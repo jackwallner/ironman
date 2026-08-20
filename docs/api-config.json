@@ -1,0 +1,9 @@
+{
+  "proxyURL": "https://labs-v2.competitor.com/api/results-proxy",
+  "proxyURLParameter": "url",
+  "pageSizeParameter": "pageSize",
+  "resultsURL": "https://api.competitor.com/web/results",
+  "pageSize": 500,
+  "maxPages": 12,
+  "referer": "https://labs-v2.competitor.com/"
+}

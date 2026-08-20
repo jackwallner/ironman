@@ -1,0 +1,84 @@
+name: TriLocker
+packages:
+  RevenueCat:
+    url: https://github.com/RevenueCat/purchases-ios-spm.git
+    from: 5.72.0
+options:
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  bundleIdPrefix: com.jackwallner
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+targets:
+  TriLocker:
+    type: application
+    platform: iOS
+    sources:
+      - path: TriLocker
+      - path: Shared
+    settings:
+      base:
+        DEVELOPMENT_TEAM: YXG4MP6W39
+        PRODUCT_BUNDLE_IDENTIFIER: com.jackwallner.trilocker
+        PRODUCT_NAME: "Tri Locker"
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: TriLocker/Info.plist
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_STYLE: Automatic
+      configs:
+        Debug:
+          CODE_SIGN_IDENTITY: "Apple Development"
+    dependencies:
+      - package: RevenueCat
+
+  TriLockerTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: TriLockerTests
+    dependencies:
+      - target: TriLocker
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Tri Locker.app/Tri Locker"
+
+  TriLockerUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: TriLockerUITests
+    dependencies:
+      - target: TriLocker
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: TriLocker
+
+schemes:
+  TriLocker:
+    build:
+      targets:
+        TriLocker: all
+    run:
+      config: Debug
+      storeKitConfiguration: TriLocker/Services/Products.storekit
+    # XcodeGen can only put the StoreKit configuration on the run action; the
+    # test action needs it too, and `scripts/generate.sh` patches it in.
+    test:
+      config: Debug
+      targets:
+        - TriLockerTests
+        - TriLockerUITests
+      gatherCoverageData: false
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release

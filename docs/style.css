@@ -1,0 +1,68 @@
+:root {
+  --deep: #0d2645;
+  --sunrise: #ed6b1c;
+  --canvas: #f4f5f7;
+  --surface: #ffffff;
+  --ink: #14181f;
+  --ink-2: #434a55;
+  --ink-3: #6f7683;
+  --hairline: #d9dce1;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --canvas: #0b0f16;
+    --surface: #141a24;
+    --ink: #f2f4f7;
+    --ink-2: #c2c8d2;
+    --ink-3: #8d95a3;
+    --hairline: #26303e;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--sunrise); }
+.wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+header.hero {
+  background: var(--deep);
+  color: #fff;
+  padding: 72px 0 56px;
+}
+header.hero h1 { font-size: 2.6rem; margin: 0 0 12px; letter-spacing: -0.02em; }
+header.hero p { font-size: 1.15rem; color: rgba(255,255,255,.78); margin: 0 0 28px; max-width: 34em; }
+.legs { display: flex; gap: 2px; height: 10px; border-radius: 999px; overflow: hidden; max-width: 420px; }
+.legs i { display: block; }
+.legs .swim { background: #1c82b8; flex: 12; }
+.legs .t { background: #8c919b; flex: 1; }
+.legs .bike { background: #2b784f; flex: 55; }
+.legs .run { background: #d95721; flex: 31; }
+main { padding: 48px 0 72px; }
+section { margin: 0 0 40px; }
+h2 { font-size: 1.25rem; margin: 0 0 10px; letter-spacing: -0.01em; }
+h3 { font-size: 1rem; margin: 26px 0 6px; }
+p, li { color: var(--ink-2); }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  padding: 20px 22px;
+}
+.grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.grid .card h2 { font-size: 1rem; }
+.grid .card p { margin: 0; font-size: .95rem; }
+footer {
+  border-top: 1px solid var(--hairline);
+  padding: 28px 0 48px;
+  color: var(--ink-3);
+  font-size: .9rem;
+}
+footer a { color: var(--ink-3); margin-right: 16px; }
+.note { color: var(--ink-3); font-size: .88rem; }
+table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--hairline); }
+th { color: var(--ink-3); font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; }
