@@ -30,7 +30,7 @@ final class PattieVoice: NSObject, ObservableObject {
         return nowPlaying == name
     }
 
-    /// Configure the audio session, once, off the main thread.
+    /// Prepare the audio session off the main thread.
     ///
     /// `setCategory` and `setActive` both talk to the media daemon and both can
     /// block for hundreds of milliseconds. Calling them on the main thread is
@@ -38,24 +38,44 @@ final class PattieVoice: NSObject, ObservableObject {
     /// Pattie's first line can land within a second of launch, so on the main
     /// thread it lands inside the first frame the app ever draws.
     ///
-    /// `.ambient` with `.mixWithOthers` so she never stops the podcast somebody
-    /// is training to.
+    /// Playback uses `.mixWithOthers` so she never stops the podcast somebody
+    /// is training to. Unlike `.ambient`, `.playback` remains audible when the
+    /// hardware Silent switch is on, which also lets episode video share this
+    /// session.
     nonisolated static func prepareSession() {
         sessionQueue.async {
-            guard !sessionConfigured else { return }
-            sessionConfigured = true
-            do {
-                try AVAudioSession.sharedInstance().setCategory(.ambient, options: [.mixWithOthers])
-                try AVAudioSession.sharedInstance().setActive(true)
-            } catch {
-                sessionConfigured = false
+            _ = configureSession()
+        }
+    }
+
+    /// Activate the session and wait for the media daemon before starting a
+    /// player. This closes the race where `AVAudioPlayer.play()` or
+    /// `AVPlayer.play()` ran before the session finished activating.
+    nonisolated static func activateSession() async -> Bool {
+        await withCheckedContinuation { continuation in
+            sessionQueue.async {
+                continuation.resume(returning: configureSession())
             }
         }
     }
 
     private nonisolated static let sessionQueue = DispatchQueue(label: "com.jackwallner.ironman.pattie.audio")
-    /// Only ever touched on `sessionQueue`.
-    private nonisolated(unsafe) static var sessionConfigured = false
+    private nonisolated static let sessionLogger = Logger(
+        subsystem: "com.jackwallner.ironman",
+        category: "PattieAudioSession"
+    )
+
+    private nonisolated static func configureSession() -> Bool {
+        do {
+            let session = AVAudioSession.sharedInstance()
+            try session.setCategory(.playback, options: [.mixWithOthers])
+            try session.setActive(true)
+            return true
+        } catch {
+            sessionLogger.debug("audio session setup failed: \(error.localizedDescription, privacy: .public)")
+            return false
+        }
+    }
 
     /// Play a bundled clip. A nil name is a silent line and is not an error.
     @discardableResult
@@ -65,13 +85,22 @@ final class PattieVoice: NSObject, ObservableObject {
             return false
         }
         stop()
-        Self.prepareSession()
         do {
-            let player = try AVAudioPlayer(contentsOf: url)
-            player.delegate = self
-            self.player = player
+            let newPlayer = try AVAudioPlayer(contentsOf: url)
+            newPlayer.delegate = self
+            self.player = newPlayer
             nowPlaying = name
-            player.play()
+
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                guard await Self.activateSession() else {
+                    guard self.player === newPlayer else { return }
+                    self.stop()
+                    return
+                }
+                guard self.player === newPlayer, self.nowPlaying == name else { return }
+                newPlayer.play()
+            }
             return true
         } catch {
             logger.debug("play failed: \(error.localizedDescription, privacy: .public)")

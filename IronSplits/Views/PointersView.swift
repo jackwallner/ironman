@@ -329,6 +329,8 @@ struct PointerPlayerSheet: View {
                 Task { @MainActor in progress = fraction }
             }
             let player = AVPlayer(url: url)
+            _ = await PattieVoice.activateSession()
+            guard !Task.isCancelled else { return }
             self.player = player
             player.play()
         } catch {

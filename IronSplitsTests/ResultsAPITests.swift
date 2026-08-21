@@ -1,7 +1,16 @@
+import AVFoundation
 import XCTest
 @testable import IM_Iron_Splits
 
 final class ResultsAPITests: XCTestCase {
+
+    func testPattieAudioSessionUsesAudibleMixedPlayback() async {
+        let activated = await PattieVoice.activateSession()
+
+        XCTAssertTrue(activated)
+        XCTAssertEqual(AVAudioSession.sharedInstance().category, .playback)
+        XCTAssertTrue(AVAudioSession.sharedInstance().categoryOptions.contains(.mixWithOthers))
+    }
 
     // MARK: - Name filter
 
