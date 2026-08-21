@@ -199,4 +199,65 @@ final class RaceAnalyticsTests: XCTestCase {
                swim: 2400, t1: 300, bike: 12000, t2: 180, run: 12271, finish: finish,
                bikeKm: 90.1, runKm: 21.0975, swimKm: 1.9312)
     }
+
+    // MARK: - Shortened races
+
+    /// 2012 IRONMAN New Zealand was called off in 140km/h winds and re-staged
+    /// the next day over half distance. Every row still carries 3.8/180/42.2,
+    /// so Pattie Wallner's real 7:20:54 half read as a full-distance personal
+    /// best an hour inside the world record.
+    func testAShortenedRaceIsNotAFullJustBecauseTheRowSaysSo() {
+        let kind = RaceKind(bikeDistanceKm: 180.0, runDistanceKm: 42.2,
+                            bikeSeconds: 13_721,
+                            externalEventName: nil,
+                            eventName: "2012 IRONMAN New Zealand: Triathlon")
+        XCTAssertEqual(kind, .halfDistance, "180km in 3:48:41 is 47km/h, so it was not 180km")
+    }
+
+    /// The guard must not touch a legitimately fast full-distance ride: the
+    /// bike world best over the distance is a little over 44km/h.
+    func testAWorldClassFullDistanceRideIsStillAFull() {
+        let kind = RaceKind(bikeDistanceKm: 180.0, runDistanceKm: 42.2,
+                            bikeSeconds: 14_640,  // 4:04:00, about 44.3km/h
+                            externalEventName: nil,
+                            eventName: "2016 IRONMAN Texas")
+        XCTAssertEqual(kind, .fullDistance)
+    }
+
+    func testAnOrdinaryAgeGroupFullIsUnaffected() {
+        let kind = RaceKind(bikeDistanceKm: 180.0, runDistanceKm: 42.2,
+                            bikeSeconds: 25_200,  // 7:00:00
+                            externalEventName: nil,
+                            eventName: "2025 IRONMAN Texas")
+        XCTAssertEqual(kind, .fullDistance)
+    }
+
+    /// With no bike split there is nothing to check the distance against, so
+    /// the row is taken at its word rather than guessed at.
+    func testNoBikeSplitLeavesTheClaimedDistanceAlone() {
+        let kind = RaceKind(bikeDistanceKm: 180.0, runDistanceKm: 42.2,
+                            bikeSeconds: nil,
+                            externalEventName: nil,
+                            eventName: "2012 IRONMAN New Zealand: Triathlon")
+        XCTAssertEqual(kind, .fullDistance)
+    }
+
+    /// Pattie's 2012 New Zealand half (7:20:54) and her 2026 70.3 (7:32:31)
+    /// are the same distance fourteen years apart, which is the whole point:
+    /// they belong on one leaderboard.
+    func testTheShortenedRaceRanksAgainstHerOtherHalf() {
+        let newZealand = result(id: "nz-2012", name: "IRONMAN New Zealand: Triathlon", year: 2012,
+                                swim: 2608, t1: 756, bike: 13_721, t2: 512, run: 8857,
+                                finish: 26_454, bikeKm: 180.0, runKm: 42.2, swimKm: 3.8)
+        let northernCalifornia = result(id: "nc-2026", name: "IRONMAN 70.3 Northern California",
+                                        year: 2026, swim: 2400, t1: 300, bike: 12_000, t2: 180,
+                                        run: 12_271, finish: 27_151,
+                                        bikeKm: 90.1, runKm: 21.0975, swimKm: 1.9312)
+        XCTAssertEqual(newZealand.kind, .halfDistance)
+        XCTAssertEqual(northernCalifornia.kind, .halfDistance)
+        let standings = RaceAnalytics.standings([newZealand, northernCalifornia],
+                                                discipline: .finish, kind: .halfDistance)
+        XCTAssertEqual(standings.count, 2, "Both halves belong on one leaderboard")
+        XCTAssertEqual(standings.first?.result.id, "nz-2012", "7:20:54 beats 7:32:31")
+    }
 }

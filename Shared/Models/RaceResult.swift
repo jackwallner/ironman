@@ -65,7 +65,11 @@ struct RaceResult: Identifiable, Codable, Hashable, Sendable {
     }
 
     var kind: RaceKind {
-        RaceKind(bikeDistanceKm: bikeDistanceKm, runDistanceKm: runDistanceKm, externalEventName: externalEventName, eventName: eventName)
+        RaceKind(bikeDistanceKm: bikeDistanceKm,
+                 runDistanceKm: runDistanceKm,
+                 bikeSeconds: bike,
+                 externalEventName: externalEventName,
+                 eventName: eventName)
     }
 
     /// A finish only counts as a comparable performance when the athlete
@@ -187,7 +191,15 @@ enum RaceKind: String, Codable, Sendable, CaseIterable {
         }
     }
 
-    /// Distance first, name second.
+    /// No age-grouper, and no professional, rides 180km at this speed.
+    ///
+    /// The bike world best inside a full-distance race sits a little over
+    /// 44km/h on the fastest courses, so anything past this is not a real
+    /// ride over the distance the row claims — it is the row claiming the
+    /// wrong distance. See `init` for what the feed does.
+    static let implausibleBikeSpeedKmh = 46.0
+
+    /// Distance first, name second — but only a distance the splits agree with.
     ///
     /// The feed mixes full-distance triathlon, 70.3, marathons, 5Ks, and the
     /// 2020 virtual series, and only the completed-distance fields describe all
@@ -195,8 +207,32 @@ enum RaceKind: String, Codable, Sendable, CaseIterable {
     /// Triathlon" and "2025 IRONMAN Wisconsin" are the same race, and
     /// "IRONMAN 70.3" appears in the name of events whose rows have no
     /// distances at all.
-    init(bikeDistanceKm: Double?, runDistanceKm: Double?, externalEventName: String?, eventName: String) {
-        if let bike = bikeDistanceKm, bike > 1 {
+    ///
+    /// The catch is that "distance completed" is sometimes the distance that
+    /// was *scheduled*. 2012 IRONMAN New Zealand was called off in 140km/h
+    /// winds and re-staged the next day over half distance, keeping its full
+    /// distance qualifying spots — and every row still carries 3.8/180/42.2.
+    /// Taken at face value that made Pattie Wallner's 7:20:54 a full-distance
+    /// personal best an hour inside the world record, which then measured all
+    /// sixteen of her real fulls as six hours slower than her "best".
+    ///
+    /// So the claimed distance has to survive the athlete's own bike split: if
+    /// 180km at that split is faster than anyone has ridden, the athlete did
+    /// not ride 180km. Halving it is what the shortened-race case actually
+    /// needs, and it is self-checking — the half only stands if it makes the
+    /// ride plausible.
+    init(bikeDistanceKm: Double?,
+         runDistanceKm: Double?,
+         bikeSeconds: Int? = nil,
+         externalEventName: String?,
+         eventName: String) {
+        if var bike = bikeDistanceKm, bike > 1 {
+            if let seconds = bikeSeconds, seconds > 0 {
+                let speed = { (km: Double) in km / (Double(seconds) / 3600) }
+                if speed(bike) > Self.implausibleBikeSpeedKmh, speed(bike / 2) <= Self.implausibleBikeSpeedKmh {
+                    bike /= 2
+                }
+            }
             if bike > 140 { self = .fullDistance; return }
             if bike > 60 { self = .halfDistance; return }
             self = .otherTriathlon
