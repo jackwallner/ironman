@@ -1,0 +1,73 @@
+{
+  "note": "Cut from Pattie's own clips, snapped to real silence and verified: every edge sits at least 10dB under the snippet's own peak.",
+  "source": "most come from the 11-minute Highlight Reel, the only clip with pauses between lines",
+  "clean": {
+    "away-you-go": {
+      "file": "pattie-away-you-go.m4a",
+      "seconds": 0.86,
+      "sourceClip": "2933093860295411"
+    },
+    "bike": {
+      "file": "pattie-bike.m4a",
+      "seconds": 0.54,
+      "sourceClip": "2933093860295411"
+    },
+    "good": {
+      "file": "pattie-good.m4a",
+      "seconds": 0.41,
+      "sourceClip": "2933093860295411"
+    },
+    "great-idea": {
+      "file": "pattie-great-idea.m4a",
+      "seconds": 0.72,
+      "sourceClip": "810571790452550"
+    },
+    "here-s-the-situation": {
+      "file": "pattie-here-s-the-situation.m4a",
+      "seconds": 1.6,
+      "sourceClip": "2933093860295411"
+    },
+    "here-s-the-solution": {
+      "file": "pattie-here-s-the-solution.m4a",
+      "seconds": 1.24,
+      "sourceClip": "2933093860295411"
+    },
+    "nice": {
+      "file": "pattie-nice.m4a",
+      "seconds": 0.37,
+      "sourceClip": "2933093860295411"
+    },
+    "now-that-s-a-great-idea": {
+      "file": "pattie-now-that-s-a-great-idea.m4a",
+      "seconds": 1.23,
+      "sourceClip": "2933093860295411"
+    },
+    "solution": {
+      "file": "pattie-solution.m4a",
+      "seconds": 0.72,
+      "sourceClip": "2933093860295411"
+    },
+    "that-s-a-great-idea": {
+      "file": "pattie-that-s-a-great-idea.m4a",
+      "seconds": 1.23,
+      "sourceClip": "2933093860295411"
+    }
+  },
+  "marginal": [
+    "go",
+    "great",
+    "race",
+    "swim"
+  ],
+  "needsRecording": [
+    "back",
+    "ready",
+    "no",
+    "okay",
+    "run",
+    "finish",
+    "situation",
+    "done",
+    "oops"
+  ]
+}
