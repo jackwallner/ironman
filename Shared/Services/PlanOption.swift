@@ -114,9 +114,9 @@ enum BundledStoreKitCatalog {
     private static func displayName(_ entry: [String: Any]) -> String? {
         guard let localizations = entry["localizations"] as? [[String: Any]] else { return nil }
         let name = localizations.first?["displayName"] as? String
-        // "Tri Locker Pro Yearly" in the card's name slot is redundant next to a
-        // paywall already headed "Tri Locker Pro".
-        return name?.replacingOccurrences(of: "Tri Locker Pro ", with: "")
+        // "Iron Splits+ Yearly" in the card's name slot is redundant next to a
+        // paywall already headed "Iron Splits+".
+        return name?.replacingOccurrences(of: "Iron Splits+ ", with: "")
     }
 
     private static func trialLabel(_ period: String?) -> String? {

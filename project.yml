@@ -1,4 +1,4 @@
-name: TriLocker
+name: IronSplits
 packages:
   RevenueCat:
     url: https://github.com/RevenueCat/purchases-ios-spm.git
@@ -13,21 +13,21 @@ settings:
     SWIFT_VERSION: "6.0"
     IPHONEOS_DEPLOYMENT_TARGET: "17.0"
 targets:
-  TriLocker:
+  IronSplits:
     type: application
     platform: iOS
     sources:
-      - path: TriLocker
+      - path: IronSplits
       - path: Shared
     settings:
       base:
         DEVELOPMENT_TEAM: YXG4MP6W39
-        PRODUCT_BUNDLE_IDENTIFIER: com.jackwallner.trilocker
-        PRODUCT_NAME: "Tri Locker"
+        PRODUCT_BUNDLE_IDENTIFIER: com.jackwallner.ironsplits
+        PRODUCT_NAME: "IM Iron Splits"
         MARKETING_VERSION: "1.0.0"
         CURRENT_PROJECT_VERSION: "1"
         GENERATE_INFOPLIST_FILE: NO
-        INFOPLIST_FILE: TriLocker/Info.plist
+        INFOPLIST_FILE: IronSplits/Info.plist
         TARGETED_DEVICE_FAMILY: "1"
         CODE_SIGN_STYLE: Automatic
       configs:
@@ -36,45 +36,45 @@ targets:
     dependencies:
       - package: RevenueCat
 
-  TriLockerTests:
+  IronSplitsTests:
     type: bundle.unit-test
     platform: iOS
     sources:
-      - path: TriLockerTests
+      - path: IronSplitsTests
     dependencies:
-      - target: TriLocker
+      - target: IronSplits
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
-        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Tri Locker.app/Tri Locker"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/IM Iron Splits.app/IM Iron Splits"
 
-  TriLockerUITests:
+  IronSplitsUITests:
     type: bundle.ui-testing
     platform: iOS
     sources:
-      - path: TriLockerUITests
+      - path: IronSplitsUITests
     dependencies:
-      - target: TriLocker
+      - target: IronSplits
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
-        TEST_TARGET_NAME: TriLocker
+        TEST_TARGET_NAME: IronSplits
 
 schemes:
-  TriLocker:
+  IronSplits:
     build:
       targets:
-        TriLocker: all
+        IronSplits: all
     run:
       config: Debug
-      storeKitConfiguration: TriLocker/Services/Products.storekit
+      storeKitConfiguration: IronSplits/Services/Products.storekit
     # XcodeGen can only put the StoreKit configuration on the run action; the
     # test action needs it too, and `scripts/generate.sh` patches it in.
     test:
       config: Debug
       targets:
-        - TriLockerTests
-        - TriLockerUITests
+        - IronSplitsTests
+        - IronSplitsUITests
       gatherCoverageData: false
     profile:
       config: Release

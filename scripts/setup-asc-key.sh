@@ -18,7 +18,7 @@ if [ -z "$ASC_ISSUER_ID" ] || [ -z "$ASC_API_KEY_ID" ]; then
   echo ""
   echo "  1. Go to https://appstoreconnect.apple.com/access/api"
   echo "  2. Click the '+' button next to 'Keys'"
-  echo "  3. Name: Tri Locker CI"
+  echo "  3. Name: IM Iron Splits CI"
   echo "  4. Role: App Manager"
   echo "  5. Download the .p8 file — you only get this once"
   echo ""

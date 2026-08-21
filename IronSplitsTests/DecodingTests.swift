@@ -1,5 +1,5 @@
 import XCTest
-@testable import Tri_Locker
+@testable import IM_Iron_Splits
 
 /// Decoding is pinned against the real upstream payload shape, because every
 /// number in it has at least two representations and a strict decode of the

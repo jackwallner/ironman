@@ -4,8 +4,8 @@ set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$DIR/.."
 
-SCHEME="TriLocker"
-ARCHIVE_PATH="$PROJECT_DIR/build/TriLocker.xcarchive"
+SCHEME="IronSplits"
+ARCHIVE_PATH="$PROJECT_DIR/build/IronSplits.xcarchive"
 
 cd "$PROJECT_DIR"
 
@@ -20,14 +20,14 @@ echo "==> Regenerating Xcode project..."
 if command -v xcodegen &> /dev/null; then
   "$DIR/generate.sh"
 else
-  echo "warning: xcodegen not found. Using existing TriLocker.xcodeproj."
+  echo "warning: xcodegen not found. Using existing IronSplits.xcodeproj."
 fi
 
 echo "==> Cleaning..."
-xcodebuild -project TriLocker.xcodeproj -scheme "$SCHEME" clean
+xcodebuild -project IronSplits.xcodeproj -scheme "$SCHEME" clean
 
 echo "==> Archiving..."
-xcodebuild -project TriLocker.xcodeproj -scheme "$SCHEME" -configuration Release archive -archivePath "$ARCHIVE_PATH" -destination "generic/platform=iOS" -allowProvisioningUpdates
+xcodebuild -project IronSplits.xcodeproj -scheme "$SCHEME" -configuration Release archive -archivePath "$ARCHIVE_PATH" -destination "generic/platform=iOS" -allowProvisioningUpdates
 
 echo "==> Exporting & Uploading..."
 exec "$DIR/upload-testflight.sh" "$ARCHIVE_PATH"

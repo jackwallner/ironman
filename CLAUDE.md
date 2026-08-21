@@ -1,20 +1,25 @@
-# Tri Locker — Project Guide
+# IM Iron Splits — Project Guide
 
 Your triathlon and running race results, pulled from the official timing feed by
-name, ranked by split. XcodeGen project/scheme: `TriLocker`, sim lease owner
-`trilocker`. Repo dir is `~/ironman`; the app is **not** named IRONMAN and must
-never be (registered trademark of the World Triathlon Corporation). The app
-carries a not-affiliated disclaimer in Settings.
+name, ranked by split. XcodeGen project/scheme: `IronSplits`, sim lease owner
+`ironsplits`. Repo dir stays `~/ironman` (the GitHub Pages URL that
+`FeedConfig` hot-reloads from lives there), but the app is **IM Iron Splits**
+and is never called IRONMAN: that is a registered trademark of the World
+Triathlon Corporation. Jack chose the current name on 2026-08-20 over a flagged
+objection that an IRON- lead morpheme in the same goods class carries real
+App Review 5.2.1 and takedown risk. That call is his and is settled: do not
+relitigate it. Never add a WTC logo, M-DOT, `140.6`/`70.3` as branding, or any
+claim of affiliation, and keep the not-affiliated disclaimer in Settings.
 
 ## Tech Stack
 - Swift 6 / SwiftUI (strict concurrency), iOS 17+
-- XcodeGen (`project.yml`). Targets: `TriLocker`, `TriLockerTests`, `TriLockerUITests`
-- RevenueCat, entitlement `pro` (display entitlement `Tri Locker Pro`)
+- XcodeGen (`project.yml`). Targets: `IronSplits`, `IronSplitsTests`, `IronSplitsUITests`
+- RevenueCat, entitlement `pro` (display entitlement `Iron Splits+`)
 - No backend, no accounts, no user data leaves the phone
 
 ## Targets / bundle IDs
-- `TriLocker` — `com.jackwallner.trilocker`
-- IAPs: `…trilocker.pro` (lifetime), `…pro.yearly`, `…pro.monthly`
+- `IronSplits` — `com.jackwallner.ironsplits`
+- IAPs: `…ironsplits.pro` (lifetime), `…pro.yearly`, `…pro.monthly`
 
 ## The results feed (read this before touching `Shared/Services/`)
 
@@ -55,7 +60,7 @@ moves, publish a new `api-config.json` — do not ship an app update.**
 - `Shared/Services/` — `ResultsAPI` + `ODataResultRow` (feed), `FeedConfig`/`FeedConfigLoader`
   (hotfix channel), `LockerStore` (claimed athlete + on-disk cache), `RaceAnalytics`
   (every derived number), `ProGate`, `RaceNotesStore`, `ResumeBuilder`, `StoreService`
-- `TriLocker/Views/` — five tabs: Locker, Bests, Pointers, Resume, Settings
+- `IronSplits/Views/` — five tabs: Locker, Bests, Pointers, Resume, Settings
 
 Ranking is always scoped to one `RaceKind`. A 70.3 bike split always beats a
 full-distance one, so a combined "best bike" list is just a list of every half
@@ -74,9 +79,13 @@ per filter — see `LockerView.visibleResults`.
 - Review funnel trigger: opening a race detail (`RaceDetailView.task`). App Store
   ID is unset in `AppStoreReviewLinks` until the ASC record exists, which is what
   makes Settings show "Send feedback" instead of "Rate".
-- `TriLockerSecrets.revenueCatKey` is empty until the RevenueCat project exists.
-  Empty means `Purchases.configure` never runs, so the app works and Pro stays
-  locked rather than billing against another app's project.
+- `IronSplitsSecrets.revenueCatKey` holds the production public SDK key
+  (`appl_…`), set 2026-08-20. Only public keys go in that file; the RevenueCat
+  **secret** key (`sk_…`, full REST access) lives in `~/.ironsplits_credentials`
+  and must never enter the repo, the binary, or `docs/` (public Pages).
+- The RevenueCat dashboard app is still registered as bundle ID
+  `com.jackwallner.ironman`. Purchases will not validate until it is changed to
+  `com.jackwallner.ironsplits`.
 - UI tests hit the live feed on purpose. The claim flow is a search against
   someone else's service and a mock would only prove the mock still matches.
 

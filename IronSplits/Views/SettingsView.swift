@@ -25,7 +25,7 @@ struct SettingsView: View {
                                 Image(systemName: "crown.fill")
                                     .foregroundStyle(TriPalette.sunrise)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("Tri Locker Pro")
+                                    Text("Iron Splits+")
                                         .font(TriType.bodyBold)
                                         .foregroundStyle(TriPalette.ink)
                                     Text("Full history, split leaderboards, race resume")
@@ -79,7 +79,7 @@ struct SettingsView: View {
 
                 Section("Subscription") {
                     if store.isPro {
-                        Label("Tri Locker Pro is active", systemImage: "checkmark.seal.fill")
+                        Label("Iron Splits+ is active", systemImage: "checkmark.seal.fill")
                             .foregroundStyle(TriPalette.positive)
                     }
                     Button("Restore purchases") {
@@ -103,13 +103,13 @@ struct SettingsView: View {
                             reviewCoordinator.requestFeedback()
                         }
                     }
-                    Link("Privacy policy", destination: TriLockerLegal.privacyURL)
-                    Link("Terms of use", destination: TriLockerLegal.termsURL)
+                    Link("Privacy policy", destination: IronSplitsLegal.privacyURL)
+                    Link("Terms of use", destination: IronSplitsLegal.termsURL)
                     LabeledContent("Version", value: versionText)
                 }
 
                 Section {
-                    Text("Tri Locker is an independent app. It is not affiliated with, endorsed by, or sponsored by any race organiser. Results are shown as published by each event's timer.")
+                    Text("IM Iron Splits is an independent app. It is not affiliated with, endorsed by, or sponsored by any race organiser. Results are shown as published by each event's timer. IRONMAN\u{00AE} and 70.3\u{00AE} are registered trademarks of the World Triathlon Corporation, used here only to describe the races an athlete has entered.")
                         .font(TriType.micro)
                         .foregroundStyle(TriPalette.inkTertiary)
                 }
@@ -121,7 +121,7 @@ struct SettingsView: View {
                         set: { _ in }
                     ))
                     .disabled(true)
-                    Text("Set TRILOCKER_FORCE_PRO=1 on the scheme to unlock Pro locally.")
+                    Text("Set IRONSPLITS_FORCE_PRO=1 on the scheme to unlock Pro locally.")
                         .font(TriType.micro)
                         .foregroundStyle(TriPalette.inkTertiary)
                 }

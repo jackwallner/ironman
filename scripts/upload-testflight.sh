@@ -8,13 +8,13 @@
 # Prerequisites: Xcode signed in (Xcode → Settings → Accounts) with team YXG4MP6W39.
 #
 # Usage:
-#   ./scripts/upload-testflight.sh [path/to/TriLocker.xcarchive]
+#   ./scripts/upload-testflight.sh [path/to/IronSplits.xcarchive]
 #
-# Default archive: ./build/TriLocker.xcarchive
+# Default archive: ./build/IronSplits.xcarchive
 
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-ARCHIVE="${1:-$ROOT/build/TriLocker.xcarchive}"
+ARCHIVE="${1:-$ROOT/build/IronSplits.xcarchive}"
 STAGING="$ROOT/build/upload-staging"
 PLIST="$ROOT/AppStoreUploadOptions.plist"
 

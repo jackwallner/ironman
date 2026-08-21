@@ -33,7 +33,7 @@ platform :ios do
       key_filepath: ENV["ASC_KEY_PATH"]
     )
 
-    app = Spaceship::ConnectAPI::App.find("com.jackwallner.trilocker")
+    app = Spaceship::ConnectAPI::App.find("com.jackwallner.ironsplits")
     version = app.get_edit_app_store_version
     UI.user_error!("No editable version found") unless version
 
@@ -85,7 +85,7 @@ platform :ios do
         demo_user: "N/A — no login, no account system",
         demo_password: "",
         notes: <<~NOTES
-          Tri Locker is a read-only viewer for published race results. There are
+          IM Iron Splits is a read-only viewer for published race results. There are
           no accounts and no sign-in.
 
           Core flow:
@@ -99,7 +99,7 @@ platform :ios do
           To review without a name of your own, search "Daniel Winek" — a public
           result set with five full-distance finishes.
 
-          Tri Locker Pro (IAP via RevenueCat): full history beyond the three most
+          Iron Splits+ (IAP via RevenueCat): full history beyond the three most
           recent races, split leaderboards, field percentiles, race notes, and
           the resume export. Test with a Sandbox account.
 

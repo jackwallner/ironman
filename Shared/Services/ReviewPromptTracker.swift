@@ -2,7 +2,7 @@ import Foundation
 
 extension Notification.Name {
     /// Posted after a satisfaction moment, host may present the enjoyment funnel after a short delay.
-    static let triLockerPositiveMomentForReview = Notification.Name("com.jackwallner.trilocker.positiveMomentForReview")
+    static let ironSplitsPositiveMomentForReview = Notification.Name("com.jackwallner.ironsplits.positiveMomentForReview")
 }
 
 /// How the user last resolved the in-app review / feedback prompt.
@@ -128,7 +128,7 @@ enum ReviewPromptTracker {
     static func recordPositiveMoment() {
         positiveMomentCount += 1
         hasPendingPositiveMoment = true
-        NotificationCenter.default.post(name: .triLockerPositiveMomentForReview, object: nil)
+        NotificationCenter.default.post(name: .ironSplitsPositiveMomentForReview, object: nil)
     }
 
     static func consumePendingPositiveMoment() {

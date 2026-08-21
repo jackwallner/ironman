@@ -1,5 +1,5 @@
 import Foundation
-@testable import Tri_Locker
+@testable import IM_Iron_Splits
 
 extension ODataResultRow {
     static func decode(_ json: String) -> ODataResultRow {

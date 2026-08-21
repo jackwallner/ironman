@@ -67,23 +67,23 @@ enum PaywallTrigger: Identifiable, Hashable {
         case .onboarding, .upgrade:
             return "Every race, every split, ranked. Personal bests on all four legs, field percentiles, race notes and a resume you can send."
         case .winback:
-            return "Your Tri Locker Pro access has lapsed. Pick it back up for your full history, split leaderboards and race resume."
+            return "Your Iron Splits+ access has lapsed. Pick it back up for your full history, split leaderboards and race resume."
         }
     }
 
     /// RevenueCat custom-paywall impression id for this entry point.
     var paywallImpressionId: String {
         switch self {
-        case .fullHistory:       return "trilocker_paywall_full_history"
-        case .lockedYear:        return "trilocker_paywall_locked_year"
-        case .splitLeaderboards: return "trilocker_paywall_split_leaderboards"
-        case .raceResume:        return "trilocker_paywall_race_resume"
-        case .fieldPercentiles:  return "trilocker_paywall_field_percentiles"
-        case .raceNotes:         return "trilocker_paywall_race_notes"
-        case .pointers:          return "trilocker_paywall_pointers"
-        case .onboarding:        return "trilocker_paywall_onboarding"
-        case .upgrade:           return "trilocker_paywall_upgrade"
-        case .winback:           return "trilocker_paywall_winback"
+        case .fullHistory:       return "ironsplits_paywall_full_history"
+        case .lockedYear:        return "ironsplits_paywall_locked_year"
+        case .splitLeaderboards: return "ironsplits_paywall_split_leaderboards"
+        case .raceResume:        return "ironsplits_paywall_race_resume"
+        case .fieldPercentiles:  return "ironsplits_paywall_field_percentiles"
+        case .raceNotes:         return "ironsplits_paywall_race_notes"
+        case .pointers:          return "ironsplits_paywall_pointers"
+        case .onboarding:        return "ironsplits_paywall_onboarding"
+        case .upgrade:           return "ironsplits_paywall_upgrade"
+        case .winback:           return "ironsplits_paywall_winback"
         }
     }
 
@@ -103,7 +103,7 @@ enum PaywallTrigger: Identifiable, Hashable {
     }
 }
 
-/// Native Tri Locker Pro paywall. Purchases flow through `StoreService.purchase`
+/// Native Iron Splits+ paywall. Purchases flow through `StoreService.purchase`
 /// → `Purchases.shared.purchase` so RevenueCat records transactions unchanged.
 struct PaywallView: View {
     @EnvironmentObject private var store: StoreService
@@ -230,7 +230,7 @@ struct PaywallView: View {
                         .foregroundStyle(.white)
                 }
 
-                Text("TRI LOCKER PRO")
+                Text("IRON SPLITS+")
                     .font(TriType.micro)
                     .tracking(2.5)
                     .foregroundStyle(.white.opacity(0.65))
@@ -390,8 +390,8 @@ struct PaywallView: View {
             .disabled(isRestoring || isPurchasing)
 
             HStack(spacing: 12) {
-                Link("Terms", destination: TriLockerLegal.termsURL)
-                Link("Privacy", destination: TriLockerLegal.privacyURL)
+                Link("Terms", destination: IronSplitsLegal.termsURL)
+                Link("Privacy", destination: IronSplitsLegal.privacyURL)
             }
             .font(TriType.micro)
             .tracking(0.3)
@@ -478,7 +478,7 @@ struct PaywallView: View {
                 case .pending:
                     // Ask-to-Buy / deferred payment: nothing is unlocked yet and
                     // no error occurred, tell the user instead of going silent.
-                    restoreMessage = "Purchase pending approval. Tri Locker Pro unlocks automatically once it's approved."
+                    restoreMessage = "Purchase pending approval. Iron Splits+ unlocks automatically once it's approved."
                 case .cancelled:
                     errorMessage = "Purchase cancelled. Tap again to continue."
                 }
@@ -496,7 +496,7 @@ struct PaywallView: View {
             defer { isRestoring = false }
             await store.restorePurchases()
             if !store.isPro {
-                restoreMessage = store.lastError ?? "No active Tri Locker Pro purchase was found for this Apple ID."
+                restoreMessage = store.lastError ?? "No active Iron Splits+ purchase was found for this Apple ID."
             }
         }
     }

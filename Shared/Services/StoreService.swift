@@ -3,24 +3,24 @@ import os
 import StoreKit
 @preconcurrency import RevenueCat
 
-enum TriLockerProduct {
-    static let lifetime = "com.jackwallner.trilocker.pro"
-    static let yearly = "com.jackwallner.trilocker.pro.yearly"
-    static let monthly = "com.jackwallner.trilocker.pro.monthly"
+enum IronSplitsProduct {
+    static let lifetime = "com.jackwallner.ironsplits.pro"
+    static let yearly = "com.jackwallner.ironsplits.pro.yearly"
+    static let monthly = "com.jackwallner.ironsplits.pro.monthly"
     static let all: [String] = [lifetime, yearly, monthly]
 }
 
 enum RevenueCatConfig {
     #if DEBUG
-    static let apiKey = TriLockerSecrets.revenueCatDebugKey
+    static let apiKey = IronSplitsSecrets.revenueCatDebugKey
     #else
-    static let apiKey = TriLockerSecrets.revenueCatKey
+    static let apiKey = IronSplitsSecrets.revenueCatKey
     #endif
-    static let proEntitlement = "Tri Locker Pro"
+    static let proEntitlement = "Iron Splits+"
     static let fallbackEntitlement = "pro"
 }
 
-enum TriLockerLegal {
+enum IronSplitsLegal {
     /// Apple's standard EULA, required on the paywall unless a custom one is hosted.
     static let termsURL = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
     static let privacyURL = URL(string: "https://jackwallner.github.io/ironman/privacy-policy.html")!
@@ -93,11 +93,11 @@ extension RCProductKind {
             self = .monthly
         default:
             let identifiers = [package.identifier, package.storeProduct.productIdentifier].map { $0.lowercased() }
-            if identifiers.contains(where: { $0.contains(TriLockerProduct.lifetime.lowercased()) }) {
+            if identifiers.contains(where: { $0.contains(IronSplitsProduct.lifetime.lowercased()) }) {
                 self = .lifetime
-            } else if identifiers.contains(where: { $0.contains(TriLockerProduct.yearly.lowercased()) || $0.contains("annual") }) {
+            } else if identifiers.contains(where: { $0.contains(IronSplitsProduct.yearly.lowercased()) || $0.contains("annual") }) {
                 self = .yearly
-            } else if identifiers.contains(where: { $0.contains(TriLockerProduct.monthly.lowercased()) }) {
+            } else if identifiers.contains(where: { $0.contains(IronSplitsProduct.monthly.lowercased()) }) {
                 self = .monthly
             } else {
                 self = .other
@@ -215,10 +215,10 @@ extension CustomerInfo {
         // Belt-and-suspenders: if the entitlement mapping on the dashboard is
         // missing or mis-named, fall back to product ownership. Lifetime is a
         // non-consumable; recurring products show up under activeSubscriptions.
-        if nonSubscriptions.contains(where: { $0.productIdentifier == TriLockerProduct.lifetime }) {
+        if nonSubscriptions.contains(where: { $0.productIdentifier == IronSplitsProduct.lifetime }) {
             return true
         }
-        let recurring: Set<String> = [TriLockerProduct.yearly, TriLockerProduct.monthly]
+        let recurring: Set<String> = [IronSplitsProduct.yearly, IronSplitsProduct.monthly]
         if !activeSubscriptions.intersection(recurring).isEmpty {
             return true
         }
@@ -257,11 +257,11 @@ final class StoreService: NSObject, ObservableObject {
     @Published private(set) var currentOffering: Offering?
     @Published private(set) var customerInfo: CustomerInfo?
     #if DEBUG
-    /// Local-only Tri Locker Pro override so Pro-gated surfaces (split leaderboards,
+    /// Local-only Iron Splits+ override so Pro-gated surfaces (split leaderboards,
     /// full history, race resume) can be exercised in the simulator, where
     /// RevenueCat is intentionally never configured. Set the
-    /// `TRILOCKER_FORCE_PRO=1` environment variable on the scheme/launch.
-    @Published private(set) var isPro: Bool = ProcessInfo.processInfo.environment["TRILOCKER_FORCE_PRO"] == "1"
+    /// `IRONSPLITS_FORCE_PRO=1` environment variable on the scheme/launch.
+    @Published private(set) var isPro: Bool = ProcessInfo.processInfo.environment["IRONSPLITS_FORCE_PRO"] == "1"
     #else
     @Published private(set) var isPro: Bool = false
     #endif
@@ -286,7 +286,7 @@ final class StoreService: NSObject, ObservableObject {
         directCTALabel(for: .upgrade)
     }
 
-    /// The short label every "go to Tri Locker Pro" entry point wears: the toolbar
+    /// The short label every "go to Iron Splits+" entry point wears: the toolbar
     /// pill, the Settings button, the leaderboard footer. Trial-aware, because
     /// "Try Free" converts and "Upgrade" reads as an account setting, but the
     /// same everywhere, because three names for one door is three doors.
@@ -309,8 +309,8 @@ final class StoreService: NSObject, ObservableObject {
         #if DEBUG
         // Simulator-only: lets the trial-copy state of every upgrade surface be
         // captured headlessly, since the real path needs a device. Same shape
-        // as the existing TRILOCKER_FORCE_PRO hook, and stripped from Release.
-        if ProcessInfo.processInfo.environment["TRILOCKER_FORCE_TRIAL_CTA"] == "1" { return true }
+        // as the existing IRONSPLITS_FORCE_PRO hook, and stripped from Release.
+        if ProcessInfo.processInfo.environment["IRONSPLITS_FORCE_TRIAL_CTA"] == "1" { return true }
         #endif
         guard let yearly = yearlyPackage else { return false }
         return isEligibleForIntroOffer(yearly) && yearly.introOfferLabel != nil
@@ -328,13 +328,13 @@ final class StoreService: NSObject, ObservableObject {
                 return "Start \(trial)"
             }
             let verb = trigger == .winback ? "Restart" : "Try"
-            return "\(verb) Tri Locker Pro for \(yearly.priceLabel)"
+            return "\(verb) Iron Splits+ for \(yearly.priceLabel)"
         }
         if let price = proPrice {
             let verb = trigger == .winback ? "Restart" : "Unlock"
-            return "\(verb) Tri Locker Pro for \(price)"
+            return "\(verb) Iron Splits+ for \(price)"
         }
-        return trigger == .winback ? "Restart Tri Locker Pro" : "Unlock Tri Locker Pro"
+        return trigger == .winback ? "Restart Iron Splits+" : "Unlock Iron Splits+"
     }
 
     /// One-line secondary caption shown under the CTA when a trial is offered,
@@ -368,11 +368,11 @@ final class StoreService: NSObject, ObservableObject {
     }
 
     var onboardingMonthlyCTALabel: String {
-        guard let monthly = monthlyPackage else { return "Upgrade to Tri Locker Pro" }
+        guard let monthly = monthlyPackage else { return "Upgrade to Iron Splits+" }
         if isEligibleForIntroOffer(monthly), let trial = monthly.introOfferLabel {
             return "Start \(trial)"
         }
-        return "Try Tri Locker Pro for \(monthly.priceLabel)"
+        return "Try Iron Splits+ for \(monthly.priceLabel)"
     }
 
     var onboardingMonthlyDisclosureText: String? {
@@ -456,7 +456,7 @@ final class StoreService: NSObject, ObservableObject {
         isLapsed ? .winback : .upgrade
     }
 
-    private let logger = Logger(subsystem: "com.jackwallner.trilocker", category: "Store")
+    private let logger = Logger(subsystem: "com.jackwallner.ironsplits", category: "Store")
     private var isConfigured = false
 
     private override init() {}
@@ -570,7 +570,7 @@ final class StoreService: NSObject, ObservableObject {
         do {
             let info = try await Purchases.shared.restorePurchases()
             apply(customerInfo: info)
-            lastError = isPro ? nil : "No active Tri Locker Pro purchase was found for this Apple ID."
+            lastError = isPro ? nil : "No active Iron Splits+ purchase was found for this Apple ID."
         } catch {
             logger.error("Restore failed: \(String(describing: error), privacy: .public)")
             lastError = "Couldn't restore purchases. Try again."
@@ -623,7 +623,7 @@ final class StoreService: NSObject, ObservableObject {
     func hydrateForSimulator() async {
         #if targetEnvironment(simulator)
         guard planOptions.isEmpty else { return }
-        if let storeKitProducts = try? await Product.products(for: TriLockerProduct.all),
+        if let storeKitProducts = try? await Product.products(for: IronSplitsProduct.all),
            !storeKitProducts.isEmpty {
             products = storeKitProducts.map { product in
                 Package(identifier: product.id,

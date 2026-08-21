@@ -1,6 +1,6 @@
 Every race you have ever finished, in one place, ranked the way you actually think about it.
 
-Type your name once. Tri Locker finds you in the official results and fills your locker: swim, T1, bike, T2 and run splits, bib numbers, age-group and overall places, going back to your first start. No accounts, no manual entry, no digging through a different results page for every race.
+Type your name once. IM Iron Splits finds you in the official results and fills your locker: swim, T1, bike, T2 and run splits, bib numbers, age-group and overall places, going back to your first start. No accounts, no manual entry, no digging through a different results page for every race.
 
 YOUR SPLITS, RANKED
 See every race you have done ranked by swim, by bike, by run, or by time lost in transition. Personal bests are marked on every leg, and each race shows how far off your best it was. Full-distance and half-distance are ranked separately, because comparing them tells you nothing.
@@ -18,11 +18,11 @@ TRI POINTERS
 A coaching clip library, filed by leg of the race.
 
 FREE AND PRO
-Search, claim your results, and see your three most recent races with full splits for free. Tri Locker Pro unlocks your complete history, the split leaderboards, field percentiles, race notes, the resume export and the full Pointers library.
+Search, claim your results, and see your three most recent races with full splits for free. Iron Splits+ unlocks your complete history, the split leaderboards, field percentiles, race notes, the resume export and the full Pointers library.
 
-Tri Locker Pro is offered as a monthly or yearly auto-renewing subscription, or as a one-time lifetime purchase. Eligible new subscribers get a free trial; payment is charged to your Apple ID at confirmation of purchase, or at the end of the free trial. Subscriptions renew automatically unless auto-renew is turned off at least 24 hours before the end of the current period, and your account is charged for renewal within 24 hours of the end of that period. Manage or cancel your subscription in Settings, Apple ID, Subscriptions after purchase. Any unused portion of a free trial is forfeited when you buy a subscription. Prices are shown in the app before you buy and vary by region.
+Iron Splits+ is offered as a monthly or yearly auto-renewing subscription, or as a one-time lifetime purchase. Eligible new subscribers get a free trial; payment is charged to your Apple ID at confirmation of purchase, or at the end of the free trial. Subscriptions renew automatically unless auto-renew is turned off at least 24 hours before the end of the current period, and your account is charged for renewal within 24 hours of the end of that period. Manage or cancel your subscription in Settings, Apple ID, Subscriptions after purchase. Any unused portion of a free trial is forfeited when you buy a subscription. Prices are shown in the app before you buy and vary by region.
 
 Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
 Terms of Use (Apple Standard EULA): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-Tri Locker is an independent app. It is not affiliated with, endorsed by, or sponsored by any race organiser or timing company. Results are shown as published by each event's timer.
+IM Iron Splits is an independent app. It is not affiliated with, endorsed by, or sponsored by any race organiser or timing company. Results are shown as published by each event's timer.

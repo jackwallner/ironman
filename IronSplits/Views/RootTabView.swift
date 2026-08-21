@@ -21,7 +21,7 @@ struct RootTabView: View {
         .onChange(of: locker.hasClaimedAthlete) { _, claimed in
             if claimed { settings.hasCompletedOnboarding = true }
         }
-        .onReceive(NotificationCenter.default.publisher(for: .triLockerPositiveMomentForReview)) { _ in
+        .onReceive(NotificationCenter.default.publisher(for: .ironSplitsPositiveMomentForReview)) { _ in
             presentReviewPromptIfEligible()
         }
         .onReceive(reviewCoordinator.$pendingPresentation.compactMap { $0 }) { presentation in

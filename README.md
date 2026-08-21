@@ -1,4 +1,4 @@
-# Tri Locker
+# IM Iron Splits
 
 Your triathlon and running race results, found by name and ranked by split.
 
@@ -15,10 +15,10 @@ server, and `docs/POINTERS.md` for publishing the coaching-clip library.
 
 ```bash
 xcodegen generate
-agent-sim checkout trilocker && UDID=$(agent-sim udid trilocker) && agent-sim boot trilocker
-xcodebuild -project TriLocker.xcodeproj -scheme TriLocker -destination "id=$UDID" build
-xcodebuild test -project TriLocker.xcodeproj -scheme TriLocker -destination "id=$UDID"
-agent-sim checkin trilocker
+agent-sim checkout ironsplits && UDID=$(agent-sim udid ironsplits) && agent-sim boot ironsplits
+xcodebuild -project IronSplits.xcodeproj -scheme IronSplits -destination "id=$UDID" build
+xcodebuild test -project IronSplits.xcodeproj -scheme IronSplits -destination "id=$UDID"
+agent-sim checkin ironsplits
 ```
 
 The UI tests hit the live results feed on purpose — the claim flow is a search
@@ -27,9 +27,9 @@ matches what was written down.
 
 ## Before it can ship
 
-- [ ] App Store Connect app record for `com.jackwallner.trilocker`, then set
+- [ ] App Store Connect app record for `com.jackwallner.ironsplits`, then set
       `AppStoreReviewLinks.appStoreID`
-- [ ] RevenueCat project + the three products, then set `TriLockerSecrets.revenueCatKey`
+- [ ] RevenueCat project + the three products, then set `IronSplitsSecrets.revenueCatKey`
       (empty today, which is why Pro is inert rather than misbilled)
 - [ ] Enable GitHub Pages on this repo so `docs/api-config.json` — the app's
       hotfix channel — is actually served

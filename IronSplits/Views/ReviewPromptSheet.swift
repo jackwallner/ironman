@@ -88,7 +88,7 @@ struct ReviewPromptSheet: View {
 
     private var navigationTitle: String {
         switch step {
-        case .enjoyment: "Enjoying Tri Locker?"
+        case .enjoyment: "Enjoying IM Iron Splits?"
         case .reviewPitch: "Support an indie app"
         case .feedback: "Help us improve"
         }
@@ -106,7 +106,7 @@ struct ReviewPromptSheet: View {
             }
             .padding(.top, 8)
 
-            Text("If Tri Locker is keeping your race history straight, a quick rating on the App Store makes a real difference.")
+            Text("If IM Iron Splits is keeping your race history straight, a quick rating on the App Store makes a real difference.")
                 .font(TriType.body)
                 .foregroundStyle(TriPalette.inkSecondary)
                 .multilineTextAlignment(.center)
@@ -135,7 +135,7 @@ struct ReviewPromptSheet: View {
 
     private var reviewPitchContent: some View {
         VStack(spacing: 18) {
-            Text("Tri Locker is built by one indie developer. No ads, no accounts, and your locker stays on your phone.")
+            Text("IM Iron Splits is built by one indie developer. No ads, no accounts, and your locker stays on your phone.")
                 .font(TriType.body)
                 .foregroundStyle(TriPalette.inkSecondary)
                 .multilineTextAlignment(.center)
@@ -173,7 +173,7 @@ struct ReviewPromptSheet: View {
 
     private var feedbackContent: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("What would make Tri Locker work better for you?")
+            Text("What would make IM Iron Splits work better for you?")
                 .font(TriType.body)
                 .foregroundStyle(TriPalette.inkSecondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -247,7 +247,7 @@ struct ReviewPromptSheet: View {
         components.scheme = "mailto"
         components.path = "jackwallner+tri@gmail.com"
         components.queryItems = [
-            URLQueryItem(name: "subject", value: "Tri Locker feedback"),
+            URLQueryItem(name: "subject", value: "IM Iron Splits feedback"),
             URLQueryItem(name: "body", value: body),
         ]
         return components.url

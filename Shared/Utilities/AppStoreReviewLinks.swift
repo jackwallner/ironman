@@ -1,7 +1,7 @@
 import Foundation
 import StoreKit
 
-/// App Store review deep links for Tri Locker.
+/// App Store review deep links for IM Iron Splits.
 enum AppStoreReviewLinks {
     /// Set once the App Store Connect record exists. Until then the
     /// storefront link resolves to nothing, so Settings hides the Rate row.

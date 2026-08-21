@@ -81,7 +81,7 @@ final class LockerFlowUITests: XCTestCase {
         let opened = paywallTitle.waitForExistence(timeout: 15)
         attachScreenshot(app, name: "9-paywall")
         XCTAssertTrue(opened, "Locked row should open the paywall")
-        // Products come from TriLocker.storekit under `xcodebuild test`, so the
+        // Products come from IronSplits.storekit under `xcodebuild test`, so the
         // real plan cards must render — not the "Couldn't Load Plans" state
         // that a simulator without StoreKit Testing would show.
         XCTAssertTrue(app.staticTexts["Yearly"].waitForExistence(timeout: 10), "Paywall should show real plans")

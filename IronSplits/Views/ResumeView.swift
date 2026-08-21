@@ -41,7 +41,7 @@ struct ResumeView: View {
             TriPlaceholder(systemImage: "lock.fill",
                            title: "Race resume",
                            message: "Every race with its date, distance, bib number, official time and division place — the sheet other races ask you to produce, in one tap.",
-                           actionTitle: "Unlock Tri Locker Pro") {
+                           actionTitle: "Unlock Iron Splits+") {
                 paywallTrigger = .raceResume
             }
         } else {

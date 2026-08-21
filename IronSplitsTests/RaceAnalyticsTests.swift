@@ -1,5 +1,5 @@
 import XCTest
-@testable import Tri_Locker
+@testable import IM_Iron_Splits
 
 final class RaceAnalyticsTests: XCTestCase {
 

@@ -56,7 +56,7 @@ struct BestsView: View {
                 TriPlaceholder(systemImage: "lock.fill",
                                title: "Split leaderboards",
                                message: "Rank every race you have finished by swim, bike, run or transitions. See the personal best on each leg and how far off it today's race was.",
-                               actionTitle: "Unlock Tri Locker Pro") {
+                               actionTitle: "Unlock Iron Splits+") {
                     paywallTrigger = .splitLeaderboards
                 }
             }

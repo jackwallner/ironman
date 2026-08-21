@@ -14,8 +14,8 @@ set -euo pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR/.."
 
-SCHEME="TriLocker.xcodeproj/xcshareddata/xcschemes/TriLocker.xcscheme"
-CONFIG="../../TriLocker/Services/Products.storekit"
+SCHEME="IronSplits.xcodeproj/xcshareddata/xcschemes/IronSplits.xcscheme"
+CONFIG="../../IronSplits/Services/Products.storekit"
 
 xcodegen generate
 

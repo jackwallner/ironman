@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct TriLockerApp: App {
+struct IronSplitsApp: App {
     @StateObject private var locker = LockerStore()
     @StateObject private var store = StoreService.shared
     @StateObject private var notes = RaceNotesStore()
