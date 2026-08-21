@@ -54,9 +54,11 @@ final class LockerFlowUITests: XCTestCase {
         XCTAssertTrue(app.navigationBars["Resume"].waitForExistence(timeout: 10))
         attachScreenshot(app, name: "5-resume")
 
-        // Pointers
-        app.tabBars.buttons["Pointers"].tap()
-        attachScreenshot(app, name: "6-pointers")
+        // Pattie: Ask Pattie, then the episode library behind the same tab.
+        app.tabBars.buttons["Pattie"].tap()
+        XCTAssertTrue(app.staticTexts["WHAT ARE YOU TRAINING FOR?"].waitForExistence(timeout: 10),
+                      "The Pattie tab should open on the Ask Pattie tree")
+        attachScreenshot(app, name: "6-ask-pattie")
 
         // Settings
         app.tabBars.buttons["Settings"].tap()
@@ -64,30 +66,40 @@ final class LockerFlowUITests: XCTestCase {
         attachScreenshot(app, name: "7-settings")
     }
 
-    func testFreeTierShowsTheUpgradeRowInsteadOfEveryRace() throws {
+    /// Nothing in the app is gated: `ProGate.everythingUnlocked` is set.
+    ///
+    /// This test used to assert the opposite, that a free athlete saw three
+    /// races and a "2 more races" row that opened the paywall. It is inverted
+    /// rather than deleted, because the thing worth pinning is the same either
+    /// way: whatever `ProGate` says, the locker has to agree with it. If the
+    /// flag ever goes back, this is the test that has to be flipped again, and
+    /// it will fail loudly rather than silently pass.
+    func testEverythingIsUnlockedWithNoPurchase() throws {
+        // No FORCE_PRO: this is a plain launch with no entitlement at all.
         let app = launch()
 
         XCTAssertTrue(searchAndClaim(app, name: "Daniel Winek"), "Search should return the athlete")
-
         XCTAssertTrue(app.navigationBars["Locker"].waitForExistence(timeout: 30))
-        // Five results exist for this athlete and three are free, so the
-        // locked row must be there.
-        let locked = app.staticTexts["2 more races"]
-        XCTAssertTrue(locked.waitForExistence(timeout: 15), "Free tier should truncate to three races")
-        attachScreenshot(app, name: "8-free-tier")
+        XCTAssertTrue(app.staticTexts["FINISHES"].waitForExistence(timeout: 15))
 
-        locked.tap()
-        let paywallTitle = app.staticTexts["Unlock Every Race"]
-        let opened = paywallTitle.waitForExistence(timeout: 15)
-        attachScreenshot(app, name: "9-paywall")
-        XCTAssertTrue(opened, "Locked row should open the paywall")
-        // Products come from IronSplits.storekit under `xcodebuild test`, so the
-        // real plan cards must render — not the "Couldn't Load Plans" state
-        // that a simulator without StoreKit Testing would show.
-        XCTAssertTrue(app.staticTexts["Yearly"].waitForExistence(timeout: 10), "Paywall should show real plans")
-        attachScreenshot(app, name: "10-paywall-plans")
+        XCTAssertFalse(app.staticTexts["2 more races"].exists,
+                       "No locked row should exist while everything is unlocked")
+        XCTAssertFalse(app.staticTexts["Unlock Every Race"].exists, "No paywall should be reachable")
+        attachScreenshot(app, name: "8-unlocked-locker")
+
+        // The three surfaces that used to be behind the paywall.
+        app.tabBars.buttons["Bests"].tap()
+        XCTAssertTrue(app.navigationBars["Bests"].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.staticTexts["Split leaderboards"].exists,
+                       "Bests should show the board, not the locked placeholder")
+        attachScreenshot(app, name: "9-unlocked-bests")
+
+        app.tabBars.buttons["Resume"].tap()
+        XCTAssertTrue(app.navigationBars["Resume"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["INCLUDE"].waitForExistence(timeout: 10),
+                      "Resume should show its options, not the locked placeholder")
+        attachScreenshot(app, name: "10-unlocked-resume")
     }
-
 
     /// Type a name and wait for the athlete to come back, retrying once.
     ///

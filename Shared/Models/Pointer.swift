@@ -4,7 +4,7 @@ import Foundation
 ///
 /// Content is not compiled in. The catalog is fetched from the app's own site
 /// and cached, so episodes can be added, re-ordered, or corrected without an
-/// App Store release — the same hotfix channel `FeedConfig` uses. An episode
+/// App Store release, on the same hotfix channel `FeedConfig` uses. An episode
 /// can point at a hosted video file or at a watch URL; the app plays the first
 /// and hands the second to the system.
 struct Pointer: Identifiable, Codable, Hashable, Sendable {

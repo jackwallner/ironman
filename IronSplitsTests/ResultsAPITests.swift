@@ -7,14 +7,29 @@ final class ResultsAPITests: XCTestCase {
 
     func testNameFilterSplitsOnWhitespaceSoEitherOrderMatches() {
         let filter = ResultsAPI.nameFilter(for: "Pattie Wallner")
-        XCTAssertTrue(filter.contains("contains(wtc_ContactId/firstname,'Pattie')"))
-        XCTAssertTrue(filter.contains("contains(wtc_ContactId/lastname,'Wallner')"))
+        XCTAssertTrue(filter.contains("startswith(wtc_ContactId/firstname,'Pattie')"))
+        XCTAssertTrue(filter.contains("startswith(wtc_ContactId/lastname,'Wallner')"))
         XCTAssertTrue(filter.contains(" and "))
     }
 
+    /// The default has to stay `startswith`: `contains` is a full scan upstream
+    /// and measures ~30s against ~1.5s for the same two-word name, which is the
+    /// whole difference between onboarding working and onboarding looking dead.
+    func testNameFilterDefaultsToThePrefixOperator() {
+        XCTAssertFalse(ResultsAPI.nameFilter(for: "Pattie Wallner").contains("contains("))
+    }
+
+    func testNameFilterSubstringDepthFallsBackToContains() {
+        let filter = ResultsAPI.nameFilter(for: "Wallner", depth: .substring)
+        XCTAssertTrue(filter.contains("contains(wtc_ContactId/lastname,'Wallner')"))
+        XCTAssertFalse(filter.contains("startswith("))
+    }
+
     func testNameFilterEscapesApostrophes() {
-        let filter = ResultsAPI.nameFilter(for: "O'Brien")
-        XCTAssertTrue(filter.contains("O''Brien"), "A raw apostrophe would terminate the OData string literal")
+        for depth in [SearchDepth.prefix, .substring] {
+            let filter = ResultsAPI.nameFilter(for: "O'Brien", depth: depth)
+            XCTAssertTrue(filter.contains("O''Brien"), "A raw apostrophe would terminate the OData string literal")
+        }
     }
 
     func testNameFilterCapsTermsSoOneQueryCannotRunAway() {

@@ -38,7 +38,7 @@ final class PattieWallnerSmokeUITests: XCTestCase {
         app.swipeUp(); shoot(app, "04-locker-scrolled")
         app.swipeUp(); shoot(app, "05-locker-scrolled2")
 
-        for (tab, name) in [("Bests", "06-bests"), ("Pointers", "07-pointers"),
+        for (tab, name) in [("Bests", "06-bests"), ("Pattie", "07-ask-pattie"),
                             ("Resume", "08-resume"), ("Settings", "09-settings")] {
             app.tabBars.buttons[tab].tap()
             _ = app.navigationBars[tab].waitForExistence(timeout: 15)

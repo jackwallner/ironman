@@ -68,14 +68,14 @@ struct RaceRow: View {
     var hasNote: Bool = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(alignment: .firstTextBaseline, spacing: 8) {
-                VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .leading, spacing: TriSpace.x2) {
+            HStack(alignment: .firstTextBaseline, spacing: TriSpace.x2) {
+                VStack(alignment: .leading, spacing: TriSpace.x1) {
                     Text(result.raceName)
                         .font(TriType.cardTitle)
                         .foregroundStyle(TriPalette.ink)
                         .lineLimit(2)
-                    HStack(spacing: 6) {
+                    HStack(spacing: TriSpace.x2) {
                         Text(dateText)
                             .font(TriType.small)
                             .foregroundStyle(TriPalette.inkTertiary)
@@ -92,8 +92,8 @@ struct RaceRow: View {
                         }
                     }
                 }
-                Spacer(minLength: 8)
-                VStack(alignment: .trailing, spacing: 2) {
+                Spacer(minLength: TriSpace.x2)
+                VStack(alignment: .trailing, spacing: TriSpace.x1) {
                     Text(result.isComplete ? TimeFormat.hms(result.finish) : statusText)
                         .font(TriType.statLarge)
                         .foregroundStyle(result.isComplete ? TriPalette.ink : TriPalette.negative)
@@ -108,7 +108,7 @@ struct RaceRow: View {
             if result.isComplete {
                 SplitBar(result: result)
                 if !personalBestLegs.isEmpty {
-                    HStack(spacing: 4) {
+                    HStack(spacing: TriSpace.x1) {
                         ForEach(Discipline.rankable.filter { personalBestLegs.contains($0) }) { leg in
                             TriBadge(text: "PB \(leg.title)", color: TriPalette.sunrise, filled: true)
                         }
@@ -116,7 +116,8 @@ struct RaceRow: View {
                 }
             }
         }
-        .padding(.vertical, 4)
+        .frame(minHeight: TriGeo.tapTarget)
+        .padding(.vertical, TriSpace.x1)
     }
 
     private var statusText: String {
@@ -127,7 +128,7 @@ struct RaceRow: View {
 
     private var dateText: String {
         guard let date = result.eventDate else {
-            return result.year > 0 ? String(result.year) : "—"
+            return result.year > 0 ? String(result.year) : "Undated"
         }
         return RaceDate.medium(date)
     }
@@ -136,9 +137,9 @@ struct RaceRow: View {
 /// Legend for the split bar's colours.
 struct SplitLegend: View {
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: TriSpace.x3) {
             ForEach([Discipline.swim, .t1, .bike, .t2, .run]) { leg in
-                HStack(spacing: 4) {
+                HStack(spacing: TriSpace.x1) {
                     Circle()
                         .fill(TriPalette.color(for: leg))
                         .frame(width: 7, height: 7)
@@ -152,6 +153,10 @@ struct SplitLegend: View {
 }
 
 /// The standard "this needs Pro" row, used wherever a list is truncated.
+///
+/// Nothing calls it while `ProGate.everythingUnlocked` is set, and that is the
+/// point: the gate came out of the screens, not out of the codebase, so turning
+/// the flag back on is a one-line change rather than a rebuild of every list.
 struct LockedRow: View {
     let title: String
     let subtitle: String
@@ -160,12 +165,12 @@ struct LockedRow: View {
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 12) {
+            HStack(spacing: TriSpace.x3) {
                 Image(systemName: "lock.fill")
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(TriPalette.sunrise)
                     .frame(width: 26)
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: TriSpace.x1) {
                     Text(title)
                         .font(TriType.bodyBold)
                         .foregroundStyle(TriPalette.ink)
@@ -174,7 +179,7 @@ struct LockedRow: View {
                         .foregroundStyle(TriPalette.inkTertiary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
-                Spacer(minLength: 8)
+                Spacer(minLength: TriSpace.x2)
                 Text(cta)
                     .font(TriType.smallBold)
                     .foregroundStyle(.white)
@@ -197,7 +202,7 @@ struct TriPlaceholder: View {
     var action: (() -> Void)?
 
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: TriSpace.x3) {
             Image(systemName: systemImage)
                 .font(.system(size: 38, weight: .light))
                 .foregroundStyle(TriPalette.inkTertiary)
@@ -213,15 +218,20 @@ struct TriPlaceholder: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
             if let actionTitle, let action {
-                Button(actionTitle, action: action)
-                    .font(TriType.bodyBold)
-                    .foregroundStyle(TriPalette.sunrise)
-                    .padding(.top, 2)
+                Button(actionTitle) {
+                    Haptics.tap()
+                    action()
+                }
+                .font(TriType.bodyBold)
+                .foregroundStyle(TriPalette.sunrise)
+                .frame(minHeight: TriGeo.tapTarget)
+                .buttonStyle(.triPressSilent)
+                .padding(.top, TriSpace.x1)
             }
         }
         .frame(maxWidth: .infinity)
-        .padding(.horizontal, 28)
-        .padding(.vertical, 32)
+        .padding(.horizontal, TriSpace.x8)
+        .padding(.vertical, TriSpace.x8)
     }
 }
 
@@ -232,7 +242,7 @@ struct StatTile: View {
     var tint: Color = TriPalette.ink
 
     var body: some View {
-        VStack(spacing: 2) {
+        VStack(spacing: TriSpace.x1) {
             Text(value)
                 .font(TriType.statMed)
                 .foregroundStyle(tint)

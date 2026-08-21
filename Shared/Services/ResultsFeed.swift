@@ -4,7 +4,7 @@ import Foundation
 ///
 /// The feed is an OData table fronted by a proxy that holds the subscription
 /// key. Neither is ours, so the shape of a request is the one thing in this app
-/// most likely to change without warning — and an App Store update takes days
+/// most likely to change without warning, and an App Store update takes days
 /// to reach anyone. Every piece of it therefore lives in a struct that can be
 /// replaced at runtime by `FeedConfigLoader`, and the compiled-in values are
 /// only the fallback for a first launch with no network.

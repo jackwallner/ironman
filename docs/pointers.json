@@ -1,6 +1,6 @@
 {
   "title": "Tri Pattie's Pointers",
-  "subtitle": "19 tips from Pattie Wallner.",
+  "subtitle": "19 tips from Pattie Wallner. All of them free.",
   "emptyMessage": "The Tri Pattie's Pointers episodes aren't published yet. They'll appear here as soon as they are, with no app update needed.",
   "pointers": [
     {
@@ -37,7 +37,7 @@
       "linkURL": null,
       "thumbnailURL": "https://github.com/jackwallner/ironman/releases/download/pointers-v1/ep-03-bring-a-backpack.jpg",
       "durationSeconds": 62,
-      "isFree": false
+      "isFree": true
     },
     {
       "id": "ep-04",
@@ -49,7 +49,7 @@
       "linkURL": null,
       "thumbnailURL": "https://github.com/jackwallner/ironman/releases/download/pointers-v1/ep-04-breaking-bad-outfit.jpg",
       "durationSeconds": 61,
-      "isFree": false
+      "isFree": true
     },
     {
       "id": "ep-05",
@@ -61,7 +61,7 @@
       "linkURL": null,
       "thumbnailURL": "https://github.com/jackwallner/ironman/releases/download/pointers-v1/ep-05-right-size-baggie.jpg",
       "durationSeconds": 45,
-      "isFree": false
+      "isFree": true
     },
     {
       "id": "ep-06",
@@ -73,7 +73,7 @@
       "linkURL": null,
       "thumbnailURL": "https://github.com/jackwallner/ironman/releases/download/pointers-v1/ep-06-freezer-bag.jpg",
       "durationSeconds": 45,
-      "isFree": false
+      "isFree": true
     },
     {
       "id": "ep-07",
@@ -85,7 +85,7 @@
       "linkURL": null,
       "thumbnailURL": "https://github.com/jackwallner/ironman/releases/download/pointers-v1/ep-07-wind-vs-flat-tire.jpg",
       "durationSeconds": 47,
-      "isFree": false
+      "isFree": true
     },
     {
       "id": "ep-08",
@@ -97,7 +97,7 @@
       "linkURL": null,
       "thumbnailURL": "https://github.com/jackwallner/ironman/releases/download/pointers-v1/ep-08-the-left-hand-grab.jpg",
       "durationSeconds": 57,
-      "isFree": false
+      "isFree": true
     },
     {
       "id": "ep-09",
@@ -109,7 +109,7 @@
       "linkURL": null,
       "thumbnailURL": "https://github.com/jackwallner/ironman/releases/download/pointers-v1/ep-09-the-climb.jpg",
       "durationSeconds": 75,
-      "isFree": false
+      "isFree": true
     },
     {
       "id": "ep-10",
@@ -121,7 +121,7 @@
       "linkURL": null,
       "thumbnailURL": "https://github.com/jackwallner/ironman/releases/download/pointers-v1/ep-10-sausage-roll-wetsuit.jpg",
       "durationSeconds": 48,
-      "isFree": false
+      "isFree": true
     },
     {
       "id": "ep-11",
@@ -133,7 +133,7 @@
       "linkURL": null,
       "thumbnailURL": "https://github.com/jackwallner/ironman/releases/download/pointers-v1/ep-11-melt-down.jpg",
       "durationSeconds": 33,
-      "isFree": false
+      "isFree": true
     },
     {
       "id": "ep-12",
@@ -145,7 +145,7 @@
       "linkURL": null,
       "thumbnailURL": "https://github.com/jackwallner/ironman/releases/download/pointers-v1/ep-12-what-to-wear.jpg",
       "durationSeconds": 30,
-      "isFree": false
+      "isFree": true
     },
     {
       "id": "ep-13",
@@ -157,7 +157,7 @@
       "linkURL": null,
       "thumbnailURL": "https://github.com/jackwallner/ironman/releases/download/pointers-v1/ep-13-it-s-a-contact-sport.jpg",
       "durationSeconds": 34,
-      "isFree": false
+      "isFree": true
     },
     {
       "id": "ep-15",
@@ -169,7 +169,7 @@
       "linkURL": null,
       "thumbnailURL": "https://github.com/jackwallner/ironman/releases/download/pointers-v1/ep-15-it-s-black.jpg",
       "durationSeconds": 43,
-      "isFree": false
+      "isFree": true
     },
     {
       "id": "ep-16",
@@ -181,7 +181,7 @@
       "linkURL": null,
       "thumbnailURL": "https://github.com/jackwallner/ironman/releases/download/pointers-v1/ep-16-avoid-the-zero-mph-fall-b-u-b-s.jpg",
       "durationSeconds": 74,
-      "isFree": false
+      "isFree": true
     },
     {
       "id": "ep-17",
@@ -193,7 +193,7 @@
       "linkURL": null,
       "thumbnailURL": "https://github.com/jackwallner/ironman/releases/download/pointers-v1/ep-17-tongue-tied.jpg",
       "durationSeconds": 71,
-      "isFree": false
+      "isFree": true
     },
     {
       "id": "ep-18",
@@ -205,7 +205,7 @@
       "linkURL": null,
       "thumbnailURL": "https://github.com/jackwallner/ironman/releases/download/pointers-v1/ep-18-key-dilemma.jpg",
       "durationSeconds": 43,
-      "isFree": false
+      "isFree": true
     },
     {
       "id": "ep-19",
@@ -217,7 +217,7 @@
       "linkURL": null,
       "thumbnailURL": "https://github.com/jackwallner/ironman/releases/download/pointers-v1/ep-19-un-blistify-toes.jpg",
       "durationSeconds": 63,
-      "isFree": false
+      "isFree": true
     },
     {
       "id": "ep-20",
@@ -229,7 +229,7 @@
       "linkURL": null,
       "thumbnailURL": "https://github.com/jackwallner/ironman/releases/download/pointers-v1/ep-20-maximize-energy.jpg",
       "durationSeconds": 55,
-      "isFree": false
+      "isFree": true
     }
   ]
 }

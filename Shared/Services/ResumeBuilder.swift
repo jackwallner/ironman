@@ -27,7 +27,7 @@ enum ResumeBuilder {
         let rows = rows(for: results, options: options)
         let summary = RaceAnalytics.summary(rows)
         var lines: [String] = []
-        lines.append("RACE RESUME — \(athlete.name.uppercased())")
+        lines.append("RACE RESUME: \(athlete.name.uppercased())")
         if let location = athlete.location {
             lines.append(location)
         }
@@ -114,7 +114,7 @@ enum ResumeBuilder {
     /// not `Sendable` and this runs off the main actor.
     private static func dateText(_ result: RaceResult) -> String {
         guard let date = result.eventDate else {
-            return result.year > 0 ? String(result.year) : "—"
+            return result.year > 0 ? String(result.year) : "Undated"
         }
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .gmt

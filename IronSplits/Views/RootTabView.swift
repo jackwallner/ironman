@@ -52,7 +52,7 @@ struct RootTabView: View {
             BestsView()
                 .tabItem { Label("Bests", systemImage: "list.number") }
             PointersView()
-                .tabItem { Label("Pointers", systemImage: "play.rectangle.fill") }
+                .tabItem { Label("Pattie", systemImage: "play.rectangle.fill") }
             ResumeView()
                 .tabItem { Label("Resume", systemImage: "doc.text.fill") }
             SettingsView()

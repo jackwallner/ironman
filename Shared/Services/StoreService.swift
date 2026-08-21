@@ -256,14 +256,21 @@ final class StoreService: NSObject, ObservableObject {
     @Published private(set) var planOptions: [PlanOption] = []
     @Published private(set) var currentOffering: Offering?
     @Published private(set) var customerInfo: CustomerInfo?
+    /// Whether this athlete has Iron Splits+.
+    ///
+    /// While `ProGate.everythingUnlocked` is set this is unconditionally true
+    /// and the entitlement is never consulted, so no screen in the app can
+    /// draw a lock. `apply(customerInfo:)` still records the real entitlement
+    /// in `customerInfo`; it just stops being what the UI asks.
+    ///
+    /// `IRONSPLITS_FORCE_PRO=1` on the scheme is the Debug-only override that
+    /// predates the switch, kept so the gated build can still be exercised in
+    /// the simulator once the switch goes back off.
     #if DEBUG
-    /// Local-only Iron Splits+ override so Pro-gated surfaces (split leaderboards,
-    /// full history, race resume) can be exercised in the simulator, where
-    /// RevenueCat is intentionally never configured. Set the
-    /// `IRONSPLITS_FORCE_PRO=1` environment variable on the scheme/launch.
-    @Published private(set) var isPro: Bool = ProcessInfo.processInfo.environment["IRONSPLITS_FORCE_PRO"] == "1"
+    @Published private(set) var isPro: Bool = ProGate.everythingUnlocked
+        || ProcessInfo.processInfo.environment["IRONSPLITS_FORCE_PRO"] == "1"
     #else
-    @Published private(set) var isPro: Bool = false
+    @Published private(set) var isPro: Bool = ProGate.everythingUnlocked
     #endif
     @Published private(set) var purchaseInFlight: Bool = false
     @Published private(set) var isLoadingProducts: Bool = false
@@ -605,6 +612,9 @@ final class StoreService: NSObject, ObservableObject {
         let allKeys = customerInfo.entitlements.all.keys.sorted().joined(separator: ", ")
         logger.info("Applied customerInfo, active: [\(activeKeys, privacy: .public)] all: [\(allKeys, privacy: .public)]")
         let hasActiveSubscription = customerInfo.hasProEntitlement
+        // While the app is fully unlocked, a customerInfo that says "not
+        // subscribed" must not be allowed to close a door the switch opened.
+        guard !ProGate.everythingUnlocked else { return }
         if isPro != hasActiveSubscription {
             isPro = hasActiveSubscription
             logger.info("isPro updated to \(hasActiveSubscription, privacy: .public)")
@@ -616,7 +626,7 @@ final class StoreService: NSObject, ObservableObject {
     ///
     /// Two sources, in order of fidelity: StoreKit Testing when the scheme has
     /// actually activated it, and the bundled `.storekit` catalog otherwise.
-    /// The second is display-only — `PlanOption.package` is nil, so the CTA
+    /// The second is display-only: `PlanOption.package` is nil, so the CTA
     /// disables itself rather than pretending a purchase is possible.
     /// Neither touches RevenueCat, so no customer is created in the production
     /// project. Compiled out of Release.

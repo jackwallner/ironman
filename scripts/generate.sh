@@ -3,7 +3,7 @@
 #
 # StoreKit Testing is what makes the paywall renderable on a simulator at all
 # (see the ios-dev skill). XcodeGen only writes a StoreKitConfigurationFileReference
-# into the scheme's LaunchAction — its spec has no key for the TestAction — and
+# into the scheme's LaunchAction (its spec has no key for the TestAction) and
 # a UI test launches the app through the TestAction. Without this patch every
 # headless paywall shot is the "Couldn't Load Plans" empty state, which
 # exercises none of the layout worth checking.

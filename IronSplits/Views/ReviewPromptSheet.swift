@@ -104,7 +104,7 @@ struct ReviewPromptSheet: View {
                     .font(.system(size: 28, weight: .bold))
                     .foregroundStyle(.white)
             }
-            .padding(.top, 8)
+            .padding(.top, TriSpace.x2)
 
             Text("If IM Iron Splits is keeping your race history straight, a quick rating on the App Store makes a real difference.")
                 .font(TriType.body)
@@ -129,8 +129,8 @@ struct ReviewPromptSheet: View {
                 .buttonStyle(.plain)
             }
         }
-        .padding(.horizontal, 24)
-        .padding(.bottom, 24)
+        .padding(.horizontal, TriSpace.x6)
+        .padding(.bottom, TriSpace.x6)
     }
 
     private var reviewPitchContent: some View {
@@ -140,7 +140,7 @@ struct ReviewPromptSheet: View {
                 .foregroundStyle(TriPalette.inkSecondary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
-                .padding(.top, 8)
+                .padding(.top, TriSpace.x2)
 
             Text("An honest App Store review takes seconds and helps more fans find a clean Statcast percentile scout.")
                 .font(TriType.small)
@@ -167,8 +167,8 @@ struct ReviewPromptSheet: View {
                 .buttonStyle(.plain)
             }
         }
-        .padding(.horizontal, 24)
-        .padding(.bottom, 24)
+        .padding(.horizontal, TriSpace.x6)
+        .padding(.bottom, TriSpace.x6)
     }
 
     private var feedbackContent: some View {
@@ -202,8 +202,8 @@ struct ReviewPromptSheet: View {
             .disabled(feedbackText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             .opacity(feedbackText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? 0.5 : 1)
         }
-        .padding(.horizontal, 24)
-        .padding(.bottom, 24)
+        .padding(.horizontal, TriSpace.x6)
+        .padding(.bottom, TriSpace.x6)
         .onAppear { feedbackFocused = true }
     }
 
@@ -212,16 +212,20 @@ struct ReviewPromptSheet: View {
             .font(TriType.bodyBold)
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 14)
+            .frame(height: TriGeo.tapTarget + TriSpace.x1)
             .background(TriPalette.sunrise, in: Capsule())
     }
 
     private func secondaryButtonLabel(_ title: String) -> some View {
+        // `inkSecondary` rather than a blue of its own. A one-off link colour
+        // was the only token in the palette that existed for a single call
+        // site, and one accent per app is the rule that keeps a screen from
+        // reading as three screens.
         Text(title)
             .font(TriType.smallBold)
-            .foregroundStyle(TriPalette.linkBlue)
+            .foregroundStyle(TriPalette.inkSecondary)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 10)
+            .frame(minHeight: TriGeo.tapTarget)
     }
 
     private func handleNotNow() {

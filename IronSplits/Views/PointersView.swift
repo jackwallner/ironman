@@ -1,47 +1,96 @@
-import SwiftUI
 import AVKit
+import SwiftUI
 
-/// The Tri Pointers coaching library.
+/// The Pattie tab: her guided answers, and the full episode library.
+///
+/// Two ways into the same twenty clips. Ask Pattie routes you to the right one
+/// in three taps; the library is for browsing when you already know what you're
+/// after. They share the catalog and the player.
 struct PointersView: View {
-    @EnvironmentObject private var store: StoreService
+    @EnvironmentObject private var pattie: PattieMode
+
+    enum Mode: String, CaseIterable, Identifiable {
+        case ask = "Ask Pattie"
+        case library = "All episodes"
+        var id: String { rawValue }
+    }
+
+    @AppStorage("pointers.mode") private var mode: Mode = .ask
+    @StateObject private var ask = AskPattieModel()
+    @State private var path: [AskPattieStep] = []
+
+    var body: some View {
+        // One `NavigationStack` for the whole tab, with the mode switch in its
+        // principal slot. Giving each half its own stack meant the toolbar the
+        // segmented control lives in was torn down by the same tap that
+        // switched it, which loses the interaction it was in the middle of.
+        NavigationStack(path: $path) {
+            ZStack {
+                TriPalette.canvas.ignoresSafeArea()
+                switch mode {
+                case .ask:
+                    AskPattieGoalList(model: ask, path: $path)
+                case .library:
+                    PointerLibraryView()
+                }
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .triNavBar()
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Picker("", selection: $mode) {
+                        ForEach(Mode.allCases) { Text($0.rawValue).tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+                    .frame(maxWidth: 260)
+                }
+            }
+            .navigationDestination(for: AskPattieStep.self) { step in
+                switch step {
+                case .topics(let goalID):
+                    AskPattieTopicList(model: ask, path: $path, goalID: goalID)
+                case .answers(let goalID, let topicID):
+                    AskPattieAnswerList(model: ask, goalID: goalID, topicID: topicID)
+                }
+            }
+            .refreshable {
+                await ask.refresh()
+                await PointerLibrary.shared.refresh(force: true)
+            }
+        }
+        .pattieMoment(.askOpened, pattie)
+        .onChange(of: mode) { _, _ in
+            Haptics.selection()
+            // A path built inside Ask Pattie means nothing to the library, and
+            // leaving it pushed would strand the back button on a screen the
+            // other mode cannot draw.
+            path.removeAll()
+        }
+        .task { await ask.load() }
+    }
+}
+
+/// Every episode, newest first, with a thumbnail and an offline badge.
+struct PointerLibraryView: View {
     @EnvironmentObject private var pattie: PattieMode
 
     @State private var catalog: PointerCatalog = .empty
     @State private var isLoading = true
     @State private var filter: Discipline?
-    @State private var paywallTrigger: PaywallTrigger?
     @State private var playing: Pointer?
 
     @Environment(\.openURL) private var openURL
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                TriPalette.canvas.ignoresSafeArea()
-                content
-            }
-            .navigationTitle(catalog.title)
+        content
             .pattieMoment(.pointers, pattie)
-            // Inline: a large title renders as an empty band here, and the
-            // screen's own header is already doing that job.
-            .navigationBarTitleDisplayMode(.inline)
-            .triNavBar()
-            .sheet(item: $paywallTrigger) { PaywallView(trigger: $0) }
-            .sheet(item: $playing) { pointer in
-                if let url = pointer.playableURL {
-                    PointerPlayer(url: url, title: pointer.title)
-                }
-            }
+            .sheet(item: $playing) { PointerPlayerSheet(pointer: $0) }
             .task {
                 catalog = await PointerLibrary.shared.catalog()
                 isLoading = catalog.pointers.isEmpty
                 catalog = await PointerLibrary.shared.refresh()
                 isLoading = false
             }
-            .refreshable {
-                catalog = await PointerLibrary.shared.refresh(force: true)
-            }
-        }
     }
 
     @ViewBuilder
@@ -58,58 +107,40 @@ struct PointersView: View {
     }
 
     private var list: some View {
-        List {
-            if let subtitle = catalog.subtitle {
-                Section {
+        ScrollView {
+            LazyVStack(spacing: TriSpace.x3) {
+                if let subtitle = catalog.subtitle {
                     Text(subtitle)
                         .font(TriType.small)
                         .foregroundStyle(TriPalette.inkSecondary)
-                        .listRowBackground(Color.clear)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
-            }
 
-            if disciplines.count > 1 {
-                Section {
+                if disciplines.count > 1 {
                     ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 8) {
-                            chip(title: "All", isSelected: filter == nil) { filter = nil }
+                        HStack(spacing: TriSpace.x2) {
+                            TriChip(title: "All", isSelected: filter == nil) { filter = nil }
                             ForEach(disciplines) { leg in
-                                chip(title: leg.title, isSelected: filter == leg) { filter = leg }
+                                TriChip(title: leg.title, isSelected: filter == leg) { filter = leg }
                             }
                         }
+                        .padding(.vertical, TriSpace.x1)
                     }
-                    .listRowInsets(EdgeInsets(top: 0, leading: TriGeo.padPage, bottom: 8, trailing: TriGeo.padPage))
-                    .listRowBackground(Color.clear)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
-            }
 
-            Section {
                 ForEach(filtered) { pointer in
                     Button {
                         open(pointer)
                     } label: {
-                        PointerRow(pointer: pointer, isLocked: isLocked(pointer))
+                        PointerRow(pointer: pointer)
                     }
-                    .buttonStyle(.plain)
-                    .listRowBackground(TriPalette.surface)
+                    .buttonStyle(.triPress)
                 }
             }
+            .padding(TriGeo.padPage)
+            .padding(.bottom, TriSpace.x8)
         }
-        .listStyle(.insetGrouped)
-        .scrollContentBackground(.hidden)
-    }
-
-    private func chip(title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Text(title)
-                .font(TriType.smallBold)
-                .foregroundStyle(isSelected ? .white : TriPalette.inkSecondary)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(isSelected ? TriPalette.deep : TriPalette.surface, in: Capsule())
-                .overlay(Capsule().stroke(TriPalette.hairline, lineWidth: isSelected ? 0 : TriGeo.hairline))
-        }
-        .buttonStyle(.plain)
     }
 
     private var disciplines: [Discipline] {
@@ -127,17 +158,9 @@ struct PointersView: View {
         return catalog.pointers.filter { $0.discipline == filter }
     }
 
-    private func isLocked(_ pointer: Pointer) -> Bool {
-        !pointer.isFree && !store.isPro
-    }
-
     private func open(_ pointer: Pointer) {
-        guard !isLocked(pointer) else {
-            paywallTrigger = .pointers
-            return
-        }
-        guard let url = pointer.playableURL else { return }
-        if pointer.opensExternally {
+        pattie.fire(.pointerPlayed)
+        if pointer.opensExternally, let url = pointer.playableURL {
             openURL(url)
         } else {
             playing = pointer
@@ -145,45 +168,46 @@ struct PointersView: View {
     }
 }
 
+// MARK: - Row
+
 private struct PointerRow: View {
     let pointer: Pointer
-    let isLocked: Bool
+
+    @State private var isDownloaded = false
 
     var body: some View {
-        HStack(spacing: 12) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .fill(TriPalette.deep.opacity(0.08))
-                    .frame(width: 44, height: 44)
-                Image(systemName: isLocked ? "lock.fill" : "play.fill")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(isLocked ? TriPalette.inkTertiary : TriPalette.deep)
-            }
+        HStack(spacing: TriSpace.x3) {
+            thumbnail
 
-            VStack(alignment: .leading, spacing: 2) {
-                HStack(spacing: 6) {
+            VStack(alignment: .leading, spacing: TriSpace.x1) {
+                HStack(spacing: TriSpace.x1) {
                     if let episode = pointer.episode {
                         Text("EP " + String(episode))
                             .font(TriType.micro)
                             .foregroundStyle(TriPalette.inkTertiary)
                     }
-                    if pointer.isFree {
-                        TriBadge(text: "Free", color: TriPalette.positive)
+                    if isDownloaded {
+                        Image(systemName: "arrow.down.circle.fill")
+                            .font(.system(size: 10, weight: .semibold))
+                            .foregroundStyle(TriPalette.positive)
+                            .accessibilityLabel("Saved for offline")
                     }
                 }
                 Text(pointer.title)
                     .font(TriType.bodyBold)
                     .foregroundStyle(TriPalette.ink)
+                    .multilineTextAlignment(.leading)
                     .lineLimit(2)
                 if let summary = pointer.summary {
                     Text(summary)
                         .font(TriType.small)
                         .foregroundStyle(TriPalette.inkTertiary)
+                        .multilineTextAlignment(.leading)
                         .lineLimit(2)
                 }
             }
 
-            Spacer(minLength: 8)
+            Spacer(minLength: TriSpace.x2)
 
             if let duration = pointer.durationText {
                 Text(duration)
@@ -191,29 +215,125 @@ private struct PointerRow: View {
                     .foregroundStyle(TriPalette.inkTertiary)
             }
         }
-        .padding(.vertical, 4)
-        .contentShape(Rectangle())
+        .frame(minHeight: TriGeo.tapTarget + TriSpace.x4)
+        .triCard(padding: TriSpace.x3)
+        .contentShape(RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous))
+        .task {
+            isDownloaded = await PointerMediaCache.shared.cachedFile(for: pointer) != nil
+        }
+    }
+
+    private var thumbnail: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: TriGeo.radiusInner, style: .continuous)
+                .fill(TriPalette.deep.opacity(0.10))
+
+            if let thumb = pointer.thumbnailURL.flatMap(URL.init(string:)) {
+                AsyncImage(url: thumb) { image in
+                    image.resizable().aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    Color.clear
+                }
+                .clipShape(RoundedRectangle(cornerRadius: TriGeo.radiusInner, style: .continuous))
+            }
+
+            Image(systemName: "play.fill")
+                .font(.system(size: 14, weight: .bold))
+                .foregroundStyle(.white)
+                .shadow(color: .black.opacity(0.5), radius: 3)
+        }
+        .frame(width: 76, height: 52)
+        .accessibilityHidden(true)
     }
 }
 
-private struct PointerPlayer: View {
-    let url: URL
-    let title: String
+// MARK: - Player
+
+/// Plays an episode from a local copy.
+///
+/// The remote file cannot be streamed: see `PointerMediaCache` for why the
+/// hosting denies `AVURLAsset` both the MIME type and the path extension it
+/// needs. The sheet downloads first, shows real progress while it does, and
+/// then plays a file that works offline from then on.
+struct PointerPlayerSheet: View {
+    let pointer: Pointer
 
     @Environment(\.dismiss) private var dismiss
 
+    @State private var player: AVPlayer?
+    @State private var progress: Double = 0
+    @State private var errorMessage: String?
+
     var body: some View {
         NavigationStack {
-            VideoPlayer(player: AVPlayer(url: url))
-                .ignoresSafeArea(edges: .bottom)
-                .navigationTitle(title)
-                .navigationBarTitleDisplayMode(.inline)
-                .triNavBar()
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Done") { dismiss() }.foregroundStyle(.white)
-                    }
+            ZStack {
+                Color.black.ignoresSafeArea()
+                content
+            }
+            .navigationTitle(pointer.title)
+            .navigationBarTitleDisplayMode(.inline)
+            .triNavBar()
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Done") { dismiss() }
+                        .foregroundStyle(.white)
+                        .triTapTarget()
                 }
+            }
+        }
+        .task { await load() }
+        .onDisappear {
+            player?.pause()
+            player = nil
+        }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        if let player {
+            VideoPlayer(player: player)
+                .ignoresSafeArea(edges: .bottom)
+        } else if let errorMessage {
+            TriPlaceholder(systemImage: "wifi.exclamationmark",
+                           title: "Couldn't load the episode",
+                           message: errorMessage,
+                           actionTitle: "Try again") {
+                Task { await load(force: true) }
+            }
+        } else {
+            VStack(spacing: TriSpace.x3) {
+                ProgressView(value: progress)
+                    .progressViewStyle(.linear)
+                    .tint(TriPalette.sunrise)
+                    .frame(maxWidth: 220)
+                Text(progress > 0 ? "Downloading \(Int(progress * 100))%" : "Starting the episode…")
+                    .font(TriType.small)
+                    .foregroundStyle(.white.opacity(0.75))
+                    .monospacedDigit()
+                Text("Saved after the first play, so it works offline next time.")
+                    .font(TriType.micro)
+                    .foregroundStyle(.white.opacity(0.5))
+                    .multilineTextAlignment(.center)
+            }
+            .padding(TriGeo.padPage)
+        }
+    }
+
+    private func load(force: Bool = false) async {
+        if force {
+            errorMessage = nil
+            progress = 0
+        }
+        do {
+            let url = try await PointerMediaCache.shared.file(for: pointer) { fraction in
+                Task { @MainActor in progress = fraction }
+            }
+            let player = AVPlayer(url: url)
+            self.player = player
+            player.play()
+        } catch {
+            guard !isTaskCancellation(error) else { return }
+            errorMessage = error.localizedDescription
         }
     }
 }

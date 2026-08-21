@@ -121,8 +121,8 @@ struct ODataResultRow: Decodable, Sendable {
         )
     }
 
-    /// Zero is the feed's "no data" for both times and ranks — a DNF carries a
-    /// 0 run split, not a missing one — so it has to become nil here or every
+    /// Zero is the feed's "no data" for both times and ranks. A DNF carries a
+    /// 0 run split, not a missing one, so it has to become nil here or every
     /// leaderboard sorts the people who didn't run to the top.
     private static func positive(_ loose: LooseInt?) -> Int? {
         guard let value = loose?.value, value > 0 else { return nil }

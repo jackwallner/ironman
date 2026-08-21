@@ -1,0 +1,117 @@
+import XCTest
+
+/// Pattie Mode, and the Ask Pattie tree it shares a tab with.
+///
+/// Pattie Mode is off in every other UI test on purpose: her card slides in over
+/// the tab bar and eats whatever tap the test was aiming at. `-PattieMode` is the
+/// opt-in, and this is the one test that takes it.
+@MainActor
+final class PattieModeUITests: XCTestCase {
+
+    override func setUp() { continueAfterFailure = false }
+
+    private func launch(pattieMode: Bool) -> XCUIApplication {
+        let app = XCUIApplication()
+        app.launchArguments += ["-UITest", "-ResetLocker"]
+        if pattieMode {
+            app.launchArguments += ["-PattieMode"]
+            app.launchEnvironment["IRONSPLITS_PATTIE_MODE"] = "1"
+        }
+        app.launch()
+        return app
+    }
+
+    /// She turns up, with her face and her voice, and goes away when tapped.
+    func testPattieAppearsAndDismisses() throws {
+        let app = launch(pattieMode: true)
+
+        // The search screen fires `.searching`, which is the first moment that
+        // can land before an athlete has been claimed.
+        let card = app.descendants(matching: .any).matching(
+            NSPredicate(format: "label BEGINSWITH %@", "Pattie says:")
+        ).firstMatch
+        XCTAssertTrue(card.waitForExistence(timeout: 20), "Pattie Mode should show a card")
+
+        card.tap()
+        XCTAssertTrue(waitForDisappearance(card, timeout: 10), "Tapping the card should dismiss it")
+    }
+
+    /// The same launch without the flag stays quiet, which is what the rest of
+    /// the suite depends on.
+    func testPattieStaysQuietWhenNotAskedFor() throws {
+        let app = launch(pattieMode: false)
+
+        XCTAssertTrue(app.textFields["Your name as you registered"].waitForExistence(timeout: 20))
+        let card = app.descendants(matching: .any).matching(
+            NSPredicate(format: "label BEGINSWITH %@", "Pattie says:")
+        ).firstMatch
+        // Long enough for the welcome and searching moments to have fired.
+        XCTAssertFalse(card.waitForExistence(timeout: 8), "Pattie Mode should be off without -PattieMode")
+    }
+
+    /// Ask Pattie is three taps and every path lands on an answer with audio.
+    func testAskPattieReachesAnAnswerInThreeTaps() throws {
+        let app = launch(pattieMode: false)
+
+        XCTAssertTrue(claimPattie(in: app), "The Pattie tab needs a claimed athlete")
+        app.tabBars.buttons["Pattie"].tap()
+
+        XCTAssertTrue(app.staticTexts["WHAT ARE YOU TRAINING FOR?"].waitForExistence(timeout: 15),
+                      "The Pattie tab should open on the goal question")
+
+        app.staticTexts["A 70.3"].tap()
+        XCTAssertTrue(app.staticTexts["WHAT DO YOU NEED HELP WITH?"].waitForExistence(timeout: 10))
+
+        app.staticTexts["Transitions"].tap()
+
+        // An answer carries her setup, her fix, and a button that plays the
+        // clip the fix was transcribed from.
+        XCTAssertTrue(app.staticTexts["HERE'S THE SITUATION"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["HERE'S THE SOLUTION"].exists)
+        XCTAssertTrue(app.buttons["Hear it from Pattie"].firstMatch.exists,
+                      "Every answer should offer her own audio")
+
+        // Back out, to prove this is real navigation rather than a stack of
+        // sheets: the system back button has to return to the topic list.
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        XCTAssertTrue(app.staticTexts["WHAT DO YOU NEED HELP WITH?"].waitForExistence(timeout: 10))
+    }
+
+    /// The library half of the tab still lists the episodes.
+    func testEpisodeLibraryLists() throws {
+        let app = launch(pattieMode: false)
+
+        XCTAssertTrue(claimPattie(in: app), "The Pattie tab needs a claimed athlete")
+        app.tabBars.buttons["Pattie"].tap()
+        XCTAssertTrue(app.buttons["All episodes"].waitForExistence(timeout: 15))
+        app.buttons["All episodes"].tap()
+
+        XCTAssertTrue(app.staticTexts["Mud In Shoes"].waitForExistence(timeout: 20),
+                      "The catalog should load and list episodes")
+        // Nothing is behind a lock any more.
+        XCTAssertFalse(app.images["lock.fill"].exists)
+    }
+
+    private func waitForDisappearance(_ element: XCUIElement, timeout: TimeInterval) -> Bool {
+        let gone = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"),
+                                             object: element)
+        return XCTWaiter.wait(for: [gone], timeout: timeout) == .completed
+    }
+
+    @discardableResult
+    private func claimPattie(in app: XCUIApplication) -> Bool {
+        let field = app.textFields["Your name as you registered"]
+        guard field.waitForExistence(timeout: 20) else { return false }
+        field.tap()
+        field.typeText("Pattie Wallner")
+
+        let match = app.staticTexts["Pattie Wallner"].firstMatch
+        if !match.waitForExistence(timeout: 30) {
+            field.typeText(" ")
+            field.typeText(XCUIKeyboardKey.delete.rawValue)
+            guard match.waitForExistence(timeout: 30) else { return false }
+        }
+        match.tap()
+        return app.navigationBars["Locker"].waitForExistence(timeout: 30)
+    }
+}

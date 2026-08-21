@@ -20,7 +20,7 @@ if [ -z "$ASC_ISSUER_ID" ] || [ -z "$ASC_API_KEY_ID" ]; then
   echo "  2. Click the '+' button next to 'Keys'"
   echo "  3. Name: IM Iron Splits CI"
   echo "  4. Role: App Manager"
-  echo "  5. Download the .p8 file — you only get this once"
+  echo "  5. Download the .p8 file, you only get this once"
   echo ""
   echo "  6. Move the key file:"
   echo "     mkdir -p $KEY_DIR"

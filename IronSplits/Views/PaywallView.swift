@@ -88,7 +88,7 @@ enum PaywallTrigger: Identifiable, Hashable {
     }
 
     /// What the subscription actually opens. Keep this in step with the gates
-    /// in `ProGate` — a pitch that sells less than the product does is the
+    /// in `ProGate`. A pitch that sells less than the product does is the
     /// failure mode this list exists to prevent.
     private static let proFeatures: [(icon: String, title: String)] = [
         ("clock.arrow.circlepath", "Your full race history, not just the last three"),
@@ -107,7 +107,6 @@ enum PaywallTrigger: Identifiable, Hashable {
 /// → `Purchases.shared.purchase` so RevenueCat records transactions unchanged.
 struct PaywallView: View {
     @EnvironmentObject private var store: StoreService
-    @EnvironmentObject private var pattie: PattieMode
     @Environment(\.dismiss) private var dismiss
 
     let trigger: PaywallTrigger
@@ -138,7 +137,6 @@ struct PaywallView: View {
             closeButton
         }
         .onAppear { PaywallGate.shared.markPresented(trigger) }
-        .pattieMoment(.paywall, pattie)
         .onChange(of: store.isPro) { _, isPro in
             if isPro { dismissOnce() }
         }

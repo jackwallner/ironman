@@ -27,6 +27,15 @@ final class LockerStore: ObservableObject {
     init(api: ResultsProviding = ResultsAPI(), storage: LockerStorage = .init()) {
         self.api = api
         self.storage = storage
+        #if DEBUG
+        // StateObject storage can initialize before IronSplitsApp.init() clears
+        // the test fixture. Ignore the old snapshot here as well, otherwise a
+        // restored Settings sheet can sit over the onboarding screen.
+        if ProcessInfo.processInfo.arguments.contains("-ResetLocker") {
+            storage.clear()
+            return
+        }
+        #endif
         if let snapshot = storage.load() {
             athlete = snapshot.athlete
             results = snapshot.results
@@ -58,13 +67,19 @@ final class LockerStore: ObservableObject {
     /// Pull the athlete's results again.
     ///
     /// A refresh that fails after we already have a cached locker is not an
-    /// error worth interrupting anyone over — the screen is still correct, just
-    /// not newer — so the failure only surfaces when there is nothing to show.
+    /// error worth interrupting anyone over. The screen is still correct, just
+    /// not newer, so the failure only surfaces when there is nothing to show.
     func refresh(force: Bool = false) async {
         guard let athlete else { return }
         if !force, let lastRefreshed, Date.now.timeIntervalSince(lastRefreshed) < 60 * 30 { return }
         if results.isEmpty { state = .loading }
-        await FeedConfigLoader.shared.refreshIfStale()
+        // Deliberately not awaited. `FeedConfigLoader.config()` already answers
+        // from the cached or bundled config without touching the network, so
+        // blocking the athlete's own results behind a hotfix-channel poll only
+        // ever added its latency to first paint. The new config lands on the
+        // next refresh, which is soon enough for a file that changes when the
+        // upstream moves.
+        Task.detached(priority: .utility) { await FeedConfigLoader.shared.refreshIfStale() }
         do {
             let fetched = try await api.results(forContactIDs: athlete.contactIDs)
             results = fetched

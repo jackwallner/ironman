@@ -4,7 +4,7 @@ import Foundation
 /// One purchasable plan, as the paywall needs to draw it.
 ///
 /// The paywall used to read RevenueCat `Package`s directly, which meant it
-/// could only ever render where RevenueCat was configured — and the
+/// could only ever render where RevenueCat was configured, and the
 /// keep-prod-clean rule says that is never a simulator. Every headless capture
 /// was therefore the "Couldn't Load Plans" empty state, which exercises none of
 /// the hero, plan cards, trial copy, disclosure, or footer that the layout is
@@ -58,7 +58,7 @@ struct PlanOption: Identifiable, Hashable {
 /// the app is launched through the Xcode scheme, and `xcodebuild test` does not
 /// reliably arrange that for a UI-test-launched app. The same file that
 /// configures StoreKit Testing is copied into the bundle, so parsing it gives
-/// the paywall the real product names, prices and trial terms to lay out —
+/// the paywall the real product names, prices and trial terms to lay out,
 /// clearly marked unpurchasable, and compiled out of Release entirely.
 enum BundledStoreKitCatalog {
     static func planOptions() -> [PlanOption] {

@@ -5,8 +5,8 @@ struct LockerView: View {
     @EnvironmentObject private var locker: LockerStore
     @EnvironmentObject private var store: StoreService
     @EnvironmentObject private var notes: RaceNotesStore
+    @EnvironmentObject private var pattie: PattieMode
 
-    @State private var paywallTrigger: PaywallTrigger?
     @State private var showingAthleteSearch = false
     @State private var kindFilter: RaceKind?
 
@@ -17,6 +17,7 @@ struct LockerView: View {
                 body(for: locker.state)
             }
             .navigationTitle("Locker")
+            .pattieMoment(.welcome, pattie)
             // Inline, because the header card immediately below is already the
             // athlete's name in the same navy. A large title left an empty
             // navy band the height of a title above a card that repeated it.
@@ -38,16 +39,17 @@ struct LockerView: View {
                     } label: {
                         Image(systemName: "ellipsis.circle")
                             .foregroundStyle(.white)
+                            .triTapTarget()
                     }
                 }
             }
             .sheet(isPresented: $showingAthleteSearch) {
                 AthleteSearchView()
             }
-            .sheet(item: $paywallTrigger) { trigger in
-                PaywallView(trigger: trigger)
+            .refreshable {
+                await locker.refresh(force: true)
+                pattie.fire(.refreshed)
             }
-            .refreshable { await locker.refresh(force: true) }
         }
     }
 
@@ -55,7 +57,7 @@ struct LockerView: View {
     private func body(for state: LockerStore.LoadState) -> some View {
         switch state {
         case .loading where locker.results.isEmpty:
-            VStack(spacing: 12) {
+            VStack(spacing: TriSpace.x3) {
                 ProgressView().tint(TriPalette.deep)
                 Text("Pulling your results…")
                     .font(TriType.small)
@@ -96,7 +98,7 @@ struct LockerView: View {
             if locker.availableKinds.count > 1 {
                 Section {
                     kindPicker
-                        .listRowInsets(EdgeInsets(top: 0, leading: TriGeo.padPage, bottom: 8, trailing: TriGeo.padPage))
+                        .listRowInsets(EdgeInsets(top: 0, leading: TriGeo.padPage, bottom: TriSpace.x2, trailing: TriGeo.padPage))
                         .listRowBackground(Color.clear)
                 }
             }
@@ -113,13 +115,6 @@ struct LockerView: View {
                     .listRowBackground(TriPalette.surface)
                 }
 
-                if lockedCount > 0 {
-                    LockedRow(title: "\(lockedCount) more \(lockedCount == 1 ? "race" : "races")",
-                              subtitle: "Your full history, back to your first start.") {
-                        paywallTrigger = .fullHistory
-                    }
-                    .listRowBackground(TriPalette.surface)
-                }
             } header: {
                 TriSectionHeader(title: "Races", trailing: footerText)
             }
@@ -136,38 +131,29 @@ struct LockerView: View {
 
     private var kindPicker: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                filterChip(title: "All", isSelected: kindFilter == nil) { kindFilter = nil }
+            HStack(spacing: TriSpace.x2) {
+                TriChip(title: "All", isSelected: kindFilter == nil) { kindFilter = nil }
                 ForEach(locker.availableKinds, id: \.self) { kind in
-                    filterChip(title: kind.longTitle, isSelected: kindFilter == kind) { kindFilter = kind }
+                    TriChip(title: kind.longTitle, isSelected: kindFilter == kind) { kindFilter = kind }
                 }
             }
+            .padding(.vertical, TriSpace.x1)
         }
     }
 
-    private func filterChip(title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Text(title)
-                .font(TriType.smallBold)
-                .foregroundStyle(isSelected ? .white : TriPalette.inkSecondary)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(isSelected ? TriPalette.deep : TriPalette.surface, in: Capsule())
-                .overlay(Capsule().stroke(TriPalette.hairline, lineWidth: isSelected ? 0 : TriGeo.hairline))
-        }
-        .buttonStyle(.plain)
-    }
-
-    /// The free window applies to the athlete's whole history, not to whatever
-    /// the filter happens to show. Otherwise switching to "Half" would hand a
-    /// free user three more races each time they changed the filter.
+    /// Every race that matches the filter.
+    ///
+    /// This still routes through `ProGate` rather than returning
+    /// `filteredResults` directly. While `everythingUnlocked` is set the gate is
+    /// a pass-through, and keeping the call here means turning the switch back
+    /// off restores the free window without anybody having to remember that this
+    /// screen had its own copy of the rule. The rule it enforces when it is on:
+    /// the window applies to the athlete's whole history, not to whatever the
+    /// filter happens to show, or switching to "Half" would hand out three more
+    /// races each time.
     private var visibleResults: [RaceResult] {
         let allowed = Set(ProGate.visibleResults(locker.results, isPro: store.isPro).map(\.id))
         return filteredResults.filter { allowed.contains($0.id) }
-    }
-
-    private var lockedCount: Int {
-        filteredResults.count - visibleResults.count
     }
 
     private var footerText: String? {
@@ -176,8 +162,7 @@ struct LockerView: View {
     }
 
     private func personalBestLegs(for result: RaceResult) -> Set<Discipline> {
-        guard store.isPro else { return [] }
-        return Set(Discipline.rankable.filter {
+        Set(Discipline.rankable.filter {
             RaceAnalytics.isPersonalBest(result, discipline: $0, within: locker.results)
         })
     }
@@ -190,9 +175,9 @@ private struct LockerHeader: View {
 
     var body: some View {
         let summary = RaceAnalytics.summary(results)
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: TriSpace.x3) {
             if let athlete {
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: TriSpace.x1) {
                     Text(athlete.name)
                         .font(TriType.athleteName)
                         .foregroundStyle(.white)

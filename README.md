@@ -4,7 +4,7 @@ Your triathlon and running race results, found by name and ranked by split.
 
 Type your name once. Every race you have finished loads with full swim/T1/bike/T2/run
 splits, bib numbers, and age-group and overall places, going back to your first
-start — then gets ranked the way athletes actually think about it: which race
+start, then gets ranked the way athletes actually think about it: which race
 held your fastest bike, and how far off it you are now.
 
 iOS 17+, SwiftUI, Swift 6. See `CLAUDE.md` for the architecture and the feed's
@@ -21,7 +21,7 @@ xcodebuild test -project IronSplits.xcodeproj -scheme IronSplits -destination "i
 agent-sim checkin ironsplits
 ```
 
-The UI tests hit the live results feed on purpose — the claim flow is a search
+The UI tests hit the live results feed on purpose. The claim flow is a search
 against someone else's service, and a mock would only prove the mock still
 matches what was written down.
 
@@ -31,6 +31,6 @@ matches what was written down.
       `AppStoreReviewLinks.appStoreID`
 - [ ] RevenueCat project + the three products, then set `IronSplitsSecrets.revenueCatKey`
       (empty today, which is why Pro is inert rather than misbilled)
-- [ ] Enable GitHub Pages on this repo so `docs/api-config.json` — the app's
-      hotfix channel — is actually served
+- [ ] Enable GitHub Pages on this repo so `docs/api-config.json`, the app's
+      hotfix channel, is actually served
 - [ ] Encode and host the Tri Pointers clips, then fill in `docs/pointers.json`

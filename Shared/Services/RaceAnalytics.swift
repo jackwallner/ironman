@@ -35,7 +35,7 @@ struct FieldPlacement: Sendable, Hashable {
 ///
 /// Ranking is deliberately scoped to one `RaceKind` at a time. A 70.3 bike
 /// split will always beat a full-distance one, so a single "best bike" list
-/// across both is a list of every half the athlete has ever done — true, and
+/// across both is a list of every half the athlete has ever done: true, and
 /// completely useless to someone who wants to know if they are getting faster.
 enum RaceAnalytics {
     /// Results eligible for comparison: finished, and of the requested kind.
@@ -105,7 +105,7 @@ enum RaceAnalytics {
     ///
     /// The feed already carries an overall rank for swim, bike, run, and
     /// finish, but not the field size, and a rank with no denominator says
-    /// nothing — 200th is a bad day in a field of 300 and an excellent one in a
+    /// nothing. 200th is a bad day in a field of 300 and an excellent one in a
     /// field of 3000. Transitions have no upstream rank at all, so those get
     /// counted from the field directly.
     static func placement(of result: RaceResult,

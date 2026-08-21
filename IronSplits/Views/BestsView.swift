@@ -7,13 +7,11 @@ import SwiftUI
 /// held your fastest bike, or how far off it you are now.
 struct BestsView: View {
     @EnvironmentObject private var locker: LockerStore
-    @EnvironmentObject private var store: StoreService
     @EnvironmentObject private var settings: AppSettings
     @EnvironmentObject private var pattie: PattieMode
 
     @State private var discipline: Discipline = .finish
     @State private var kind: RaceKind?
-    @State private var paywallTrigger: PaywallTrigger?
 
     var body: some View {
         NavigationStack {
@@ -27,7 +25,6 @@ struct BestsView: View {
             // screen's own header is already doing that job.
             .navigationBarTitleDisplayMode(.inline)
             .triNavBar()
-            .sheet(item: $paywallTrigger) { PaywallView(trigger: $0) }
             .onAppear { syncKind() }
         }
     }
@@ -38,8 +35,6 @@ struct BestsView: View {
             TriPlaceholder(systemImage: "list.number",
                            title: "No races yet",
                            message: "Your split leaderboards appear once your locker has results in it.")
-        } else if !store.isPro {
-            lockedState
         } else if standings.isEmpty {
             TriPlaceholder(systemImage: "list.number",
                            title: "Nothing to rank yet",
@@ -49,35 +44,18 @@ struct BestsView: View {
         }
     }
 
-    private var lockedState: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                pickers
-                    .disabled(true)
-                    .opacity(0.5)
-                TriPlaceholder(systemImage: "lock.fill",
-                               title: "Split leaderboards",
-                               message: "Rank every race you have finished by swim, bike, run or transitions. See the personal best on each leg and how far off it today's race was.",
-                               actionTitle: "Unlock Iron Splits+") {
-                    paywallTrigger = .splitLeaderboards
-                }
-            }
-            .padding(.vertical, TriGeo.padPage)
-        }
-    }
-
     private var board: some View {
         List {
             Section {
                 pickers
-                    .listRowInsets(EdgeInsets(top: 8, leading: TriGeo.padPage, bottom: 8, trailing: TriGeo.padPage))
+                    .listRowInsets(EdgeInsets(top: TriSpace.x2, leading: TriGeo.padPage, bottom: TriSpace.x2, trailing: TriGeo.padPage))
                     .listRowBackground(Color.clear)
             }
 
             if let best = standings.first {
                 Section {
                     BestCard(standing: best, units: settings.units)
-                        .listRowInsets(EdgeInsets(top: 0, leading: TriGeo.padPage, bottom: 8, trailing: TriGeo.padPage))
+                        .listRowInsets(EdgeInsets(top: 0, leading: TriGeo.padPage, bottom: TriSpace.x2, trailing: TriGeo.padPage))
                         .listRowBackground(Color.clear)
                 }
             }
@@ -104,33 +82,29 @@ struct BestsView: View {
     }
 
     private var pickers: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: TriSpace.x3) {
             Picker("Leg", selection: $discipline) {
                 ForEach(Discipline.rankable) { leg in
                     Text(leg.shortTitle).tag(leg)
                 }
             }
             .pickerStyle(.segmented)
+            .onChange(of: discipline) { _, _ in
+                Haptics.selection()
+                pattie.fire(.bestsFiltered)
+            }
 
             if locker.availableKinds.count > 1 {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
+                    HStack(spacing: TriSpace.x2) {
                         ForEach(locker.availableKinds, id: \.self) { available in
-                            Button {
+                            TriChip(title: available.longTitle, isSelected: kind == available) {
                                 kind = available
                                 settings.preferredKind = available
-                            } label: {
-                                Text(available.longTitle)
-                                    .font(TriType.smallBold)
-                                    .foregroundStyle(kind == available ? .white : TriPalette.inkSecondary)
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 6)
-                                    .background(kind == available ? TriPalette.deep : TriPalette.surface, in: Capsule())
-                                    .overlay(Capsule().stroke(TriPalette.hairline, lineWidth: kind == available ? 0 : TriGeo.hairline))
                             }
-                            .buttonStyle(.plain)
                         }
                     }
+                    .padding(.vertical, TriSpace.x1)
                 }
             }
         }
@@ -164,7 +138,7 @@ private struct BestCard: View {
     let units: UnitPreference
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: TriSpace.x2) {
             HStack {
                 TriBadge(text: "Personal best", color: TriPalette.sunrise, filled: true)
                 Spacer()
@@ -197,18 +171,18 @@ private struct StandingRow: View {
     let units: UnitPreference
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: TriSpace.x3) {
             Text(String(standing.rank))
                 .font(TriType.statSmall)
                 .foregroundStyle(standing.isPersonalBest ? TriPalette.sunrise : TriPalette.inkTertiary)
                 .frame(width: 22, alignment: .trailing)
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: TriSpace.x1) {
                 Text(standing.result.raceName)
                     .font(TriType.bodyBold)
                     .foregroundStyle(TriPalette.ink)
                     .lineLimit(2)
-                HStack(spacing: 6) {
+                HStack(spacing: TriSpace.x2) {
                     Text(String(standing.result.year))
                         .font(TriType.small)
                         .foregroundStyle(TriPalette.inkTertiary)
@@ -223,9 +197,9 @@ private struct StandingRow: View {
                 }
             }
 
-            Spacer(minLength: 8)
+            Spacer(minLength: TriSpace.x2)
 
-            VStack(alignment: .trailing, spacing: 2) {
+            VStack(alignment: .trailing, spacing: TriSpace.x1) {
                 Text(TimeFormat.hms(standing.seconds))
                     .font(TriType.statMed)
                     .foregroundStyle(TriPalette.ink)
@@ -236,6 +210,7 @@ private struct StandingRow: View {
                 }
             }
         }
-        .padding(.vertical, 4)
+        .frame(minHeight: TriGeo.tapTarget)
+        .padding(.vertical, TriSpace.x1)
     }
 }

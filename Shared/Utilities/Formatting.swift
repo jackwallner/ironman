@@ -8,7 +8,7 @@ enum TimeFormat {
     /// column of race times, and transitions are the one split people scan for
     /// exactly this reason.
     static func hms(_ seconds: Int?) -> String {
-        guard let seconds, seconds > 0 else { return "—" }
+        guard let seconds, seconds > 0 else { return "--" }
         let h = seconds / 3600
         let m = (seconds % 3600) / 60
         let s = seconds % 60
@@ -23,7 +23,7 @@ enum TimeFormat {
     }
 
     static func mmss(_ seconds: Double) -> String {
-        guard seconds.isFinite, seconds > 0 else { return "—" }
+        guard seconds.isFinite, seconds > 0 else { return "--" }
         let total = Int(seconds.rounded())
         return String(format: "%d:%02d", total / 60, total % 60)
     }
@@ -93,7 +93,7 @@ enum Ordinal {
 
 /// Race dates, rendered in UTC.
 ///
-/// The feed publishes event dates as bare UTC midnight — "2025-09-07T00:00:00Z"
+/// The feed publishes event dates as bare UTC midnight ("2025-09-07T00:00:00Z")
 /// means the seventh, not an instant. Formatting that with the device time zone
 /// shows an athlete west of Greenwich the day before their own race, which is
 /// the kind of wrong that makes someone distrust every other number on the

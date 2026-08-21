@@ -2,7 +2,7 @@ import Foundation
 
 /// A person in the results feed, collapsed from the rows they appear in.
 ///
-/// The feed has no athlete endpoint — there is only a flat table of results —
+/// The feed has no athlete endpoint. There is only a flat table of results,
 /// so an athlete is something we reconstruct by grouping rows on the contact
 /// id. That id is the durable handle: names repeat (there are a dozen
 /// Wallners), and once the user picks themselves out of a search we never have

@@ -3,13 +3,11 @@ import SwiftUI
 /// The race resume: every start, in the shape race entries ask for.
 struct ResumeView: View {
     @EnvironmentObject private var locker: LockerStore
-    @EnvironmentObject private var store: StoreService
     @EnvironmentObject private var pattie: PattieMode
 
     @State private var selectedKinds: Set<RaceKind> = []
     @State private var includeSplits = true
     @State private var includeDNF = false
-    @State private var paywallTrigger: PaywallTrigger?
     @State private var pdfURL: URL?
 
     var body: some View {
@@ -24,7 +22,6 @@ struct ResumeView: View {
             // screen's own header is already doing that job.
             .navigationBarTitleDisplayMode(.inline)
             .triNavBar()
-            .sheet(item: $paywallTrigger) { PaywallView(trigger: $0) }
             .onAppear {
                 if selectedKinds.isEmpty {
                     selectedKinds = Set(locker.availableKinds)
@@ -39,13 +36,6 @@ struct ResumeView: View {
             TriPlaceholder(systemImage: "doc.text",
                            title: "Nothing to export yet",
                            message: "Your resume is built from the races in your locker.")
-        } else if !store.isPro {
-            TriPlaceholder(systemImage: "lock.fill",
-                           title: "Race resume",
-                           message: "Every race with its date, distance, bib number, official time and division place — the sheet other races ask you to produce, in one tap.",
-                           actionTitle: "Unlock Iron Splits+") {
-                paywallTrigger = .raceResume
-            }
         } else {
             list
         }
@@ -84,8 +74,11 @@ struct ResumeView: View {
                     ShareLink(item: ResumeBuilder.plainText(athlete: athlete, results: locker.results, options: options)) {
                         Label("Share as text", systemImage: "square.and.arrow.up")
                     }
+                    .simultaneousGesture(TapGesture().onEnded { pattie.fire(.resumeExported) })
                     Button {
+                        Haptics.tap()
                         pdfURL = ResumeBuilder.pdf(athlete: athlete, results: locker.results, options: options)
+                        pattie.fire(.resumeExported)
                     } label: {
                         Label("Build PDF", systemImage: "doc.richtext")
                     }
@@ -127,7 +120,7 @@ private struct ResumeRow: View {
     let result: RaceResult
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 3) {
+        VStack(alignment: .leading, spacing: TriSpace.x1) {
             HStack {
                 Text(result.raceName)
                     .font(TriType.bodyBold)
@@ -137,7 +130,7 @@ private struct ResumeRow: View {
                     .font(TriType.statSmall)
                     .foregroundStyle(result.isComplete ? TriPalette.ink : TriPalette.negative)
             }
-            HStack(spacing: 8) {
+            HStack(spacing: TriSpace.x2) {
                 Text(dateText)
                 if let bib = result.bib { Text("Bib " + String(bib)) }
                 if let group = result.ageGroup {
@@ -147,7 +140,8 @@ private struct ResumeRow: View {
             .font(TriType.small)
             .foregroundStyle(TriPalette.inkTertiary)
         }
-        .padding(.vertical, 2)
+        .frame(minHeight: TriGeo.tapTarget - TriSpace.x2)
+        .padding(.vertical, TriSpace.x1)
     }
 
     private var dateText: String {

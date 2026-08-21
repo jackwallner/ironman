@@ -2,7 +2,7 @@ import Foundation
 
 /// True when a thrown error is only this task being cancelled.
 ///
-/// Screens load inside `.task(id:)`, which cancels the moment its id changes —
+/// Screens load inside `.task(id:)`, which cancels the moment its id changes:
 /// a tab switch, a new search keystroke. URLSession reports that as
 /// `URLError.cancelled` rather than `CancellationError`, so a plain `catch`
 /// can't tell an interrupted load from a failed one and would show an error for
@@ -30,9 +30,23 @@ enum ResultsAPIError: LocalizedError {
     }
 }
 
+/// How hard a name search is allowed to work.
+///
+/// The two are 20x apart on the wire, which is the entire difference between an
+/// onboarding screen that answers in a second and one that looks broken. See
+/// `ResultsAPI.nameFilter(for:depth:)`.
+enum SearchDepth: Sendable {
+    /// `startswith`. Index-backed upstream, and right for a name typed from the
+    /// front, which is nearly every name anyone types.
+    case prefix
+    /// `contains`. A full scan upstream, kept for the mid-name cases the prefix
+    /// pass genuinely cannot reach.
+    case substring
+}
+
 protocol ResultsProviding: Sendable {
-    /// Athletes whose name contains `query`, collapsed from matching rows.
-    func searchAthletes(matching query: String) async throws -> [Athlete]
+    /// Athletes whose name matches `query`, collapsed from matching rows.
+    func searchAthletes(matching query: String, depth: SearchDepth) async throws -> [Athlete]
     /// Every result belonging to one athlete, newest race first.
     func results(forAthleteID athleteID: String) async throws -> [RaceResult]
     /// The same, for an athlete the feed has split across several contact ids.
@@ -50,13 +64,22 @@ struct ResultsAPI: ResultsProviding {
 
     // MARK: - Queries
 
-    func searchAthletes(matching query: String) async throws -> [Athlete] {
+    /// Athletes whose name matches `query`.
+    ///
+    /// The upstream `contains()` is a full scan and measures around thirty
+    /// seconds for a two-word name; the same query written with `startswith()`
+    /// comes back in about one and a half. Onboarding is the first screen
+    /// anybody sees, so the prefix pass is what runs on every keystroke and the
+    /// scan only happens when the caller asks for it, after the fast pass came
+    /// back empty. See `AthleteSearchView.runSearch()` for the two-phase UI.
+    func searchAthletes(matching query: String, depth: SearchDepth = .prefix) async throws -> [Athlete] {
         let term = query.trimmingCharacters(in: .whitespacesAndNewlines)
         guard term.count >= 2 else { return [] }
-        let rows = try await fetch(filter: Self.nameFilter(for: term),
+        let rows = try await fetch(filter: Self.nameFilter(for: term, depth: depth),
                                    orderBy: nil,
                                    pageLimit: 2,
-                                   pageSize: 250)
+                                   pageSize: 250,
+                                   timeout: depth == .prefix ? 20 : 60)
         return Self.collapseToAthletes(rows)
     }
 
@@ -93,7 +116,8 @@ struct ResultsAPI: ResultsProviding {
     private func fetch(filter: String,
                        orderBy: String?,
                        pageLimit: Int? = nil,
-                       pageSize: Int? = nil) async throws -> [ODataResultRow] {
+                       pageSize: Int? = nil,
+                       timeout: TimeInterval = 25) async throws -> [ODataResultRow] {
         let config = await FeedConfigLoader.shared.config()
         var query = "$filter=" + Self.encodeODataValue(filter)
         query += "&$expand=" + Self.encodeODataValue(Self.expandClause)
@@ -107,7 +131,7 @@ struct ResultsAPI: ResultsProviding {
         var rows: [ODataResultRow] = []
         let limit = min(pageLimit ?? config.maxPages, config.maxPages)
         for _ in 0..<max(limit, 1) {
-            let page = try await load(url: url, config: config)
+            let page = try await load(url: url, config: config, timeout: timeout)
             rows.append(contentsOf: page.value)
             guard let next = page.nextLink, let nextURL = config.requestURL(nextLink: next) else { break }
             url = nextURL
@@ -116,9 +140,14 @@ struct ResultsAPI: ResultsProviding {
         return rows
     }
 
-    private func load(url: URL, config: FeedConfig) async throws -> ODataPage {
-        var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
-        request.timeoutInterval = 30
+    private func load(url: URL, config: FeedConfig, timeout: TimeInterval) async throws -> ODataPage {
+        // `.useProtocolCachePolicy` on purpose. The proxy caches an identical
+        // upstream query server-side and answers a repeat in a fraction of a
+        // second, and letting URLSession keep its own copy on top of that makes
+        // a tab switch back to a screen instant instead of a fresh round trip.
+        // Nothing behind this URL is live: a race from 2019 has one result.
+        var request = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy)
+        request.timeoutInterval = timeout
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue(config.referer, forHTTPHeaderField: "Referer")
 
@@ -142,8 +171,8 @@ struct ResultsAPI: ResultsProviding {
     /// The related records every row needs, spelled out in full.
     ///
     /// An explicit `$expand` *replaces* the server's default expansion rather
-    /// than adding to it. Asking only for `wtc_EventId` — which is all the app
-    /// needs that the default doesn't already give — silently drops
+    /// than adding to it. Asking only for `wtc_EventId`, which is all the app
+    /// needs that the default doesn't already give, silently drops
     /// `wtc_ContactId` from every row, so search returned rows with no athlete
     /// attached and reported "no athletes found" against a perfectly good
     /// 200 response. Every relation the decoder reads has to be listed here.
@@ -173,20 +202,21 @@ struct ResultsAPI: ResultsProviding {
 
     /// Search on the parts of the name the athlete actually typed.
     ///
-    /// A single `contains(fullname, …)` looks right and behaves badly on the
+    /// A single match on `fullname` looks right and behaves badly on the
     /// half of searches that put the surname first: matching is case
     /// insensitive upstream but strictly ordered, so "wallner pattie" returns
     /// nothing at all while "pattie wallner" returns the athlete. Splitting on
     /// whitespace and ANDing the terms against first and last name makes both
     /// orderings work and lets a partial name still land.
-    static func nameFilter(for term: String) -> String {
+    static func nameFilter(for term: String, depth: SearchDepth = .prefix) -> String {
+        let op = depth == .prefix ? "startswith" : "contains"
         let words = term.split(whereSeparator: { $0 == " " || $0 == "," })
             .map { escapeODataLiteral(String($0)) }
             .filter { !$0.isEmpty }
             .prefix(3)
-        guard !words.isEmpty else { return "contains(wtc_ContactId/fullname,'')" }
+        guard !words.isEmpty else { return "\(op)(wtc_ContactId/fullname,'')" }
         let clauses = words.map { word -> String in
-            "(contains(wtc_ContactId/firstname,'\(word)') or contains(wtc_ContactId/lastname,'\(word)'))"
+            "(\(op)(wtc_ContactId/firstname,'\(word)') or \(op)(wtc_ContactId/lastname,'\(word)'))"
         }
         return clauses.joined(separator: " and ")
     }
