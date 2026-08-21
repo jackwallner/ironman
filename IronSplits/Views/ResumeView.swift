@@ -4,6 +4,7 @@ import SwiftUI
 struct ResumeView: View {
     @EnvironmentObject private var locker: LockerStore
     @EnvironmentObject private var store: StoreService
+    @EnvironmentObject private var pattie: PattieMode
 
     @State private var selectedKinds: Set<RaceKind> = []
     @State private var includeSplits = true
@@ -18,6 +19,7 @@ struct ResumeView: View {
                 content
             }
             .navigationTitle("Resume")
+            .pattieMoment(.resume, pattie)
             // Inline: a large title renders as an empty band here, and the
             // screen's own header is already doing that job.
             .navigationBarTitleDisplayMode(.inline)

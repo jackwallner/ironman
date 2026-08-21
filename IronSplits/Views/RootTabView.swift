@@ -5,6 +5,7 @@ struct RootTabView: View {
     @EnvironmentObject private var locker: LockerStore
     @EnvironmentObject private var settings: AppSettings
     @EnvironmentObject private var reviewCoordinator: ReviewPromptCoordinator
+    @EnvironmentObject private var pattie: PattieMode
 
     @State private var reviewSheet: ReviewPromptSheet.Step?
     @State private var pendingRequestReview = false
@@ -18,8 +19,17 @@ struct RootTabView: View {
                 AthleteSearchView(isOnboarding: true)
             }
         }
+        .pattieHost(pattie)
         .onChange(of: locker.hasClaimedAthlete) { _, claimed in
-            if claimed { settings.hasCompletedOnboarding = true }
+            if claimed {
+                settings.hasCompletedOnboarding = true
+                pattie.fire(.claimed)
+            }
+        }
+        .task {
+            // A long career is worth remarking on, but only once she is past
+            // the claim, so the two don't stack on the same screen.
+            if locker.results.count >= 10 { pattie.fire(.veteran) }
         }
         .onReceive(NotificationCenter.default.publisher(for: .ironSplitsPositiveMomentForReview)) { _ in
             presentReviewPromptIfEligible()

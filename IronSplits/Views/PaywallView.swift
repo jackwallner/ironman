@@ -107,6 +107,7 @@ enum PaywallTrigger: Identifiable, Hashable {
 /// → `Purchases.shared.purchase` so RevenueCat records transactions unchanged.
 struct PaywallView: View {
     @EnvironmentObject private var store: StoreService
+    @EnvironmentObject private var pattie: PattieMode
     @Environment(\.dismiss) private var dismiss
 
     let trigger: PaywallTrigger
@@ -137,6 +138,7 @@ struct PaywallView: View {
             closeButton
         }
         .onAppear { PaywallGate.shared.markPresented(trigger) }
+        .pattieMoment(.paywall, pattie)
         .onChange(of: store.isPro) { _, isPro in
             if isPro { dismissOnce() }
         }

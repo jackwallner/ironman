@@ -1,0 +1,13 @@
+{
+  "images": [
+    {
+      "filename": "pattie-ready.jpg",
+      "idiom": "universal",
+      "scale": "2x"
+    }
+  ],
+  "info": {
+    "author": "xcode",
+    "version": 1
+  }
+}

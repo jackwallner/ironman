@@ -9,6 +9,7 @@ struct RaceDetailView: View {
     @EnvironmentObject private var store: StoreService
     @EnvironmentObject private var notes: RaceNotesStore
     @EnvironmentObject private var settings: AppSettings
+    @EnvironmentObject private var pattie: PattieMode
 
     @State private var field: [RaceResult] = []
     @State private var fieldState: FieldState = .idle
@@ -43,9 +44,22 @@ struct RaceDetailView: View {
         }
         .task {
             ReviewPromptTracker.recordPositiveMoment()
+            pattie.fire(pattieMoment)
             guard store.isPro, result.isComplete else { return }
             await loadField()
         }
+    }
+
+    /// The most interesting thing about this race, in Pattie's eyes.
+    private var pattieMoment: PattieMode.Moment {
+        if !result.isComplete { return .didNotFinish }
+        if result.raceName.localizedCaseInsensitiveContains("World Championship") {
+            return .worldChampionship
+        }
+        let isPB = Discipline.rankable.contains {
+            RaceAnalytics.isPersonalBest(result, discipline: $0, within: locker.results)
+        }
+        return isPB ? .personalBest : .raceOpened
     }
 
     // MARK: - Hero

@@ -4,6 +4,7 @@ import StoreKit
 struct SettingsView: View {
     @EnvironmentObject private var locker: LockerStore
     @EnvironmentObject private var store: StoreService
+    @EnvironmentObject private var pattie: PattieMode
     @EnvironmentObject private var settings: AppSettings
     @EnvironmentObject private var reviewCoordinator: ReviewPromptCoordinator
 
@@ -91,6 +92,27 @@ struct SettingsView: View {
                             .foregroundStyle(TriPalette.negative)
                     }
                     Link("Manage subscription", destination: URL(string: "https://apps.apple.com/account/subscriptions")!)
+                }
+
+                Section("Pattie Mode") {
+                    Toggle("Pattie Mode", isOn: Binding(
+                        get: { pattie.isEnabled },
+                        set: { on in
+                            pattie.isEnabled = on
+                            // Show what you just signed up for, rather than
+                            // leaving the toggle to explain itself.
+                            if on { pattie.demo() }
+                        }
+                    ))
+                    if pattie.isEnabled {
+                        Toggle("Play her voice", isOn: Binding(
+                            get: { pattie.soundEnabled },
+                            set: { pattie.soundEnabled = $0 }
+                        ))
+                    }
+                    Text("Pattie turns up as you use the app with a pointer for whatever you're looking at. Every photo is a frame from her own clips and every clip of her voice is cut from that video's audio.")
+                        .font(TriType.micro)
+                        .foregroundStyle(TriPalette.inkTertiary)
                 }
 
                 Section("About") {

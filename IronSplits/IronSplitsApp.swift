@@ -7,6 +7,7 @@ struct IronSplitsApp: App {
     @StateObject private var notes = RaceNotesStore()
     @StateObject private var settings = AppSettings()
     @StateObject private var reviewCoordinator = ReviewPromptCoordinator.shared
+    @StateObject private var pattie = PattieMode()
 
     init() {
         #if DEBUG
@@ -17,7 +18,8 @@ struct IronSplitsApp: App {
             LockerStorage().clear()
             for key in ["settings.hasCompletedOnboarding", "settings.preferredKind",
                         "feed.config.cached", "feed.config.cachedAt",
-                        "pointers.catalog.cached", "pointers.catalog.cachedAt"] {
+                        "pointers.catalog.cached", "pointers.catalog.cachedAt",
+                        "pattie.mode.enabled", "pattie.mode.seenLines"] {
                 UserDefaults.standard.removeObject(forKey: key)
             }
         }
@@ -33,6 +35,7 @@ struct IronSplitsApp: App {
                 .environmentObject(notes)
                 .environmentObject(settings)
                 .environmentObject(reviewCoordinator)
+                .environmentObject(pattie)
                 .task {
                     store.start()
                     await FeedConfigLoader.shared.refreshIfStale()

@@ -4,6 +4,7 @@ import AVKit
 /// The Tri Pointers coaching library.
 struct PointersView: View {
     @EnvironmentObject private var store: StoreService
+    @EnvironmentObject private var pattie: PattieMode
 
     @State private var catalog: PointerCatalog = .empty
     @State private var isLoading = true
@@ -20,6 +21,7 @@ struct PointersView: View {
                 content
             }
             .navigationTitle(catalog.title)
+            .pattieMoment(.pointers, pattie)
             // Inline: a large title renders as an empty band here, and the
             // screen's own header is already doing that job.
             .navigationBarTitleDisplayMode(.inline)

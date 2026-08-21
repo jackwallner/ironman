@@ -9,6 +9,7 @@ struct BestsView: View {
     @EnvironmentObject private var locker: LockerStore
     @EnvironmentObject private var store: StoreService
     @EnvironmentObject private var settings: AppSettings
+    @EnvironmentObject private var pattie: PattieMode
 
     @State private var discipline: Discipline = .finish
     @State private var kind: RaceKind?
@@ -21,6 +22,7 @@ struct BestsView: View {
                 content
             }
             .navigationTitle("Bests")
+            .pattieMoment(.bests, pattie)
             // Inline: a large title renders as an empty band here, and the
             // screen's own header is already doing that job.
             .navigationBarTitleDisplayMode(.inline)
