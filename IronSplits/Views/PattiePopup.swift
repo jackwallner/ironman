@@ -4,10 +4,9 @@ import SwiftUI
 ///
 /// The old one was a 56pt thumbnail in a thin banner, which is roughly the
 /// weight of a push notification about a software update. This is the opposite
-/// bet: she arrives at the size of a person, the portrait leans in from the
-/// edge as if she has stepped into frame, and the ring around her pulses while
-/// her voice is actually playing so the audio and the picture are obviously the
-/// same event.
+/// bet: she arrives at the size of a person, the upright portrait scales into
+/// place, and the ring around her pulses while her voice is actually playing so
+/// the audio and the picture are obviously the same event.
 ///
 /// `.big` moments dim the screen behind her; `.banner` moments do not, and stay
 /// out of the way of whatever split someone is reading. Both dismiss on tap, on
@@ -25,18 +24,25 @@ struct PattiePopup: View {
     @State private var dragOffset: CGFloat = 0
     @State private var pulse = false
 
-    /// Tab bar (49pt) plus the home indicator inset plus a gap on the scale.
-    static let tabBarClearance: CGFloat = 49 + 34 + TriSpace.x3
+    /// The popup is hosted above the tab bar and the device safe area.
+    static let tabBarHeight: CGFloat = 49
+    static let tabBarGap: CGFloat = TriSpace.x3
 
     private var isBig: Bool { line.impact == .big }
-    private var portraitSize: CGFloat { isBig ? 116 : 76 }
+    private var portraitSize: CGFloat { isBig ? 176 : 76 }
     private var isSpeaking: Bool { voice.isPlaying(line.voice) }
+    private var portraitName: String { isBig ? "pattie-profile" : line.portrait }
 
     var body: some View {
-        VStack(spacing: 0) {
-            card
+        Group {
+            if isBig {
+                megaCard
+            } else {
+                card
+            }
         }
         .padding(.horizontal, TriSpace.x3)
+        .frame(maxWidth: .infinity)
         .offset(y: appeared ? dragOffset : 220)
         .opacity(appeared ? 1 : 0)
         .gesture(dismissDrag)
@@ -56,31 +62,44 @@ struct PattiePopup: View {
             bubble
         }
         .padding(TriSpace.x4)
-        .background(
-            RoundedRectangle(cornerRadius: TriGeo.radiusCard + TriSpace.x2, style: .continuous)
-                .fill(TriPalette.deep)
-                .overlay(
-                    // A single warm sweep behind her, so the card reads as
-                    // sunrise-over-open-water rather than a grey system sheet.
-                    RoundedRectangle(cornerRadius: TriGeo.radiusCard + TriSpace.x2, style: .continuous)
-                        .fill(
-                            LinearGradient(
-                                colors: [TriPalette.sunrise.opacity(0.30), .clear],
-                                startPoint: .topLeading,
-                                endPoint: .init(x: 0.75, y: 0.9)
-                            )
-                        )
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: TriGeo.radiusCard + TriSpace.x2, style: .continuous)
-                        .stroke(TriPalette.sunrise.opacity(0.35), lineWidth: 1)
-                )
-                .shadow(color: TriShadow.floating(scheme).0,
-                        radius: TriShadow.floating(scheme).1,
-                        y: TriShadow.floating(scheme).2)
-        )
-        .contentShape(RoundedRectangle(cornerRadius: TriGeo.radiusCard + TriSpace.x2, style: .continuous))
+        .background(cardBackground)
+        .contentShape(RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous))
         .onTapGesture(perform: onDismiss)
+    }
+
+    private var megaCard: some View {
+        VStack(spacing: TriSpace.x4) {
+            portrait
+            bubble
+        }
+        .padding(TriSpace.x6)
+        .background(cardBackground)
+        .contentShape(RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous))
+        .onTapGesture(perform: onDismiss)
+    }
+
+    private var cardBackground: some View {
+        RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous)
+            .fill(TriPalette.deep)
+            .overlay(
+                // A single warm sweep behind her, so the card reads as
+                // sunrise-over-open-water rather than a grey system sheet.
+                RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [TriPalette.sunrise.opacity(0.30), .clear],
+                            startPoint: .topLeading,
+                            endPoint: .init(x: 0.75, y: 0.9)
+                        )
+                    )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous)
+                    .stroke(TriPalette.sunrise.opacity(0.35), lineWidth: 1)
+            )
+            .shadow(color: TriShadow.floating(scheme).0,
+                    radius: TriShadow.floating(scheme).1,
+                    y: TriShadow.floating(scheme).2)
     }
 
     /// Tapping her replays the clip, which is the obvious thing to try when you
@@ -93,16 +112,16 @@ struct PattiePopup: View {
                     .scaleEffect(pulse && isSpeaking ? 1.22 : 1.0)
                     .opacity(pulse && isSpeaking ? 0 : 1)
 
-                Image(line.portrait)
+                Image(portraitName)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: portraitSize, height: portraitSize)
                     .clipShape(Circle())
                     .overlay(Circle().stroke(TriPalette.sunrise, lineWidth: isBig ? 3 : 2))
                     .overlay(alignment: .bottomTrailing) { speakerPip }
-                    // She leans in from the left, then settles.
-                    .rotationEffect(.degrees(appeared ? 0 : -12))
-                    .scaleEffect(appeared ? 1 : 0.6)
+                    // The hero portrait enters upright, so the face never
+                    // looks tilted or stretched during the arrival animation.
+                    .scaleEffect(appeared ? 1 : 0.72)
             }
             .frame(width: portraitSize, height: portraitSize)
         }
@@ -125,7 +144,7 @@ struct PattiePopup: View {
                 .font(.system(size: isBig ? 12 : 10, weight: .bold))
                 .foregroundStyle(TriPalette.deep)
                 .frame(width: isBig ? 26 : 20, height: isBig ? 26 : 20)
-                .background(.white.opacity(0.9), in: Circle())
+                .background(TriPalette.inkOnDark.opacity(0.9), in: Circle())
                 .overlay(Circle().stroke(TriPalette.deep, lineWidth: 2))
         }
     }
@@ -150,7 +169,7 @@ struct PattiePopup: View {
 
             Text(isSpeaking ? "In her own voice" : "Tap her to hear it")
                 .font(TriType.micro)
-                .foregroundStyle(.white.opacity(0.55))
+                .foregroundStyle(TriPalette.inkOnDark.opacity(0.55))
                 .animation(.easeInOut(duration: 0.2), value: isSpeaking)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -197,21 +216,23 @@ extension View {
     func pattieHost(_ pattie: PattieMode) -> some View {
         overlay {
             if let line = pattie.current {
-                ZStack(alignment: .bottom) {
-                    if line.impact == .big {
-                        Color.black.opacity(0.28)
-                            .ignoresSafeArea()
-                            .transition(.opacity)
-                            .onTapGesture { pattie.dismiss() }
+                GeometryReader { proxy in
+                    ZStack(alignment: .bottom) {
+                        if line.impact == .big {
+                            Color.black.opacity(0.28)
+                                .ignoresSafeArea()
+                                .transition(.opacity)
+                                .onTapGesture { pattie.dismiss() }
+                        }
+                        PattiePopup(line: line,
+                                    onReplay: { pattie.replayVoice() },
+                                    onDismiss: { pattie.dismiss() })
+                            .padding(.bottom, PattiePopup.tabBarHeight
+                                      + PattiePopup.tabBarGap
+                                      + proxy.safeAreaInsets.bottom)
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
                     }
-                    PattiePopup(line: line,
-                                onReplay: { pattie.replayVoice() },
-                                onDismiss: { pattie.dismiss() })
-                        // A banner clears the tab bar so it never covers a tab
-                        // it is inviting you to go to. A big one sits lower,
-                        // because it has already dimmed everything behind it.
-                        .padding(.bottom, line.impact == .big ? TriSpace.x10 : PattiePopup.tabBarClearance)
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 .zIndex(10)
             }

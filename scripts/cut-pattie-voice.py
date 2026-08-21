@@ -21,12 +21,12 @@ How the edges are found:
   1. Whisper word timestamps locate the phrase.
   2. The end is snapped to the last sentence-ending word inside the window, so a
      clip ends on a full stop rather than a stopwatch.
-  3. Both edges are then nudged to the quietest instant within +/-0.3s. Word
-     times are close but not frame-accurate, and an in-point two frames early
-     drags the tail of the previous word into the clip.
+  3. Both edges are then nudged into a bounded silence just outside the phrase.
+     Word times are close but not frame-accurate, and an in-point two frames
+     early drags the tail of the previous word into the clip.
   4. Anything that still starts hot (she runs straight on with no pause to cut
-     into) gets a 0.3s fade-in instead, which is the editorial answer when there
-     is no silence to find.
+     into) gets a longer fade-in instead, which is the editorial answer when
+     there is no silence to find.
 
 Requires ffmpeg. Transcripts live in `scripts/pattie-transcripts.json`; regenerate
 them with openai-whisper (`small.en`, `word_timestamps=True`) if the episodes
@@ -58,6 +58,10 @@ SOLUTION_CUES = ["here's the solution", "so here's the solution", "well here's t
 # The edge level, relative to the clip's own peak, above which a cut point is
 # treated as landing mid-speech.
 HOT_EDGE_DB = -18.0
+AUDIO_SAMPLE_RATE = 48000
+AUDIO_BITRATE = "96k"
+DEFAULT_FADE_IN = 0.12
+FADE_OUT = 0.20
 
 
 def words(transcript):
@@ -115,11 +119,12 @@ class Episode:
         ]
         self.duration = len(samples) / 16000.0
 
-    def quietest(self, t, window=0.30):
-        lo = max(0, int((t - window) * 100))
-        hi = min(len(self.envelope) - 1, int((t + window) * 100))
+    def quietest_between(self, start, end):
+        """The quietest 10ms frame inside a bounded interval."""
+        lo = max(0, int(start * 100))
+        hi = min(len(self.envelope) - 1, int(end * 100))
         if hi <= lo:
-            return t
+            return max(0.0, min(self.duration, start))
         return min(range(lo, hi + 1), key=lambda i: self.envelope[i]) / 100.0
 
 
@@ -127,19 +132,40 @@ def run(args):
     subprocess.run(["ffmpeg", "-nostdin", "-loglevel", "error", "-y"] + args, check=True)
 
 
-def encode(episode, name, start, end, fade_in=0.05):
-    begin = max(0.0, episode.quietest(start - 0.10))
-    finish = min(episode.duration, episode.quietest(end + 0.25))
+def encode(episode, name, start, end, fade_in=DEFAULT_FADE_IN):
+    begin = episode.quietest_between(max(0.0, start - 0.45),
+                                     max(0.0, start - 0.12))
+    finish = episode.quietest_between(min(episode.duration, end + 0.08),
+                                      min(episode.duration, end + 0.45))
     if finish - begin < 0.5:
         return None
     path = os.path.join(OUT, name + ".m4a")
-    fade_out = max(0.0, finish - begin - 0.15)
+    fade_out = max(0.0, finish - begin - FADE_OUT)
     run(["-ss", f"{begin:.3f}", "-t", f"{finish - begin:.3f}", "-i", episode.mp4,
-         "-vn", "-ac", "1", "-ar", "44100", "-c:a", "aac", "-b:a", "56k",
-         "-af", f"afade=t=in:st=0:d={fade_in},afade=t=out:st={fade_out:.3f}:d=0.15,"
-                "loudnorm=I=-16:TP=-1.5:LRA=11",
+         "-vn", "-ac", "1", "-ar", str(AUDIO_SAMPLE_RATE), "-c:a", "aac",
+         "-b:a", AUDIO_BITRATE,
+         "-af", f"afade=t=in:st=0:d={fade_in},afade=t=out:st={fade_out:.3f}:d={FADE_OUT},"
+                "loudnorm=I=-16:TP=-2.0:LRA=11",
          path])
     return path, begin, finish
+
+
+def normalize_existing(name, metadata):
+    """Re-encode a first-pass phrase without changing its spoken content."""
+    path = os.path.join(OUT, name + ".m4a")
+    if not os.path.exists(path):
+        return False
+    duration = float(metadata.get("seconds", 0.0))
+    fade_out = max(0.0, duration - FADE_OUT)
+    temp = path + ".tmp.m4a"
+    run(["-i", path, "-vn", "-ac", "1", "-ar", str(AUDIO_SAMPLE_RATE),
+         "-c:a", "aac", "-b:a", AUDIO_BITRATE,
+         "-af", f"afade=t=in:st=0:d={DEFAULT_FADE_IN},"
+                f"afade=t=out:st={fade_out:.3f}:d={FADE_OUT},"
+                "loudnorm=I=-16:TP=-2.0:LRA=11",
+         temp])
+    os.replace(temp, path)
+    return True
 
 
 def edge_levels(path):
@@ -164,6 +190,14 @@ def main(source_dir):
     os.makedirs(OUT, exist_ok=True)
     transcripts = json.load(open(TRANSCRIPTS))
     manifest, hot = {}, []
+    record = os.path.join(ROOT, "docs", "pattie-voice.json")
+    previous = json.load(open(record)) if os.path.exists(record) else {}
+    preserved = {
+        name: metadata for name, metadata in previous.get("clips", {}).items()
+        if not (name.startswith("pattie-hook-") or
+                name.startswith("pattie-solution-") or
+                name.startswith("pattie-signoff-"))
+    }
 
     for key in sorted(transcripts):
         mp4 = os.path.join(source_dir, key + ".mp4")
@@ -181,7 +215,9 @@ def main(source_dir):
                 plans.append((f"pattie-signoff-{number}", i, i + len(phrase.split()) - 1, None))
                 break
 
-        i = find(ws, "here's the situation") or find(ws, "there's a situation")
+        i = find(ws, "here's the situation")
+        if i is None:
+            i = find(ws, "there's a situation")
         if i is not None:
             j = snap_end(ws, i, 4.0, 12.0)
             if j:
@@ -215,15 +251,22 @@ def main(source_dir):
             }
         os.remove(episode.wav)
 
+    normalized = [name for name, metadata in preserved.items()
+                  if normalize_existing(name, metadata)]
+
     # The manifest is documentation, not a bundled resource: it stays out of
-    # OUT so it never ships inside the app.
-    record = os.path.join(ROOT, "docs", "pattie-voice.json")
+    # OUT so it never ships inside the app. Keep first-pass phrase clips while
+    # the episode families are regenerated.
+    combined = {**preserved, **manifest}
     json.dump({
         "note": "Cut from Pattie's own episodes by scripts/cut-pattie-voice.py. "
-                "Nothing here is synthesised.",
-        "clips": manifest,
+                "Edges are bounded by nearby silence and softened when speech "
+                "runs through a cut. Nothing here is synthesised.",
+        "families": previous.get("families", {}),
+        "count": len(combined),
+        "clips": combined,
     }, open(record, "w"), indent=1)
-    print(f"cut {len(manifest)} clips into {OUT}, manifest in {record}")
+    print(f"cut {len(manifest)} clips into {OUT}, normalized {len(normalized)} phrase clips, manifest in {record}")
     if hot:
         print("fade-in applied (no silent in-point):", ", ".join(hot))
     still_hot = [n for n, m in manifest.items()

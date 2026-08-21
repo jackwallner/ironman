@@ -36,6 +36,37 @@ final class PattieModeUITests: XCTestCase {
         XCTAssertTrue(waitForDisappearance(card, timeout: 10), "Tapping the card should dismiss it")
     }
 
+    /// The large hero card clears the tab bar just like the regular banner.
+    func testBigPattieClearsTheTabBar() throws {
+        let app = launch(pattieMode: true)
+
+        XCTAssertTrue(claimPattie(in: app), "The big popup needs a claimed athlete")
+        dismissPopupIfPresent(in: app)
+
+        app.tabBars.buttons["Settings"].tap()
+        dismissPopupIfPresent(in: app)
+
+        let show = app.buttons["Show me one now"]
+        if !show.waitForExistence(timeout: 3) {
+            app.swipeUp()
+        }
+        XCTAssertTrue(show.waitForExistence(timeout: 15))
+        show.tap()
+
+        let card = app.descendants(matching: .any).matching(
+            NSPredicate(format: "label BEGINSWITH %@", "Pattie says:")
+        ).firstMatch
+        XCTAssertTrue(card.waitForExistence(timeout: 10), "The hero popup should show")
+        let screenshot = XCTAttachment(screenshot: app.screenshot())
+        screenshot.name = "big-pattie-popup"
+        screenshot.lifetime = .keepAlways
+        add(screenshot)
+        let tabBar = app.tabBars.firstMatch
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+        XCTAssertLessThan(card.frame.maxY, tabBar.frame.minY,
+                          "Pattie's popup must stay above the tab bar")
+    }
+
     /// The same launch without the flag stays quiet, which is what the rest of
     /// the suite depends on.
     func testPattieStaysQuietWhenNotAskedFor() throws {
@@ -96,6 +127,16 @@ final class PattieModeUITests: XCTestCase {
         let gone = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"),
                                              object: element)
         return XCTWaiter.wait(for: [gone], timeout: timeout) == .completed
+    }
+
+    private func dismissPopupIfPresent(in app: XCUIApplication) {
+        let card = app.descendants(matching: .any).matching(
+            NSPredicate(format: "label BEGINSWITH %@", "Pattie says:")
+        ).firstMatch
+        if card.waitForExistence(timeout: 5), card.exists, card.isHittable {
+            card.tap()
+            _ = waitForDisappearance(card, timeout: 10)
+        }
     }
 
     @discardableResult

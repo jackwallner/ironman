@@ -91,7 +91,7 @@ struct SettingsView: View {
                         ))
                         Button("Show me one now") { pattie.demo() }
                     }
-                    Text("Pattie turns up as you use the app with a pointer for whatever you're looking at. Every photo is a frame from her own clips and every line of her voice is cut from that video's audio.")
+                    Text("Pattie turns up as you use the app with a pointer for whatever you're looking at. The large portrait uses a natural profile photo, and every line of her voice is cut from her own video audio.")
                         .font(TriType.micro)
                         .foregroundStyle(TriPalette.inkTertiary)
                 }

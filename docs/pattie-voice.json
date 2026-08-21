@@ -1,5 +1,5 @@
 {
- "note": "Cut from Pattie's own episodes by scripts/cut-pattie-voice.py. Word timestamps locate the phrase, the end snaps to a sentence boundary, and both edges are nudged to the quietest instant within 0.3s. Nothing here is synthesised.",
+ "note": "Cut from Pattie's own episodes by scripts/cut-pattie-voice.py. Edges are bounded by nearby silence and softened when speech runs through a cut. Nothing here is synthesised.",
  "families": {
   "signoff": "Her closing line, one take per episode. Short reactions for Pattie Mode.",
   "hook": "\"Here's the situation\" plus the situation itself.",
@@ -8,286 +8,6 @@
  },
  "count": 66,
  "clips": {
-  "pattie-hook-01": {
-   "seconds": 7.43,
-   "episode": "ep-01-mud-in-shoes",
-   "text": "Here's the situation. You're at a race where it's been raining and the transition area is grass and it's full of mud."
-  },
-  "pattie-hook-02": {
-   "seconds": 11.55,
-   "episode": "ep-02-phone-on-shoe",
-   "text": "Here's the situation. You've just finished your race. You're tired. Oh my gosh. But I've got my medal. I'm just exhausted. Just finished. I got my morning clothes bag. But I didn't bring my phone."
-  },
-  "pattie-hook-03": {
-   "seconds": 11.51,
-   "episode": "ep-03-bring-a-backpack",
-   "text": "Here's the situation. It's race day morning and you have a backpack and it's full of all of your transition bags, fuel bottles, special needs bags. It's heavy."
-  },
-  "pattie-hook-04": {
-   "seconds": 11.7,
-   "episode": "ep-04-breaking-bad-outfit",
-   "text": "Here's the situation. It's race day morning or it's a freezing cold training morning and you're going to be standing around for hours, even at a marathon. And it's really cold and it's raining."
-  },
-  "pattie-hook-05": {
-   "seconds": 8.55,
-   "episode": "ep-05-right-size-baggie",
-   "text": "Here's the situation. It's a really windy day out and either out for a long training ride or it's on race day and you just pulled into an aid station."
-  },
-  "pattie-hook-06": {
-   "seconds": 8.88,
-   "episode": "ep-06-freezer-bag",
-   "text": "Here's the situation you've come out of your swim you're exiting t1 and you got a steep decline or it's a little chilly out Well, here's what you want to do."
-  },
-  "pattie-hook-07": {
-   "seconds": 6.94,
-   "episode": "ep-07-wind-vs-flat-tire",
-   "text": "Here's the situation. You've got a flat tire and you're on the side of the road and it's a little breezy."
-  },
-  "pattie-hook-08": {
-   "seconds": 8.68,
-   "episode": "ep-08-the-left-hand-grab",
-   "text": "Here's the situation. You're going to go down under or go to New Zealand and do a race where they're on the left -hand side of the road."
-  },
-  "pattie-hook-09": {
-   "seconds": 11.72,
-   "episode": "ep-09-the-climb",
-   "text": "Here's the situation. You're about to climb a hill and you're on your triathlon bike, which is not the easiest bike to climb hills with. So, what's the solution? Make sure you're sitting up on your bike."
-  },
-  "pattie-hook-10": {
-   "seconds": 10.72,
-   "episode": "ep-10-sausage-roll-wetsuit",
-   "text": "Here's the situation. You're coming down to go out to a beautiful swim or you're about to start your race. And you've got your wetsuit, which is a pain in the butt to try and put all together."
-  },
-  "pattie-hook-11": {
-   "seconds": 10.24,
-   "episode": "ep-11-melt-down",
-   "text": "Here's the situation. You're about to go for a nice swim and it's summertime, so you go and get your swim cap out of your closet and you notice that they're stuck together."
-  },
-  "pattie-hook-12": {
-   "seconds": 11.68,
-   "episode": "ep-12-what-to-wear",
-   "text": "There's a situation. It's race day morning and you're about to go down to the swim start. And it could be on a boat ramp or it could be sand and so you want to wear some kind of shoes. But you're not going to get the shoes back."
-  },
-  "pattie-hook-13": {
-   "seconds": 6.8,
-   "episode": "ep-13-it-s-a-contact-sport",
-   "text": "Here's the situation. You're in your triathlon swim and it's crowded and you're getting hit."
-  },
-  "pattie-hook-15": {
-   "seconds": 11.93,
-   "episode": "ep-15-it-s-black",
-   "text": "Here's the situation. You're out to go out swimming with your swim buddies and you've got swim caps and everyone's ready to go. Somebody's got a dark colored swim cap on, a black swim cap."
-  },
-  "pattie-hook-16": {
-   "seconds": 9.55,
-   "episode": "ep-16-avoid-the-zero-mph-fall-b-u-b-s",
-   "text": "Here's the situation. You just got your first set of bike shoes and you've got your pedals and now you need to learn how to clip in and clip out."
-  },
-  "pattie-hook-17": {
-   "seconds": 6.62,
-   "episode": "ep-17-tongue-tied",
-   "text": "Here's the situation. You got out for your training run, and it feels like there's a rock in your shoe or something."
-  },
-  "pattie-hook-18": {
-   "seconds": 9.79,
-   "episode": "ep-18-key-dilemma",
-   "text": "Here's the situation. It's a beautiful day to go for a swim in the ocean and you have all your belongings that you've left in your car, you're ready to go in the ocean."
-  },
-  "pattie-hook-19": {
-   "seconds": 11.48,
-   "episode": "ep-19-un-blistify-toes",
-   "text": "Here's the situation. You're going out for your long training runs and you tend to get blisters on your toes. So what do you do about that? So here's the solution. You've got a couple options."
-  },
-  "pattie-hook-20": {
-   "seconds": 8.89,
-   "episode": "ep-20-maximize-energy",
-   "text": "Here's the situation. You're out for your long training runs and you want to make sure that you are as efficient as possible. So here's the solution."
-  },
-  "pattie-signoff-01": {
-   "seconds": 1.47,
-   "episode": "ep-01-mud-in-shoes",
-   "text": "Now that's a great idea."
-  },
-  "pattie-signoff-02": {
-   "seconds": 1.77,
-   "episode": "ep-02-phone-on-shoe",
-   "text": "Now that's a great idea."
-  },
-  "pattie-signoff-03": {
-   "seconds": 2.06,
-   "episode": "ep-03-bring-a-backpack",
-   "text": "that is a great idea."
-  },
-  "pattie-signoff-04": {
-   "seconds": 1.97,
-   "episode": "ep-04-breaking-bad-outfit",
-   "text": "That's a great idea."
-  },
-  "pattie-signoff-05": {
-   "seconds": 1.72,
-   "episode": "ep-05-right-size-baggie",
-   "text": "Now that's a good idea."
-  },
-  "pattie-signoff-07": {
-   "seconds": 1.55,
-   "episode": "ep-07-wind-vs-flat-tire",
-   "text": "Now that's a great idea."
-  },
-  "pattie-signoff-08": {
-   "seconds": 1.03,
-   "episode": "ep-08-the-left-hand-grab",
-   "text": "Now that's a great idea."
-  },
-  "pattie-signoff-09": {
-   "seconds": 1.28,
-   "episode": "ep-09-the-climb",
-   "text": "Now that's a great idea."
-  },
-  "pattie-signoff-10": {
-   "seconds": 1.75,
-   "episode": "ep-10-sausage-roll-wetsuit",
-   "text": "That's a bonus idea."
-  },
-  "pattie-signoff-11": {
-   "seconds": 1.69,
-   "episode": "ep-11-melt-down",
-   "text": "now that's a great idea."
-  },
-  "pattie-signoff-12": {
-   "seconds": 2.11,
-   "episode": "ep-12-what-to-wear",
-   "text": "That's a great idea."
-  },
-  "pattie-signoff-13": {
-   "seconds": 1.34,
-   "episode": "ep-13-it-s-a-contact-sport",
-   "text": "Now that's a great idea."
-  },
-  "pattie-signoff-15": {
-   "seconds": 1.77,
-   "episode": "ep-15-it-s-black",
-   "text": "That's always a great idea."
-  },
-  "pattie-signoff-16": {
-   "seconds": 1.57,
-   "episode": "ep-16-avoid-the-zero-mph-fall-b-u-b-s",
-   "text": "Now that's a great idea."
-  },
-  "pattie-signoff-17": {
-   "seconds": 1.7,
-   "episode": "ep-17-tongue-tied",
-   "text": "Now that's a great idea."
-  },
-  "pattie-signoff-18": {
-   "seconds": 2.47,
-   "episode": "ep-18-key-dilemma",
-   "text": "that's a great idea."
-  },
-  "pattie-signoff-19": {
-   "seconds": 2.03,
-   "episode": "ep-19-un-blistify-toes",
-   "text": "Now that's a great idea."
-  },
-  "pattie-signoff-20": {
-   "seconds": 1.59,
-   "episode": "ep-20-maximize-energy",
-   "text": "Now that's a great idea."
-  },
-  "pattie-solution-01": {
-   "seconds": 13.83,
-   "episode": "ep-01-mud-in-shoes",
-   "text": "Here's the solution. Get yourself some of those booties that they give you and get your carpets cleaned like Stanley Steamer. Put those on your bike shoes. So then when you walk through transition, your cleats stay nice and clean."
-  },
-  "pattie-solution-02": {
-   "seconds": 8.65,
-   "episode": "ep-02-phone-on-shoe",
-   "text": "here's the solution. Before you put your shoes in your T2 bag, write the phone number of your friend on your shoe."
-  },
-  "pattie-solution-03": {
-   "seconds": 9.84,
-   "episode": "ep-03-bring-a-backpack",
-   "text": "here's the solution. Make sure you have yourself a backpack, right? Don't carry around all those separate bags. You're going to drop them everywhere. But here's the neat thing."
-  },
-  "pattie-solution-04": {
-   "seconds": 14.07,
-   "episode": "ep-04-breaking-bad-outfit",
-   "text": "here's what I do. And I get myself one of those Breaking Bad Tyvek outfits. Why? Because it keeps me warm, the rain doesn't get in and it doesn't breathe."
-  },
-  "pattie-solution-05": {
-   "seconds": 9.09,
-   "episode": "ep-05-right-size-baggie",
-   "text": "here's the solution. Make sure the bag that you're using you can get from Uline or find something else that's really small and rectangular."
-  },
-  "pattie-solution-06": {
-   "seconds": 7.63,
-   "episode": "ep-06-freezer-bag",
-   "text": "here's what you want to do. You want to take a gallon freezer Ziploc baggie and just put it in your chest"
-  },
-  "pattie-solution-07": {
-   "seconds": 10.95,
-   "episode": "ep-07-wind-vs-flat-tire",
-   "text": "here's the solution. In order to keep all your components together, take off your helmet, complete with helmet hair, put all the components into your bike helmet."
-  },
-  "pattie-solution-08": {
-   "seconds": 9.19,
-   "episode": "ep-08-the-left-hand-grab",
-   "text": "Here's the solution. You better practice. Practice grabbing behind with your left hand, getting the bottles out of your cage,"
-  },
-  "pattie-solution-09": {
-   "seconds": 10.45,
-   "episode": "ep-09-the-climb",
-   "text": "what's the solution? Make sure you're sitting up on your bike. You want your chin horizontal with the horizon so you're able to get in as much air and exhale as much as possible."
-  },
-  "pattie-solution-10": {
-   "seconds": 15.23,
-   "episode": "ep-10-sausage-roll-wetsuit",
-   "text": "here's the solution. You take your wetsuit, put it out flat. You fold up the legs, you fold up the arms, you roll it up into a sausage, and you put two elastic strips around it and then you're good to go. Here's a bonus solution."
-  },
-  "pattie-solution-11": {
-   "seconds": 15.28,
-   "episode": "ep-11-melt-down",
-   "text": "here's the solution. Before you store them away, take baby powder and put the baby powder inside the swim cap underneath each other so then when you stack them together, they won't stick together and now you're able to use whichever swim cap you want. And now that's a great idea."
-  },
-  "pattie-solution-12": {
-   "seconds": 14.54,
-   "episode": "ep-12-what-to-wear",
-   "text": "Here's the solution. Go to Walmart and get yourself some cent flip flops that you can use as you walk down to the swim start. Then what you can do is you just take them off right before you enter the water and throw them into the receptacle. That's a great idea."
-  },
-  "pattie-solution-13": {
-   "seconds": 10.44,
-   "episode": "ep-13-it-s-a-contact-sport",
-   "text": "Here's the solution. You need to mentally understand that people are not intentionally hitting you. So just know that it's not on purpose."
-  },
-  "pattie-solution-15": {
-   "seconds": 14.24,
-   "episode": "ep-15-it-s-black",
-   "text": "Here's the solution. Make sure you wear a bright colored swim cap. Now in races sometimes they do give dark colored swim caps but remember they have kayak people, they have lifeguards, they have safety protocols in place. So they're watching everybody."
-  },
-  "pattie-solution-16": {
-   "seconds": 20.18,
-   "episode": "ep-16-avoid-the-zero-mph-fall-b-u-b-s",
-   "text": "So I've got a word for you to remember to help you learn how to unclip without falling. Here it is. It stands for break. You're gonna unclip butt off the seat and lastly you're gonna stand by putting your foot down."
-  },
-  "pattie-solution-17": {
-   "seconds": 13.34,
-   "episode": "ep-17-tongue-tied",
-   "text": "here's the solution. So what you wanna do is take the shoelace and come around and do this over, under, right? From the opposite side and go through the little cutout."
-  },
-  "pattie-solution-18": {
-   "seconds": 15.8,
-   "episode": "ep-18-key-dilemma",
-   "text": "Here's the solution. Take the mechanical key out of your fob, take a safety pin and attach that to your swim suit or swim trucks or something like that. Then it'll be inside your wetsuit. And then you can go ahead and go swimming, no problem. You won't lose your key."
-  },
-  "pattie-solution-19": {
-   "seconds": 14.82,
-   "episode": "ep-19-un-blistify-toes",
-   "text": "here's the solution. You've got a couple options. The first one is you can just get a pedicure and cover your toenails so you can't see that they might be black and blue. The second solution is you want to get some kind of lubricant or I happen to use bag bomb."
-  },
-  "pattie-solution-20": {
-   "seconds": 12.69,
-   "episode": "ep-20-maximize-energy",
-   "text": "here's the solution. We can certainly minimize the amount of energy we exert on our training runs. And one of the ways we can do that is making sure that we use our arms effectively by keeping that energy going forward."
-  },
   "pattie-away-you-go": {
    "seconds": 0.86,
    "sourceClip": "2933093860295411",
@@ -337,6 +57,398 @@
    "seconds": 1.23,
    "sourceClip": "2933093860295411",
    "text": "that s a great idea"
+  },
+  "pattie-signoff-01": {
+   "seconds": 1.49,
+   "episode": "ep-01-mud-in-shoes",
+   "text": "Now that's a great idea.",
+   "headDB": -28.8,
+   "tailDB": -27.9
+  },
+  "pattie-hook-01": {
+   "seconds": 7.54,
+   "episode": "ep-01-mud-in-shoes",
+   "text": "Here's the situation. You're at a race where it's been raining and the transition area is grass and it's full of mud.",
+   "headDB": -34.0,
+   "tailDB": -42.8
+  },
+  "pattie-solution-01": {
+   "seconds": 18.77,
+   "episode": "ep-01-mud-in-shoes",
+   "text": "Here's the solution. Get yourself some of those booties that they give you and get your carpets cleaned like Stanley Steamer. Put those on your bike shoes. So then when you walk through transition, your cleats stay nice and clean. And then when you're ready to mount your bike, you just take them off and you hand them to a volunteer.",
+   "headDB": -32.1,
+   "tailDB": -38.2
+  },
+  "pattie-signoff-02": {
+   "seconds": 1.97,
+   "episode": "ep-02-phone-on-shoe",
+   "text": "Now that's a great idea.",
+   "headDB": -24.7,
+   "tailDB": -37.6
+  },
+  "pattie-hook-02": {
+   "seconds": 11.58,
+   "episode": "ep-02-phone-on-shoe",
+   "text": "Here's the situation. You've just finished your race. You're tired. Oh my gosh. But I've got my medal. I'm just exhausted. Just finished. I got my morning clothes bag. But I didn't bring my phone.",
+   "headDB": -32.2,
+   "tailDB": -31.5
+  },
+  "pattie-solution-02": {
+   "seconds": 17.89,
+   "episode": "ep-02-phone-on-shoe",
+   "text": "here's the solution. Before you put your shoes in your T2 bag, write the phone number of your friend on your shoe. Then what you can do is you can say here random stranger, would you please call this phone number, get ahold of my friend, and tell her to meet me by the W.",
+   "headDB": -29.5,
+   "tailDB": -35.7
+  },
+  "pattie-signoff-03": {
+   "seconds": 2.06,
+   "episode": "ep-03-bring-a-backpack",
+   "text": "that is a great idea.",
+   "headDB": -30.8,
+   "tailDB": -34.6
+  },
+  "pattie-hook-03": {
+   "seconds": 12.06,
+   "episode": "ep-03-bring-a-backpack",
+   "text": "Here's the situation. It's race day morning and you have a backpack and it's full of all of your transition bags, fuel bottles, special needs bags. It's heavy.",
+   "headDB": -28.4,
+   "tailDB": -36.0
+  },
+  "pattie-solution-03": {
+   "seconds": 16.57,
+   "episode": "ep-03-bring-a-backpack",
+   "text": "here's the solution. Make sure you have yourself a backpack, right? Don't carry around all those separate bags. You're going to drop them everywhere. But here's the neat thing. When you get to transition, take out your wetsuit, swim cap, your goggles, your morning clothes back.",
+   "headDB": -25.5,
+   "tailDB": -40.9
+  },
+  "pattie-signoff-04": {
+   "seconds": 2.03,
+   "episode": "ep-04-breaking-bad-outfit",
+   "text": "That's a great idea.",
+   "headDB": -28.6,
+   "tailDB": -29.8
+  },
+  "pattie-hook-04": {
+   "seconds": 11.93,
+   "episode": "ep-04-breaking-bad-outfit",
+   "text": "Here's the situation. It's race day morning or it's a freezing cold training morning and you're going to be standing around for hours, even at a marathon. And it's really cold and it's raining.",
+   "headDB": -30.5,
+   "tailDB": -40.4
+  },
+  "pattie-solution-04": {
+   "seconds": 20.26,
+   "episode": "ep-04-breaking-bad-outfit",
+   "text": "here's what I do. And I get myself one of those Breaking Bad Tyvek outfits. Why? Because it keeps me warm, the rain doesn't get in and it doesn't breathe. So I am toasty warm while I'm standing around in the crowds waiting for the race to start. Here's another situation.",
+   "headDB": -29.0,
+   "tailDB": -34.3
+  },
+  "pattie-signoff-05": {
+   "seconds": 1.72,
+   "episode": "ep-05-right-size-baggie",
+   "text": "Now that's a good idea.",
+   "headDB": -30.5,
+   "tailDB": -27.9
+  },
+  "pattie-hook-05": {
+   "seconds": 8.71,
+   "episode": "ep-05-right-size-baggie",
+   "text": "Here's the situation. It's a really windy day out and either out for a long training ride or it's on race day and you just pulled into an aid station.",
+   "headDB": -30.7,
+   "tailDB": -34.4
+  },
+  "pattie-solution-05": {
+   "seconds": 17.27,
+   "episode": "ep-05-right-size-baggie",
+   "text": "here's the solution. Make sure the bag that you're using you can get from Uline or find something else that's really small and rectangular. Make sure the mouth of that baggy fits inside the mouth of the bottle and just shove it in there and that way you don't have any powder flying all over the place.",
+   "headDB": -21.3,
+   "tailDB": -37.4
+  },
+  "pattie-hook-06": {
+   "seconds": 8.98,
+   "episode": "ep-06-freezer-bag",
+   "text": "Here's the situation you've come out of your swim you're exiting t1 and you got a steep decline or it's a little chilly out Well, here's what you want to do.",
+   "headDB": -33.0,
+   "tailDB": -23.0
+  },
+  "pattie-solution-06": {
+   "seconds": 18.71,
+   "episode": "ep-06-freezer-bag",
+   "text": "here's what you want to do. You want to take a gallon freezer Ziploc baggie and just put it in your chest So this will keep the wind off your chest as you're descending and riding then as you go further into the race as soon as You warm up.",
+   "headDB": -31.0,
+   "tailDB": -48.0
+  },
+  "pattie-signoff-07": {
+   "seconds": 1.57,
+   "episode": "ep-07-wind-vs-flat-tire",
+   "text": "Now that's a great idea.",
+   "headDB": -35.9,
+   "tailDB": -44.1
+  },
+  "pattie-hook-07": {
+   "seconds": 6.94,
+   "episode": "ep-07-wind-vs-flat-tire",
+   "text": "Here's the situation. You've got a flat tire and you're on the side of the road and it's a little breezy.",
+   "headDB": -35.6,
+   "tailDB": -36.6
+  },
+  "pattie-solution-07": {
+   "seconds": 17.68,
+   "episode": "ep-07-wind-vs-flat-tire",
+   "text": "here's the solution. In order to keep all your components together, take off your helmet, complete with helmet hair, put all the components into your bike helmet. That way you're able to contain them so when the breeze blows, it'll blow all over the road again.",
+   "headDB": -37.1,
+   "tailDB": -40.1
+  },
+  "pattie-signoff-08": {
+   "seconds": 1.32,
+   "episode": "ep-08-the-left-hand-grab",
+   "text": "Now that's a great idea.",
+   "headDB": -43.8,
+   "tailDB": -28.6
+  },
+  "pattie-hook-08": {
+   "seconds": 8.75,
+   "episode": "ep-08-the-left-hand-grab",
+   "text": "Here's the situation. You're going to go down under or go to New Zealand and do a race where they're on the left -hand side of the road.",
+   "headDB": -33.0,
+   "tailDB": -49.5
+  },
+  "pattie-solution-08": {
+   "seconds": 20.08,
+   "episode": "ep-08-the-left-hand-grab",
+   "text": "Here's the solution. You better practice. Practice grabbing behind with your left hand, getting the bottles out of your cage, opening up the front, putting the liquid in with your left hand, which I'm not very good at. So I practice this, squeezing the bottle, okay?",
+   "headDB": -42.5,
+   "tailDB": -46.2
+  },
+  "pattie-signoff-09": {
+   "seconds": 1.4,
+   "episode": "ep-09-the-climb",
+   "text": "Now that's a great idea.",
+   "headDB": -36.5,
+   "tailDB": -72.1
+  },
+  "pattie-hook-09": {
+   "seconds": 11.72,
+   "episode": "ep-09-the-climb",
+   "text": "Here's the situation. You're about to climb a hill and you're on your triathlon bike, which is not the easiest bike to climb hills with. So, what's the solution? Make sure you're sitting up on your bike.",
+   "headDB": -38.6,
+   "tailDB": -40.2
+  },
+  "pattie-solution-09": {
+   "seconds": 10.56,
+   "episode": "ep-09-the-climb",
+   "text": "what's the solution? Make sure you're sitting up on your bike. You want your chin horizontal with the horizon so you're able to get in as much air and exhale as much as possible.",
+   "headDB": -32.4,
+   "tailDB": -34.0
+  },
+  "pattie-signoff-10": {
+   "seconds": 1.76,
+   "episode": "ep-10-sausage-roll-wetsuit",
+   "text": "That's a bonus idea.",
+   "headDB": -43.9,
+   "tailDB": -41.4
+  },
+  "pattie-hook-10": {
+   "seconds": 10.91,
+   "episode": "ep-10-sausage-roll-wetsuit",
+   "text": "Here's the situation. You're coming down to go out to a beautiful swim or you're about to start your race. And you've got your wetsuit, which is a pain in the butt to try and put all together.",
+   "headDB": -32.4,
+   "tailDB": -38.0
+  },
+  "pattie-solution-10": {
+   "seconds": 15.06,
+   "episode": "ep-10-sausage-roll-wetsuit",
+   "text": "here's the solution. You take your wetsuit, put it out flat. You fold up the legs, you fold up the arms, you roll it up into a sausage, and you put two elastic strips around it and then you're good to go. Here's a bonus solution.",
+   "headDB": -33.8,
+   "tailDB": -36.5
+  },
+  "pattie-signoff-11": {
+   "seconds": 1.69,
+   "episode": "ep-11-melt-down",
+   "text": "now that's a great idea.",
+   "headDB": -37.3,
+   "tailDB": -41.6
+  },
+  "pattie-hook-11": {
+   "seconds": 10.24,
+   "episode": "ep-11-melt-down",
+   "text": "Here's the situation. You're about to go for a nice swim and it's summertime, so you go and get your swim cap out of your closet and you notice that they're stuck together.",
+   "headDB": -42.8,
+   "tailDB": -47.5
+  },
+  "pattie-solution-11": {
+   "seconds": 15.28,
+   "episode": "ep-11-melt-down",
+   "text": "here's the solution. Before you store them away, take baby powder and put the baby powder inside the swim cap underneath each other so then when you stack them together, they won't stick together and now you're able to use whichever swim cap you want. And now that's a great idea.",
+   "headDB": -24.9,
+   "tailDB": -39.0
+  },
+  "pattie-signoff-12": {
+   "seconds": 2.12,
+   "episode": "ep-12-what-to-wear",
+   "text": "That's a great idea.",
+   "headDB": -23.0,
+   "tailDB": -41.6
+  },
+  "pattie-hook-12": {
+   "seconds": 12.16,
+   "episode": "ep-12-what-to-wear",
+   "text": "There's a situation. It's race day morning and you're about to go down to the swim start. And it could be on a boat ramp or it could be sand and so you want to wear some kind of shoes. But you're not going to get the shoes back.",
+   "headDB": -35.5,
+   "tailDB": -37.0
+  },
+  "pattie-solution-12": {
+   "seconds": 14.56,
+   "episode": "ep-12-what-to-wear",
+   "text": "Here's the solution. Go to Walmart and get yourself some cent flip flops that you can use as you walk down to the swim start. Then what you can do is you just take them off right before you enter the water and throw them into the receptacle. That's a great idea.",
+   "headDB": -35.2,
+   "tailDB": -38.4
+  },
+  "pattie-signoff-13": {
+   "seconds": 1.36,
+   "episode": "ep-13-it-s-a-contact-sport",
+   "text": "Now that's a great idea.",
+   "headDB": -31.7,
+   "tailDB": -31.6
+  },
+  "pattie-hook-13": {
+   "seconds": 7.17,
+   "episode": "ep-13-it-s-a-contact-sport",
+   "text": "Here's the situation. You're in your triathlon swim and it's crowded and you're getting hit.",
+   "headDB": -35.5,
+   "tailDB": -42.7
+  },
+  "pattie-solution-13": {
+   "seconds": 18.11,
+   "episode": "ep-13-it-s-a-contact-sport",
+   "text": "Here's the solution. You need to mentally understand that people are not intentionally hitting you. So just know that it's not on purpose. What you want to do is just veer off a couple inches to the left, to the right and then the water will be nice and clear. Now that's a great idea.",
+   "headDB": -24.9,
+   "tailDB": -31.7
+  },
+  "pattie-signoff-15": {
+   "seconds": 1.96,
+   "episode": "ep-15-it-s-black",
+   "text": "That's always a great idea.",
+   "headDB": -34.3,
+   "tailDB": -42.2
+  },
+  "pattie-hook-15": {
+   "seconds": 11.93,
+   "episode": "ep-15-it-s-black",
+   "text": "Here's the situation. You're out to go out swimming with your swim buddies and you've got swim caps and everyone's ready to go. Somebody's got a dark colored swim cap on, a black swim cap.",
+   "headDB": -40.7,
+   "tailDB": -41.9
+  },
+  "pattie-solution-15": {
+   "seconds": 19.27,
+   "episode": "ep-15-it-s-black",
+   "text": "Here's the solution. Make sure you wear a bright colored swim cap. Now in races sometimes they do give dark colored swim caps but remember they have kayak people, they have lifeguards, they have safety protocols in place. So they're watching everybody. But when you're out in the open water make sure you wear something bright so that people can see you.",
+   "headDB": -18.7,
+   "tailDB": -35.7
+  },
+  "pattie-signoff-16": {
+   "seconds": 1.68,
+   "episode": "ep-16-avoid-the-zero-mph-fall-b-u-b-s",
+   "text": "Now that's a great idea.",
+   "headDB": -39.1,
+   "tailDB": -41.7
+  },
+  "pattie-hook-16": {
+   "seconds": 9.67,
+   "episode": "ep-16-avoid-the-zero-mph-fall-b-u-b-s",
+   "text": "Here's the situation. You just got your first set of bike shoes and you've got your pedals and now you need to learn how to clip in and clip out.",
+   "headDB": -37.6,
+   "tailDB": -46.3
+  },
+  "pattie-solution-16": {
+   "seconds": 20.18,
+   "episode": "ep-16-avoid-the-zero-mph-fall-b-u-b-s",
+   "text": "So I've got a word for you to remember to help you learn how to unclip without falling. Here it is. It stands for break. You're gonna unclip butt off the seat and lastly you're gonna stand by putting your foot down.",
+   "headDB": -33.1,
+   "tailDB": -40.4
+  },
+  "pattie-signoff-17": {
+   "seconds": 1.72,
+   "episode": "ep-17-tongue-tied",
+   "text": "Now that's a great idea.",
+   "headDB": -39.1,
+   "tailDB": -40.8
+  },
+  "pattie-hook-17": {
+   "seconds": 6.61,
+   "episode": "ep-17-tongue-tied",
+   "text": "Here's the situation. You got out for your training run, and it feels like there's a rock in your shoe or something.",
+   "headDB": -37.4,
+   "tailDB": -44.4
+  },
+  "pattie-solution-17": {
+   "seconds": 17.4,
+   "episode": "ep-17-tongue-tied",
+   "text": "here's the solution. So what you wanna do is take the shoelace and come around and do this over, under, right? From the opposite side and go through the little cutout. See, I'm going from the opposite side.",
+   "headDB": -30.0,
+   "tailDB": -43.8
+  },
+  "pattie-signoff-18": {
+   "seconds": 2.48,
+   "episode": "ep-18-key-dilemma",
+   "text": "that's a great idea.",
+   "headDB": -31.4,
+   "tailDB": -32.6
+  },
+  "pattie-hook-18": {
+   "seconds": 10.14,
+   "episode": "ep-18-key-dilemma",
+   "text": "Here's the situation. It's a beautiful day to go for a swim in the ocean and you have all your belongings that you've left in your car, you're ready to go in the ocean.",
+   "headDB": -34.8,
+   "tailDB": -41.5
+  },
+  "pattie-solution-18": {
+   "seconds": 20.35,
+   "episode": "ep-18-key-dilemma",
+   "text": "Here's the solution. Take the mechanical key out of your fob, take a safety pin and attach that to your swim suit or swim trucks or something like that. Then it'll be inside your wetsuit. And then you can go ahead and go swimming, no problem. You won't lose your key. Come back, you're all good, everything's safe, no one's taken any of your belongings.",
+   "headDB": -33.0,
+   "tailDB": -31.3
+  },
+  "pattie-signoff-19": {
+   "seconds": 2.05,
+   "episode": "ep-19-un-blistify-toes",
+   "text": "Now that's a great idea.",
+   "headDB": -31.9,
+   "tailDB": -36.2
+  },
+  "pattie-hook-19": {
+   "seconds": 11.48,
+   "episode": "ep-19-un-blistify-toes",
+   "text": "Here's the situation. You're going out for your long training runs and you tend to get blisters on your toes. So what do you do about that? So here's the solution. You've got a couple options.",
+   "headDB": -29.9,
+   "tailDB": -44.6
+  },
+  "pattie-solution-19": {
+   "seconds": 14.82,
+   "episode": "ep-19-un-blistify-toes",
+   "text": "here's the solution. You've got a couple options. The first one is you can just get a pedicure and cover your toenails so you can't see that they might be black and blue. The second solution is you want to get some kind of lubricant or I happen to use bag bomb.",
+   "headDB": -24.0,
+   "tailDB": -38.1
+  },
+  "pattie-signoff-20": {
+   "seconds": 1.59,
+   "episode": "ep-20-maximize-energy",
+   "text": "Now that's a great idea.",
+   "headDB": -31.9,
+   "tailDB": -47.6
+  },
+  "pattie-hook-20": {
+   "seconds": 9.07,
+   "episode": "ep-20-maximize-energy",
+   "text": "Here's the situation. You're out for your long training runs and you want to make sure that you are as efficient as possible. So here's the solution.",
+   "headDB": -30.8,
+   "tailDB": -35.5
+  },
+  "pattie-solution-20": {
+   "seconds": 18.74,
+   "episode": "ep-20-maximize-energy",
+   "text": "here's the solution. We can certainly minimize the amount of energy we exert on our training runs. And one of the ways we can do that is making sure that we use our arms effectively by keeping that energy going forward. You don't want to be running with your arms going side to side to side this way. I know you've seen those people, right?",
+   "headDB": -28.3,
+   "tailDB": -31.3
   }
  }
 }

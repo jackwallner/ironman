@@ -5,9 +5,10 @@ import os
 /// Pattie Mode: Pattie Wallner turning up in the app to comment on your racing.
 ///
 /// The app exists because Pattie asked for it, and the tips it carries are hers,
-/// so this is the version where she is actually in the room. Every portrait is a
-/// frame from one of her own Tri Pattie's Pointers clips and every voice line is
-/// cut from that clip's audio. Nothing here is synthesised.
+/// so this is the version where she is actually in the room. The working portraits
+/// are from her own Tri Pattie's Pointers clips, with her public profile portrait
+/// reserved for the large hero popup. Every voice line is cut from her own audio.
+/// Nothing here is synthesised.
 ///
 /// It is on by default and switched off in Settings. On by default because the
 /// app is named after her pointers and a personality feature nobody finds is
@@ -215,29 +216,29 @@ extension PattieMode {
     /// use a sign-off", which `present(_:)` fills in.
     static let deck: [Line] = [
         // Welcome
-        Line(id: "welcome-1", moment: .welcome, portrait: "pattie-happy",
+        Line(id: "welcome-1", moment: .welcome, portrait: "pattie-profile",
              text: "Here's the situation: your races are scattered across a dozen result pages. Here's the solution. They're all in here now.",
              voice: "pattie-here-s-the-situation", impact: .big),
-        Line(id: "welcome-2", moment: .welcome, portrait: "pattie-coach",
+        Line(id: "welcome-2", moment: .welcome, portrait: "pattie-profile",
              text: "Every bib, every split, every year. No more digging through old emails the night before a race.",
              voice: "pattie-here-s-the-solution", impact: .big),
 
         // Search
         Line(id: "search-1", moment: .searching, portrait: "pattie-ready",
              text: "Type your name the way you registered. Full legal first name, usually, whether you like it or not."),
-        Line(id: "search-2", moment: .searching, portrait: "pattie-coach",
+        Line(id: "search-2", moment: .searching, portrait: "pattie-excited",
              text: "Surname first works too. I've spelled mine both ways on an entry form and so has everyone else."),
 
         // Claim
         Line(id: "claimed-1", moment: .claimed, portrait: "pattie-excited",
              text: "There you are. That's your whole career, straight off the timing feed.",
              voice: "pattie-now-that-s-a-great-idea", impact: .big),
-        Line(id: "claimed-2", moment: .claimed, portrait: "pattie-happy",
+        Line(id: "claimed-2", moment: .claimed, portrait: "pattie-profile",
              text: "Found you. Now you never have to remember a bib number again.",
              voice: "pattie-nice", impact: .big),
 
         // Race detail
-        Line(id: "race-1", moment: .raceOpened, portrait: "pattie-coach",
+        Line(id: "race-1", moment: .raceOpened, portrait: "pattie-ready",
              text: "Look at your transitions. That's free time sitting right there, and it costs nothing to practise."),
         Line(id: "race-2", moment: .raceOpened, portrait: "pattie-ride",
              text: "The bike is where the day is won or thrown away. Everything after it is just holding on.",
@@ -248,7 +249,7 @@ extension PattieMode {
              text: "Somewhere in this one there's a mile you'd rather not talk about. There is in all of mine too."),
 
         // Personal best
-        Line(id: "pb-1", moment: .personalBest, portrait: "pattie-podium",
+        Line(id: "pb-1", moment: .personalBest, portrait: "pattie-profile",
              text: "That's a personal best. Go on, look at it for a minute. You earned that one.",
              voice: "pattie-that-s-a-great-idea", impact: .big),
         Line(id: "pb-2", moment: .personalBest, portrait: "pattie-excited",
@@ -256,25 +257,25 @@ extension PattieMode {
              voice: "pattie-now-that-s-a-great-idea", impact: .big),
 
         // DNF
-        Line(id: "dnf-1", moment: .didNotFinish, portrait: "pattie-oops",
+        Line(id: "dnf-1", moment: .didNotFinish, portrait: "pattie-ready",
              text: "A DNF is a day, not a verdict. I've had mine. The next one still counts the same."),
         Line(id: "dnf-2", moment: .didNotFinish, portrait: "pattie-grit",
              text: "Everybody who races long enough collects one of these. It stays on the record and so do you."),
 
         // World Championship
-        Line(id: "worlds-1", moment: .worldChampionship, portrait: "pattie-podium",
+        Line(id: "worlds-1", moment: .worldChampionship, portrait: "pattie-profile",
              text: "A World Championship start line. Not many people get one of those on their record.",
              voice: "pattie-good", impact: .big),
 
         // Bests
-        Line(id: "bests-1", moment: .bests, portrait: "pattie-coach",
+        Line(id: "bests-1", moment: .bests, portrait: "pattie-excited",
              text: "Best swim, best bike, best run, all scoped to the right distance. A half and a full were never the same race."),
         Line(id: "bests-2", moment: .bests, portrait: "pattie-grit",
              text: "Sorted by your fastest leg. This is the list you quote at dinner.",
              voice: "pattie-nice"),
         Line(id: "bests-filter-1", moment: .bestsFiltered, portrait: "pattie-ready",
              text: "Different leg, different story. The transitions one is the list nobody wants to look at."),
-        Line(id: "bests-filter-2", moment: .bestsFiltered, portrait: "pattie-coach",
+        Line(id: "bests-filter-2", moment: .bestsFiltered, portrait: "pattie-excited",
              text: "Watch the gap column. That number is the whole training plan in one line."),
 
         // Resume
@@ -286,16 +287,16 @@ extension PattieMode {
              voice: "pattie-away-you-go"),
 
         // Pointers
-        Line(id: "pointers-1", moment: .pointers, portrait: "pattie-happy",
+        Line(id: "pointers-1", moment: .pointers, portrait: "pattie-ready",
              text: "These are my pointers. Little things that cost nothing and save your whole day.",
              voice: "pattie-away-you-go"),
-        Line(id: "pointers-2", moment: .pointers, portrait: "pattie-coach",
+        Line(id: "pointers-2", moment: .pointers, portrait: "pattie-excited",
              text: "Every one of these is something that went wrong for me first. That's how the list got written."),
-        Line(id: "pointer-played-1", moment: .pointerPlayed, portrait: "pattie-happy",
+        Line(id: "pointer-played-1", moment: .pointerPlayed, portrait: "pattie-ready",
              text: "Here's the situation, and then here's the solution. That's the whole format."),
 
         // Ask Pattie
-        Line(id: "ask-1", moment: .askOpened, portrait: "pattie-coach",
+        Line(id: "ask-1", moment: .askOpened, portrait: "pattie-profile",
              text: "Tell me what you're training for and what's bothering you. I've probably already made a clip about it.",
              voice: "pattie-here-s-the-situation", impact: .big),
         Line(id: "ask-2", moment: .askOpened, portrait: "pattie-ready",
@@ -303,7 +304,7 @@ extension PattieMode {
         Line(id: "ask-answered-1", moment: .askAnswered, portrait: "pattie-excited",
              text: "That's the one. Tap play and you'll get it in my own words.",
              voice: "pattie-here-s-the-solution"),
-        Line(id: "ask-answered-2", moment: .askAnswered, portrait: "pattie-happy",
+        Line(id: "ask-answered-2", moment: .askAnswered, portrait: "pattie-ready",
              text: "Try it on a training day first. Race day is a bad time to learn a new trick."),
 
         // Notes
@@ -320,7 +321,7 @@ extension PattieMode {
              text: "Pulled it again, straight from the timers. If your latest race isn't here, they haven't posted it yet."),
 
         // Settings
-        Line(id: "settings-1", moment: .settings, portrait: "pattie-oops",
+        Line(id: "settings-1", moment: .settings, portrait: "pattie-ready",
              text: "If I'm getting on your nerves there's a switch on this very screen. No hard feelings."),
     ]
 }
