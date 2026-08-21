@@ -127,9 +127,9 @@ Splits+ still need to reattach a receipt on a new device.
   nearest real silence. There are 56 in `IronSplits/Resources/PattieVoice/`:
   18 sign-offs, 19 situation hooks, 19 solutions. Nothing is synthesised, and
   nothing should be.
-- Review funnel trigger: opening a race detail (`RaceDetailView.task`). App Store
-  ID is unset in `AppStoreReviewLinks` until the ASC record exists, which is what
-  makes Settings show "Send feedback" instead of "Rate".
+- Review funnel trigger: opening a race detail (`RaceDetailView.task`). The ASC
+  record is `6803727074`, and `AppStoreReviewLinks` is configured so Settings
+  can show the native rating entry.
 - `IronSplitsSecrets.revenueCatKey` holds the production public SDK key
   (`appl_…`), set 2026-08-20. Only public keys go in that file; the RevenueCat
   **secret** key (`sk_…`, full REST access) lives in `~/.ironsplits_credentials`

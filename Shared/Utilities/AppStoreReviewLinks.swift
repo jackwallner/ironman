@@ -3,9 +3,7 @@ import StoreKit
 
 /// App Store review deep links for IM Iron Splits.
 enum AppStoreReviewLinks {
-    /// Set once the App Store Connect record exists. Until then the
-    /// storefront link resolves to nothing, so Settings hides the Rate row.
-    static let appStoreID = ""
+    static let appStoreID = "6803727074"
 
     static var isConfigured: Bool { !appStoreID.isEmpty }
 

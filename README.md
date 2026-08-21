@@ -27,10 +27,11 @@ matches what was written down.
 
 ## Before it can ship
 
-- [ ] App Store Connect app record for `com.jackwallner.ironman`, then set
-      `AppStoreReviewLinks.appStoreID`
-- [ ] RevenueCat project + the three products, then set `IronSplitsSecrets.revenueCatKey`
-      (empty today, which is why Pro is inert rather than misbilled)
+- [x] App Store Connect app record for `com.jackwallner.ironman` (`6803727074`),
+      named **IM Iron Splits: Race Results**, with `AppStoreReviewLinks.appStoreID`
+      configured
+- [x] RevenueCat project and the three products are configured; the production
+      public key is set in `IronSplitsSecrets.revenueCatKey`
 - [ ] Enable GitHub Pages on this repo so `docs/api-config.json`, the app's
       hotfix channel, is actually served
 - [ ] Encode and host the Tri Pointers clips, then fill in `docs/pointers.json`
