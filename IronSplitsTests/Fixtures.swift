@@ -33,6 +33,30 @@ extension ODataResultRow {
         ]
     }
 
+    /// A row with the contact fields the identity merge actually reads.
+    static func contactRow(id: String, first: String, last: String, contact: String,
+                           city: String?, state: String?, gender: String,
+                           event: String, date: String) -> ODataResultRow {
+        let cityJSON = city.map { "\"address1_city\": \"\($0)\"," } ?? ""
+        let stateJSON = state.map { "\"address1_stateorprovince\": \"\($0)\"," } ?? ""
+        return decode("""
+        {
+          "wtc_resultid": "\(id)",
+          "wtc_finisher": true,
+          "wtc_ContactId": {
+            "contactid": "\(contact)",
+            "firstname": "\(first)",
+            "lastname": "\(last)",
+            "fullname": "\(first) \(last)",
+            \(cityJSON)
+            \(stateJSON)
+            "gendercode_formatted": "\(gender)"
+          },
+          "wtc_EventId": { "wtc_name": "\(event)", "wtc_eventdate": "\(date)" }
+        }
+        """)
+    }
+
     private static func row(id: String, first: String, last: String, contact: String,
                             event: String, date: String) -> ODataResultRow {
         decode("""

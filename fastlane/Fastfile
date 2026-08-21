@@ -33,7 +33,7 @@ platform :ios do
       key_filepath: ENV["ASC_KEY_PATH"]
     )
 
-    app = Spaceship::ConnectAPI::App.find("com.jackwallner.ironsplits")
+    app = Spaceship::ConnectAPI::App.find("com.jackwallner.ironman")
     version = app.get_edit_app_store_version
     UI.user_error!("No editable version found") unless version
 

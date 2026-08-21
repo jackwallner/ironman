@@ -167,4 +167,36 @@ final class RaceAnalyticsTests: XCTestCase {
         let full = result(id: "f")
         XCTAssertEqual(RaceAnalytics.availableKinds(halves + [full]), [.halfDistance, .fullDistance])
     }
+
+    /// Pattie Wallner's only half wore PB FINISH, PB SWIM, PB BIKE, PB RUN and
+    /// PB TRANSITIONS at once, because a field of one wins everything.
+    func testFirstRaceAtADistanceIsNotAPersonalBest() {
+        let debut = half(id: "half-1", finish: 27151)
+        for leg in Discipline.rankable {
+            XCTAssertFalse(RaceAnalytics.isPersonalBest(debut, discipline: leg, within: [debut]),
+                           "A debut at a distance has nothing to be better than (\(leg))")
+        }
+    }
+
+    func testSecondRaceAtADistanceCanBeAPersonalBest() {
+        let slower = half(id: "half-1", finish: 28000)
+        let faster = half(id: "half-2", finish: 27151)
+        let both = [slower, faster]
+        XCTAssertTrue(RaceAnalytics.isPersonalBest(faster, discipline: .finish, within: both))
+        XCTAssertFalse(RaceAnalytics.isPersonalBest(slower, discipline: .finish, within: both))
+    }
+
+    /// A full-distance career alongside it must not be dragged in: ranking is
+    /// always scoped to one kind, so the fulls are a separate leaderboard.
+    func testADebutHalfIsUnaffectedByAFullDistanceCareer() {
+        let debut = half(id: "half-1", finish: 27151)
+        let fulls = (1...3).map { result(id: "full-\($0)", year: 2020 + $0) }
+        XCTAssertFalse(RaceAnalytics.isPersonalBest(debut, discipline: .finish, within: fulls + [debut]))
+    }
+
+    private func half(id: String, finish: Int) -> RaceResult {
+        result(id: id, name: "IRONMAN 70.3 Northern California", year: 2026,
+               swim: 2400, t1: 300, bike: 12000, t2: 180, run: 12271, finish: finish,
+               bikeKm: 90.1, runKm: 21.0975, swimKm: 1.9312)
+    }
 }

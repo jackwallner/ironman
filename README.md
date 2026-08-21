@@ -27,7 +27,7 @@ matches what was written down.
 
 ## Before it can ship
 
-- [ ] App Store Connect app record for `com.jackwallner.ironsplits`, then set
+- [ ] App Store Connect app record for `com.jackwallner.ironman`, then set
       `AppStoreReviewLinks.appStoreID`
 - [ ] RevenueCat project + the three products, then set `IronSplitsSecrets.revenueCatKey`
       (empty today, which is why Pro is inert rather than misbilled)

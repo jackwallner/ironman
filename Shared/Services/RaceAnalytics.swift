@@ -88,12 +88,17 @@ enum RaceAnalytics {
     }
 
     /// Whether a given race holds the best time on a leg.
+    ///
+    /// A first race at a distance is not a personal best: with nothing to beat,
+    /// every leg wins its own leaderboard, so Pattie Wallner's debut half
+    /// wore five PB badges at once. A PB needs something to be better than.
     static func isPersonalBest(_ result: RaceResult,
                                discipline: Discipline,
                                within results: [RaceResult]) -> Bool {
         guard result.isComplete, let seconds = result.seconds(for: discipline), seconds > 0 else { return false }
-        let best = standings(results, discipline: discipline, kind: result.kind).first
-        return best?.result.id == result.id
+        let ranked = standings(results, discipline: discipline, kind: result.kind)
+        guard ranked.count > 1 else { return false }
+        return ranked.first?.result.id == result.id
     }
 
     /// Rank and percentile against everyone who finished the same event.

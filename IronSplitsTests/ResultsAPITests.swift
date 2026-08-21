@@ -81,4 +81,101 @@ extension ResultsAPITests {
         XCTAssertTrue(clause.contains("contactid"), "Claiming an athlete keys on the contact id")
         XCTAssertTrue(clause.contains("wtc_eventdate"), "Sorting and the year label need the event date")
     }
+
+    // MARK: - Split contact records
+
+    private static let contactA = "f1d44741-1048-ed11-bba1-000d3a314d17"
+    private static let contactB = "f98c1655-3981-f111-ab0e-70a8a5ae8eaa"
+
+    /// Pattie Wallner's 22 races sit under a contact spelled
+    /// "Lincoln, CALIFORNIA" and her most recent race under a second contact
+    /// spelled "Lincoln, CA". Grouping on the contact id showed her twice in
+    /// search and gave her a locker missing whichever half she didn't tap.
+    func testOnePersonSplitOverTwoContactsCollapsesToOneAthlete() {
+        let rows = [
+            ODataResultRow.contactRow(id: "1", first: "Pattie", last: "Wallner",
+                                      contact: Self.contactA, city: "Lincoln",
+                                      state: "CALIFORNIA", gender: "Female",
+                                      event: "2025 IRONMAN Texas", date: "2025-04-26T00:00:00Z"),
+            ODataResultRow.contactRow(id: "2", first: "Pattie", last: "Wallner",
+                                      contact: Self.contactB, city: "Lincoln",
+                                      state: "CA", gender: "Female",
+                                      event: "2026 IRONMAN 70.3 Northern California",
+                                      date: "2026-08-16T00:00:00Z"),
+        ]
+        let athletes = ResultsAPI.collapseToAthletes(rows)
+        XCTAssertEqual(athletes.count, 1, "Both contacts are the same person")
+        XCTAssertEqual(athletes[0].knownRaceCount, 2)
+        XCTAssertEqual(Set(athletes[0].contactIDs), [Self.contactA, Self.contactB],
+                       "Both ids must be carried so the locker fetches the whole career")
+        XCTAssertEqual(athletes[0].latestRaceYear, 2026)
+        XCTAssertEqual(athletes[0].stateOrProvince, "CA",
+                       "The newest registration wins the display fields")
+    }
+
+    func testDifferentCitiesStaySeparatePeople() {
+        let rows = [
+            ODataResultRow.contactRow(id: "1", first: "John", last: "Smith",
+                                      contact: Self.contactA, city: "Madison", state: "WI",
+                                      gender: "Male", event: "2024 IRONMAN Wisconsin",
+                                      date: "2024-09-08T00:00:00Z"),
+            ODataResultRow.contactRow(id: "2", first: "John", last: "Smith",
+                                      contact: Self.contactB, city: "Austin", state: "TX",
+                                      gender: "Male", event: "2025 IRONMAN Texas",
+                                      date: "2025-04-26T00:00:00Z"),
+        ]
+        XCTAssertEqual(ResultsAPI.collapseToAthletes(rows).count, 2)
+    }
+
+    func testContactWithNoCityNeverMergesWithAnother() {
+        let rows = [
+            ODataResultRow.contactRow(id: "1", first: "John", last: "Smith",
+                                      contact: Self.contactA, city: nil, state: nil,
+                                      gender: "Male", event: "2024 IRONMAN Wisconsin",
+                                      date: "2024-09-08T00:00:00Z"),
+            ODataResultRow.contactRow(id: "2", first: "John", last: "Smith",
+                                      contact: Self.contactB, city: nil, state: nil,
+                                      gender: "Male", event: "2025 IRONMAN Texas",
+                                      date: "2025-04-26T00:00:00Z"),
+        ]
+        XCTAssertEqual(ResultsAPI.collapseToAthletes(rows).count, 2,
+                       "A missing city must not collapse strangers together")
+    }
+
+    func testDifferentGendersStaySeparatePeople() {
+        let rows = [
+            ODataResultRow.contactRow(id: "1", first: "Alex", last: "Kim",
+                                      contact: Self.contactA, city: "Lincoln", state: "CA",
+                                      gender: "Female", event: "2024 IRONMAN Texas",
+                                      date: "2024-04-27T00:00:00Z"),
+            ODataResultRow.contactRow(id: "2", first: "Alex", last: "Kim",
+                                      contact: Self.contactB, city: "Lincoln", state: "CA",
+                                      gender: "Male", event: "2025 IRONMAN Texas",
+                                      date: "2025-04-26T00:00:00Z"),
+        ]
+        XCTAssertEqual(ResultsAPI.collapseToAthletes(rows).count, 2)
+    }
+
+    /// The same person typed at two registrations differs in case, accents and
+    /// stray whitespace. None of those may split them into two athletes.
+    func testCaseAccentsAndSpacingDoNotSplitAPerson() {
+        XCTAssertEqual(ResultsAPI.normalizeForMatching("O'Brien-Smith"),
+                       ResultsAPI.normalizeForMatching("o'brien-smith"))
+        XCTAssertEqual(ResultsAPI.normalizeForMatching("MÜNCHEN"),
+                       ResultsAPI.normalizeForMatching("münchen"))
+        XCTAssertEqual(ResultsAPI.normalizeForMatching("  Lincoln  "),
+                       ResultsAPI.normalizeForMatching("lincoln"))
+        XCTAssertNotEqual(ResultsAPI.normalizeForMatching("Lincoln"),
+                          ResultsAPI.normalizeForMatching("Lincolnshire"))
+    }
+
+    /// A locker cached before the merge shipped has no `contactIDs` key, and
+    /// must not be thrown away and force a re-claim.
+    func testAthleteDecodedFromAPreMergeCacheKeepsItsOwnID() throws {
+        let json = Data("""
+        {"id":"\(Self.contactA)","name":"Pattie Wallner","knownRaceCount":22}
+        """.utf8)
+        let athlete = try JSONDecoder().decode(Athlete.self, from: json)
+        XCTAssertEqual(athlete.contactIDs, [Self.contactA])
+    }
 }

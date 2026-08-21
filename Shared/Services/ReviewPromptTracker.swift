@@ -2,7 +2,7 @@ import Foundation
 
 extension Notification.Name {
     /// Posted after a satisfaction moment, host may present the enjoyment funnel after a short delay.
-    static let ironSplitsPositiveMomentForReview = Notification.Name("com.jackwallner.ironsplits.positiveMomentForReview")
+    static let ironSplitsPositiveMomentForReview = Notification.Name("com.jackwallner.ironman.positiveMomentForReview")
 }
 
 /// How the user last resolved the in-app review / feedback prompt.

@@ -13,7 +13,7 @@
           "locale": "en_US"
         }
       ],
-      "productID": "com.jackwallner.ironsplits.pro",
+      "productID": "com.jackwallner.ironman.pro",
       "referenceName": "Iron Splits+ Lifetime",
       "type": "NonConsumable"
     }
@@ -58,7 +58,7 @@
               "locale": "en_US"
             }
           ],
-          "productID": "com.jackwallner.ironsplits.pro.monthly",
+          "productID": "com.jackwallner.ironman.pro.monthly",
           "recurringSubscriptionPeriod": "P1M",
           "referenceName": "Iron Splits+ Monthly",
           "subscriptionGroupID": "31555001",
@@ -83,7 +83,7 @@
               "locale": "en_US"
             }
           ],
-          "productID": "com.jackwallner.ironsplits.pro.yearly",
+          "productID": "com.jackwallner.ironman.pro.yearly",
           "recurringSubscriptionPeriod": "P1Y",
           "referenceName": "Iron Splits+ Yearly",
           "subscriptionGroupID": "31555001",

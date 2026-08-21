@@ -35,6 +35,8 @@ protocol ResultsProviding: Sendable {
     func searchAthletes(matching query: String) async throws -> [Athlete]
     /// Every result belonging to one athlete, newest race first.
     func results(forAthleteID athleteID: String) async throws -> [RaceResult]
+    /// The same, for an athlete the feed has split across several contact ids.
+    func results(forContactIDs contactIDs: [String]) async throws -> [RaceResult]
     /// Every result in one event, used for field percentiles on a race detail.
     func results(forEventID eventID: String) async throws -> [RaceResult]
 }
@@ -59,8 +61,21 @@ struct ResultsAPI: ResultsProviding {
     }
 
     func results(forAthleteID athleteID: String) async throws -> [RaceResult] {
-        guard Self.isGUID(athleteID) else { throw ResultsAPIError.badConfiguration }
-        let rows = try await fetch(filter: "wtc_ContactId/contactid eq \(athleteID)",
+        try await results(forContactIDs: [athleteID])
+    }
+
+    /// One athlete's whole career, across every contact id the feed holds for
+    /// them.
+    ///
+    /// See `Athlete.contactIDs`: a career is regularly split over two contact
+    /// records, so asking for only the one the user tapped silently drops the
+    /// other half. The ids are ORed into a single `$filter` rather than fetched
+    /// separately so paging and the page cap still apply to the whole career.
+    func results(forContactIDs contactIDs: [String]) async throws -> [RaceResult] {
+        let ids = Array(NSOrderedSet(array: contactIDs)).compactMap { $0 as? String }
+        guard !ids.isEmpty, ids.allSatisfy(Self.isGUID) else { throw ResultsAPIError.badConfiguration }
+        let clause = ids.map { "wtc_ContactId/contactid eq \($0)" }.joined(separator: " or ")
+        let rows = try await fetch(filter: ids.count == 1 ? clause : "(\(clause))",
                                    orderBy: "wtc_EventId/wtc_eventdate desc")
         return rows.map(\.result).sortedByDateDescending()
     }
@@ -181,38 +196,85 @@ struct ResultsAPI: ResultsProviding {
     }
 
     /// Group result rows into the people who produced them.
+    ///
+    /// Grouping is on person, not on contact id: see `Athlete.contactIDs` for
+    /// why one person routinely owns two. Rows merge when the name, the
+    /// gender and the home city all match after normalisation, which is what
+    /// reunites "Lincoln, CALIFORNIA" with "Lincoln, CA". A row whose contact
+    /// carries no city keeps its own id as the key, so a missing city never
+    /// collapses strangers together.
     static func collapseToAthletes(_ rows: [ODataResultRow]) -> [Athlete] {
-        var byID: [String: Athlete] = [:]
+        var byKey: [String: Athlete] = [:]
         var latestYear: [String: Int] = [:]
+        var order: [String] = []
         for row in rows {
             guard let contact = row.contact, let id = contact.contactid else { continue }
             let result = row.result
-            var athlete = byID[id] ?? Athlete(
-                id: id,
-                name: contact.fullname ?? result.athleteName,
-                countryISO2: result.countryISO2,
-                city: contact.address1_city,
-                stateOrProvince: contact.address1_stateorprovince,
-                gender: contact.gendercode_formatted,
-                latestAgeGroup: nil,
-                knownRaceCount: 0,
-                latestRaceName: nil,
-                latestRaceYear: nil
-            )
-            athlete.knownRaceCount += 1
+            let key = identityKey(for: contact, fallback: id)
             let year = result.year
-            if year > (latestYear[id] ?? 0) {
-                latestYear[id] = year
-                athlete.latestRaceName = result.raceName
-                athlete.latestRaceYear = year
-                athlete.latestAgeGroup = result.ageGroup
+            if var athlete = byKey[key] {
+                athlete.knownRaceCount += 1
+                if !athlete.contactIDs.contains(id) { athlete.contactIDs.append(id) }
+                if year > (latestYear[key] ?? 0) {
+                    latestYear[key] = year
+                    athlete.latestRaceName = result.raceName
+                    athlete.latestRaceYear = year
+                    athlete.latestAgeGroup = result.ageGroup
+                    // The newest registration is the athlete's current truth:
+                    // it is where "Lincoln, CA" beats the older "CALIFORNIA".
+                    athlete.name = contact.fullname ?? result.athleteName
+                    athlete.city = contact.address1_city ?? athlete.city
+                    athlete.stateOrProvince = contact.address1_stateorprovince ?? athlete.stateOrProvince
+                    athlete.countryISO2 = result.countryISO2 ?? athlete.countryISO2
+                }
+                byKey[key] = athlete
+            } else {
+                order.append(key)
+                latestYear[key] = year
+                byKey[key] = Athlete(
+                    id: id,
+                    contactIDs: [id],
+                    name: contact.fullname ?? result.athleteName,
+                    countryISO2: result.countryISO2,
+                    city: contact.address1_city,
+                    stateOrProvince: contact.address1_stateorprovince,
+                    gender: contact.gendercode_formatted,
+                    latestAgeGroup: result.ageGroup,
+                    knownRaceCount: 1,
+                    latestRaceName: result.raceName,
+                    latestRaceYear: year
+                )
             }
-            byID[id] = athlete
         }
-        return byID.values.sorted {
+        return order.compactMap { byKey[$0] }.sorted {
             if $0.knownRaceCount != $1.knownRaceCount { return $0.knownRaceCount > $1.knownRaceCount }
             return $0.name < $1.name
         }
+    }
+
+    /// The key two contact records have to share to be treated as one person.
+    static func identityKey(for contact: ODataResultRow.Contact, fallback id: String) -> String {
+        let city = normalizeForMatching(contact.address1_city)
+        guard !city.isEmpty else { return "id:" + id }
+        let first = normalizeForMatching(contact.firstname)
+        let last = normalizeForMatching(contact.lastname)
+        let name = first.isEmpty && last.isEmpty
+            ? normalizeForMatching(contact.fullname)
+            : first + " " + last
+        guard !name.trimmingCharacters(in: .whitespaces).isEmpty else { return "id:" + id }
+        let gender = normalizeForMatching(contact.gendercode_formatted)
+        return [name, gender, city].joined(separator: "|")
+    }
+
+    /// Case, accents, punctuation and stray whitespace all vary between two
+    /// registrations by the same person, and none of them mean anything.
+    static func normalizeForMatching(_ value: String?) -> String {
+        guard let value else { return "" }
+        let folded = value.folding(options: [.diacriticInsensitive, .caseInsensitive], locale: nil)
+        let cleaned = folded.unicodeScalars.map { scalar -> Character in
+            CharacterSet.alphanumerics.contains(scalar) ? Character(scalar) : " "
+        }
+        return String(cleaned).split(separator: " ").joined(separator: " ")
     }
 }
 

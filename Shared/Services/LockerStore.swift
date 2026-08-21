@@ -66,7 +66,7 @@ final class LockerStore: ObservableObject {
         if results.isEmpty { state = .loading }
         await FeedConfigLoader.shared.refreshIfStale()
         do {
-            let fetched = try await api.results(forAthleteID: athlete.id)
+            let fetched = try await api.results(forContactIDs: athlete.contactIDs)
             results = fetched
             lastRefreshed = .now
             state = .loaded

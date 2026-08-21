@@ -4,9 +4,9 @@ import StoreKit
 @preconcurrency import RevenueCat
 
 enum IronSplitsProduct {
-    static let lifetime = "com.jackwallner.ironsplits.pro"
-    static let yearly = "com.jackwallner.ironsplits.pro.yearly"
-    static let monthly = "com.jackwallner.ironsplits.pro.monthly"
+    static let lifetime = "com.jackwallner.ironman.pro"
+    static let yearly = "com.jackwallner.ironman.pro.yearly"
+    static let monthly = "com.jackwallner.ironman.pro.monthly"
     static let all: [String] = [lifetime, yearly, monthly]
 }
 
@@ -456,7 +456,7 @@ final class StoreService: NSObject, ObservableObject {
         isLapsed ? .winback : .upgrade
     }
 
-    private let logger = Logger(subsystem: "com.jackwallner.ironsplits", category: "Store")
+    private let logger = Logger(subsystem: "com.jackwallner.ironman", category: "Store")
     private var isConfigured = false
 
     private override init() {}

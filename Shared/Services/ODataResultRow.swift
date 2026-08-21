@@ -105,15 +105,15 @@ struct ODataResultRow: Decodable, Sendable {
             swimDistanceKm: wtc_swimdistancecompleted?.value,
             bikeDistanceKm: wtc_bikedistancecompleted?.value,
             runDistanceKm: wtc_rundistancecompleted?.value,
-            swimRankOverall: Self.positive(wtc_swimrankoverall),
-            bikeRankOverall: Self.positive(wtc_bikerankoverall),
-            runRankOverall: Self.positive(wtc_runrankoverall),
-            finishRankOverall: Self.positive(wtc_finishrankoverall),
-            finishRankGender: Self.positive(wtc_finishrankgender),
-            finishRankGroup: Self.positive(wtc_finishrankgroup),
-            swimRankGroup: Self.positive(wtc_swimrankgroup),
-            bikeRankGroup: Self.positive(wtc_bikerankgroup),
-            runRankGroup: Self.positive(wtc_runrankgroup),
+            swimRankOverall: Self.rank(wtc_swimrankoverall),
+            bikeRankOverall: Self.rank(wtc_bikerankoverall),
+            runRankOverall: Self.rank(wtc_runrankoverall),
+            finishRankOverall: Self.rank(wtc_finishrankoverall),
+            finishRankGender: Self.rank(wtc_finishrankgender),
+            finishRankGroup: Self.rank(wtc_finishrankgroup),
+            swimRankGroup: Self.rank(wtc_swimrankgroup),
+            bikeRankGroup: Self.rank(wtc_bikerankgroup),
+            runRankGroup: Self.rank(wtc_runrankgroup),
             isFinisher: wtc_finisher ?? false,
             didNotFinish: wtc_dnf ?? false,
             didNotStart: wtc_dns ?? false,
@@ -126,6 +126,15 @@ struct ODataResultRow: Decodable, Sendable {
     /// leaderboard sorts the people who didn't run to the top.
     private static func positive(_ loose: LooseInt?) -> Int? {
         guard let value = loose?.value, value > 0 else { return nil }
+        return value
+    }
+
+    /// The other end of the same problem: an athlete the timer never ranked
+    /// gets the sentinel 99999 rather than a missing field, which rendered on
+    /// Pattie Wallner's DNF at Kona as "F60-64 #99999". Nobody finishes
+    /// 99,999th, so anything at or above the sentinel is "no rank".
+    private static func rank(_ loose: LooseInt?) -> Int? {
+        guard let value = positive(loose), value < 99_999 else { return nil }
         return value
     }
 

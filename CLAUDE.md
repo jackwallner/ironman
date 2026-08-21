@@ -18,8 +18,8 @@ claim of affiliation, and keep the not-affiliated disclaimer in Settings.
 - No backend, no accounts, no user data leaves the phone
 
 ## Targets / bundle IDs
-- `IronSplits` — `com.jackwallner.ironsplits`
-- IAPs: `…ironsplits.pro` (lifetime), `…pro.yearly`, `…pro.monthly`
+- `IronSplits` — `com.jackwallner.ironman`
+- IAPs: `…ironman.pro` (lifetime), `…pro.yearly`, `…pro.monthly`
 
 ## The results feed (read this before touching `Shared/Services/`)
 
@@ -83,9 +83,9 @@ per filter — see `LockerView.visibleResults`.
   (`appl_…`), set 2026-08-20. Only public keys go in that file; the RevenueCat
   **secret** key (`sk_…`, full REST access) lives in `~/.ironsplits_credentials`
   and must never enter the repo, the binary, or `docs/` (public Pages).
-- The RevenueCat dashboard app is still registered as bundle ID
-  `com.jackwallner.ironman`. Purchases will not validate until it is changed to
-  `com.jackwallner.ironsplits`.
+- Bundle ID is `com.jackwallner.ironman`, matching the RevenueCat dashboard
+  app. Jack chose this deliberately on 2026-08-20 after the trademark risk was
+  raised; settled, do not relitigate.
 - UI tests hit the live feed on purpose. The claim flow is a search against
   someone else's service and a mock would only prove the mock still matches.
 
