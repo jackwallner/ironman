@@ -59,6 +59,7 @@ struct ResumeView: View {
                         get: { selectedKinds.contains(kind) },
                         set: { isOn in
                             if isOn { selectedKinds.insert(kind) } else { selectedKinds.remove(kind) }
+                            pattie.react(.selection)
                         }
                     ))
                 }
@@ -111,8 +112,14 @@ struct ResumeView: View {
         // Any change to what goes in invalidates the file that was built from
         // the old settings, so drop it rather than sharing a stale PDF.
         .onChange(of: options.kinds) { _, _ in pdfURL = nil }
-        .onChange(of: includeSplits) { _, _ in pdfURL = nil }
-        .onChange(of: includeDNF) { _, _ in pdfURL = nil }
+        .onChange(of: includeSplits) { _, _ in
+            pdfURL = nil
+            pattie.react(.selection)
+        }
+        .onChange(of: includeDNF) { _, _ in
+            pdfURL = nil
+            pattie.react(.selection)
+        }
     }
 }
 

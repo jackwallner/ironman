@@ -27,11 +27,13 @@ struct LockerView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
                         Button {
+                            pattie.react(.refresh)
                             Task { await locker.refresh(force: true) }
                         } label: {
                             Label("Refresh results", systemImage: "arrow.clockwise")
                         }
                         Button {
+                            pattie.react(.selection)
                             showingAthleteSearch = true
                         } label: {
                             Label("Change athlete", systemImage: "person.crop.circle.badge.questionmark")
@@ -68,6 +70,7 @@ struct LockerView: View {
                            title: "Couldn't load your races",
                            message: message,
                            actionTitle: "Try again") {
+                pattie.react(.refresh)
                 Task { await locker.refresh(force: true) }
             }
         default:
@@ -75,7 +78,10 @@ struct LockerView: View {
                 TriPlaceholder(systemImage: "flag.checkered",
                                title: "No results yet",
                                message: "We couldn't find any published results under this athlete. If you registered under a different name, pick the right one.",
-                               actionTitle: "Change athlete") { showingAthleteSearch = true }
+                               actionTitle: "Change athlete") {
+                    pattie.react(.selection)
+                    showingAthleteSearch = true
+                }
             } else {
                 list
             }
@@ -132,9 +138,15 @@ struct LockerView: View {
     private var kindPicker: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: TriSpace.x2) {
-                TriChip(title: "All", isSelected: kindFilter == nil) { kindFilter = nil }
+                TriChip(title: "All", isSelected: kindFilter == nil) {
+                    kindFilter = nil
+                    pattie.react(.filter)
+                }
                 ForEach(locker.availableKinds, id: \.self) { kind in
-                    TriChip(title: kind.longTitle, isSelected: kindFilter == kind) { kindFilter = kind }
+                    TriChip(title: kind.longTitle, isSelected: kindFilter == kind) {
+                        kindFilter = kind
+                        pattie.react(.filter)
+                    }
                 }
             }
             .padding(.vertical, TriSpace.x1)

@@ -56,6 +56,30 @@ final class LockerStore: ObservableObject {
         await refresh(force: true)
     }
 
+    /// Add another official contact record to the current athlete.
+    ///
+    /// This is the recovery path for a registration such as "Pattie M" that
+    /// the feed cannot safely infer is the same person. The user chooses the
+    /// second official result, and the locker then asks the feed for both
+    /// contact ids. No race is typed in or invented locally.
+    func addContact(from candidate: Athlete) async {
+        guard var current = athlete else {
+            await claim(candidate)
+            return
+        }
+
+        let mergedIDs = Array(NSOrderedSet(array: current.contactIDs + candidate.contactIDs))
+            .compactMap { $0 as? String }
+        guard mergedIDs != current.contactIDs else { return }
+
+        current.contactIDs = mergedIDs
+        current.knownRaceCount = max(current.knownRaceCount, candidate.knownRaceCount)
+        athlete = current
+        results = []
+        state = .loading
+        await refresh(force: true)
+    }
+
     func unclaim() {
         athlete = nil
         results = []

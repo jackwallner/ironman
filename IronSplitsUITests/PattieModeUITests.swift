@@ -2,9 +2,8 @@ import XCTest
 
 /// Pattie Mode, and the Ask Pattie tree it shares a tab with.
 ///
-/// Pattie Mode is off in every other UI test on purpose: her card slides in over
-/// the tab bar and eats whatever tap the test was aiming at. `-PattieMode` is the
-/// opt-in, and this is the one test that takes it.
+/// Pattie Mode is off in every other UI test on purpose. `-PattieMode` is the
+/// opt-in, and this is the one test group that exercises the companion.
 @MainActor
 final class PattieModeUITests: XCTestCase {
 
@@ -21,7 +20,7 @@ final class PattieModeUITests: XCTestCase {
         return app
     }
 
-    /// She turns up, with her face and her voice, and goes away when tapped.
+    /// She turns up, with her face and her voice, and the bubble goes away when tapped.
     func testPattieAppearsAndDismisses() throws {
         let app = launch(pattieMode: true)
 
@@ -30,21 +29,21 @@ final class PattieModeUITests: XCTestCase {
         let card = app.descendants(matching: .any).matching(
             NSPredicate(format: "label BEGINSWITH %@", "Pattie says:")
         ).firstMatch
-        XCTAssertTrue(card.waitForExistence(timeout: 20), "Pattie Mode should show a card")
+        XCTAssertTrue(card.waitForExistence(timeout: 20), "Pattie Mode should show a speech bubble")
 
         card.tap()
         XCTAssertTrue(waitForDisappearance(card, timeout: 10), "Tapping the card should dismiss it")
     }
 
-    /// The large hero card clears the tab bar just like the regular banner.
-    func testBigPattieClearsTheTabBar() throws {
+    /// The speech bubble clears the tab bar and stays anchored to the left.
+    func testCompanionClearsTheTabBar() throws {
         let app = launch(pattieMode: true)
 
-        XCTAssertTrue(claimPattie(in: app), "The big popup needs a claimed athlete")
-        dismissPopupIfPresent(in: app)
+        XCTAssertTrue(claimPattie(in: app), "The companion needs a claimed athlete")
+        dismissBubbleIfPresent(in: app)
 
         app.tabBars.buttons["Settings"].tap()
-        dismissPopupIfPresent(in: app)
+        dismissBubbleIfPresent(in: app)
 
         let show = app.buttons["Show me one now"]
         if !show.waitForExistence(timeout: 3) {
@@ -56,15 +55,17 @@ final class PattieModeUITests: XCTestCase {
         let card = app.descendants(matching: .any).matching(
             NSPredicate(format: "label BEGINSWITH %@", "Pattie says:")
         ).firstMatch
-        XCTAssertTrue(card.waitForExistence(timeout: 10), "The hero popup should show")
+        XCTAssertTrue(card.waitForExistence(timeout: 10), "The speech bubble should show")
         let screenshot = XCTAttachment(screenshot: app.screenshot())
-        screenshot.name = "big-pattie-popup"
+        screenshot.name = "pattie-companion"
         screenshot.lifetime = .keepAlways
         add(screenshot)
         let tabBar = app.tabBars.firstMatch
         XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
         XCTAssertLessThan(card.frame.maxY, tabBar.frame.minY,
-                          "Pattie's popup must stay above the tab bar")
+                          "Pattie's bubble must stay above the tab bar")
+        XCTAssertLessThan(card.frame.minX, tabBar.frame.midX,
+                          "Pattie's bubble should remain on the left side")
     }
 
     /// The same launch without the flag stays quiet, which is what the rest of
@@ -78,6 +79,32 @@ final class PattieModeUITests: XCTestCase {
         ).firstMatch
         // Long enough for the welcome and searching moments to have fired.
         XCTAssertFalse(card.waitForExistence(timeout: 8), "Pattie Mode should be off without -PattieMode")
+        let companion = app.buttons["Pattie. Tap for a tip."]
+        XCTAssertFalse(companion.waitForExistence(timeout: 2), "The companion should be hidden by default")
+    }
+
+    /// The one switch removes both the face and the voice.
+    func testTurningPattieModeOffRemovesCompanion() throws {
+        let app = launch(pattieMode: true)
+
+        XCTAssertTrue(claimPattie(in: app), "The companion needs a claimed athlete")
+        dismissBubbleIfPresent(in: app)
+        app.tabBars.buttons["Settings"].tap()
+        dismissBubbleIfPresent(in: app)
+
+        let toggle = app.switches["Pattie Mode"]
+        if !toggle.waitForExistence(timeout: 3) {
+            app.swipeUp()
+        }
+        XCTAssertTrue(toggle.waitForExistence(timeout: 10))
+        toggle.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5)).tap()
+
+        let card = app.descendants(matching: .any).matching(
+            NSPredicate(format: "label BEGINSWITH %@", "Pattie says:")
+        ).firstMatch
+        XCTAssertFalse(card.waitForExistence(timeout: 3), "Turning Pattie Mode off should remove the bubble")
+        let companion = app.buttons["Pattie. Tap for a tip."]
+        XCTAssertFalse(companion.waitForExistence(timeout: 2), "Turning Pattie Mode off should hide the companion")
     }
 
     /// Ask Pattie is three taps and every path lands on an answer with audio.
@@ -115,6 +142,8 @@ final class PattieModeUITests: XCTestCase {
         XCTAssertTrue(claimPattie(in: app), "The Pattie tab needs a claimed athlete")
         app.tabBars.buttons["Pattie"].tap()
         XCTAssertTrue(app.buttons["All episodes"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts["Pattie's pointers"].waitForExistence(timeout: 10),
+                      "Pattie's profile moment should be featured in her tab")
         app.buttons["All episodes"].tap()
 
         XCTAssertTrue(app.staticTexts["Mud In Shoes"].waitForExistence(timeout: 20),
@@ -129,7 +158,7 @@ final class PattieModeUITests: XCTestCase {
         return XCTWaiter.wait(for: [gone], timeout: timeout) == .completed
     }
 
-    private func dismissPopupIfPresent(in app: XCUIApplication) {
+    private func dismissBubbleIfPresent(in app: XCUIApplication) {
         let card = app.descendants(matching: .any).matching(
             NSPredicate(format: "label BEGINSWITH %@", "Pattie says:")
         ).firstMatch

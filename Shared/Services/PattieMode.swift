@@ -1,25 +1,21 @@
 import Foundation
 import SwiftUI
-import os
 
 /// Pattie Mode: Pattie Wallner turning up in the app to comment on your racing.
 ///
 /// The app exists because Pattie asked for it, and the tips it carries are hers,
-/// so this is the version where she is actually in the room. The working portraits
-/// are from her own Tri Pattie's Pointers clips, with her public profile portrait
-/// reserved for the large hero popup. Every voice line is cut from her own audio.
-/// Nothing here is synthesised.
+/// so this is the version where she is actually in the room. The companion keeps
+/// her profile portrait present and lets one small speech bubble carry the line.
+/// Every voice line is cut from her own audio. Nothing here is synthesised.
 ///
-/// It is on by default and switched off in Settings. On by default because the
-/// app is named after her pointers and a personality feature nobody finds is
-/// the same as one that does not exist; switchable because it interrupts, and
-/// an interruption you cannot turn off is a different product.
+/// It is off on a first install and switched on in Settings. The people who want
+/// a talkative coach can invite her in, and everybody else gets the results app
+/// without an unexpected personality on top of it.
 ///
 /// What keeps it fun rather than exhausting is the budget: a moment needs a
-/// quiet gap behind it, a line
-/// never repeats until the deck has been through, and each moment has its own
-/// cooldown so the same remark can come back later in a long session without
-/// coming back immediately.
+/// quiet gap behind it, a line never repeats until the deck has been through,
+/// and each moment has its own cooldown so the same remark can come back later
+/// in a long session without coming back immediately.
 ///
 /// She talks a lot more than she used to. There are now eighteen separate takes
 /// of her sign-off cut from eighteen different episodes, so a line with nothing
@@ -28,17 +24,18 @@ import os
 @MainActor
 final class PattieMode: ObservableObject {
 
-    /// How much of the screen a line is allowed to take.
+    /// Deck priority retained for semantic moments. Every line is presented
+    /// through the same lightweight, nonmodal companion.
     enum Impact: Sendable {
-        /// A card above the tab bar. The default.
+        /// A normal companion reaction.
         case banner
-        /// She takes the screen: big portrait, dimmed background. Reserved for
-        /// the handful of moments that have actually earned an interruption.
+        /// A moment with extra emotional weight, still without blocking content.
         case big
     }
 
     /// Where in the app Pattie can appear.
     enum Moment: String, CaseIterable, Sendable {
+        case action             // a small reaction to a user interaction
         case welcome            // first look at the locker
         case claimed            // an athlete was just claimed
         case searching          // the search screen, before anything is typed
@@ -67,6 +64,8 @@ final class PattieMode: ObservableObject {
         /// made the feature feel like it had switched itself off.
         var cooldown: TimeInterval {
             switch self {
+            case .action:
+                return 2.5
             case .welcome, .claimed, .veteran:
                 return .infinity
             case .personalBest, .worldChampionship, .askAnswered, .pointerPlayed:
@@ -75,6 +74,22 @@ final class PattieMode: ObservableObject {
                 return 240
             }
         }
+    }
+
+    /// The little things Pattie can notice without taking over the screen.
+    enum Action: String, CaseIterable, Sendable {
+        case tab
+        case filter
+        case selection
+        case search
+        case choice
+        case save
+        case export
+        case play
+        case refresh
+        case tap
+
+        var cooldown: TimeInterval { 2.5 }
     }
 
     /// One thing Pattie says, with the face and the voice that go with it.
@@ -87,31 +102,69 @@ final class PattieMode: ObservableObject {
         /// `fire` hands it one of the eighteen sign-offs instead.
         var voice: String?
         var impact: Impact = .banner
+        var action: Action? = nil
+        var petState: PattiePetState = .idle
+
+        /// The stable, content-backed state used when a caller has not
+        /// supplied a more specific pointer or topic state.
+        var defaultPetState: PattiePetState {
+            switch id {
+            case "claimed-1", "claimed-2", "pb-1", "pb-2", "worlds-1", "veteran-1",
+                 "resume-2":
+                return .celebrate
+            case "dnf-1", "dnf-2", "race-4", "ask-answered-2":
+                return .encourage
+            case "race-2", "refresh-1":
+                return .bike
+            case "bests-1", "bests-2", "bests-filter-1", "bests-filter-2",
+                 "search-1", "search-2", "resume-1", "pointers-1", "pointers-2",
+                 "pointer-played-1", "ask-1", "ask-2":
+                return .coach
+            case "action-tab-1", "action-tab-2", "action-filter-1", "action-filter-2",
+                 "action-selection-1", "action-selection-2", "action-search-1", "action-search-2",
+                 "action-choice-1", "action-choice-2":
+                return .coach
+            case "action-save-1", "action-save-2", "action-export-1", "action-export-2",
+                 "note-1":
+                return .encourage
+            case "action-play-1", "action-play-2", "action-refresh-1", "action-refresh-2",
+                 "action-tap-1", "action-tap-2", "welcome-1", "welcome-2":
+                return .idle
+            case "race-1", "race-3", "settings-1":
+                return .coach
+            default:
+                return .idle
+            }
+        }
     }
 
     // MARK: - State
 
-    @AppStorage("pattie.mode.enabled") var isEnabled: Bool = true {
-        willSet { objectWillChange.send() }
-    }
-    @AppStorage("pattie.mode.sound") var soundEnabled: Bool = true {
-        willSet { objectWillChange.send() }
+    @Published var isEnabled: Bool {
+        didSet {
+            guard oldValue != isEnabled else { return }
+            UserDefaults.standard.set(isEnabled, forKey: "pattie.mode.enabled")
+            if !isEnabled { dismiss() }
+        }
     }
 
     @Published private(set) var current: Line?
 
     private var firedAt: [Moment: Date] = [:]
+    private var firedActions: [Action: Date] = [:]
     private var usedSignoffs: Set<String> = []
     private var lastFired: Date?
     private let voice = PattieVoice.shared
     private let seenKey = "pattie.mode.seenLines"
-    private let logger = Logger(subsystem: "com.jackwallner.ironman", category: "PattieMode")
-
-    /// Long enough that two taps in a row can't both summon her, short enough
-    /// that moving through three screens gets more than one line out of her.
-    private let quietPeriod: TimeInterval = 10
+    /// Long enough that two taps in a row cannot both summon her, short enough
+    /// that moving through three screens still gets more than one line out of
+    /// her.
+    private let quietPeriod: TimeInterval = 3.5
 
     init() {
+        let storedIsEnabled = UserDefaults.standard.object(forKey: "pattie.mode.enabled") as? Bool ?? false
+        _isEnabled = Published(initialValue: storedIsEnabled)
+
         #if DEBUG
         // StateObject storage can initialize before IronSplitsApp.init() resets
         // the UI-test fixture. Keep the in-memory value in step with the
@@ -128,26 +181,42 @@ final class PattieMode: ObservableObject {
         ProcessInfo.processInfo.arguments.contains("-PattieMode")
         || ProcessInfo.processInfo.environment["IRONSPLITS_PATTIE_MODE"] == "1"
 
-    /// Offer a moment. It lands if Pattie Mode is on, this moment's cooldown has
-    /// expired, and the quiet period behind it has elapsed.
-    func fire(_ moment: Moment) {
+    /// Offer a meaningful screen moment. It lands if Pattie Mode is on, the
+    /// moment's cooldown has expired, and the quiet period behind it has elapsed.
+    func fire(_ moment: Moment, petState: PattiePetState? = nil) {
         guard isEnabled, current == nil else { return }
         if let last = firedAt[moment], Date.now.timeIntervalSince(last) < moment.cooldown { return }
         if let lastFired, Date.now.timeIntervalSince(lastFired) < quietPeriod { return }
         guard let line = pick(for: moment) else { return }
-        present(line)
+        present(line, petState: petState)
     }
 
-    /// Preview one immediately, ignoring the budget. Used by the Settings row so
-    /// switching the toggle on shows what you just signed up for.
+    /// React to a small interaction by replacing the current bubble in place.
+    /// The companion never stacks cards, and the short quiet period keeps a
+    /// burst of taps from becoming a wall of commentary.
+    func react(_ action: Action, petState: PattiePetState? = nil) {
+        guard isEnabled, !voice.isSpeaking else { return }
+        if let last = firedActions[action], Date.now.timeIntervalSince(last) < action.cooldown {
+            return
+        }
+        if let lastFired, Date.now.timeIntervalSince(lastFired) < quietPeriod { return }
+        guard let line = pick(for: action) else { return }
+        present(line, petState: petState)
+    }
+
+    /// Preview one immediately, ignoring the budget. Used by Settings and the
+    /// idle avatar so switching Pattie on feels like an invitation, not a new
+    /// modal screen.
     func demo() {
-        guard var line = Self.deck.first(where: { $0.moment == .welcome }) else { return }
-        line.impact = .big
+        guard let line = Self.deck.first(where: { $0.action == .tap }) else { return }
         present(line, respectingBudget: false)
     }
 
-    private func present(_ line: Line, respectingBudget: Bool = true) {
+    private func present(_ line: Line,
+                         respectingBudget: Bool = true,
+                         petState: PattiePetState? = nil) {
         var line = line
+        line.petState = petState ?? line.defaultPetState
         // Every line speaks. One with nothing specific to say gets a sign-off,
         // and a different one each time: eighteen takes cut from eighteen
         // episodes is enough that a session never hears the same recording.
@@ -159,6 +228,7 @@ final class PattieMode: ObservableObject {
         }
         if respectingBudget {
             firedAt[line.moment] = .now
+            if let action = line.action { firedActions[action] = .now }
             lastFired = .now
         }
         markSeen(line.id)
@@ -166,11 +236,11 @@ final class PattieMode: ObservableObject {
             current = line
         }
         Haptics.tap(.soft)
-        if soundEnabled { voice.play(line.voice) }
+        voice.playIfQuiet(line.voice)
     }
 
     func replayVoice() {
-        guard let current, soundEnabled else { return }
+        guard let current else { return }
         voice.toggle(current.voice)
     }
 
@@ -183,6 +253,15 @@ final class PattieMode: ObservableObject {
     /// before it repeats.
     private func pick(for moment: Moment) -> Line? {
         let candidates = Self.deck.filter { $0.moment == moment }
+        return pick(from: candidates)
+    }
+
+    private func pick(for action: Action) -> Line? {
+        let candidates = Self.deck.filter { $0.action == action }
+        return pick(from: candidates)
+    }
+
+    private func pick(from candidates: [Line]) -> Line? {
         guard !candidates.isEmpty else { return nil }
         let seen = seenLines
         let fresh = candidates.filter { !seen.contains($0.id) }
@@ -215,6 +294,68 @@ extension PattieMode {
     /// A `voice` of nil is not a silent line. It means "no specific clip fits,
     /// use a sign-off", which `present(_:)` fills in.
     static let deck: [Line] = [
+        // Small companion reactions
+        Line(id: "action-tab-1", moment: .action, portrait: "pattie-profile",
+             text: "You are keeping the important things in one place. That's a very good habit.",
+             action: .tab),
+        Line(id: "action-tab-2", moment: .action, portrait: "pattie-profile",
+             text: "Good choice. A little data now saves a lot of guessing later.",
+             action: .tab),
+        Line(id: "action-filter-1", moment: .action, portrait: "pattie-profile",
+             text: "That is the right question to ask. Compare the pieces, not just the finish.",
+             action: .filter),
+        Line(id: "action-filter-2", moment: .action, portrait: "pattie-profile",
+             text: "Look at you, getting specific. That's how the useful pattern turns up.",
+             action: .filter),
+        Line(id: "action-selection-1", moment: .action, portrait: "pattie-profile",
+             text: "Nice choice. You know what you want to look at.",
+             action: .selection),
+        Line(id: "action-selection-2", moment: .action, portrait: "pattie-profile",
+             text: "That is a sensible adjustment. Future-you will appreciate the tidy record.",
+             action: .selection),
+        Line(id: "action-search-1", moment: .action, portrait: "pattie-profile",
+             text: "Good. Start with the name exactly as raced, and the rest gets wonderfully simple.",
+             action: .search),
+        Line(id: "action-search-2", moment: .action, portrait: "pattie-profile",
+             text: "You came prepared to find the truth in the results. I like that.",
+             action: .search),
+        Line(id: "action-choice-1", moment: .action, portrait: "pattie-profile",
+             text: "Good pick. You are making this much easier on yourself.",
+             action: .choice),
+        Line(id: "action-choice-2", moment: .action, portrait: "pattie-profile",
+             text: "Exactly. A small decision now, a much clearer race story later.",
+             action: .choice),
+        Line(id: "action-save-1", moment: .action, portrait: "pattie-profile",
+             text: "Excellent. Write it down while the day is still fresh. That note will age beautifully.",
+             action: .save),
+        Line(id: "action-save-2", moment: .action, portrait: "pattie-profile",
+             text: "That is smart racecraft. The details you save now become your best advice later.",
+             action: .save),
+        Line(id: "action-export-1", moment: .action, portrait: "pattie-profile",
+             text: "There you are. Your racing history, ready to travel with you.",
+             action: .export),
+        Line(id: "action-export-2", moment: .action, portrait: "pattie-profile",
+             text: "Good idea. Let the results speak for themselves.",
+             action: .export),
+        Line(id: "action-play-1", moment: .action, portrait: "pattie-profile",
+             text: "Good choice. This one is worth hearing when you have a quiet minute.",
+             action: .play),
+        Line(id: "action-play-2", moment: .action, portrait: "pattie-profile",
+             text: "Press play. I am very happy to have made this little pointer for you.",
+             action: .play),
+        Line(id: "action-refresh-1", moment: .action, portrait: "pattie-profile",
+             text: "Fresh results, fresh evidence. You are keeping the record honest.",
+             action: .refresh),
+        Line(id: "action-refresh-2", moment: .action, portrait: "pattie-profile",
+             text: "Good check. If it is not here yet, the timer is still catching up.",
+             action: .refresh),
+        Line(id: "action-tap-1", moment: .action, portrait: "pattie-profile",
+             text: "I saw that. You are doing a very good job of looking after your race story.",
+             action: .tap),
+        Line(id: "action-tap-2", moment: .action, portrait: "pattie-profile",
+             text: "That was a good move. Keep going, there is something useful in here.",
+             action: .tap),
+
         // Welcome
         Line(id: "welcome-1", moment: .welcome, portrait: "pattie-profile",
              text: "Here's the situation: your races are scattered across a dozen result pages. Here's the solution. They're all in here now.",

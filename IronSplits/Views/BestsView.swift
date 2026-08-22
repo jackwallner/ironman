@@ -101,6 +101,7 @@ struct BestsView: View {
                             TriChip(title: available.longTitle, isSelected: kind == available) {
                                 kind = available
                                 settings.preferredKind = available
+                                pattie.react(.filter)
                             }
                         }
                     }

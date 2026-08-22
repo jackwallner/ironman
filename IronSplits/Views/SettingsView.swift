@@ -9,6 +9,7 @@ struct SettingsView: View {
     @EnvironmentObject private var reviewCoordinator: ReviewPromptCoordinator
 
     @State private var showingAthleteSearch = false
+    @State private var showingAlternateSearch = false
     @State private var confirmingUnclaim = false
     @State private var cacheBytes: Int64 = 0
 
@@ -29,11 +30,25 @@ struct SettingsView: View {
                             }
                         }
                     }
-                    Button("Change athlete") { showingAthleteSearch = true }
+                    Button("Change athlete") {
+                        pattie.react(.selection)
+                        showingAthleteSearch = true
+                    }
+                    Button {
+                        pattie.react(.selection)
+                        showingAlternateSearch = true
+                    } label: {
+                        Label("Find another registered name", systemImage: "person.crop.circle.badge.plus")
+                    }
+                    Text("If one race was entered under a different name, search the official results database and add that registration to this profile.")
+                        .font(TriType.micro)
+                        .foregroundStyle(TriPalette.inkTertiary)
                     Button("Refresh results") {
+                        pattie.react(.refresh)
                         Task { await locker.refresh(force: true) }
                     }
                     Button("Remove my athlete", role: .destructive) {
+                        pattie.react(.choice)
                         confirmingUnclaim = true
                     }
                 }
@@ -47,6 +62,7 @@ struct SettingsView: View {
                             Text(unit.title).tag(unit)
                         }
                     }
+                    .onChange(of: settings.units) { _, _ in pattie.react(.selection) }
                 }
 
                 Section("Iron Splits+") {
@@ -71,27 +87,15 @@ struct SettingsView: View {
                 }
 
                 Section("Pattie Mode") {
-                    Toggle("Pattie Mode", isOn: Binding(
-                        get: { pattie.isEnabled },
-                        set: { on in
-                            Haptics.selection()
-                            pattie.isEnabled = on
-                            // Show what you just signed up for, rather than
-                            // leaving the toggle to explain itself.
-                            if on { pattie.demo() }
-                        }
-                    ))
+                    Toggle("Pattie Mode", isOn: $pattie.isEnabled)
+                    .onChange(of: pattie.isEnabled) { _, on in
+                        Haptics.selection()
+                        if on { pattie.demo() }
+                    }
                     if pattie.isEnabled {
-                        Toggle("Play her voice", isOn: Binding(
-                            get: { pattie.soundEnabled },
-                            set: {
-                                Haptics.selection()
-                                pattie.soundEnabled = $0
-                            }
-                        ))
                         Button("Show me one now") { pattie.demo() }
                     }
-                    Text("Pattie turns up as you use the app with a pointer for whatever you're looking at. The large portrait uses a natural profile photo, and every line of her voice is cut from her own video audio.")
+                    Text("Pattie stays just above the tab bar and chimes in with flattering race thoughts as you explore. Turn Pattie Mode off any time to hide her and stop her voice. Her profile portrait is natural, and every spoken line is cut from her own video audio.")
                         .font(TriType.micro)
                         .foregroundStyle(TriPalette.inkTertiary)
                 }
@@ -152,6 +156,9 @@ struct SettingsView: View {
             .scrollContentBackground(.hidden)
             .background(TriPalette.canvas)
             .sheet(isPresented: $showingAthleteSearch) { AthleteSearchView() }
+            .sheet(isPresented: $showingAlternateSearch) {
+                AthleteSearchView(addingToCurrentAthlete: true)
+            }
             .confirmationDialog("Remove your athlete?",
                                 isPresented: $confirmingUnclaim,
                                 titleVisibility: .visible) {

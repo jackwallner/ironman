@@ -54,6 +54,7 @@ struct PointersView: View {
                 }
             }
             .refreshable {
+                pattie.react(.refresh)
                 await ask.refresh()
                 await PointerLibrary.shared.refresh(force: true)
             }
@@ -61,6 +62,7 @@ struct PointersView: View {
         .pattieMoment(.askOpened, pattie)
         .onChange(of: mode) { _, _ in
             Haptics.selection()
+            pattie.react(.selection)
             // A path built inside Ask Pattie means nothing to the library, and
             // leaving it pushed would strand the back button on a screen the
             // other mode cannot draw.
@@ -109,6 +111,8 @@ struct PointerLibraryView: View {
     private var list: some View {
         ScrollView {
             LazyVStack(spacing: TriSpace.x3) {
+                PattieFeaturedHero()
+
                 if let subtitle = catalog.subtitle {
                     Text(subtitle)
                         .font(TriType.small)
@@ -119,9 +123,15 @@ struct PointerLibraryView: View {
                 if disciplines.count > 1 {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: TriSpace.x2) {
-                            TriChip(title: "All", isSelected: filter == nil) { filter = nil }
+                            TriChip(title: "All", isSelected: filter == nil) {
+                                filter = nil
+                                pattie.react(.filter)
+                            }
                             ForEach(disciplines) { leg in
-                                TriChip(title: leg.title, isSelected: filter == leg) { filter = leg }
+                                TriChip(title: leg.title, isSelected: filter == leg) {
+                                    filter = leg
+                                    pattie.react(.filter)
+                                }
                             }
                         }
                         .padding(.vertical, TriSpace.x1)
@@ -159,11 +169,59 @@ struct PointerLibraryView: View {
     }
 
     private func open(_ pointer: Pointer) {
-        pattie.fire(.pointerPlayed)
+        pattie.fire(.pointerPlayed, petState: .forPointerID(pointer.id))
         if pointer.opensExternally, let url = pointer.playableURL {
             openURL(url)
         } else {
             playing = pointer
+        }
+    }
+}
+
+/// A larger, clean finish-line moment for Pattie's own profile.
+struct PattieFeaturedHero: View {
+    @EnvironmentObject private var locker: LockerStore
+
+    private var isPattieProfile: Bool {
+        guard let name = locker.athlete?.name.lowercased() else { return false }
+        return name.contains("pattie") && name.contains("wallner")
+    }
+
+    var body: some View {
+        if isPattieProfile {
+            VStack(alignment: .leading, spacing: TriSpace.x2) {
+                ZStack(alignment: .bottomTrailing) {
+                    RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous)
+                        .fill(TriPalette.deep)
+
+                    Image("pattie-pet-celebrate")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 220)
+                        .clipped()
+
+                    Text("FINISHING STRONG")
+                        .font(TriType.micro)
+                        .kerning(1.1)
+                        .foregroundStyle(TriPalette.deep)
+                        .padding(.horizontal, TriSpace.x2)
+                        .padding(.vertical, TriSpace.x1)
+                        .background(TriPalette.sunrise, in: Capsule())
+                        .padding(TriSpace.x3)
+                }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Pattie Wallner, celebrating at the finish")
+
+                Text("Pattie's pointers")
+                    .font(TriType.cardTitle)
+                    .foregroundStyle(TriPalette.ink)
+                Text("The athlete behind the voice, the race stories, and the little things that save a whole day.")
+                    .font(TriType.small)
+                    .foregroundStyle(TriPalette.inkSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 }

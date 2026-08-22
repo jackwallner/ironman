@@ -34,10 +34,8 @@ struct IronSplitsApp: App {
                         "pattie.mode.enabled", "pattie.mode.seenLines"] {
                 UserDefaults.standard.removeObject(forKey: key)
             }
-            // Pattie Mode ships on, and a card that slides over the tab bar
-            // eats the tap a UI test was aiming at. Tests opt in with
-            // `-PattieMode` instead of fighting an overlay they did not ask
-            // for; `PattieModeUITests` is the one that does.
+            // Pattie Mode is off by default, and tests opt in with
+            // `-PattieMode` when they need to exercise the companion.
             UserDefaults.standard.set(
                 ProcessInfo.processInfo.arguments.contains("-PattieMode"),
                 forKey: "pattie.mode.enabled"

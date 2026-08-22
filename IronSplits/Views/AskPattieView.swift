@@ -38,6 +38,7 @@ enum AskPattieStep: Hashable {
 struct AskPattieGoalList: View {
     @ObservedObject var model: AskPattieModel
     @Binding var path: [AskPattieStep]
+    @EnvironmentObject private var pattie: PattieMode
 
     var body: some View {
         if model.guide.goals.isEmpty && model.isLoading {
@@ -50,6 +51,8 @@ struct AskPattieGoalList: View {
         } else {
             ScrollView {
                 VStack(alignment: .leading, spacing: TriSpace.x3) {
+                    PattieFeaturedHero()
+
                     Text(model.guide.subtitle)
                         .font(TriType.small)
                         .foregroundStyle(TriPalette.inkSecondary)
@@ -59,6 +62,7 @@ struct AskPattieGoalList: View {
 
                     ForEach(model.guide.goals) { goal in
                         Button {
+                            pattie.react(.choice)
                             path.append(.topics(goalID: goal.id))
                         } label: {
                             AskPattieOptionRow(symbol: goal.symbol,
@@ -79,6 +83,7 @@ struct AskPattieGoalList: View {
 struct AskPattieTopicList: View {
     @ObservedObject var model: AskPattieModel
     @Binding var path: [AskPattieStep]
+    @EnvironmentObject private var pattie: PattieMode
     let goalID: String
 
     var body: some View {
@@ -91,6 +96,7 @@ struct AskPattieTopicList: View {
                     ForEach(goal.map { model.guide.topics(for: $0) } ?? []) { topic in
                         let count = model.guide.answers(for: goalID, topic: topic.id).count
                         Button {
+                            pattie.react(.choice)
                             path.append(.answers(goalID: goalID, topicID: topic.id))
                         } label: {
                             AskPattieOptionRow(symbol: topic.symbol,
@@ -134,7 +140,7 @@ struct AskPattieAnswerList: View {
         .navigationTitle(model.guide.topic(topicID)?.title ?? "Pointers")
         .navigationBarTitleDisplayMode(.inline)
         .triNavBar()
-        .pattieMoment(.askAnswered, pattie)
+        .task { pattie.fire(.askAnswered, petState: .forTopicID(topicID)) }
         // Her voice is the point of this screen, but it should not follow you
         // off it.
         .onDisappear { PattieVoice.shared.stop() }

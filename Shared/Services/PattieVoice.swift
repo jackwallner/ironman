@@ -4,7 +4,7 @@ import os
 
 /// Plays Pattie's bundled voice clips, and tells the UI when she is talking.
 ///
-/// One player for the whole app. Pattie Mode's popup and the Ask Pattie answers
+/// One player for the whole app. Pattie's companion and the Ask Pattie answers
 /// both go through it, so starting one line always stops the last one instead
 /// of leaving two takes of her talking over each other.
 ///
@@ -19,6 +19,7 @@ final class PattieVoice: NSObject, ObservableObject {
     @Published private(set) var nowPlaying: String?
 
     private var player: AVAudioPlayer?
+    private var fadeTask: Task<Void, Never>?
     private let logger = Logger(subsystem: "com.jackwallner.ironman", category: "PattieVoice")
 
     private override init() { super.init() }
@@ -88,6 +89,7 @@ final class PattieVoice: NSObject, ObservableObject {
         do {
             let newPlayer = try AVAudioPlayer(contentsOf: url)
             newPlayer.delegate = self
+            newPlayer.volume = 0
             self.player = newPlayer
             nowPlaying = name
 
@@ -100,6 +102,7 @@ final class PattieVoice: NSObject, ObservableObject {
                 }
                 guard self.player === newPlayer, self.nowPlaying == name else { return }
                 newPlayer.play()
+                newPlayer.setVolume(1, fadeDuration: 0.06)
             }
             return true
         } catch {
@@ -124,22 +127,36 @@ final class PattieVoice: NSObject, ObservableObject {
     }
 
     func stop() {
-        player?.stop()
+        fadeTask?.cancel()
+        fadeTask = nil
+        guard let oldPlayer = player else {
+            nowPlaying = nil
+            return
+        }
+        oldPlayer.setVolume(0, fadeDuration: 0.04)
         player = nil
         nowPlaying = nil
+        fadeTask = Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(60))
+            oldPlayer.stop()
+        }
     }
 }
 
 extension PattieVoice: AVAudioPlayerDelegate {
     nonisolated func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        let finishedPath = player.url?.path
         Task { @MainActor in
+            guard self.player?.url?.path == finishedPath else { return }
             self.nowPlaying = nil
             self.player = nil
         }
     }
 
     nonisolated func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
+        let failedPath = player.url?.path
         Task { @MainActor in
+            guard self.player?.url?.path == failedPath else { return }
             self.nowPlaying = nil
             self.player = nil
         }
@@ -150,7 +167,7 @@ extension PattieVoice: AVAudioPlayerDelegate {
 ///
 /// The three families come from the shape every episode is cut to: she opens on
 /// the situation, hands over the solution, and signs off "now that's a great
-/// idea". `signoffs` is the one that matters for Pattie Mode: nineteen separate
+/// idea". `signoffs` is the one that matters for Pattie Mode: eighteen separate
 /// takes of the same line, so she can react to something without ever landing
 /// on the same recording twice in a session.
 enum PattieVoiceLibrary {

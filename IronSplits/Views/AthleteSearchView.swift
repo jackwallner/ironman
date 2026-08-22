@@ -17,8 +17,10 @@ struct AthleteSearchView: View {
     @EnvironmentObject private var pattie: PattieMode
     @Environment(\.dismiss) private var dismiss
 
-    /// Shown as a first-run screen (no cancel) or as a "change athlete" sheet.
+    /// Shown as a first-run screen, a replacement sheet, or an official
+    /// contact search that adds another registration to the current profile.
     var isOnboarding: Bool = false
+    var addingToCurrentAthlete: Bool = false
 
     @State private var query = ""
     @State private var matches: [Athlete] = []
@@ -44,7 +46,7 @@ struct AthleteSearchView: View {
                 TriPalette.canvas.ignoresSafeArea()
                 content
             }
-            .navigationTitle(isOnboarding ? "Find your races" : "Change athlete")
+            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .triNavBar()
             .toolbar {
@@ -155,6 +157,7 @@ struct AthleteSearchView: View {
             if !query.isEmpty {
                 Button {
                     Haptics.tap()
+                    pattie.react(.selection)
                     query = ""
                     matches = []
                     phase = .idle
@@ -197,7 +200,7 @@ struct AthleteSearchView: View {
             Text("Type your name")
                 .font(TriType.cardTitle)
                 .foregroundStyle(TriPalette.inkSecondary)
-            Text("Every race you have finished is already published under the name you registered with. Find yourself once and your locker fills in: bibs, splits, division places and all.")
+            Text(introText)
                 .font(TriType.small)
                 .foregroundStyle(TriPalette.inkTertiary)
                 .multilineTextAlignment(.center)
@@ -210,6 +213,7 @@ struct AthleteSearchView: View {
         let term = query.trimmingCharacters(in: .whitespacesAndNewlines)
         guard term.count >= 2 else { return }
         errorMessage = nil
+        pattie.react(.search)
         phase = .quick
         Task {
             do {
@@ -235,11 +239,28 @@ struct AthleteSearchView: View {
         Haptics.tap(.medium)
         claiming = athlete
         Task {
-            await locker.claim(athlete)
+            if addingToCurrentAthlete {
+                await locker.addContact(from: athlete)
+            } else {
+                await locker.claim(athlete)
+            }
             claiming = nil
             Haptics.success()
             if !isOnboarding { dismiss() }
         }
+    }
+
+    private var title: String {
+        if isOnboarding { return "Find your races" }
+        if addingToCurrentAthlete { return "Find another registration" }
+        return "Change athlete"
+    }
+
+    private var introText: String {
+        if addingToCurrentAthlete {
+            return "Search the official results feed for another name you raced under. Choose the right person and those published races will be added to this profile."
+        }
+        return "Every race you have finished is already published under the name you registered with. Find yourself once and your locker fills in: bibs, splits, division places and all."
     }
 }
 

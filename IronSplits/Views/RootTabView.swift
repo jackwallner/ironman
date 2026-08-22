@@ -9,7 +9,12 @@ struct RootTabView: View {
 
     @State private var reviewSheet: ReviewPromptSheet.Step?
     @State private var pendingRequestReview = false
+    @State private var selectedTab: Tab = .locker
     @Environment(\.requestReview) private var requestReview
+
+    private enum Tab: Hashable {
+        case locker, bests, pattie, resume, settings
+    }
 
     var body: some View {
         Group {
@@ -46,19 +51,28 @@ struct RootTabView: View {
     }
 
     private var tabs: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             LockerView()
                 .tabItem { Label("Locker", systemImage: "tray.full.fill") }
+                .tag(Tab.locker)
             BestsView()
                 .tabItem { Label("Bests", systemImage: "list.number") }
+                .tag(Tab.bests)
             PointersView()
                 .tabItem { Label("Pattie", systemImage: "play.rectangle.fill") }
+                .tag(Tab.pattie)
             ResumeView()
                 .tabItem { Label("Resume", systemImage: "doc.text.fill") }
+                .tag(Tab.resume)
             SettingsView()
                 .tabItem { Label("Settings", systemImage: "gearshape.fill") }
+                .tag(Tab.settings)
         }
         .tint(TriPalette.sunrise)
+        .onChange(of: selectedTab) { _, _ in
+            Haptics.selection()
+            pattie.react(.tab)
+        }
         .task { await locker.refresh() }
     }
 
