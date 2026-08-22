@@ -129,6 +129,7 @@ a {
   margin: 0 auto;
   padding: 0 24px;
   gap: 24px;
+  justify-content: center;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
@@ -211,6 +212,88 @@ a {
 .pattie-feature-screen img {
   display: block;
   width: 100%;
+}
+.pattie-gallery {
+  padding: 80px 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+.pattie-gallery-header {
+  max-width: 640px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+.pattie-gallery-header .label {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: var(--sunrise);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+.pattie-gallery-header h2 {
+  margin: 0 0 10px;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+}
+.pattie-gallery-header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.6;
+}
+.pattie-gallery-grid {
+  display: grid;
+  grid-template-columns: 1.25fr repeat(2, 1fr);
+  grid-template-rows: repeat(2, 220px);
+  gap: 12px;
+}
+.pattie-gallery-card {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--deep);
+}
+.pattie-gallery-card-feature {
+  grid-row: span 2;
+}
+.pattie-gallery-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.pattie-gallery-card-pet img {
+  object-fit: contain;
+  padding: 8px 8px 0;
+}
+.pattie-gallery-card figcaption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 44px 16px 14px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.78));
+  color: #ffffff;
+}
+.pattie-gallery-card figcaption span {
+  display: block;
+  color: var(--sunrise);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+}
+.pattie-gallery-card figcaption strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 14px;
+  font-weight: 600;
 }
 .features {
   padding: 80px 0;
@@ -504,12 +587,23 @@ a {
   .showcase-card img {
     height: 400px;
   }
+  .showcase-scroll {
+    justify-content: flex-start;
+  }
   .pattie-feature-grid {
     grid-template-columns: 1fr;
     gap: 40px;
   }
   .pattie-feature-copy {
     max-width: none;
+  }
+  .pattie-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 200px);
+  }
+  .pattie-gallery-card-feature {
+    grid-column: span 2;
+    grid-row: auto;
   }
   .features-grid {
     grid-template-columns: 1fr;
@@ -526,5 +620,12 @@ a {
 @media (max-width: 480px) {
   .showcase-card img {
     height: 360px;
+  }
+  .pattie-gallery-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, 240px);
+  }
+  .pattie-gallery-card-feature {
+    grid-column: auto;
   }
 }
