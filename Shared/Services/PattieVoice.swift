@@ -5,8 +5,8 @@ import os
 /// Plays Pattie's bundled voice clips, and tells the UI when she is talking.
 ///
 /// One player for the whole app. Pattie's companion and the Ask Pattie answers
-/// both go through it, so starting one line always stops the last one instead
-/// of leaving two takes of her talking over each other.
+/// both go through it, so intentional playback never leaves two takes talking
+/// over each other.
 ///
 /// Every clip is cut from her own episodes. `PattieVoiceLibrary` holds the
 /// names; nothing here synthesises anything.
@@ -89,7 +89,8 @@ final class PattieVoice: NSObject, ObservableObject {
         do {
             let newPlayer = try AVAudioPlayer(contentsOf: url)
             newPlayer.delegate = self
-            newPlayer.volume = 0
+            newPlayer.volume = 1
+            newPlayer.prepareToPlay()
             self.player = newPlayer
             nowPlaying = name
 
@@ -102,7 +103,6 @@ final class PattieVoice: NSObject, ObservableObject {
                 }
                 guard self.player === newPlayer, self.nowPlaying == name else { return }
                 newPlayer.play()
-                newPlayer.setVolume(1, fadeDuration: 0.06)
             }
             return true
         } catch {
@@ -167,11 +167,11 @@ extension PattieVoice: AVAudioPlayerDelegate {
 ///
 /// The three families come from the shape every episode is cut to: she opens on
 /// the situation, hands over the solution, and signs off "now that's a great
-/// idea". `signoffs` is the one that matters for Pattie Mode: eighteen separate
-/// takes of the same line, so she can react to something without ever landing
-/// on the same recording twice in a session.
+/// idea". `modeCatchphrases` contains only the short complete takes that work
+/// as reactions. The longer episode hooks and solutions stay with their source
+/// pointer instead of being chopped into a popup.
 enum PattieVoiceLibrary {
-    /// Short reactions, roughly a second and a half each.
+    /// Short sign-offs cut from separate episodes.
     static let signoffs: [String] = [
         "pattie-signoff-01", "pattie-signoff-02", "pattie-signoff-03", "pattie-signoff-04",
         "pattie-signoff-05", "pattie-signoff-07", "pattie-signoff-08", "pattie-signoff-09",
@@ -180,80 +180,42 @@ enum PattieVoiceLibrary {
         "pattie-signoff-19", "pattie-signoff-20",
     ]
 
-    /// The short phrases cut from the highlight reel, kept from the first pass.
+    /// Short complete phrases cut from Pattie's episodes.
     static let phrases: [String] = [
         "pattie-away-you-go", "pattie-bike", "pattie-good", "pattie-great-idea",
         "pattie-here-s-the-situation", "pattie-here-s-the-solution", "pattie-nice",
         "pattie-now-that-s-a-great-idea", "pattie-solution", "pattie-that-s-a-great-idea",
     ]
 
-    /// Short clips selected by what the athlete just did. The longer hook and
-    /// solution clips belong to the actual pointer and Ask Pattie answers. A
-    /// small interaction needs a catchphrase with a useful direction behind it,
-    /// not the same sign-off every time.
-    static let actionPhrases: [PattieMode.Action: [String]] = [
-        .tab: [
-            "pattie-good", "pattie-nice", "pattie-away-you-go", "pattie-solution",
-        ],
-        .filter: [
-            "pattie-bike", "pattie-good", "pattie-nice", "pattie-solution",
-        ],
-        .selection: [
-            "pattie-nice", "pattie-good", "pattie-great-idea", "pattie-away-you-go",
-        ],
-        .search: [
-            "pattie-here-s-the-situation", "pattie-good", "pattie-nice",
-        ],
-        .choice: [
-            "pattie-here-s-the-solution", "pattie-nice", "pattie-great-idea", "pattie-good",
-        ],
-        .save: [
-            "pattie-here-s-the-solution", "pattie-solution", "pattie-good", "pattie-away-you-go",
-        ],
-        .export: [
-            "pattie-away-you-go", "pattie-good", "pattie-nice", "pattie-solution",
-        ],
-        .play: [
-            "pattie-here-s-the-situation", "pattie-here-s-the-solution", "pattie-solution", "pattie-nice",
-        ],
-        .refresh: [
-            "pattie-good", "pattie-nice", "pattie-here-s-the-situation", "pattie-solution",
-        ],
-        .tap: [
-            "pattie-nice", "pattie-good", "pattie-great-idea", "pattie-away-you-go",
-        ],
-        .back: [
-            "pattie-away-you-go", "pattie-nice", "pattie-here-s-the-solution", "pattie-good",
-        ],
-    ]
+    /// Every short recording suitable for Pattie Mode. The order is deliberate:
+    /// taking the first unused item gives the companion a visible rotation
+    /// instead of choosing the same tiny subset at random.
+    static let modeCatchphrases: [String] = phrases + signoffs
+
+    /// Kept as a compatibility view for callers and tests. Pattie Mode now
+    /// rotates one shared catchphrase deck so every action gets the same full
+    /// pool of real recordings.
+    static let actionPhrases: [PattieMode.Action: [String]] =
+        Dictionary(uniqueKeysWithValues: PattieMode.Action.allCases.map { ($0, modeCatchphrases) })
 
     /// Moment-specific defaults for screen changes that are not tied to a
     /// button action. These keep the voice relevant without making every
     /// screen reuse the same catchphrase.
-    static let momentPhrases: [PattieMode.Moment: [String]] = [
-        .searching: ["pattie-here-s-the-situation", "pattie-good", "pattie-nice"],
-        .raceOpened: ["pattie-bike", "pattie-here-s-the-situation", "pattie-nice"],
-        .didNotFinish: ["pattie-good", "pattie-here-s-the-solution", "pattie-away-you-go"],
-        .bests: ["pattie-good", "pattie-nice", "pattie-solution"],
-        .bestsFiltered: ["pattie-bike", "pattie-good", "pattie-nice"],
-        .noteSaved: ["pattie-here-s-the-solution", "pattie-good", "pattie-away-you-go"],
-        .refreshed: ["pattie-good", "pattie-nice", "pattie-here-s-the-situation"],
-        .settings: ["pattie-nice", "pattie-good", "pattie-away-you-go"],
-    ]
+    static let momentPhrases: [PattieMode.Moment: [String]] =
+        Dictionary(uniqueKeysWithValues: PattieMode.Moment.allCases.map { ($0, modeCatchphrases) })
 
     static func nextReaction(action: PattieMode.Action?,
                              moment: PattieMode.Moment,
                              excluding used: Set<String>) -> String {
-        let candidates: [String]
-        if let action, let actionCandidates = actionPhrases[action] {
-            candidates = actionCandidates
-        } else if let momentCandidates = momentPhrases[moment] {
-            candidates = momentCandidates
-        } else {
-            candidates = phrases
-        }
-        let fresh = candidates.filter { !used.contains($0) }
-        return (fresh.isEmpty ? candidates : fresh).randomElement()
+        _ = action
+        _ = moment
+        return nextCatchphrase(excluding: used)
+    }
+
+    /// Return the next unused short phrase, then restart the full deck.
+    static func nextCatchphrase(excluding used: Set<String>) -> String {
+        let fresh = modeCatchphrases.filter { !used.contains($0) }
+        return (fresh.isEmpty ? modeCatchphrases : fresh).first
             ?? nextSignoff(excluding: used)
     }
 
@@ -264,6 +226,6 @@ enum PattieVoiceLibrary {
     /// reason to ever reuse one inside a session.
     static func nextSignoff(excluding used: Set<String>) -> String {
         let fresh = signoffs.filter { !used.contains($0) }
-        return (fresh.isEmpty ? signoffs : fresh).randomElement() ?? signoffs[0]
+        return (fresh.isEmpty ? signoffs : fresh).first ?? signoffs[0]
     }
 }

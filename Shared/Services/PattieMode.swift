@@ -5,7 +5,7 @@ import SwiftUI
 ///
 /// The app exists because Pattie asked for it, and the tips it carries are hers,
 /// so this is the version where she is actually in the room. The companion keeps
-/// her profile portrait present and lets one small speech bubble carry the line.
+/// a real Pattie portrait present and lets one oversized speech bubble carry the line.
 /// Every voice line is cut from her own audio. Nothing here is synthesised.
 ///
 /// It is off on a first install and switched on in Settings. The people who want
@@ -185,7 +185,7 @@ final class PattieMode: ObservableObject {
     /// Offer a meaningful screen moment. It lands if Pattie Mode is on, the
     /// moment's cooldown has expired, and the quiet period behind it has elapsed.
     func fire(_ moment: Moment, petState: PattiePetState? = nil) {
-        guard isEnabled, current == nil else { return }
+        guard isEnabled, current == nil, !voice.isSpeaking else { return }
         if let last = firedAt[moment], Date.now.timeIntervalSince(last) < moment.cooldown { return }
         if let lastFired, Date.now.timeIntervalSince(lastFired) < quietPeriod { return }
         guard let line = pick(for: moment) else { return }
@@ -193,10 +193,10 @@ final class PattieMode: ObservableObject {
     }
 
     /// React to a small interaction by replacing the current bubble in place.
-    /// The companion never stacks cards, and the short quiet period keeps a
-    /// burst of taps from becoming a wall of commentary.
+    /// The companion never stacks cards, and a speaking clip gets to finish
+    /// before another reaction can appear.
     func react(_ action: Action, petState: PattiePetState? = nil) {
-        guard isEnabled else { return }
+        guard isEnabled, !voice.isSpeaking else { return }
         if let last = firedActions[action], Date.now.timeIntervalSince(last) < action.cooldown {
             return
         }
@@ -204,7 +204,7 @@ final class PattieMode: ObservableObject {
             if let lastFired, Date.now.timeIntervalSince(lastFired) < quietPeriod { return }
         }
         guard let line = pick(for: action) else { return }
-        present(line, petState: petState, replaceVoice: true)
+        present(line, petState: petState)
     }
 
     /// Preview one immediately, ignoring the budget. Used by Settings and the
@@ -212,18 +212,17 @@ final class PattieMode: ObservableObject {
     /// modal screen.
     func demo() {
         guard let line = Self.deck.first(where: { $0.action == .tap }) else { return }
-        present(line, respectingBudget: false, replaceVoice: true)
+        present(line, respectingBudget: false)
     }
 
     private func present(_ line: Line,
                          respectingBudget: Bool = true,
-                         petState: PattiePetState? = nil,
-                         replaceVoice: Bool = false) {
+                         petState: PattiePetState? = nil) {
+        guard !voice.isSpeaking else { return }
         var line = line
         line.petState = petState ?? line.defaultPetState
-        // Every line speaks. Action lines use short, action-specific phrases,
-        // while larger moments keep their transcript-matched clips. A
-        // sign-off is the last resort, not the default reaction.
+        // Explicit clips belong to the larger content-backed moments. Every
+        // automatic line without one gets the shared short catchphrase deck.
         if line.voice == nil {
             let clip = PattieVoiceLibrary.nextReaction(
                 action: line.action,
@@ -243,11 +242,7 @@ final class PattieMode: ObservableObject {
             current = line
         }
         Haptics.tap(.soft)
-        if replaceVoice {
-            voice.play(line.voice)
-        } else {
-            voice.playIfQuiet(line.voice)
-        }
+        voice.playIfQuiet(line.voice)
     }
 
     func replayVoice() {
@@ -309,67 +304,67 @@ extension PattieMode {
         Line(id: "action-tab-1", moment: .action, portrait: "pattie-profile",
              text: "Here's the situation: a race story is easier to use when the swim, bike, run, and finish stay together. Keep it all in one place.",
              action: .tab),
-        Line(id: "action-tab-2", moment: .action, portrait: "pattie-profile",
+        Line(id: "action-tab-2", moment: .action, portrait: "pattie-ready",
              text: "Here's the solution: look at the whole pattern, not one shiny number. The useful clue is usually in the split beside it.",
              action: .tab),
-        Line(id: "action-filter-1", moment: .action, portrait: "pattie-profile",
+        Line(id: "action-filter-1", moment: .action, portrait: "pattie-ride",
              text: "A half and a full are different races. Compare like with like before you call something your best.",
              action: .filter),
-        Line(id: "action-filter-2", moment: .action, portrait: "pattie-profile",
+        Line(id: "action-filter-2", moment: .action, portrait: "pattie-grit",
              text: "Different leg, different story. The transition number is often the free time hiding in plain sight.",
              action: .filter),
-        Line(id: "action-selection-1", moment: .action, portrait: "pattie-profile",
+        Line(id: "action-selection-1", moment: .action, portrait: "pattie-excited",
              text: "Pick the piece you can practise. Small changes are the ones that make it to race day.",
              action: .selection),
-        Line(id: "action-selection-2", moment: .action, portrait: "pattie-profile",
+        Line(id: "action-selection-2", moment: .action, portrait: "pattie-ready",
              text: "Good choice. If it matters on race day, give it one rehearsal before you need it.",
              action: .selection),
-        Line(id: "action-search-1", moment: .action, portrait: "pattie-profile",
+        Line(id: "action-search-1", moment: .action, portrait: "pattie-ready",
              text: "Here's the situation: the timing feed knows the name on your registration. Start there, then we can find the rest.",
              action: .search),
         Line(id: "action-search-2", moment: .action, portrait: "pattie-profile",
              text: "Surname first works too. The important thing is matching the entry, not guessing at a nickname.",
              action: .search),
-        Line(id: "action-choice-1", moment: .action, portrait: "pattie-profile",
+        Line(id: "action-choice-1", moment: .action, portrait: "pattie-excited",
              text: "Here's the solution: choose the race first, then the problem you want to solve. No typing, no invented advice.",
              action: .choice),
         Line(id: "action-choice-2", moment: .action, portrait: "pattie-profile",
              text: "That is the useful choice. Take one pointer and try it on a training day before race day.",
              action: .choice),
-        Line(id: "action-save-1", moment: .action, portrait: "pattie-profile",
+        Line(id: "action-save-1", moment: .action, portrait: "pattie-grit",
              text: "Write down the weather and what went wrong while it is fresh. In two years, that detail will be worth more than the time.",
              action: .save),
-        Line(id: "action-save-2", moment: .action, portrait: "pattie-profile",
+        Line(id: "action-save-2", moment: .action, portrait: "pattie-ready",
              text: "That is smart racecraft. The small detail you save today becomes your best advice later.",
              action: .save),
-        Line(id: "action-export-1", moment: .action, portrait: "pattie-profile",
+        Line(id: "action-export-1", moment: .action, portrait: "pattie-kona-finish",
              text: "Away you go. Put the race history in front of the next person who needs to see it.",
              action: .export),
-        Line(id: "action-export-2", moment: .action, portrait: "pattie-profile",
+        Line(id: "action-export-2", moment: .action, portrait: "pattie-excited",
              text: "Here's the solution: one clean resume, with the splits that prove the story.",
              action: .export),
-        Line(id: "action-play-1", moment: .action, portrait: "pattie-profile",
+        Line(id: "action-play-1", moment: .action, portrait: "pattie-ready",
              text: "Here's the situation, then here's the solution. Listen for the small thing you can try before the next start.",
              action: .play),
         Line(id: "action-play-2", moment: .action, portrait: "pattie-profile",
              text: "Press play when you have a quiet minute. These pointers are built from the things that went wrong first.",
              action: .play),
-        Line(id: "action-refresh-1", moment: .action, portrait: "pattie-profile",
+        Line(id: "action-refresh-1", moment: .action, portrait: "pattie-ride",
              text: "Fresh results, straight from the timers. If the latest race is not here, it has not been posted yet.",
              action: .refresh),
-        Line(id: "action-refresh-2", moment: .action, portrait: "pattie-profile",
+        Line(id: "action-refresh-2", moment: .action, portrait: "pattie-excited",
              text: "A refresh checks the official feed again. It cannot make an unpublished result appear early.",
              action: .refresh),
-        Line(id: "action-tap-1", moment: .action, portrait: "pattie-profile",
+        Line(id: "action-tap-1", moment: .action, portrait: "pattie-excited",
              text: "One small move at a time. The next useful clue is usually one tap away.",
              action: .tap),
         Line(id: "action-tap-2", moment: .action, portrait: "pattie-profile",
              text: "Good. Keep going. We are looking for the detail that makes the next race easier.",
              action: .tap),
-        Line(id: "action-back-1", moment: .action, portrait: "pattie-profile",
+        Line(id: "action-back-1", moment: .action, portrait: "pattie-ready",
              text: "Good, take the pointer with you. You do not need to stay on a screen after you have got the useful bit.",
              action: .back),
-        Line(id: "action-back-2", moment: .action, portrait: "pattie-profile",
+        Line(id: "action-back-2", moment: .action, portrait: "pattie-ride",
              text: "Away you go. The best tip is the one you can try before the next start.",
              action: .back),
 

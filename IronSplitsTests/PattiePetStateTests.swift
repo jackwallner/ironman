@@ -44,4 +44,23 @@ final class PattiePetStateTests: XCTestCase {
         XCTAssertNotEqual(first, second)
         XCTAssertNotEqual(first, "pattie-now-that-s-a-great-idea")
     }
+
+    func testPattieModeUsesCompleteShortRecordings() {
+        let clips = PattieVoiceLibrary.modeCatchphrases
+
+        XCTAssertEqual(Set(clips).count, clips.count)
+        XCTAssertFalse(clips.contains { $0.hasPrefix("pattie-hook-") })
+        XCTAssertFalse(clips.contains { $0.hasPrefix("pattie-solution-") })
+        XCTAssertGreaterThanOrEqual(PattieVoiceLibrary.signoffs.count, 18)
+    }
+
+    func testCatchphraseDeckRotatesInOrderBeforeRepeating() {
+        var used = Set<String>()
+        let first = PattieVoiceLibrary.nextCatchphrase(excluding: used)
+        used.insert(first)
+        let second = PattieVoiceLibrary.nextCatchphrase(excluding: used)
+
+        XCTAssertEqual(first, PattieVoiceLibrary.modeCatchphrases[0])
+        XCTAssertEqual(second, PattieVoiceLibrary.modeCatchphrases[1])
+    }
 }
