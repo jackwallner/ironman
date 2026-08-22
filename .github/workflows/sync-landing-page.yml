@@ -27,6 +27,7 @@ jobs:
         with:
           repository: jackwallner/portfolio
           ssh-key: ${{ secrets.PORTFOLIO_DEPLOY_KEY }}
+          persist-credentials: false
           path: portfolio
 
       - name: Mirror this app's page
@@ -37,6 +38,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin git@github.com:jackwallner/portfolio.git
           git add docs/ios/ironman
           if git diff --cached --quiet; then
             echo "Mirror is already current."
