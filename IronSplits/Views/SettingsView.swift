@@ -106,7 +106,7 @@ struct SettingsView: View {
                     if pattie.isEnabled {
                         Button("Show me one now") { pattie.demo() }
                     }
-                    Text("Pattie Mode puts real Pattie portraits, rotating catchphrases from her own recordings, and oversized reactions above the tab bar as you explore. Turn Pattie Mode off any time to hide her and stop her voice.")
+                    Text("Pattie Mode keeps a small Pattie pet in the corner and brings up useful tips from her own recordings as you explore. Turn Pattie Mode off any time to hide her and stop her voice.")
                         .font(TriType.micro)
                         .foregroundStyle(TriPalette.inkTertiary)
                 }

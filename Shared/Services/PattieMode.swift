@@ -5,7 +5,7 @@ import SwiftUI
 ///
 /// The app exists because Pattie asked for it, and the tips it carries are hers,
 /// so this is the version where she is actually in the room. The companion keeps
-/// a real Pattie portrait present and lets one oversized speech bubble carry the line.
+/// a small Pattie pet in the corner and shows one useful tip at a time.
 /// Every voice line is cut from her own audio. Nothing here is synthesised.
 ///
 /// It is off on a first install and switched on in Settings. The people who want
@@ -17,10 +17,9 @@ import SwiftUI
 /// and each moment has its own cooldown so the same remark can come back later
 /// in a long session without coming back immediately.
 ///
-/// She talks a lot more than she used to. There are now eighteen separate takes
-/// of her sign-off cut from eighteen different episodes, so a line with nothing
-/// specific to say still gets a voice, and it is a different recording every
-/// time.
+/// Each automatic line is paired with a complete solution recording from the
+/// Ask Pattie answer tree. The event deck decides when a tip appears, while the
+/// tip catalog decides what useful thing she says.
 @MainActor
 final class PattieMode: ObservableObject {
 
@@ -98,9 +97,9 @@ final class PattieMode: ObservableObject {
         let id: String
         let moment: Moment
         let portrait: String
-        let text: String
-        /// Bundled clip cut from her own audio. When nil, `present` selects a
-        /// short clip that matches the action or moment.
+        var text: String
+        /// Bundled clip cut from her own audio. `present` replaces placeholder
+        /// event copy with a complete solution tip when one is available.
         var voice: String?
         var impact: Impact = .banner
         var action: Action? = nil
@@ -153,7 +152,7 @@ final class PattieMode: ObservableObject {
 
     private var firedAt: [Moment: Date] = [:]
     private var firedActions: [Action: Date] = [:]
-    private var usedAutoVoices: Set<String> = []
+    private var usedModeTipVoices: Set<String> = []
     private var lastFired: Date?
     private let voice = PattieVoice.shared
     private let seenKey = "pattie.mode.seenLines"
@@ -221,16 +220,15 @@ final class PattieMode: ObservableObject {
         guard !voice.isSpeaking else { return }
         var line = line
         line.petState = petState ?? line.defaultPetState
-        // Explicit clips belong to the larger content-backed moments. Every
-        // automatic line without one gets the shared short catchphrase deck.
-        if line.voice == nil {
-            let clip = PattieVoiceLibrary.nextReaction(
-                action: line.action,
-                moment: line.moment,
-                excluding: usedAutoVoices
-            )
-            usedAutoVoices.insert(clip)
-            line.voice = clip
+        // The event deck controls timing. The real answer tree controls the
+        // visible tip and the matching complete solution recording.
+        if let tip = PattieVoiceLibrary.nextModeTip(excluding: usedModeTipVoices) {
+            usedModeTipVoices.insert(tip.voice)
+            line.text = tip.text
+            line.voice = tip.voice
+            line.petState = petState ?? .forTopicID(tip.topic)
+        } else {
+            line.petState = petState ?? line.defaultPetState
         }
         if respectingBudget {
             firedAt[line.moment] = .now
@@ -291,14 +289,14 @@ final class PattieMode: ObservableObject {
 
 extension PattieMode {
 
-    /// What she says, and where.
+    /// The event deck determines when she appears. `present` supplies the
+    /// actual tip text and matching recording from the Ask Pattie catalog.
     ///
     /// The wording follows the shape of her own clips: she opens on the
     /// situation, hands you the solution, and signs off "now that's a great
     /// idea", because that is the format every one of the episodes is cut to.
     ///
-    /// A `voice` of nil is not a silent line. It means "choose the clip that
-    /// fits this action", which `present(_:)` fills in.
+    /// The text and voice values below are fallback copy for a missing catalog.
     static let deck: [Line] = [
         // Small companion reactions
         Line(id: "action-tab-1", moment: .action, portrait: "pattie-profile",

@@ -56,6 +56,10 @@ final class PattieModeUITests: XCTestCase {
             NSPredicate(format: "label BEGINSWITH %@", "Pattie says:")
         ).firstMatch
         XCTAssertTrue(card.waitForExistence(timeout: 10), "The speech bubble should show")
+        XCTAssertFalse(app.staticTexts["LIVE"].exists)
+        XCTAssertFalse(app.staticTexts["READY"].exists)
+        XCTAssertFalse(app.staticTexts["ROTATING PHRASES"].exists)
+        XCTAssertFalse(app.staticTexts["REAL PATTIE AUDIO"].exists)
         let screenshot = XCTAttachment(screenshot: app.screenshot())
         screenshot.name = "pattie-companion"
         screenshot.lifetime = .keepAlways

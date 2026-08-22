@@ -163,69 +163,50 @@ extension PattieVoice: AVAudioPlayerDelegate {
     }
 }
 
-/// The names of every clip in the bundle, grouped by what it is.
+/// The complete real tips available to Pattie Mode.
 ///
-/// The three families come from the shape every episode is cut to: she opens on
-/// the situation, hands over the solution, and signs off "now that's a great
-/// idea". `modeCatchphrases` contains only the short complete takes that work
-/// as reactions. The longer episode hooks and solutions stay with their source
-/// pointer instead of being chopped into a popup.
+/// The catalog is the same answer tree used by Ask Pattie. Each entry pairs the
+/// exact solution text with the complete solution clip cut from that pointer,
+/// so the companion never shows one tip while speaking a different phrase.
 enum PattieVoiceLibrary {
-    /// Short sign-offs cut from separate episodes.
-    static let signoffs: [String] = [
-        "pattie-signoff-01", "pattie-signoff-02", "pattie-signoff-03", "pattie-signoff-04",
-        "pattie-signoff-05", "pattie-signoff-07", "pattie-signoff-08", "pattie-signoff-09",
-        "pattie-signoff-10", "pattie-signoff-11", "pattie-signoff-12", "pattie-signoff-13",
-        "pattie-signoff-15", "pattie-signoff-16", "pattie-signoff-17", "pattie-signoff-18",
-        "pattie-signoff-19", "pattie-signoff-20",
-    ]
-
-    /// Short complete phrases cut from Pattie's episodes.
-    static let phrases: [String] = [
-        "pattie-away-you-go", "pattie-bike", "pattie-good", "pattie-great-idea",
-        "pattie-here-s-the-situation", "pattie-here-s-the-solution", "pattie-nice",
-        "pattie-now-that-s-a-great-idea", "pattie-solution", "pattie-that-s-a-great-idea",
-    ]
-
-    /// Every short recording suitable for Pattie Mode. The order is deliberate:
-    /// taking the first unused item gives the companion a visible rotation
-    /// instead of choosing the same tiny subset at random.
-    static let modeCatchphrases: [String] = phrases + signoffs
-
-    /// Kept as a compatibility view for callers and tests. Pattie Mode now
-    /// rotates one shared catchphrase deck so every action gets the same full
-    /// pool of real recordings.
-    static let actionPhrases: [PattieMode.Action: [String]] =
-        Dictionary(uniqueKeysWithValues: PattieMode.Action.allCases.map { ($0, modeCatchphrases) })
-
-    /// Moment-specific defaults for screen changes that are not tied to a
-    /// button action. These keep the voice relevant without making every
-    /// screen reuse the same catchphrase.
-    static let momentPhrases: [PattieMode.Moment: [String]] =
-        Dictionary(uniqueKeysWithValues: PattieMode.Moment.allCases.map { ($0, modeCatchphrases) })
-
-    static func nextReaction(action: PattieMode.Action?,
-                             moment: PattieMode.Moment,
-                             excluding used: Set<String>) -> String {
-        _ = action
-        _ = moment
-        return nextCatchphrase(excluding: used)
+    struct ModeTip: Identifiable, Equatable, Sendable {
+        let id: String
+        let topic: String
+        let text: String
+        let voice: String
     }
 
-    /// Return the next unused short phrase, then restart the full deck.
-    static func nextCatchphrase(excluding used: Set<String>) -> String {
-        let fresh = modeCatchphrases.filter { !used.contains($0) }
-        return (fresh.isEmpty ? modeCatchphrases : fresh).first
-            ?? nextSignoff(excluding: used)
+    /// Every bundled answer with a complete solution recording. There are
+    /// nineteen distinct solution clips across the answer tree, with repeated
+    /// clips retaining their different, useful text.
+    static let modeTips: [ModeTip] = loadModeTips()
+
+    /// Rotate through distinct real solution recordings before reusing one.
+    static func nextModeTip(excluding usedVoices: Set<String>) -> ModeTip? {
+        let fresh = modeTips.filter { !usedVoices.contains($0.voice) }
+        return (fresh.isEmpty ? modeTips : fresh).first
     }
 
-    /// A different sign-off every time, cycling the whole deck before repeating.
-    ///
-    /// Nothing is more obviously canned than the same 1.4 seconds of audio on
-    /// every single interaction, and there are eighteen of these, so there is no
-    /// reason to ever reuse one inside a session.
-    static func nextSignoff(excluding used: Set<String>) -> String {
-        let fresh = signoffs.filter { !used.contains($0) }
-        return (fresh.isEmpty ? signoffs : fresh).first ?? signoffs[0]
+    private static func loadModeTips() -> [ModeTip] {
+        let bundles = [Bundle.main, Bundle(for: PattieVoice.self)]
+
+        for bundle in bundles {
+            guard let url = bundle.url(forResource: "ask-pattie", withExtension: "json"),
+                  let data = try? Data(contentsOf: url),
+                  let guide = try? JSONDecoder().decode(AskPattieGuide.self, from: data) else {
+                continue
+            }
+
+            let tips = guide.answers.compactMap { answer -> ModeTip? in
+                guard let voice = answer.solutionVoice, !answer.solution.isEmpty else { return nil }
+                return ModeTip(id: answer.id,
+                               topic: answer.topic,
+                               text: answer.solution,
+                               voice: voice)
+            }
+            if !tips.isEmpty { return tips }
+        }
+
+        return []
     }
 }

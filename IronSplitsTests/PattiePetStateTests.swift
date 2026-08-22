@@ -35,32 +35,22 @@ final class PattiePetStateTests: XCTestCase {
         XCTAssertEqual(dnf.defaultPetState, .encourage)
     }
 
-    func testActionVoicesRotateInsteadOfUsingTheDefaultSignoff() {
-        let first = PattieVoiceLibrary.nextReaction(action: .tap, moment: .action, excluding: [])
-        let second = PattieVoiceLibrary.nextReaction(action: .tap, moment: .action, excluding: [first])
+    func testPattieModeUsesRealSolutionTips() {
+        let tips = PattieVoiceLibrary.modeTips
 
-        XCTAssertTrue(PattieVoiceLibrary.actionPhrases[.tap]?.contains(first) == true)
-        XCTAssertTrue(PattieVoiceLibrary.actionPhrases[.tap]?.contains(second) == true)
-        XCTAssertNotEqual(first, second)
-        XCTAssertNotEqual(first, "pattie-now-that-s-a-great-idea")
+        XCTAssertGreaterThanOrEqual(tips.count, 19)
+        XCTAssertGreaterThanOrEqual(Set(tips.map(\.voice)).count, 19)
+        XCTAssertTrue(tips.allSatisfy { $0.voice.hasPrefix("pattie-solution-") })
+        XCTAssertTrue(tips.allSatisfy { !$0.text.isEmpty })
     }
 
-    func testPattieModeUsesCompleteShortRecordings() {
-        let clips = PattieVoiceLibrary.modeCatchphrases
-
-        XCTAssertEqual(Set(clips).count, clips.count)
-        XCTAssertFalse(clips.contains { $0.hasPrefix("pattie-hook-") })
-        XCTAssertFalse(clips.contains { $0.hasPrefix("pattie-solution-") })
-        XCTAssertGreaterThanOrEqual(PattieVoiceLibrary.signoffs.count, 18)
-    }
-
-    func testCatchphraseDeckRotatesInOrderBeforeRepeating() {
+    func testSolutionTipRotationUsesDifferentRealRecordings() throws {
         var used = Set<String>()
-        let first = PattieVoiceLibrary.nextCatchphrase(excluding: used)
-        used.insert(first)
-        let second = PattieVoiceLibrary.nextCatchphrase(excluding: used)
+        let first = try XCTUnwrap(PattieVoiceLibrary.nextModeTip(excluding: used))
+        used.insert(first.voice)
+        let second = try XCTUnwrap(PattieVoiceLibrary.nextModeTip(excluding: used))
 
-        XCTAssertEqual(first, PattieVoiceLibrary.modeCatchphrases[0])
-        XCTAssertEqual(second, PattieVoiceLibrary.modeCatchphrases[1])
+        XCTAssertNotEqual(first.voice, second.voice)
+        XCTAssertNotEqual(first.text, second.text)
     }
 }
