@@ -1,63 +1,347 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>IM Iron Splits: your race splits, ranked</title>
-<meta name="description" content="Type your name once. Every triathlon and running race you have finished loads with full splits, bib numbers and division places.">
-<link rel="stylesheet" href="/ironman/style.css">
-</head>
-<body>
-<header class="hero">
-  <div class="wrap">
-    <h1>IM Iron Splits</h1>
-    <p>Type your name once. Every race you have finished loads with full splits, bib numbers and division places, then gets ranked the way you actually think about it.</p>
-    <div class="legs" aria-hidden="true"><i class="swim"></i><i class="t"></i><i class="bike"></i><i class="t"></i><i class="run"></i></div>
-  </div>
-</header>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" sizes="256x256" href="icon_256.png" />
+    <link rel="apple-touch-icon" href="icon_256.png" />
+    <title>IM Iron Splits: Race Results, Ranked by Split</title>
+    <meta
+      name="description"
+      content="Find your published triathlon and running results, keep every split in one locker, and see which race was actually your best."
+    />
+    <link rel="canonical" href="https://jackwallner.github.io/ironman/" />
+    <meta name="apple-itunes-app" content="app-id=6803727074" />
+    <meta
+      name="keywords"
+      content="triathlon race results, race splits, swim bike run, personal bests, race resume, running results, iPhone"
+    />
+    <meta
+      property="og:title"
+      content="IM Iron Splits: Race Results, Ranked by Split"
+    />
+    <meta
+      property="og:description"
+      content="Find your published race results, compare every split, and keep your race history in one locker."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://jackwallner.github.io/ironman/" />
+    <meta
+      property="og:image"
+      content="https://jackwallner.github.io/ironman/appstore-screenshot-02.png"
+    />
+    <meta property="og:site_name" content="IM Iron Splits" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="IM Iron Splits: Race Results, Ranked by Split"
+    />
+    <meta
+      name="twitter:description"
+      content="Find your published race results, compare every split, and keep your race history in one locker."
+    />
+    <meta
+      name="twitter:image"
+      content="https://jackwallner.github.io/ironman/appstore-screenshot-02.png"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "IM Iron Splits",
+        "operatingSystem": "iOS",
+        "applicationCategory": "SportsApplication",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "description": "Free download with no account required"
+        },
+        "description": "Find your published triathlon and running results, keep every split in one locker, and see which race was actually your best.",
+        "url": "https://jackwallner.github.io/ironman/",
+        "downloadUrl": "https://apps.apple.com/app/id6803727074",
+        "screenshot": "https://jackwallner.github.io/ironman/appstore-screenshot-02.png",
+        "softwareVersion": "1.0.0",
+        "author": { "@type": "Person", "name": "Jack Wallner" }
+      }
+    </script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="home-page">
+    <nav class="site-nav">
+      <div class="container">
+        <a class="nav-brand" href="./"
+          ><img src="icon_256.png" alt="IM Iron Splits" /><span
+            >IM Iron Splits</span
+          ></a
+        >
+        <a class="nav-link" href="https://apps.apple.com/app/id6803727074"
+          >Download</a
+        >
+      </div>
+    </nav>
 
-<main class="wrap">
-  <section>
-    <h2>What it does</h2>
-    <p>Your results are already published. They are just scattered across a different page for every race, and none of them can tell you which of your fourteen halves held your fastest bike.</p>
-  </section>
+    <section class="hero">
+      <h1>Your race history, <span>ranked by split</span></h1>
+      <p class="tagline">
+        Find your published triathlon and running results, keep every split in
+        one locker, and see which race was actually your best.
+      </p>
+      <p class="platforms">
+        iPhone &middot; Swim, bike, run &middot; Privacy first
+      </p>
+      <a class="download-btn" href="https://apps.apple.com/app/id6803727074"
+        >Download on the App Store</a
+      >
+    </section>
 
-  <section class="grid">
-    <div class="card">
-      <h2>Your splits, ranked</h2>
-      <p>Every race ranked by swim, bike, run, or time lost in transition. Personal bests marked on each leg, with the gap from every other race.</p>
-    </div>
-    <div class="card">
-      <h2>Where you landed</h2>
-      <p>Each split against the field that actually raced it. A rank means nothing without the size of the field, so you get both.</p>
-    </div>
-    <div class="card">
-      <h2>Race resume</h2>
-      <p>Date, distance, bib, official time and division place for every start. Share it as text or a PDF in one tap.</p>
-    </div>
-    <div class="card">
-      <h2>Race notes</h2>
-      <p>The conditions, nutrition and gear that produced each result, kept with the result.</p>
-    </div>
-  </section>
+    <section class="showcase" aria-label="Screens from IM Iron Splits">
+      <div class="showcase-scroll">
+        <div class="showcase-card">
+          <img
+            src="appstore-screenshot-01.png"
+            alt="Search once and find your published race results"
+          />
+        </div>
+        <div class="showcase-card">
+          <img
+            src="appstore-screenshot-02.png"
+            alt="Rank every full-distance finish by time"
+          />
+        </div>
+        <div class="showcase-card">
+          <img
+            src="appstore-screenshot-03.png"
+            alt="Choose which races and splits to include in a shareable resume"
+          />
+        </div>
+        <div class="showcase-card">
+          <img
+            src="appstore-screenshot-04.png"
+            alt="Ask Pattie for practical race pointers in her own voice"
+          />
+        </div>
+      </div>
+    </section>
 
-  <section>
-    <h2>Free and Pro</h2>
-    <p>Searching, claiming your results, and your three most recent races with full splits are free. Iron Splits+ unlocks your complete history, the split leaderboards, field percentiles, race notes, the resume export and the full Pointers library.</p>
-    <p class="note">Prices are shown in the app before you buy and vary by region.</p>
-  </section>
+    <section class="features">
+      <div class="container">
+        <div class="features-header">
+          <h2>Built around the result</h2>
+          <p>
+            No account, no manual entry. Search once, then keep the history
+            useful.
+          </p>
+        </div>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <span class="label">Search</span>
+          <h3>Find your races</h3>
+          <p>
+            Type the name you registered with and choose the matching athlete.
+            The published history fills in from there.
+          </p>
+        </div>
+        <div class="feature-card">
+          <span class="label">Locker</span>
+          <h3>Every start in one place</h3>
+          <p>
+            See dates, distances, bibs, official times, division places, and
+            every published split without opening a new race page.
+          </p>
+        </div>
+        <div class="feature-card">
+          <span class="label">Bests</span>
+          <h3>Ranked by discipline</h3>
+          <p>
+            Find your fastest swim, bike, run, transition, or finish.
+            Full-distance and half-distance races stay in their own lists.
+          </p>
+        </div>
+        <div class="feature-card">
+          <span class="label">Field</span>
+          <h3>Know where you landed</h3>
+          <p>
+            See overall and division places with the field size behind them, so
+            a split rank has the context it needs.
+          </p>
+        </div>
+        <div class="feature-card">
+          <span class="label">Resume</span>
+          <h3>Share the record</h3>
+          <p>
+            Build a clean race resume with the starts, times, bibs, places, and
+            splits you want to show.
+          </p>
+        </div>
+        <div class="feature-card">
+          <span class="label">Pattie</span>
+          <h3>Keep the little things</h3>
+          <p>
+            Ask for practical race pointers from Pattie's filmed advice, with
+            nothing synthesized and no per-question cost.
+          </p>
+        </div>
+        <div class="feature-card">
+          <span class="label">Notes</span>
+          <h3>Remember the day</h3>
+          <p>
+            Keep conditions, nutrition, gear, and what you learned attached to
+            the result itself, on your device.
+          </p>
+        </div>
+        <div class="feature-card">
+          <span class="label plus">Iron Splits+</span>
+          <h3>Keep the full locker open</h3>
+          <p>
+            The complete feature set is currently available without a purchase.
+            Iron Splits+ remains available for existing customers, with Restore
+            Purchases built in.
+          </p>
+        </div>
+        <div class="feature-card">
+          <span class="label">Independent</span>
+          <h3>Clear about the source</h3>
+          <p>
+            Results are shown as published by each event's timing provider. The
+            app does not verify or rewrite the official record.
+          </p>
+        </div>
+      </div>
+    </section>
 
-  <section>
-    <h2>Privacy</h2>
-    <p>No account, no sign-up, no analytics SDK. Your race notes never leave your phone. The app reads the same public results pages anyone can open in a browser.</p>
-  </section>
-</main>
+    <section class="privacy">
+      <div class="container">
+        <div class="privacy-lock" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="11" width="18" height="11" rx="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+        </div>
+        <h2>Your locker stays yours</h2>
+        <p>
+          No account, no ads, and no analytics SDK. Your claimed athlete, cached
+          results, race notes, and settings stay on your iPhone. The app only
+          requests published results when you search or refresh.
+        </p>
+        <a href="privacy-policy/">Privacy Policy &rarr;</a>
+      </div>
+    </section>
 
-<footer class="wrap">
-  <a href="/ironman/privacy-policy.html">Privacy</a>
-  <a href="/ironman/terms.html">Terms</a>
-  <a href="/ironman/support.html">Support</a>
-  <p>IM Iron Splits is an independent app. It is not affiliated with, endorsed by, or sponsored by any race organiser or timing company. Results are shown as published by each event's timer.</p>
-</footer>
-</body>
+    <section class="more-info">
+      <div class="container">
+        <div class="more-info-header">
+          <h2>More info</h2>
+          <p>A simpler way to keep a long race history useful.</p>
+        </div>
+        <div class="more-info-content">
+          <div class="more-info-section">
+            <h3>The Pitch</h3>
+            <p>
+              The official results page tells you what happened in one race. It
+              does not tell you which of your starts had your fastest bike, how
+              much time you lost in transition, or where a split landed in that
+              field.
+            </p>
+            <p>
+              IM Iron Splits turns a career of published results into a locker
+              you can search, compare, annotate, and share. Start with your
+              name, then let the app do the sorting.
+            </p>
+          </div>
+          <div class="more-info-section">
+            <h3>Iron Splits+</h3>
+            <p>
+              The complete feature set is currently available without a purchase
+              or account. Iron Splits+ remains available for existing customers,
+              and Restore Purchases stays visible so a purchase can be
+              reattached on a new device.
+            </p>
+          </div>
+          <div class="more-info-section">
+            <h3>Under the hood</h3>
+            <table class="specs-table">
+              <tr>
+                <td>Platform</td>
+                <td>iOS 17+</td>
+              </tr>
+              <tr>
+                <td>Framework</td>
+                <td>SwiftUI &middot; Swift 6 &middot; RevenueCat</td>
+              </tr>
+              <tr>
+                <td>Data</td>
+                <td>Published event timing results</td>
+              </tr>
+              <tr>
+                <td>Storage</td>
+                <td>Locker, notes, and settings on device</td>
+              </tr>
+              <tr>
+                <td>Account</td>
+                <td>None required</td>
+              </tr>
+              <tr>
+                <td>Affiliation</td>
+                <td>Independent app</td>
+              </tr>
+            </table>
+          </div>
+          <div class="more-info-section">
+            <h3>What Mattered</h3>
+            <p>
+              <strong>Split-first thinking.</strong> A best finish is useful.
+              Knowing which race held your best bike is the reason to come back.
+            </p>
+            <p>
+              <strong>Distance stays honest.</strong> Full-distance,
+              half-distance, and running results are ranked in their own groups
+              rather than flattened into one misleading list.
+            </p>
+            <p>
+              <strong>Privacy as a feature.</strong> The app has no account
+              system and no developer-owned database of your race history. Apple
+              handles purchases, and RevenueCat receives only what is needed to
+              unlock or restore them.
+            </p>
+            <p>
+              <strong>The official record stays official.</strong> The app makes
+              published results easier to use, while the event timing provider
+              remains the source of truth.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="disclaimer">
+      <div class="container">
+        <p>
+          IM Iron Splits is an independent app. It is not affiliated with,
+          endorsed by, or sponsored by any race organiser, series, or timing
+          company. Race names appear only to identify the published results they
+          belong to. Results can change or be incomplete, so check the official
+          result when accuracy matters.
+        </p>
+      </div>
+    </section>
+
+    <section class="cta">
+      <h2>Your next best split is already in your history.</h2>
+      <p>Free to download. No account required.</p>
+      <a class="download-btn" href="https://apps.apple.com/app/id6803727074"
+        >Download on the App Store</a
+      >
+    </section>
+
+    <footer class="site-footer">
+      <div>
+        <a href="support/">Support</a><a href="privacy-policy/">Privacy</a
+        ><a href="terms/">Terms</a>
+      </div>
+      <div class="divider">&middot;</div>
+      <div>&copy; 2026 Jack Wallner</div>
+    </footer>
+  </body>
 </html>
