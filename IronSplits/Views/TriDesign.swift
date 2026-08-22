@@ -220,19 +220,29 @@ enum TriShadow {
 /// changing a filter or a tab, `impact` for committing to something, `notify`
 /// for an outcome the app is telling you about.
 enum Haptics {
+    private static let enabledKey = "settings.haptics.enabled"
+
+    @MainActor private static var isEnabled: Bool {
+        UserDefaults.standard.object(forKey: enabledKey) as? Bool ?? false
+    }
+
     @MainActor static func selection() {
+        guard isEnabled else { return }
         UISelectionFeedbackGenerator().selectionChanged()
     }
 
     @MainActor static func tap(_ style: UIImpactFeedbackGenerator.FeedbackStyle = .light) {
+        guard isEnabled else { return }
         UIImpactFeedbackGenerator(style: style).impactOccurred()
     }
 
     @MainActor static func success() {
+        guard isEnabled else { return }
         UINotificationFeedbackGenerator().notificationOccurred(.success)
     }
 
     @MainActor static func warning() {
+        guard isEnabled else { return }
         UINotificationFeedbackGenerator().notificationOccurred(.warning)
     }
 }

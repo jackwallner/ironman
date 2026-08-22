@@ -12,6 +12,7 @@ struct SettingsView: View {
     @State private var showingAlternateSearch = false
     @State private var confirmingUnclaim = false
     @State private var cacheBytes: Int64 = 0
+    @AppStorage("settings.haptics.enabled") private var hapticsEnabled = false
 
     @Environment(\.openURL) private var openURL
 
@@ -63,6 +64,16 @@ struct SettingsView: View {
                         }
                     }
                     .onChange(of: settings.units) { _, _ in pattie.react(.selection) }
+                }
+
+                Section("Interaction") {
+                    Toggle("Haptics", isOn: $hapticsEnabled)
+                        .onChange(of: hapticsEnabled) { _, enabled in
+                            if enabled { Haptics.selection() }
+                        }
+                    Text("Turn on subtle taps and selection feedback throughout the app. It is off by default.")
+                        .font(TriType.micro)
+                        .foregroundStyle(TriPalette.inkTertiary)
                 }
 
                 Section("Iron Splits+") {

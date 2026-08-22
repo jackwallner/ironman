@@ -68,6 +68,10 @@ struct PointersView: View {
             // other mode cannot draw.
             path.removeAll()
         }
+        .onChange(of: path) { oldPath, newPath in
+            guard newPath.count < oldPath.count else { return }
+            pattie.react(.back)
+        }
         .task { await ask.load() }
     }
 }
@@ -194,12 +198,20 @@ struct PattieFeaturedHero: View {
                     RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous)
                         .fill(TriPalette.deep)
 
-                    Image("pattie-pet-celebrate")
+                    Image("pattie-kona-finish")
                         .resizable()
-                        .scaledToFit()
+                        .scaledToFill()
                         .frame(maxWidth: .infinity)
-                        .frame(height: 220)
+                        .frame(height: 220, alignment: .top)
                         .clipped()
+                        .overlay {
+                            LinearGradient(
+                                colors: [.clear, TriPalette.deep.opacity(0.5)],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        }
+                        .accessibilityIdentifier("pattie-real-photo")
 
                     Text("FINISHING STRONG")
                         .font(TriType.micro)
@@ -317,6 +329,7 @@ struct PointerPlayerSheet: View {
     let pointer: Pointer
 
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var pattie: PattieMode
 
     @State private var player: AVPlayer?
     @State private var progress: Double = 0
@@ -333,7 +346,10 @@ struct PointerPlayerSheet: View {
             .triNavBar()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Done") { dismiss() }
+                    Button("Done") {
+                        pattie.react(.back)
+                        dismiss()
+                    }
                         .foregroundStyle(.white)
                         .triTapTarget()
                 }

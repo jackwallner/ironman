@@ -187,6 +187,76 @@ enum PattieVoiceLibrary {
         "pattie-now-that-s-a-great-idea", "pattie-solution", "pattie-that-s-a-great-idea",
     ]
 
+    /// Short clips selected by what the athlete just did. The longer hook and
+    /// solution clips belong to the actual pointer and Ask Pattie answers. A
+    /// small interaction needs a catchphrase with a useful direction behind it,
+    /// not the same sign-off every time.
+    static let actionPhrases: [PattieMode.Action: [String]] = [
+        .tab: [
+            "pattie-good", "pattie-nice", "pattie-away-you-go", "pattie-solution",
+        ],
+        .filter: [
+            "pattie-bike", "pattie-good", "pattie-nice", "pattie-solution",
+        ],
+        .selection: [
+            "pattie-nice", "pattie-good", "pattie-great-idea", "pattie-away-you-go",
+        ],
+        .search: [
+            "pattie-here-s-the-situation", "pattie-good", "pattie-nice",
+        ],
+        .choice: [
+            "pattie-here-s-the-solution", "pattie-nice", "pattie-great-idea", "pattie-good",
+        ],
+        .save: [
+            "pattie-here-s-the-solution", "pattie-solution", "pattie-good", "pattie-away-you-go",
+        ],
+        .export: [
+            "pattie-away-you-go", "pattie-good", "pattie-nice", "pattie-solution",
+        ],
+        .play: [
+            "pattie-here-s-the-situation", "pattie-here-s-the-solution", "pattie-solution", "pattie-nice",
+        ],
+        .refresh: [
+            "pattie-good", "pattie-nice", "pattie-here-s-the-situation", "pattie-solution",
+        ],
+        .tap: [
+            "pattie-nice", "pattie-good", "pattie-great-idea", "pattie-away-you-go",
+        ],
+        .back: [
+            "pattie-away-you-go", "pattie-nice", "pattie-here-s-the-solution", "pattie-good",
+        ],
+    ]
+
+    /// Moment-specific defaults for screen changes that are not tied to a
+    /// button action. These keep the voice relevant without making every
+    /// screen reuse the same catchphrase.
+    static let momentPhrases: [PattieMode.Moment: [String]] = [
+        .searching: ["pattie-here-s-the-situation", "pattie-good", "pattie-nice"],
+        .raceOpened: ["pattie-bike", "pattie-here-s-the-situation", "pattie-nice"],
+        .didNotFinish: ["pattie-good", "pattie-here-s-the-solution", "pattie-away-you-go"],
+        .bests: ["pattie-good", "pattie-nice", "pattie-solution"],
+        .bestsFiltered: ["pattie-bike", "pattie-good", "pattie-nice"],
+        .noteSaved: ["pattie-here-s-the-solution", "pattie-good", "pattie-away-you-go"],
+        .refreshed: ["pattie-good", "pattie-nice", "pattie-here-s-the-situation"],
+        .settings: ["pattie-nice", "pattie-good", "pattie-away-you-go"],
+    ]
+
+    static func nextReaction(action: PattieMode.Action?,
+                             moment: PattieMode.Moment,
+                             excluding used: Set<String>) -> String {
+        let candidates: [String]
+        if let action, let actionCandidates = actionPhrases[action] {
+            candidates = actionCandidates
+        } else if let momentCandidates = momentPhrases[moment] {
+            candidates = momentCandidates
+        } else {
+            candidates = phrases
+        }
+        let fresh = candidates.filter { !used.contains($0) }
+        return (fresh.isEmpty ? candidates : fresh).randomElement()
+            ?? nextSignoff(excluding: used)
+    }
+
     /// A different sign-off every time, cycling the whole deck before repeating.
     ///
     /// Nothing is more obviously canned than the same 1.4 seconds of audio on

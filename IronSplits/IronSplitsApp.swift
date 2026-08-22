@@ -31,7 +31,8 @@ struct IronSplitsApp: App {
                         "pointers.catalog.cached", "pointers.catalog.cachedAt",
                         "pointers.mode",
                         "askpattie.guide.cached", "askpattie.guide.cachedAt",
-                        "pattie.mode.enabled", "pattie.mode.seenLines"] {
+                        "pattie.mode.enabled", "pattie.mode.seenLines",
+                        "settings.haptics.enabled"] {
                 UserDefaults.standard.removeObject(forKey: key)
             }
             // Pattie Mode is off by default, and tests opt in with

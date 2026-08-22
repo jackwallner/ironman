@@ -141,9 +141,13 @@ struct AskPattieAnswerList: View {
         .navigationBarTitleDisplayMode(.inline)
         .triNavBar()
         .task { pattie.fire(.askAnswered, petState: .forTopicID(topicID)) }
-        // Her voice is the point of this screen, but it should not follow you
-        // off it.
-        .onDisappear { PattieVoice.shared.stop() }
+        .onDisappear {
+            // Replace the answer clip with a useful back-navigation reaction.
+            // The parent path observer may also see this pop, but the action
+            // cooldown makes the two paths collapse to one line.
+            PattieVoice.shared.stop()
+            pattie.react(.back)
+        }
     }
 }
 

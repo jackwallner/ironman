@@ -88,8 +88,9 @@ final class PattieMode: ObservableObject {
         case play
         case refresh
         case tap
+        case back
 
-        var cooldown: TimeInterval { 2.5 }
+        var cooldown: TimeInterval { 0.9 }
     }
 
     /// One thing Pattie says, with the face and the voice that go with it.
@@ -98,8 +99,8 @@ final class PattieMode: ObservableObject {
         let moment: Moment
         let portrait: String
         let text: String
-        /// Bundled clip cut from her own audio. When nil, the line still speaks:
-        /// `fire` hands it one of the eighteen sign-offs instead.
+        /// Bundled clip cut from her own audio. When nil, `present` selects a
+        /// short clip that matches the action or moment.
         var voice: String?
         var impact: Impact = .banner
         var action: Action? = nil
@@ -152,14 +153,14 @@ final class PattieMode: ObservableObject {
 
     private var firedAt: [Moment: Date] = [:]
     private var firedActions: [Action: Date] = [:]
-    private var usedSignoffs: Set<String> = []
+    private var usedAutoVoices: Set<String> = []
     private var lastFired: Date?
     private let voice = PattieVoice.shared
     private let seenKey = "pattie.mode.seenLines"
     /// Long enough that two taps in a row cannot both summon her, short enough
     /// that moving through three screens still gets more than one line out of
     /// her.
-    private let quietPeriod: TimeInterval = 3.5
+    private let quietPeriod: TimeInterval = 0.9
 
     init() {
         let storedIsEnabled = UserDefaults.standard.object(forKey: "pattie.mode.enabled") as? Bool ?? false
@@ -195,13 +196,15 @@ final class PattieMode: ObservableObject {
     /// The companion never stacks cards, and the short quiet period keeps a
     /// burst of taps from becoming a wall of commentary.
     func react(_ action: Action, petState: PattiePetState? = nil) {
-        guard isEnabled, !voice.isSpeaking else { return }
+        guard isEnabled else { return }
         if let last = firedActions[action], Date.now.timeIntervalSince(last) < action.cooldown {
             return
         }
-        if let lastFired, Date.now.timeIntervalSince(lastFired) < quietPeriod { return }
+        if action != .back {
+            if let lastFired, Date.now.timeIntervalSince(lastFired) < quietPeriod { return }
+        }
         guard let line = pick(for: action) else { return }
-        present(line, petState: petState)
+        present(line, petState: petState, replaceVoice: true)
     }
 
     /// Preview one immediately, ignoring the budget. Used by Settings and the
@@ -209,22 +212,26 @@ final class PattieMode: ObservableObject {
     /// modal screen.
     func demo() {
         guard let line = Self.deck.first(where: { $0.action == .tap }) else { return }
-        present(line, respectingBudget: false)
+        present(line, respectingBudget: false, replaceVoice: true)
     }
 
     private func present(_ line: Line,
                          respectingBudget: Bool = true,
-                         petState: PattiePetState? = nil) {
+                         petState: PattiePetState? = nil,
+                         replaceVoice: Bool = false) {
         var line = line
         line.petState = petState ?? line.defaultPetState
-        // Every line speaks. One with nothing specific to say gets a sign-off,
-        // and a different one each time: eighteen takes cut from eighteen
-        // episodes is enough that a session never hears the same recording.
+        // Every line speaks. Action lines use short, action-specific phrases,
+        // while larger moments keep their transcript-matched clips. A
+        // sign-off is the last resort, not the default reaction.
         if line.voice == nil {
-            let pick = PattieVoiceLibrary.nextSignoff(excluding: usedSignoffs)
-            usedSignoffs.insert(pick)
-            if usedSignoffs.count >= PattieVoiceLibrary.signoffs.count { usedSignoffs = [pick] }
-            line.voice = pick
+            let clip = PattieVoiceLibrary.nextReaction(
+                action: line.action,
+                moment: line.moment,
+                excluding: usedAutoVoices
+            )
+            usedAutoVoices.insert(clip)
+            line.voice = clip
         }
         if respectingBudget {
             firedAt[line.moment] = .now
@@ -236,7 +243,11 @@ final class PattieMode: ObservableObject {
             current = line
         }
         Haptics.tap(.soft)
-        voice.playIfQuiet(line.voice)
+        if replaceVoice {
+            voice.play(line.voice)
+        } else {
+            voice.playIfQuiet(line.voice)
+        }
     }
 
     func replayVoice() {
@@ -291,70 +302,76 @@ extension PattieMode {
     /// situation, hands you the solution, and signs off "now that's a great
     /// idea", because that is the format every one of the episodes is cut to.
     ///
-    /// A `voice` of nil is not a silent line. It means "no specific clip fits,
-    /// use a sign-off", which `present(_:)` fills in.
+    /// A `voice` of nil is not a silent line. It means "choose the clip that
+    /// fits this action", which `present(_:)` fills in.
     static let deck: [Line] = [
         // Small companion reactions
         Line(id: "action-tab-1", moment: .action, portrait: "pattie-profile",
-             text: "You are keeping the important things in one place. That's a very good habit.",
+             text: "Here's the situation: a race story is easier to use when the swim, bike, run, and finish stay together. Keep it all in one place.",
              action: .tab),
         Line(id: "action-tab-2", moment: .action, portrait: "pattie-profile",
-             text: "Good choice. A little data now saves a lot of guessing later.",
+             text: "Here's the solution: look at the whole pattern, not one shiny number. The useful clue is usually in the split beside it.",
              action: .tab),
         Line(id: "action-filter-1", moment: .action, portrait: "pattie-profile",
-             text: "That is the right question to ask. Compare the pieces, not just the finish.",
+             text: "A half and a full are different races. Compare like with like before you call something your best.",
              action: .filter),
         Line(id: "action-filter-2", moment: .action, portrait: "pattie-profile",
-             text: "Look at you, getting specific. That's how the useful pattern turns up.",
+             text: "Different leg, different story. The transition number is often the free time hiding in plain sight.",
              action: .filter),
         Line(id: "action-selection-1", moment: .action, portrait: "pattie-profile",
-             text: "Nice choice. You know what you want to look at.",
+             text: "Pick the piece you can practise. Small changes are the ones that make it to race day.",
              action: .selection),
         Line(id: "action-selection-2", moment: .action, portrait: "pattie-profile",
-             text: "That is a sensible adjustment. Future-you will appreciate the tidy record.",
+             text: "Good choice. If it matters on race day, give it one rehearsal before you need it.",
              action: .selection),
         Line(id: "action-search-1", moment: .action, portrait: "pattie-profile",
-             text: "Good. Start with the name exactly as raced, and the rest gets wonderfully simple.",
+             text: "Here's the situation: the timing feed knows the name on your registration. Start there, then we can find the rest.",
              action: .search),
         Line(id: "action-search-2", moment: .action, portrait: "pattie-profile",
-             text: "You came prepared to find the truth in the results. I like that.",
+             text: "Surname first works too. The important thing is matching the entry, not guessing at a nickname.",
              action: .search),
         Line(id: "action-choice-1", moment: .action, portrait: "pattie-profile",
-             text: "Good pick. You are making this much easier on yourself.",
+             text: "Here's the solution: choose the race first, then the problem you want to solve. No typing, no invented advice.",
              action: .choice),
         Line(id: "action-choice-2", moment: .action, portrait: "pattie-profile",
-             text: "Exactly. A small decision now, a much clearer race story later.",
+             text: "That is the useful choice. Take one pointer and try it on a training day before race day.",
              action: .choice),
         Line(id: "action-save-1", moment: .action, portrait: "pattie-profile",
-             text: "Excellent. Write it down while the day is still fresh. That note will age beautifully.",
+             text: "Write down the weather and what went wrong while it is fresh. In two years, that detail will be worth more than the time.",
              action: .save),
         Line(id: "action-save-2", moment: .action, portrait: "pattie-profile",
-             text: "That is smart racecraft. The details you save now become your best advice later.",
+             text: "That is smart racecraft. The small detail you save today becomes your best advice later.",
              action: .save),
         Line(id: "action-export-1", moment: .action, portrait: "pattie-profile",
-             text: "There you are. Your racing history, ready to travel with you.",
+             text: "Away you go. Put the race history in front of the next person who needs to see it.",
              action: .export),
         Line(id: "action-export-2", moment: .action, portrait: "pattie-profile",
-             text: "Good idea. Let the results speak for themselves.",
+             text: "Here's the solution: one clean resume, with the splits that prove the story.",
              action: .export),
         Line(id: "action-play-1", moment: .action, portrait: "pattie-profile",
-             text: "Good choice. This one is worth hearing when you have a quiet minute.",
+             text: "Here's the situation, then here's the solution. Listen for the small thing you can try before the next start.",
              action: .play),
         Line(id: "action-play-2", moment: .action, portrait: "pattie-profile",
-             text: "Press play. I am very happy to have made this little pointer for you.",
+             text: "Press play when you have a quiet minute. These pointers are built from the things that went wrong first.",
              action: .play),
         Line(id: "action-refresh-1", moment: .action, portrait: "pattie-profile",
-             text: "Fresh results, fresh evidence. You are keeping the record honest.",
+             text: "Fresh results, straight from the timers. If the latest race is not here, it has not been posted yet.",
              action: .refresh),
         Line(id: "action-refresh-2", moment: .action, portrait: "pattie-profile",
-             text: "Good check. If it is not here yet, the timer is still catching up.",
+             text: "A refresh checks the official feed again. It cannot make an unpublished result appear early.",
              action: .refresh),
         Line(id: "action-tap-1", moment: .action, portrait: "pattie-profile",
-             text: "I saw that. You are doing a very good job of looking after your race story.",
+             text: "One small move at a time. The next useful clue is usually one tap away.",
              action: .tap),
         Line(id: "action-tap-2", moment: .action, portrait: "pattie-profile",
-             text: "That was a good move. Keep going, there is something useful in here.",
+             text: "Good. Keep going. We are looking for the detail that makes the next race easier.",
              action: .tap),
+        Line(id: "action-back-1", moment: .action, portrait: "pattie-profile",
+             text: "Good, take the pointer with you. You do not need to stay on a screen after you have got the useful bit.",
+             action: .back),
+        Line(id: "action-back-2", moment: .action, portrait: "pattie-profile",
+             text: "Away you go. The best tip is the one you can try before the next start.",
+             action: .back),
 
         // Welcome
         Line(id: "welcome-1", moment: .welcome, portrait: "pattie-profile",

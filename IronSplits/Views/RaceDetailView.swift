@@ -47,6 +47,7 @@ struct RaceDetailView: View {
             guard result.isComplete else { return }
             await loadField()
         }
+        .onDisappear { pattie.react(.back) }
     }
 
     /// The most interesting thing about this race, in Pattie's eyes.

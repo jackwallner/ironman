@@ -34,4 +34,14 @@ final class PattiePetStateTests: XCTestCase {
         XCTAssertEqual(best.defaultPetState, .celebrate)
         XCTAssertEqual(dnf.defaultPetState, .encourage)
     }
+
+    func testActionVoicesRotateInsteadOfUsingTheDefaultSignoff() {
+        let first = PattieVoiceLibrary.nextReaction(action: .tap, moment: .action, excluding: [])
+        let second = PattieVoiceLibrary.nextReaction(action: .tap, moment: .action, excluding: [first])
+
+        XCTAssertTrue(PattieVoiceLibrary.actionPhrases[.tap]?.contains(first) == true)
+        XCTAssertTrue(PattieVoiceLibrary.actionPhrases[.tap]?.contains(second) == true)
+        XCTAssertNotEqual(first, second)
+        XCTAssertNotEqual(first, "pattie-now-that-s-a-great-idea")
+    }
 }

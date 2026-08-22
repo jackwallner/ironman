@@ -186,6 +186,19 @@ final class RaceAnalyticsTests: XCTestCase {
         XCTAssertFalse(RaceAnalytics.isPersonalBest(slower, discipline: .finish, within: both))
     }
 
+    func testPersonalBestNeverComparesDifferentRaceKinds() {
+        let slowerHalf = half(id: "half-slow", finish: 28000)
+        let fasterHalf = half(id: "half-fast", finish: 27151)
+        let slowerFull = result(id: "full-slow", finish: 38000)
+        let fasterFull = result(id: "full-fast", finish: 37000)
+        let career = [slowerHalf, fasterHalf, slowerFull, fasterFull]
+
+        XCTAssertTrue(RaceAnalytics.isPersonalBest(fasterHalf, discipline: .finish, within: career))
+        XCTAssertFalse(RaceAnalytics.isPersonalBest(slowerHalf, discipline: .finish, within: career))
+        XCTAssertTrue(RaceAnalytics.isPersonalBest(fasterFull, discipline: .finish, within: career))
+        XCTAssertFalse(RaceAnalytics.isPersonalBest(slowerFull, discipline: .finish, within: career))
+    }
+
     /// A full-distance career alongside it must not be dragged in: ranking is
     /// always scoped to one kind, so the fulls are a separate leaderboard.
     func testADebutHalfIsUnaffectedByAFullDistanceCareer() {
