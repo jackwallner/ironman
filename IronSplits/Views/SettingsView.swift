@@ -79,7 +79,7 @@ struct SettingsView: View {
                 Section("Iron Splits+") {
                     Label("Everything is unlocked", systemImage: "checkmark.seal.fill")
                         .foregroundStyle(TriPalette.positive)
-                    Text("Full history, split leaderboards, field percentiles, race notes, resume export and every one of Pattie's pointers. No purchase, nothing held back.")
+                    Text("Everything is currently available without a purchase. Restore purchases and subscription management remain for anyone who bought Iron Splits+ before this change.")
                         .font(TriType.micro)
                         .foregroundStyle(TriPalette.inkTertiary)
                     // Restore stays. Anyone who bought Iron Splits+ before the
@@ -166,6 +166,7 @@ struct SettingsView: View {
             .triNavBar()
             .scrollContentBackground(.hidden)
             .background(TriPalette.canvas)
+            .triTabBarClearance()
             .sheet(isPresented: $showingAthleteSearch) { AthleteSearchView() }
             .sheet(isPresented: $showingAlternateSearch) {
                 AthleteSearchView(addingToCurrentAthlete: true)

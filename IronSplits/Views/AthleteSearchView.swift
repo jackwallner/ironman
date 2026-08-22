@@ -289,7 +289,7 @@ private struct AthleteRow: View {
             } else {
                 // "At least", because the search reads a capped number of rows:
                 // claiming the athlete is what pulls their complete history.
-                Text(String(athlete.knownRaceCount) + "+")
+                Text(String(athlete.knownRaceCount) + "+ races")
                     .font(TriType.statSmall)
                     .foregroundStyle(TriPalette.inkTertiary)
                 Image(systemName: "chevron.right")

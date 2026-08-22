@@ -68,17 +68,17 @@ final class DesignAuditUITests: XCTestCase {
         shoot(app, "03-locker")
 
         // Race detail, which is the densest screen and the one with the hero.
-        let firstRace = app.cells.containing(.staticText, identifier: "SWIM").firstMatch
-        if !firstRace.exists {
-            app.cells.element(boundBy: 2).tap()
-        } else {
-            firstRace.tap()
-        }
-        if app.staticTexts["SPLITS"].waitForExistence(timeout: 20) {
-            settle()
-            shoot(app, "04-race-detail")
-            app.navigationBars.buttons.element(boundBy: 0).tap()
-        }
+        let firstRace = app.buttons.matching(
+            NSPredicate(format: "label CONTAINS[c] %@", "IRONMAN")
+        ).firstMatch
+        XCTAssertTrue(firstRace.waitForExistence(timeout: 20),
+                      "The first race must be tappable for the visual audit")
+        firstRace.tap()
+        XCTAssertTrue(app.staticTexts["SPLITS"].waitForExistence(timeout: 20),
+                      "Race Detail must render for the visual audit")
+        settle()
+        shoot(app, "04-race-detail")
+        app.navigationBars.buttons.element(boundBy: 0).tap()
 
         for (tab, name) in [("Bests", "05-bests"), ("Pattie", "06-ask-pattie"),
                             ("Resume", "07-resume"), ("Settings", "08-settings")] {

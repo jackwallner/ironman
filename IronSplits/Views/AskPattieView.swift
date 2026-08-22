@@ -73,7 +73,7 @@ struct AskPattieGoalList: View {
                     }
                 }
                 .padding(TriGeo.padPage)
-                .padding(.bottom, TriSpace.x8)
+                .padding(.bottom, TriGeo.tabBarClearance)
             }
         }
     }
@@ -107,12 +107,18 @@ struct AskPattieTopicList: View {
                     }
                 }
                 .padding(TriGeo.padPage)
-                .padding(.bottom, TriSpace.x8)
+                .padding(.bottom, TriGeo.tabBarClearance)
             }
         }
         .navigationTitle(goal?.title ?? "Ask Pattie")
         .navigationBarTitleDisplayMode(.inline)
         .triNavBar()
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                TriBackButton()
+            }
+        }
     }
 }
 
@@ -134,12 +140,18 @@ struct AskPattieAnswerList: View {
                     }
                 }
                 .padding(TriGeo.padPage)
-                .padding(.bottom, TriSpace.x8)
+                .padding(.bottom, TriGeo.tabBarClearance)
             }
         }
         .navigationTitle(model.guide.topic(topicID)?.title ?? "Pointers")
         .navigationBarTitleDisplayMode(.inline)
         .triNavBar()
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                TriBackButton()
+            }
+        }
         .task { pattie.fire(.askAnswered, petState: .forTopicID(topicID)) }
         .onDisappear {
             // Replace the answer clip with a useful back-navigation reaction.

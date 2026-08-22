@@ -38,11 +38,7 @@ struct PointersView: View {
             .triNavBar()
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Picker("", selection: $mode) {
-                        ForEach(Mode.allCases) { Text($0.rawValue).tag($0) }
-                    }
-                    .pickerStyle(.segmented)
-                    .frame(maxWidth: 260)
+                    PointerModePicker(selection: $mode)
                 }
             }
             .navigationDestination(for: AskPattieStep.self) { step in
@@ -73,6 +69,35 @@ struct PointersView: View {
             pattie.react(.back)
         }
         .task { await ask.load() }
+    }
+}
+
+private struct PointerModePicker: View {
+    @Binding var selection: PointersView.Mode
+
+    var body: some View {
+        HStack(spacing: TriSpace.x1) {
+            ForEach(PointersView.Mode.allCases) { option in
+                Button {
+                    selection = option
+                } label: {
+                    Text(option.rawValue)
+                        .font(TriType.smallBold)
+                        .foregroundStyle(selection == option ? .white : TriPalette.ink)
+                        .padding(.horizontal, TriSpace.x3)
+                        .frame(minHeight: TriSpace.x8)
+                        .background(selection == option ? TriPalette.deep : Color.clear,
+                                    in: Capsule())
+                }
+                .buttonStyle(.triPressSilent)
+                .accessibilityValue(selection == option ? "Selected" : "")
+            }
+        }
+        .padding(TriSpace.x1)
+        .background(TriPalette.surface, in: Capsule())
+        .overlay(Capsule().stroke(TriPalette.hairline, lineWidth: TriGeo.hairline))
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Pointer view")
     }
 }
 
@@ -153,7 +178,7 @@ struct PointerLibraryView: View {
                 }
             }
             .padding(TriGeo.padPage)
-            .padding(.bottom, TriSpace.x8)
+            .padding(.bottom, TriGeo.tabBarClearance)
         }
     }
 

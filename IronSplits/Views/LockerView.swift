@@ -8,6 +8,7 @@ struct LockerView: View {
     @EnvironmentObject private var pattie: PattieMode
 
     @State private var showingAthleteSearch = false
+    @State private var showingOptions = false
     @State private var kindFilter: RaceKind?
 
     var body: some View {
@@ -25,24 +26,17 @@ struct LockerView: View {
             .triNavBar()
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Menu {
-                        Button {
-                            pattie.react(.refresh)
-                            Task { await locker.refresh(force: true) }
-                        } label: {
-                            Label("Refresh results", systemImage: "arrow.clockwise")
-                        }
-                        Button {
-                            pattie.react(.selection)
-                            showingAthleteSearch = true
-                        } label: {
-                            Label("Change athlete", systemImage: "person.crop.circle.badge.questionmark")
-                        }
+                    Button {
+                        showingOptions = true
                     } label: {
-                        Image(systemName: "ellipsis.circle")
+                        Image(systemName: "ellipsis")
+                            .font(.system(size: 15, weight: .bold))
                             .foregroundStyle(.white)
-                            .triTapTarget()
+                            .frame(width: TriGeo.tapTarget, height: TriGeo.tapTarget)
+                            .triToolbarCircleBackground()
                     }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("More")
                 }
             }
             .sheet(isPresented: $showingAthleteSearch) {
@@ -51,6 +45,20 @@ struct LockerView: View {
             .refreshable {
                 await locker.refresh(force: true)
                 pattie.fire(.refreshed)
+            }
+            .confirmationDialog("Locker options", isPresented: $showingOptions) {
+                Button {
+                    pattie.react(.refresh)
+                    Task { await locker.refresh(force: true) }
+                } label: {
+                    Label("Refresh results", systemImage: "arrow.clockwise")
+                }
+                Button {
+                    pattie.react(.selection)
+                    showingAthleteSearch = true
+                } label: {
+                    Label("Change athlete", systemImage: "person.crop.circle.badge.questionmark")
+                }
             }
         }
     }
@@ -133,6 +141,7 @@ struct LockerView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
+        .triTabBarClearance()
     }
 
     private var kindPicker: some View {

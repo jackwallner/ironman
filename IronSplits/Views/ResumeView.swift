@@ -109,6 +109,7 @@ struct ResumeView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
+        .triTabBarClearance()
         // Any change to what goes in invalidates the file that was built from
         // the old settings, so drop it rather than sharing a stale PDF.
         .onChange(of: options.kinds) { _, _ in pdfURL = nil }

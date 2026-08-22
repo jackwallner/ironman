@@ -93,7 +93,8 @@ enum ReviewPromptTracker {
 
     /// Skip passive prompts during UI tests / Fastlane snapshot runs.
     static var isAutomationRun: Bool {
-        ProcessInfo.processInfo.arguments.contains("-FASTLANE_SNAPSHOT")
+        ProcessInfo.processInfo.arguments.contains("-UITest")
+            || ProcessInfo.processInfo.arguments.contains("-FASTLANE_SNAPSHOT")
             || ProcessInfo.processInfo.environment["SCREENSHOT_MODE"] == "1"
     }
 

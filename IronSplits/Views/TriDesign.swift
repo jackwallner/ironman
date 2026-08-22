@@ -145,23 +145,23 @@ enum TriPalette {
 /// own columns as the seconds change is the cheapest possible tell, and this
 /// screen is nothing but numeric columns.
 enum TriType {
-    static let athleteName   = Font.system(size: 28, weight: .bold)
-    static let pageTitle     = Font.system(size: 22, weight: .bold)
-    static let sectionTitle  = Font.system(size: 13, weight: .semibold)
-    static let cardTitle     = Font.system(size: 17, weight: .semibold)
-    static let body          = Font.system(size: 16, weight: .regular)
-    static let bodyBold      = Font.system(size: 16, weight: .semibold)
+    static let athleteName   = Font.system(.title, design: .default).weight(.bold)
+    static let pageTitle     = Font.system(.title2, design: .default).weight(.bold)
+    static let sectionTitle  = Font.system(.footnote, design: .default).weight(.semibold)
+    static let cardTitle     = Font.system(.headline, design: .default).weight(.semibold)
+    static let body          = Font.system(.body, design: .default)
+    static let bodyBold      = Font.system(.body, design: .default).weight(.semibold)
     /// Text fields only. 17pt is what every native field on the phone uses, and
     /// anything smaller reads as a web form in a wrapper.
-    static let field         = Font.system(size: 17, weight: .regular)
-    static let small         = Font.system(size: 13, weight: .regular)
-    static let smallBold     = Font.system(size: 13, weight: .semibold)
-    static let micro         = Font.system(size: 11, weight: .semibold)
+    static let field         = Font.system(.body, design: .default)
+    static let small         = Font.system(.footnote, design: .default)
+    static let smallBold     = Font.system(.footnote, design: .default).weight(.semibold)
+    static let micro         = Font.system(.caption2, design: .default).weight(.semibold)
 
-    static let statHero      = Font.system(size: 40, weight: .bold).monospacedDigit()
-    static let statLarge     = Font.system(size: 22, weight: .bold).monospacedDigit()
-    static let statMed       = Font.system(size: 16, weight: .semibold).monospacedDigit()
-    static let statSmall     = Font.system(size: 13, weight: .semibold).monospacedDigit()
+    static let statHero      = Font.system(.largeTitle, design: .monospaced).weight(.bold).monospacedDigit()
+    static let statLarge     = Font.system(.title2, design: .monospaced).weight(.bold).monospacedDigit()
+    static let statMed       = Font.system(.body, design: .monospaced).weight(.semibold).monospacedDigit()
+    static let statSmall     = Font.system(.footnote, design: .monospaced).weight(.semibold).monospacedDigit()
 }
 
 // MARK: - Space
@@ -196,6 +196,8 @@ enum TriGeo {
     /// Apple's floor for anything a thumb has to hit.
     static let tapTarget: CGFloat = 44
     static let rowHeight: CGFloat = 44
+    /// Extra content space for the floating system tab bar.
+    static let tabBarClearance: CGFloat = TriSpace.x10 + TriSpace.x8 + TriSpace.x4
 }
 
 /// Two elevations: one for a card sitting on the canvas, one for something
@@ -302,6 +304,20 @@ private struct TriCard: ViewModifier {
 extension View {
     func triNavBar() -> some View { modifier(TriNavBar()) }
 
+    @ViewBuilder
+    func triToolbarCircleBackground() -> some View {
+        if #available(iOS 26.0, *) {
+            glassEffect(.regular.tint(TriPalette.deep).interactive(), in: .circle)
+        } else {
+            background(TriPalette.deep, in: Circle())
+        }
+    }
+
+    /// Keeps the floating tab bar from covering the last interactive content.
+    func triTabBarClearance() -> some View {
+        safeAreaPadding(.bottom, TriGeo.tabBarClearance)
+    }
+
     /// The standard card: surface, hairline, one radius, one elevation.
     func triCard(padding: CGFloat = TriGeo.padCard) -> some View {
         modifier(TriCard(padding: padding))
@@ -311,6 +327,24 @@ extension View {
     func triTapTarget(_ minimum: CGFloat = TriGeo.tapTarget) -> some View {
         frame(minWidth: minimum, minHeight: minimum)
             .contentShape(Rectangle())
+    }
+}
+
+struct TriBackButton: View {
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        Button {
+            dismiss()
+        } label: {
+            Image(systemName: "chevron.left")
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(width: TriGeo.tapTarget, height: TriGeo.tapTarget)
+                .triToolbarCircleBackground()
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Back")
     }
 }
 

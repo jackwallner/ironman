@@ -79,6 +79,7 @@ struct BestsView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
+        .triTabBarClearance()
     }
 
     private var pickers: some View {

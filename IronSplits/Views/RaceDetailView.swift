@@ -28,12 +28,18 @@ struct RaceDetailView: View {
                 fieldCard
                 notesCard
             }
-            .padding(.bottom, TriSpace.x8)
+            .padding(.bottom, TriGeo.tabBarClearance)
         }
         .background(TriPalette.canvas)
         .navigationTitle(String(result.year))
         .navigationBarTitleDisplayMode(.inline)
         .triNavBar()
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                TriBackButton()
+            }
+        }
         .sheet(isPresented: $editingNote) {
             RaceNoteEditor(note: notes.note(for: result.id), raceName: result.raceName) { updated in
                 notes.save(updated)
@@ -318,7 +324,7 @@ private struct PlacementRow: View {
                 Text("\(placement.rank) of \(placement.fieldSize)")
                     .font(TriType.small)
                     .foregroundStyle(TriPalette.inkTertiary)
-                Text(String(placement.percentile))
+                Text("\(placement.percentile)%")
                     .font(TriType.statSmall)
                     .foregroundStyle(TriPalette.textColor(forPercentile: placement.percentile))
                     .frame(width: 28, alignment: .trailing)
