@@ -1,0 +1,12 @@
+Každé preteky, ktoré ste dokončili, na jednom mieste a usporiadané tak, aby ste im rozumeli.
+
+Zadajte meno raz. IM Iron Splits nájde zverejnené výsledky a zobrazí časy plávania, depa, bicykla a behu, štartové číslo a umiestnenia.
+
+Pozrite si osobné rekordy, porovnajte preteky rovnakého typu a zistite miesto každého času v poli. Race Book odomkne porovnania a export do PDF alebo obrázka jednorazovým doživotným nákupom, bez predplatného a bez poplatku za export.
+
+Základ ostáva bezplatný: vyhľadávanie, celá história, medzičasy, poradia, poznámky a knižnica Pointers.
+
+Súkromie: https://jackwallner.github.io/ironman/privacy-policy.html
+Podmienky: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
+IM Iron Splits je nezávislá aplikácia bez väzby na organizátorov pretekov alebo časomerné firmy.

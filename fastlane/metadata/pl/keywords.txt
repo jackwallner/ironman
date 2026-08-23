@@ -1,0 +1,1 @@
+triathlon,wyniki zawodów,międzyczasy,pływanie,rower,bieg,numer startowy,czas mety,rekord

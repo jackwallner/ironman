@@ -1,0 +1,68 @@
+{
+  "filename": "07-learn-from-every-race-day.png",
+  "path": "race-book-evidence/07-learn-from-every-race-day.png",
+  "output_sha256": "021789e5902b28d3cf5f25ef540aed3bcfedba1d44014f1332cc1ef6e6474397",
+  "output_size": [
+    1320,
+    2868
+  ],
+  "device": "iphone",
+  "header": "Learn from every race day",
+  "pitch": {
+    "benefit": "Pair the result history with a focused coaching pointer for the next start",
+    "problem": "A result can show what happened without helping an athlete revisit race-day choices.",
+    "advantage": "The Pointers library organizes real coaching clips by race leg and keeps the core library free.",
+    "header_problem": "a result without context",
+    "header_advantage": "race-day pointer",
+    "search_terms": [
+      "triathlon tips",
+      "swim bike run"
+    ],
+    "proof": "The literal Pattie capture shows the app's coaching pointer surface organized around the athlete's question."
+  },
+  "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/pattie.png",
+  "source_sha256": "2468080b8fb2dafac2ced92e1f042380db5b45c938aff3083049cc126f696f04",
+  "background_asset": null,
+  "background_asset_sha256": null,
+  "background_override": null,
+  "foreground": "manifests/race-book-evidence/07-learn-from-every-race-day.foreground.png",
+  "foreground_sha256": "6e6308cbdffb11eb709ae9acccdc03ed8f8a1a37690bd7c4a7c12bdc8ee47ca0",
+  "ui_mask": "manifests/race-book-evidence/07-learn-from-every-race-day.ui-mask.png",
+  "ui_coverage": 0.6078,
+  "imagegen_received_ui_source": false,
+  "target": "iphone_69",
+  "size": [
+    1320,
+    2868
+  ],
+  "background_mode": "theme",
+  "background_id": "theme",
+  "background_top": "#071A2F",
+  "background_bottom": "#102D4D",
+  "background_asset_applied": false,
+  "phone": {
+    "x": 127,
+    "y": 560,
+    "width": 1066,
+    "height": 2273,
+    "screen_x": 146,
+    "screen_y": 579,
+    "screen_width": 1028,
+    "screen_height": 2235
+  },
+  "header_only": true,
+  "compositor_text_layers": [
+    "header"
+  ],
+  "header_font_size": 164,
+  "header_lines": 2,
+  "header_text": "Learn from every race day",
+  "header_bounds": [
+    162,
+    152,
+    1158,
+    467
+  ],
+  "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/pattie.png",
+  "source_evidence_sha256": "2468080b8fb2dafac2ced92e1f042380db5b45c938aff3083049cc126f696f04"
+}

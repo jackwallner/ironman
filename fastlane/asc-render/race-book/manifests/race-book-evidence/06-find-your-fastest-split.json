@@ -1,0 +1,68 @@
+{
+  "filename": "06-find-your-fastest-split.png",
+  "path": "race-book-evidence/06-find-your-fastest-split.png",
+  "output_sha256": "cebeacd69d0edcf2361f7f59ec073369fabbe12aa3c7b61668ccd93540eb794a",
+  "output_size": [
+    1320,
+    2868
+  ],
+  "device": "iphone",
+  "header": "Find your fastest split",
+  "pitch": {
+    "benefit": "See your fastest swim, bike, run, and transition splits at a glance",
+    "problem": "Personal bests are easy to lose inside a long list of finished races.",
+    "advantage": "Bests ranks each discipline while keeping race distance comparisons honest.",
+    "header_problem": "a long race list",
+    "header_advantage": "fastest split at a glance",
+    "search_terms": [
+      "personal bests",
+      "race splits"
+    ],
+    "proof": "The literal Bests capture shows split rankings sourced from the official race history."
+  },
+  "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/bests.png",
+  "source_sha256": "efc5c5e8aefe16490556208b48f3130dc441258efca06c02977ae6fa0caf0411",
+  "background_asset": null,
+  "background_asset_sha256": null,
+  "background_override": null,
+  "foreground": "manifests/race-book-evidence/06-find-your-fastest-split.foreground.png",
+  "foreground_sha256": "b487cd35b5e4503eb0c16705b4a52b086de173bab7f96816d18225bf66a42261",
+  "ui_mask": "manifests/race-book-evidence/06-find-your-fastest-split.ui-mask.png",
+  "ui_coverage": 0.6078,
+  "imagegen_received_ui_source": false,
+  "target": "iphone_69",
+  "size": [
+    1320,
+    2868
+  ],
+  "background_mode": "theme",
+  "background_id": "theme",
+  "background_top": "#071A2F",
+  "background_bottom": "#102D4D",
+  "background_asset_applied": false,
+  "phone": {
+    "x": 127,
+    "y": 560,
+    "width": 1066,
+    "height": 2273,
+    "screen_x": 146,
+    "screen_y": 579,
+    "screen_width": 1028,
+    "screen_height": 2235
+  },
+  "header_only": true,
+  "compositor_text_layers": [
+    "header"
+  ],
+  "header_font_size": 164,
+  "header_lines": 2,
+  "header_text": "Find your fastest split",
+  "header_bounds": [
+    92,
+    152,
+    1228,
+    465
+  ],
+  "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/bests.png",
+  "source_evidence_sha256": "efc5c5e8aefe16490556208b48f3130dc441258efca06c02977ae6fa0caf0411"
+}

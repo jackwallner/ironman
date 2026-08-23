@@ -1,0 +1,68 @@
+{
+  "filename": "01-turn-history-into-a-story.png",
+  "path": "race-book-evidence/01-turn-history-into-a-story.png",
+  "output_sha256": "664a472dd34ba4ad4e319719e340308adb2e4c45beab0ee3c997a2c8b78f8953",
+  "output_size": [
+    1320,
+    2868
+  ],
+  "device": "iphone",
+  "header": "Turn your race history into a story",
+  "pitch": {
+    "benefit": "See a complete racing career as one meaningful story instead of a pile of event pages",
+    "problem": "A finish history is difficult to understand when every race lives on a different results page.",
+    "advantage": "Race Book gathers personal bests, progression, and official history after one name search.",
+    "header_problem": "scattered results",
+    "header_advantage": "one race story",
+    "search_terms": [
+      "race history",
+      "triathlon race results"
+    ],
+    "proof": "The literal Race Book capture shows the athlete's personal bests and progression cards built from the claimed history."
+  },
+  "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book.png",
+  "source_sha256": "2606886381dce375d2b3e281ac6b47031f2c83ff9782dbdd730651c6dd1353c7",
+  "background_asset": null,
+  "background_asset_sha256": null,
+  "background_override": null,
+  "foreground": "manifests/race-book-evidence/01-turn-history-into-a-story.foreground.png",
+  "foreground_sha256": "43f4665d8ebb3cb66f3be5ac50de6fed7f791e7d39ba4ecf075afbf76e7e404c",
+  "ui_mask": "manifests/race-book-evidence/01-turn-history-into-a-story.ui-mask.png",
+  "ui_coverage": 0.6078,
+  "imagegen_received_ui_source": false,
+  "target": "iphone_69",
+  "size": [
+    1320,
+    2868
+  ],
+  "background_mode": "theme",
+  "background_id": "theme",
+  "background_top": "#071A2F",
+  "background_bottom": "#102D4D",
+  "background_asset_applied": false,
+  "phone": {
+    "x": 127,
+    "y": 560,
+    "width": 1066,
+    "height": 2273,
+    "screen_x": 146,
+    "screen_y": 579,
+    "screen_width": 1028,
+    "screen_height": 2235
+  },
+  "header_only": true,
+  "compositor_text_layers": [
+    "header"
+  ],
+  "header_font_size": 148,
+  "header_lines": 2,
+  "header_text": "Turn your race history into a story",
+  "header_bounds": [
+    98,
+    149,
+    1222,
+    432
+  ],
+  "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book.png",
+  "source_evidence_sha256": "2606886381dce375d2b3e281ac6b47031f2c83ff9782dbdd730651c6dd1353c7"
+}

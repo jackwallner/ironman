@@ -1,0 +1,311 @@
+{
+  "app": "iron-splits",
+  "display_name": "IM Iron Splits",
+  "capture_report": "asc-capture/race-book/capture-report.json",
+  "target": "iphone_69",
+  "copy_contract": "single-header-benefit-story-v3",
+  "market": {
+    "category": "triathlon and endurance race-history apps",
+    "audience": "athletes who want their published race history, splits, and progress in one private place",
+    "problem": "Official results are scattered across event pages, and a finish time alone does not explain where an athlete found or lost time.",
+    "advantage": "IM Iron Splits finds published results by name, keeps race kinds comparable, ranks every split, and turns the career record into a private Race Book with comparison and export tools.",
+    "competitive_context": "Event result pages show one race at a time, while training platforms usually require manual entry. IM Iron Splits uses published results as the source of truth, needs no account, and keeps the record on the phone.",
+    "search_intent": [
+      "triathlon race results",
+      "race splits",
+      "swim bike run",
+      "race history",
+      "personal bests"
+    ],
+    "proof_points": [
+      {
+        "claim": "The Race Book capture shows career personal bests and progression assembled from the claimed published results.",
+        "source": "asc-capture/race-book/race-book.png"
+      },
+      {
+        "claim": "The Race Book compare action capture shows like-for-like comparison as a distinct paid action.",
+        "source": "asc-capture/race-book/race-book-compare.png"
+      },
+      {
+        "claim": "The race detail capture shows official splits, ranks, and field context for an individual result.",
+        "source": "asc-capture/race-book/race-detail.png"
+      }
+    ]
+  },
+  "theme": {
+    "background": "#071A2F",
+    "background_2": "#102D4D",
+    "ink": "#F7FAFD",
+    "muted": "#A8B7C8",
+    "accent": "#F29A4A",
+    "accent_2": "#70C8A0",
+    "headline_font": "rounded",
+    "body_font": "sans"
+  },
+  "capture": {
+    "mode": "command",
+    "lease": "ironsplits-asc",
+    "project_root": "~/ironman",
+    "command": [
+      "bash",
+      "scripts/capture-asc-screenshots.sh",
+      "{udid}",
+      "{output}"
+    ],
+    "expected_screenshot_count": 8,
+    "expected_size": [1206, 2622]
+  },
+  "sets": [
+    {
+      "id": "race-book-evidence",
+      "submission": true,
+      "style": "navy-race-book",
+      "story": {
+        "throughline": "Turn scattered race results into a clear private history with proof in every split",
+        "sequence": ["problem", "mechanism", "proof"]
+      },
+      "frames": [
+        {
+          "filename": "01-turn-history-into-a-story.png",
+          "header": "Turn your race history into a story",
+          "story_role": "problem",
+          "story_focus": "race history into a story",
+          "pitch": {
+            "benefit": "See a complete racing career as one meaningful story instead of a pile of event pages",
+            "problem": "A finish history is difficult to understand when every race lives on a different results page.",
+            "advantage": "Race Book gathers personal bests, progression, and official history after one name search.",
+            "header_problem": "scattered results",
+            "header_advantage": "one race story",
+            "search_terms": ["race history", "triathlon race results"],
+            "proof": "The literal Race Book capture shows the athlete's personal bests and progression cards built from the claimed history."
+          },
+          "source": "asc-capture/race-book/race-book.png",
+          "source_evidence": "asc-capture/race-book/race-book.png",
+          "capture_flow": "repo-command",
+          "evidence_status": "canonical",
+          "device": "iphone",
+          "layout": {
+            "header_top": 110,
+            "header_size": 164,
+            "header_min_size": 140,
+            "header_max_lines": 2,
+            "header_margin": 90,
+            "phone_top": 560,
+            "bottom_margin": 36,
+            "phone_width": 1110
+          }
+        },
+        {
+          "filename": "02-see-where-you-found-time.png",
+          "header": "See where you found time",
+          "story_role": "mechanism",
+          "story_focus": "where you found time",
+          "pitch": {
+            "benefit": "Find the race legs that made your latest result faster or slower",
+            "problem": "Two finish times do not explain which discipline changed between races.",
+            "advantage": "Race Book offers like-for-like comparison by distance and exposes the leg-level action from the same official splits.",
+            "header_problem": "two finish times",
+            "header_advantage": "time by leg",
+            "search_terms": ["race splits", "personal bests"],
+            "proof": "The literal Race Book capture shows the Compare two races action in the paid Race Book surface."
+          },
+          "source": "asc-capture/race-book/race-book-compare.png",
+          "source_evidence": "asc-capture/race-book/race-book-compare.png",
+          "capture_flow": "repo-command",
+          "evidence_status": "canonical",
+          "device": "iphone",
+          "layout": {
+            "header_top": 110,
+            "header_size": 164,
+            "header_min_size": 140,
+            "header_max_lines": 2,
+            "header_margin": 90,
+            "phone_top": 560,
+            "bottom_margin": 36,
+            "phone_width": 1110
+          }
+        },
+        {
+          "filename": "03-know-where-every-second-went.png",
+          "header": "Know where every second went",
+          "story_role": "proof",
+          "story_focus": "where every second went",
+          "pitch": {
+            "benefit": "Read every swim, transition, bike, and run split beside its ranks and field context",
+            "problem": "A finish time without split evidence cannot show what actually happened in the race.",
+            "advantage": "The race detail view keeps official splits, ranks, field size, and percentile together for one result.",
+            "header_problem": "one finish time",
+            "header_advantage": "split evidence",
+            "search_terms": ["swim bike run", "race splits"],
+            "proof": "The literal race detail capture shows official splits and the field context used to interpret them."
+          },
+          "source": "asc-capture/race-book/race-detail.png",
+          "source_evidence": "asc-capture/race-book/race-detail.png",
+          "capture_flow": "repo-command",
+          "evidence_status": "canonical",
+          "device": "iphone",
+          "layout": {
+            "header_top": 110,
+            "header_size": 164,
+            "header_min_size": 140,
+            "header_max_lines": 2,
+            "header_margin": 90,
+            "phone_top": 560,
+            "bottom_margin": 36,
+            "phone_width": 1110
+          }
+        },
+        {
+          "filename": "04-keep-every-race-together.png",
+          "header": "Keep every race together",
+          "story_role": "support",
+          "story_focus": "every race together",
+          "pitch": {
+            "benefit": "Keep the full result history, bibs, splits, and places in one private locker",
+            "problem": "Race records become hard to revisit when they are spread across organizers and browser tabs.",
+            "advantage": "The locker stores the claimed athlete's complete published history on the phone with no account.",
+            "header_problem": "scattered race records",
+            "header_advantage": "one private locker",
+            "search_terms": ["triathlon race results", "race history"],
+            "proof": "The literal locker capture shows multiple official finishes grouped under the claimed athlete."
+          },
+          "source": "asc-capture/race-book/locker.png",
+          "source_evidence": "asc-capture/race-book/locker.png",
+          "capture_flow": "repo-command",
+          "evidence_status": "canonical",
+          "device": "iphone",
+          "layout": {
+            "header_top": 110,
+            "header_size": 164,
+            "header_min_size": 140,
+            "header_max_lines": 2,
+            "header_margin": 90,
+            "phone_top": 560,
+            "bottom_margin": 36,
+            "phone_width": 1110
+          }
+        },
+        {
+          "filename": "05-build-a-race-book-you-can-share.png",
+          "header": "Build a race book you can share",
+          "story_role": "support",
+          "story_focus": "race book you can share",
+          "pitch": {
+            "benefit": "Turn the career record into a polished artifact for a coach, family member, or your own archive",
+            "problem": "A useful race history is difficult to share when it exists only as raw result pages.",
+            "advantage": "Race Book includes a paid PDF and image export action with official splits, podiums, stats, and optional private notes.",
+            "header_problem": "raw result pages",
+            "header_advantage": "shareable race book",
+            "search_terms": ["race history", "triathlon results"],
+            "proof": "The literal Race Book capture shows the Build PDF and image action in the paid export surface."
+          },
+          "source": "asc-capture/race-book/race-book-export.png",
+          "source_evidence": "asc-capture/race-book/race-book-export.png",
+          "capture_flow": "repo-command",
+          "evidence_status": "canonical",
+          "device": "iphone",
+          "layout": {
+            "header_top": 110,
+            "header_size": 164,
+            "header_min_size": 140,
+            "header_max_lines": 2,
+            "header_margin": 90,
+            "phone_top": 560,
+            "bottom_margin": 36,
+            "phone_width": 1110
+          }
+        },
+        {
+          "filename": "06-find-your-fastest-split.png",
+          "header": "Find your fastest split",
+          "story_role": "support",
+          "story_focus": "fastest split",
+          "pitch": {
+            "benefit": "See your fastest swim, bike, run, and transition splits at a glance",
+            "problem": "Personal bests are easy to lose inside a long list of finished races.",
+            "advantage": "Bests ranks each discipline while keeping race distance comparisons honest.",
+            "header_problem": "a long race list",
+            "header_advantage": "fastest split at a glance",
+            "search_terms": ["personal bests", "race splits"],
+            "proof": "The literal Bests capture shows split rankings sourced from the official race history."
+          },
+          "source": "asc-capture/race-book/bests.png",
+          "source_evidence": "asc-capture/race-book/bests.png",
+          "capture_flow": "repo-command",
+          "evidence_status": "canonical",
+          "device": "iphone",
+          "layout": {
+            "header_top": 110,
+            "header_size": 164,
+            "header_min_size": 140,
+            "header_max_lines": 2,
+            "header_margin": 90,
+            "phone_top": 560,
+            "bottom_margin": 36,
+            "phone_width": 1110
+          }
+        },
+        {
+          "filename": "07-learn-from-every-race-day.png",
+          "header": "Learn from every race day",
+          "story_role": "support",
+          "story_focus": "learn from every race day",
+          "pitch": {
+            "benefit": "Pair the result history with a focused coaching pointer for the next start",
+            "problem": "A result can show what happened without helping an athlete revisit race-day choices.",
+            "advantage": "The Pointers library organizes real coaching clips by race leg and keeps the core library free.",
+            "header_problem": "a result without context",
+            "header_advantage": "race-day pointer",
+            "search_terms": ["triathlon tips", "swim bike run"],
+            "proof": "The literal Pattie capture shows the app's coaching pointer surface organized around the athlete's question."
+          },
+          "source": "asc-capture/race-book/pattie.png",
+          "source_evidence": "asc-capture/race-book/pattie.png",
+          "capture_flow": "repo-command",
+          "evidence_status": "canonical",
+          "device": "iphone",
+          "layout": {
+            "header_top": 110,
+            "header_size": 164,
+            "header_min_size": 140,
+            "header_max_lines": 2,
+            "header_margin": 90,
+            "phone_top": 560,
+            "bottom_margin": 36,
+            "phone_width": 1110
+          }
+        },
+        {
+          "filename": "08-keep-your-race-record-private.png",
+          "header": "Keep your race record private",
+          "story_role": "support",
+          "story_focus": "race record private",
+          "pitch": {
+            "benefit": "Keep the race record and private notes on your phone without creating an account",
+            "problem": "Athletes should not have to hand over a profile or publish their race history to review it.",
+            "advantage": "IM Iron Splits has no account system and stores the claimed history and notes locally.",
+            "header_problem": "a public profile",
+            "header_advantage": "private on-device record",
+            "search_terms": ["private race log", "triathlon race history"],
+            "proof": "The literal Settings capture shows the local-only privacy and data controls."
+          },
+          "source": "asc-capture/race-book/settings.png",
+          "source_evidence": "asc-capture/race-book/settings.png",
+          "capture_flow": "repo-command",
+          "evidence_status": "canonical",
+          "device": "iphone",
+          "layout": {
+            "header_top": 110,
+            "header_size": 164,
+            "header_min_size": 140,
+            "header_max_lines": 2,
+            "header_margin": 90,
+            "phone_top": 560,
+            "bottom_margin": 36,
+            "phone_width": 1110
+          }
+        }
+      ]
+    }
+  ]
+}

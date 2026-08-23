@@ -1,0 +1,1 @@
+triatlon,rezultati utrka,međuvremena,plivanje,bicikl,trčanje,startni broj,završno vrijeme,rekord

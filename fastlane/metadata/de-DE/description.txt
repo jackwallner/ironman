@@ -1,0 +1,12 @@
+Jedes Rennen, das du beendet hast, an einem Ort und so sortiert, wie du deine Leistung wirklich betrachtest.
+
+Gib deinen Namen einmal ein. IM Iron Splits findet veröffentlichte Ergebnisse und zeigt Schwimm-, Wechsel-, Rad- und Laufzeiten, Startnummern sowie Platzierungen in Altersklasse und Gesamtfeld.
+
+Sieh deine Bestzeiten, vergleiche Rennen derselben Distanz und ordne jede Zeit im Feld ein. Race Book schaltet Vergleiche und PDF- oder Bildexport mit einem einmaligen Kauf auf Lebenszeit frei, ohne Abo und ohne Gebühr pro Export.
+
+Der Kern bleibt kostenlos: Suche, vollständige Historie, Zwischenzeiten, Ranglisten, Notizen und die Pointers-Bibliothek.
+
+Datenschutz: https://jackwallner.github.io/ironman/privacy-policy.html
+Nutzungsbedingungen: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
+IM Iron Splits ist unabhängig und nicht mit Rennveranstaltern oder Zeitmessern verbunden.

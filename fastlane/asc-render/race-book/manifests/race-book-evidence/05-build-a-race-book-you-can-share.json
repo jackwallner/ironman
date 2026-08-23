@@ -1,0 +1,68 @@
+{
+  "filename": "05-build-a-race-book-you-can-share.png",
+  "path": "race-book-evidence/05-build-a-race-book-you-can-share.png",
+  "output_sha256": "3f037f12bec98c7aae55f67939726ba89e21a8bbcf6108c8c10a9d78a0c4badb",
+  "output_size": [
+    1320,
+    2868
+  ],
+  "device": "iphone",
+  "header": "Build a race book you can share",
+  "pitch": {
+    "benefit": "Turn the career record into a polished artifact for a coach, family member, or your own archive",
+    "problem": "A useful race history is difficult to share when it exists only as raw result pages.",
+    "advantage": "Race Book includes a paid PDF and image export action with official splits, podiums, stats, and optional private notes.",
+    "header_problem": "raw result pages",
+    "header_advantage": "shareable race book",
+    "search_terms": [
+      "race history",
+      "triathlon results"
+    ],
+    "proof": "The literal Race Book capture shows the Build PDF and image action in the paid export surface."
+  },
+  "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-export.png",
+  "source_sha256": "6ce14401a3b0ef43feec497d07f1f308f4e01722b93faae2e937023dd7eb6d95",
+  "background_asset": null,
+  "background_asset_sha256": null,
+  "background_override": null,
+  "foreground": "manifests/race-book-evidence/05-build-a-race-book-you-can-share.foreground.png",
+  "foreground_sha256": "b6fe7b3ef5ea28059f7e9dc26f2700560a17da6b3596284bac0c884fbd5cf426",
+  "ui_mask": "manifests/race-book-evidence/05-build-a-race-book-you-can-share.ui-mask.png",
+  "ui_coverage": 0.6078,
+  "imagegen_received_ui_source": false,
+  "target": "iphone_69",
+  "size": [
+    1320,
+    2868
+  ],
+  "background_mode": "theme",
+  "background_id": "theme",
+  "background_top": "#071A2F",
+  "background_bottom": "#102D4D",
+  "background_asset_applied": false,
+  "phone": {
+    "x": 127,
+    "y": 560,
+    "width": 1066,
+    "height": 2273,
+    "screen_x": 146,
+    "screen_y": 579,
+    "screen_width": 1028,
+    "screen_height": 2235
+  },
+  "header_only": true,
+  "compositor_text_layers": [
+    "header"
+  ],
+  "header_font_size": 156,
+  "header_lines": 2,
+  "header_text": "Build a race book you can share",
+  "header_bounds": [
+    103,
+    149,
+    1217,
+    450
+  ],
+  "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-export.png",
+  "source_evidence_sha256": "6ce14401a3b0ef43feec497d07f1f308f4e01722b93faae2e937023dd7eb6d95"
+}

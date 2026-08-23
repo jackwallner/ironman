@@ -1,0 +1,1 @@
+triathlon,loppresultat,mellantider,simning,cykling,löpning,nummer,sluttid,personligt rekord

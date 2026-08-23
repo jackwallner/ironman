@@ -1,0 +1,460 @@
+{
+  "app": "iron-splits",
+  "target": "iphone_69",
+  "expected_size": [
+    1320,
+    2868
+  ],
+  "copy_contract": "single-header-benefit-story-v3",
+  "market": {
+    "category": "triathlon and endurance race-history apps",
+    "audience": "athletes who want their published race history, splits, and progress in one private place",
+    "problem": "Official results are scattered across event pages, and a finish time alone does not explain where an athlete found or lost time.",
+    "advantage": "IM Iron Splits finds published results by name, keeps race kinds comparable, ranks every split, and turns the career record into a private Race Book with comparison and export tools.",
+    "competitive_context": "Event result pages show one race at a time, while training platforms usually require manual entry. IM Iron Splits uses published results as the source of truth, needs no account, and keeps the record on the phone.",
+    "search_intent": [
+      "triathlon race results",
+      "race splits",
+      "swim bike run",
+      "race history",
+      "personal bests"
+    ],
+    "proof_points": [
+      {
+        "claim": "The Race Book capture shows career personal bests and progression assembled from the claimed published results.",
+        "source": "asc-capture/race-book/race-book.png"
+      },
+      {
+        "claim": "The Race Book compare action capture shows like-for-like comparison as a distinct paid action.",
+        "source": "asc-capture/race-book/race-book-compare.png"
+      },
+      {
+        "claim": "The race detail capture shows official splits, ranks, and field context for an individual result.",
+        "source": "asc-capture/race-book/race-detail.png"
+      }
+    ]
+  },
+  "sets": [
+    {
+      "id": "race-book-evidence",
+      "submission": true,
+      "story": {
+        "throughline": "Turn scattered race results into a clear private history with proof in every split",
+        "sequence": [
+          "problem",
+          "mechanism",
+          "proof"
+        ]
+      },
+      "frames": [
+        {
+          "filename": "01-turn-history-into-a-story.png",
+          "path": "race-book-evidence/01-turn-history-into-a-story.png",
+          "header": "Turn your race history into a story",
+          "pitch": {
+            "benefit": "See a complete racing career as one meaningful story instead of a pile of event pages",
+            "problem": "A finish history is difficult to understand when every race lives on a different results page.",
+            "advantage": "Race Book gathers personal bests, progression, and official history after one name search.",
+            "header_problem": "scattered results",
+            "header_advantage": "one race story",
+            "search_terms": [
+              "race history",
+              "triathlon race results"
+            ],
+            "proof": "The literal Race Book capture shows the athlete's personal bests and progression cards built from the claimed history."
+          },
+          "capture_flow": "repo-command",
+          "evidence_status": "canonical",
+          "benefit": "See a complete racing career as one meaningful story instead of a pile of event pages",
+          "generic_header_terms": [
+            "history"
+          ],
+          "size": [
+            1320,
+            2868
+          ],
+          "mode": "RGB",
+          "header_only": true,
+          "compositor_text_layers": [
+            "header"
+          ],
+          "header_font_size": 148,
+          "header_lines": 2,
+          "header_bounds": [
+            98,
+            149,
+            1222,
+            432
+          ],
+          "story_role": "problem",
+          "story_focus": "race history into a story",
+          "background_id": "theme",
+          "foreground_sha256": "43f4665d8ebb3cb66f3be5ac50de6fed7f791e7d39ba4ecf075afbf76e7e404c",
+          "background_contrast": {
+            "top": 16.74,
+            "bottom": 13.32
+          },
+          "thumbnail_ocr": "a1 al @ Make your history tell astory See the best of your career, where your time is moving, and what each race contributed. Compare and export with one lifetime unlock Race Book unlocked CAREER AT A GLANCE 5 5 PERSONAL BESTS pa Finish 8:36:16 & Swim 1:02:46 Bike & 4:35:39 Run 22:42:51, Transitions ea",
+          "corner_contrast_vs_ink": 14.99
+        },
+        {
+          "filename": "02-see-where-you-found-time.png",
+          "path": "race-book-evidence/02-see-where-you-found-time.png",
+          "header": "See where you found time",
+          "pitch": {
+            "benefit": "Find the race legs that made your latest result faster or slower",
+            "problem": "Two finish times do not explain which discipline changed between races.",
+            "advantage": "Race Book offers like-for-like comparison by distance and exposes the leg-level action from the same official splits.",
+            "header_problem": "two finish times",
+            "header_advantage": "time by leg",
+            "search_terms": [
+              "race splits",
+              "personal bests"
+            ],
+            "proof": "The literal Race Book capture shows the Compare two races action in the paid Race Book surface."
+          },
+          "capture_flow": "repo-command",
+          "evidence_status": "canonical",
+          "benefit": "Find the race legs that made your latest result faster or slower",
+          "generic_header_terms": [],
+          "size": [
+            1320,
+            2868
+          ],
+          "mode": "RGB",
+          "header_only": true,
+          "compositor_text_layers": [
+            "header"
+          ],
+          "header_font_size": 164,
+          "header_lines": 2,
+          "header_bounds": [
+            155,
+            152,
+            1165,
+            438
+          ],
+          "story_role": "mechanism",
+          "story_focus": "where you found time",
+          "background_id": "theme",
+          "foreground_sha256": "ac7aa58836fabd36a0cf2bd6ce29a1de44af89a61fc36a004eeef83a0c88e5ef",
+          "background_contrast": {
+            "top": 16.74,
+            "bottom": 13.32
+          },
+          "thumbnail_ocr": "a1 al \u00a9 Laer 2242251, Transitions e104 proonession 9:38:11 S 8:36:16 IRONMAN Tulsa IRONMAN Wisconsin 1015S faster than the frst compare races Put two full distance finishes side by side and Compare two races ; ss Som > EXPORT YOUR RACE BOOK with your history, official spits, podiums, career stats and private notes. Build PDF and image",
+          "corner_contrast_vs_ink": 14.99
+        },
+        {
+          "filename": "03-know-where-every-second-went.png",
+          "path": "race-book-evidence/03-know-where-every-second-went.png",
+          "header": "Know where every second went",
+          "pitch": {
+            "benefit": "Read every swim, transition, bike, and run split beside its ranks and field context",
+            "problem": "A finish time without split evidence cannot show what actually happened in the race.",
+            "advantage": "The race detail view keeps official splits, ranks, field size, and percentile together for one result.",
+            "header_problem": "one finish time",
+            "header_advantage": "split evidence",
+            "search_terms": [
+              "swim bike run",
+              "race splits"
+            ],
+            "proof": "The literal race detail capture shows official splits and the field context used to interpret them."
+          },
+          "capture_flow": "repo-command",
+          "evidence_status": "canonical",
+          "benefit": "Read every swim, transition, bike, and run split beside its ranks and field context",
+          "generic_header_terms": [],
+          "size": [
+            1320,
+            2868
+          ],
+          "mode": "RGB",
+          "header_only": true,
+          "compositor_text_layers": [
+            "header"
+          ],
+          "header_font_size": 148,
+          "header_lines": 2,
+          "header_bounds": [
+            93,
+            148,
+            1226,
+            406
+          ],
+          "story_role": "proof",
+          "story_focus": "where every second went",
+          "background_id": "theme",
+          "foreground_sha256": "ebe659660128526ac8ec9f5141a27d9fd4c50eb7e0520bf3d61fe9bdfe4acc1c",
+          "background_contrast": {
+            "top": 16.74,
+            "bottom": 13.32
+          },
+          "thumbnail_ocr": "Know where every second went (@) 2025 IRONMAN Wisconsin 8:36:16 ist : ist ist swim @ 1:02:46 1 5:59 S Bike 4:41:00 T2 3:48 ~ Fun @\u00ae 2:42:51 eo = a 5 #",
+          "corner_contrast_vs_ink": 14.99
+        },
+        {
+          "filename": "04-keep-every-race-together.png",
+          "path": "race-book-evidence/04-keep-every-race-together.png",
+          "header": "Keep every race together",
+          "pitch": {
+            "benefit": "Keep the full result history, bibs, splits, and places in one private locker",
+            "problem": "Race records become hard to revisit when they are spread across organizers and browser tabs.",
+            "advantage": "The locker stores the claimed athlete's complete published history on the phone with no account.",
+            "header_problem": "scattered race records",
+            "header_advantage": "one private locker",
+            "search_terms": [
+              "triathlon race results",
+              "race history"
+            ],
+            "proof": "The literal locker capture shows multiple official finishes grouped under the claimed athlete."
+          },
+          "capture_flow": "repo-command",
+          "evidence_status": "canonical",
+          "benefit": "Keep the full result history, bibs, splits, and places in one private locker",
+          "generic_header_terms": [],
+          "size": [
+            1320,
+            2868
+          ],
+          "mode": "RGB",
+          "header_only": true,
+          "compositor_text_layers": [
+            "header"
+          ],
+          "header_font_size": 164,
+          "header_lines": 2,
+          "header_bounds": [
+            109,
+            152,
+            1211,
+            467
+          ],
+          "story_role": "support",
+          "story_focus": "every race together",
+          "background_id": "theme",
+          "foreground_sha256": "a5a4eb0c87e36491be89f90f16a3c0e66c644868758064bdc40861b49e35adf5",
+          "background_contrast": {
+            "top": 16.74,
+            "bottom": 13.32
+          },
+          "thumbnail_ocr": "Keep every race together Daniel Winek 5 5 @ IRONMAN Wisconsin 8:36:16 aD cap exp IRONMAN World 8:40:36 Championship - Men ap IRONMAN Texas 9:03:38 @\u00ae = @ 6&6 #",
+          "corner_contrast_vs_ink": 14.99
+        },
+        {
+          "filename": "05-build-a-race-book-you-can-share.png",
+          "path": "race-book-evidence/05-build-a-race-book-you-can-share.png",
+          "header": "Build a race book you can share",
+          "pitch": {
+            "benefit": "Turn the career record into a polished artifact for a coach, family member, or your own archive",
+            "problem": "A useful race history is difficult to share when it exists only as raw result pages.",
+            "advantage": "Race Book includes a paid PDF and image export action with official splits, podiums, stats, and optional private notes.",
+            "header_problem": "raw result pages",
+            "header_advantage": "shareable race book",
+            "search_terms": [
+              "race history",
+              "triathlon results"
+            ],
+            "proof": "The literal Race Book capture shows the Build PDF and image action in the paid export surface."
+          },
+          "capture_flow": "repo-command",
+          "evidence_status": "canonical",
+          "benefit": "Turn the career record into a polished artifact for a coach, family member, or your own archive",
+          "generic_header_terms": [],
+          "size": [
+            1320,
+            2868
+          ],
+          "mode": "RGB",
+          "header_only": true,
+          "compositor_text_layers": [
+            "header"
+          ],
+          "header_font_size": 156,
+          "header_lines": 2,
+          "header_bounds": [
+            103,
+            149,
+            1217,
+            450
+          ],
+          "story_role": "support",
+          "story_focus": "race book you can share",
+          "background_id": "theme",
+          "foreground_sha256": "b6fe7b3ef5ea28059f7e9dc26f2700560a17da6b3596284bac0c884fbd5cf426",
+          "background_contrast": {
+            "top": 16.74,
+            "bottom": 13.32
+          },
+          "thumbnail_ocr": "a1 al \u00a9 Laer 2242251, Transitions e104 proonession 9:38:11 S 8:36:16 IRONMAN Tulsa IRONMAN Wisconsin 1015S faster than the frst compare races Put two full distance finishes side by side and Compare two races ; ss Som > EXPORT YOUR RACE BOOK with your history, official spits, podiums, career stats and private notes. Build PDF and image",
+          "corner_contrast_vs_ink": 14.99
+        },
+        {
+          "filename": "06-find-your-fastest-split.png",
+          "path": "race-book-evidence/06-find-your-fastest-split.png",
+          "header": "Find your fastest split",
+          "pitch": {
+            "benefit": "See your fastest swim, bike, run, and transition splits at a glance",
+            "problem": "Personal bests are easy to lose inside a long list of finished races.",
+            "advantage": "Bests ranks each discipline while keeping race distance comparisons honest.",
+            "header_problem": "a long race list",
+            "header_advantage": "fastest split at a glance",
+            "search_terms": [
+              "personal bests",
+              "race splits"
+            ],
+            "proof": "The literal Bests capture shows split rankings sourced from the official race history."
+          },
+          "capture_flow": "repo-command",
+          "evidence_status": "canonical",
+          "benefit": "See your fastest swim, bike, run, and transition splits at a glance",
+          "generic_header_terms": [],
+          "size": [
+            1320,
+            2868
+          ],
+          "mode": "RGB",
+          "header_only": true,
+          "compositor_text_layers": [
+            "header"
+          ],
+          "header_font_size": 164,
+          "header_lines": 2,
+          "header_bounds": [
+            92,
+            152,
+            1228,
+            465
+          ],
+          "story_role": "support",
+          "story_focus": "fastest split",
+          "background_id": "theme",
+          "foreground_sha256": "b487cd35b5e4503eb0c16705b4a52b086de173bab7f96816d18225bf66a42261",
+          "background_contrast": {
+            "top": 16.74,
+            "bottom": 13.32
+          },
+          "thumbnail_ocr": "oa al > Bests 8:36:16 IRONMAN Wisconsin IRONMAN Wisconsin 8:36:16 IRONMAN World ao: 2 Championship - Men 8:40:36 5 IRONMAN Texas 9:03:30 IRONMAN Tulsa 9:38:11 (=) oO 6 #",
+          "corner_contrast_vs_ink": 14.99
+        },
+        {
+          "filename": "07-learn-from-every-race-day.png",
+          "path": "race-book-evidence/07-learn-from-every-race-day.png",
+          "header": "Learn from every race day",
+          "pitch": {
+            "benefit": "Pair the result history with a focused coaching pointer for the next start",
+            "problem": "A result can show what happened without helping an athlete revisit race-day choices.",
+            "advantage": "The Pointers library organizes real coaching clips by race leg and keeps the core library free.",
+            "header_problem": "a result without context",
+            "header_advantage": "race-day pointer",
+            "search_terms": [
+              "triathlon tips",
+              "swim bike run"
+            ],
+            "proof": "The literal Pattie capture shows the app's coaching pointer surface organized around the athlete's question."
+          },
+          "capture_flow": "repo-command",
+          "evidence_status": "canonical",
+          "benefit": "Pair the result history with a focused coaching pointer for the next start",
+          "generic_header_terms": [],
+          "size": [
+            1320,
+            2868
+          ],
+          "mode": "RGB",
+          "header_only": true,
+          "compositor_text_layers": [
+            "header"
+          ],
+          "header_font_size": 164,
+          "header_lines": 2,
+          "header_bounds": [
+            162,
+            152,
+            1158,
+            467
+          ],
+          "story_role": "support",
+          "story_focus": "learn from every race day",
+          "background_id": "theme",
+          "foreground_sha256": "6e6308cbdffb11eb709ae9acccdc03ed8f8a1a37690bd7c4a7c12bdc8ee47ca0",
+          "background_contrast": {
+            "top": 16.74,
+            "bottom": 13.32
+          },
+          "thumbnail_ocr": "Learn from every race day My first triathlon x > A full distance B > A marathon or run race Bw > a i= & co}",
+          "corner_contrast_vs_ink": 14.99
+        },
+        {
+          "filename": "08-keep-your-race-record-private.png",
+          "path": "race-book-evidence/08-keep-your-race-record-private.png",
+          "header": "Keep your race record private",
+          "pitch": {
+            "benefit": "Keep the race record and private notes on your phone without creating an account",
+            "problem": "Athletes should not have to hand over a profile or publish their race history to review it.",
+            "advantage": "IM Iron Splits has no account system and stores the claimed history and notes locally.",
+            "header_problem": "a public profile",
+            "header_advantage": "private on-device record",
+            "search_terms": [
+              "private race log",
+              "triathlon race history"
+            ],
+            "proof": "The literal Settings capture shows the local-only privacy and data controls."
+          },
+          "capture_flow": "repo-command",
+          "evidence_status": "canonical",
+          "benefit": "Keep the race record and private notes on your phone without creating an account",
+          "generic_header_terms": [],
+          "size": [
+            1320,
+            2868
+          ],
+          "mode": "RGB",
+          "header_only": true,
+          "compositor_text_layers": [
+            "header"
+          ],
+          "header_font_size": 164,
+          "header_lines": 2,
+          "header_bounds": [
+            145,
+            152,
+            1174,
+            465
+          ],
+          "story_role": "support",
+          "story_focus": "race record private",
+          "background_id": "theme",
+          "foreground_sha256": "e742b7b1ef34cc7974286302158338dceb38e2d7d41784a44c16690b942d2992",
+          "background_contrast": {
+            "top": 16.74,
+            "bottom": 13.32
+          },
+          "thumbnail_ocr": "Keep your race record private",
+          "corner_contrast_vs_ink": 14.99
+        }
+      ],
+      "errors": [],
+      "warnings": [
+        "01-turn-history-into-a-story.png: thumbnail OCR missed header words ['turn', 'into']",
+        "02-see-where-you-found-time.png: thumbnail OCR missed header words ['see', 'where', 'found', 'time']",
+        "05-build-a-race-book-you-can-share.png: thumbnail OCR missed header words ['can', 'share']",
+        "06-find-your-fastest-split.png: thumbnail OCR missed header words ['find', 'your', 'fastest', 'split']"
+      ],
+      "status": "pass"
+    }
+  ],
+  "errors": [],
+  "warnings": [
+    "race-book-evidence: 01-turn-history-into-a-story.png: thumbnail OCR missed header words ['turn', 'into']",
+    "race-book-evidence: 02-see-where-you-found-time.png: thumbnail OCR missed header words ['see', 'where', 'found', 'time']",
+    "race-book-evidence: 05-build-a-race-book-you-can-share.png: thumbnail OCR missed header words ['can', 'share']",
+    "race-book-evidence: 06-find-your-fastest-split.png: thumbnail OCR missed header words ['find', 'your', 'fastest', 'split']"
+  ],
+  "release_requested": true,
+  "release_ready": true,
+  "disposition": "release-ready",
+  "capture_status": "ok",
+  "canonical_submission_evidence": true,
+  "status": "pass"
+}

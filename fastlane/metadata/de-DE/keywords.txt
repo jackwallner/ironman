@@ -1,0 +1,1 @@
+Triathlon,Rennresultate,Zwischenzeiten,Schwimmen,Radfahren,Laufen,Startnummer,Endzeit,Bestzeit

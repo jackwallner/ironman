@@ -1,0 +1,68 @@
+{
+  "filename": "03-know-where-every-second-went.png",
+  "path": "race-book-evidence/03-know-where-every-second-went.png",
+  "output_sha256": "6ddee2eb00d8e8386ff4d81dad8575a6ec47e3a3fa41f549b976f9603b01ec22",
+  "output_size": [
+    1320,
+    2868
+  ],
+  "device": "iphone",
+  "header": "Know where every second went",
+  "pitch": {
+    "benefit": "Read every swim, transition, bike, and run split beside its ranks and field context",
+    "problem": "A finish time without split evidence cannot show what actually happened in the race.",
+    "advantage": "The race detail view keeps official splits, ranks, field size, and percentile together for one result.",
+    "header_problem": "one finish time",
+    "header_advantage": "split evidence",
+    "search_terms": [
+      "swim bike run",
+      "race splits"
+    ],
+    "proof": "The literal race detail capture shows official splits and the field context used to interpret them."
+  },
+  "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-detail.png",
+  "source_sha256": "1a7b24ce5321b65239a1aa7f09a5b61432035bccdd9d00a06b02353b579b4ad3",
+  "background_asset": null,
+  "background_asset_sha256": null,
+  "background_override": null,
+  "foreground": "manifests/race-book-evidence/03-know-where-every-second-went.foreground.png",
+  "foreground_sha256": "ebe659660128526ac8ec9f5141a27d9fd4c50eb7e0520bf3d61fe9bdfe4acc1c",
+  "ui_mask": "manifests/race-book-evidence/03-know-where-every-second-went.ui-mask.png",
+  "ui_coverage": 0.6078,
+  "imagegen_received_ui_source": false,
+  "target": "iphone_69",
+  "size": [
+    1320,
+    2868
+  ],
+  "background_mode": "theme",
+  "background_id": "theme",
+  "background_top": "#071A2F",
+  "background_bottom": "#102D4D",
+  "background_asset_applied": false,
+  "phone": {
+    "x": 127,
+    "y": 560,
+    "width": 1066,
+    "height": 2273,
+    "screen_x": 146,
+    "screen_y": 579,
+    "screen_width": 1028,
+    "screen_height": 2235
+  },
+  "header_only": true,
+  "compositor_text_layers": [
+    "header"
+  ],
+  "header_font_size": 148,
+  "header_lines": 2,
+  "header_text": "Know where every second went",
+  "header_bounds": [
+    93,
+    148,
+    1226,
+    406
+  ],
+  "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-detail.png",
+  "source_evidence_sha256": "1a7b24ce5321b65239a1aa7f09a5b61432035bccdd9d00a06b02353b579b4ad3"
+}

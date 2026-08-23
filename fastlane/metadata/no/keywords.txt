@@ -1,0 +1,1 @@
+triatlon,løpsresultater,splitter,svømming,sykling,løping,startnummer,sluttid,personlig rekord

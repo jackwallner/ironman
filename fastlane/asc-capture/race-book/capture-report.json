@@ -1,0 +1,105 @@
+{
+  "status": "ok",
+  "manifest": "fastlane/asc-screenshots.json",
+  "app": "iron-splits",
+  "mode": "command",
+  "lease": "ironsplits",
+  "output": "fastlane/asc-capture/race-book",
+  "proof_only": false,
+  "checkout_options": [],
+  "lease_checked_in": true,
+  "screenshots": [
+    "bests.png",
+    "locker.png",
+    "pattie.png",
+    "race-book-compare.png",
+    "race-book-export.png",
+    "race-book.png",
+    "race-detail.png",
+    "settings.png"
+  ],
+  "flows": [
+    {
+      "id": "repo-command",
+      "screenshots": [
+        "bests.png",
+        "locker.png",
+        "pattie.png",
+        "race-book-compare.png",
+        "race-book-export.png",
+        "race-book.png",
+        "race-detail.png",
+        "settings.png"
+      ]
+    }
+  ],
+  "app_repo": {
+    "path": "~/ironman",
+    "git_commit": "e9c1b3a675129e7fa4c5495aa8225a7b43c8a44b"
+  },
+  "device": {
+    "udid": "3BA38835-1CCB-4BBA-8045-4F0DD14AED56",
+    "name": "agent-sim-4",
+    "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-26-3",
+    "device_type": "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro"
+  },
+  "source_result_bundle": "/tmp/ironman-asc-capture-2.xcresult",
+  "screenshot_records": [
+    {
+      "name": "bests.png",
+      "path": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/bests.png",
+      "size": [1206, 2622],
+      "mode": "RGB",
+      "sha256": "efc5c5e8aefe16490556208b48f3130dc441258efca06c02977ae6fa0caf0411"
+    },
+    {
+      "name": "locker.png",
+      "path": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/locker.png",
+      "size": [1206, 2622],
+      "mode": "RGB",
+      "sha256": "fd3c80ca63ed5cc61c86807e60ada264e01e73ad10e9dee16fbce73ac03436ac"
+    },
+    {
+      "name": "pattie.png",
+      "path": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/pattie.png",
+      "size": [1206, 2622],
+      "mode": "RGB",
+      "sha256": "2468080b8fb2dafac2ced92e1f042380db5b45c938aff3083049cc126f696f04"
+    },
+    {
+      "name": "race-book-compare.png",
+      "path": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-compare.png",
+      "size": [1206, 2622],
+      "mode": "RGB",
+      "sha256": "6ce14401a3b0ef43feec497d07f1f308f4e01722b93faae2e937023dd7eb6d95"
+    },
+    {
+      "name": "race-book-export.png",
+      "path": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-export.png",
+      "size": [1206, 2622],
+      "mode": "RGB",
+      "sha256": "6ce14401a3b0ef43feec497d07f1f308f4e01722b93faae2e937023dd7eb6d95"
+    },
+    {
+      "name": "race-book.png",
+      "path": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book.png",
+      "size": [1206, 2622],
+      "mode": "RGB",
+      "sha256": "2606886381dce375d2b3e281ac6b47031f2c83ff9782dbdd730651c6dd1353c7"
+    },
+    {
+      "name": "race-detail.png",
+      "path": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-detail.png",
+      "size": [1206, 2622],
+      "mode": "RGB",
+      "sha256": "1a7b24ce5321b65239a1aa7f09a5b61432035bccdd9d00a06b02353b579b4ad3"
+    },
+    {
+      "name": "settings.png",
+      "path": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/settings.png",
+      "size": [1206, 2622],
+      "mode": "RGB",
+      "sha256": "3f976f58684e35257bf20cc54bdd59ab261c1ad150ee5383dd89c78d7e0dac48"
+    }
+  ]
+}

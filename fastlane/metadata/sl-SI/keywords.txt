@@ -1,0 +1,1 @@
+triatlon,rezultati tekem,delni časi,plavanje,kolo,tek,štartna številka,končni čas,osebni rekord
