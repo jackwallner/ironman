@@ -43,15 +43,7 @@ final class ASCReleaseCaptureUITests: XCTestCase {
         capture(app, named: "race-detail")
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
-        app.tabBars.buttons["Bests"].tap()
-        XCTAssertTrue(app.navigationBars["Bests"].waitForExistence(timeout: 15))
-        capture(app, named: "bests")
-
-        app.tabBars.buttons["Resume"].tap()
-        XCTAssertTrue(app.navigationBars["Resume"].waitForExistence(timeout: 15))
-        let openRaceBook = app.buttons["Open Race Book"]
-        XCTAssertTrue(openRaceBook.waitForExistence(timeout: 15))
-        openRaceBook.tap()
+        app.tabBars.buttons["Race Book"].tap()
         XCTAssertTrue(app.navigationBars["Race Book"].waitForExistence(timeout: 15))
         XCTAssertTrue(app.staticTexts["PERSONAL BESTS"].waitForExistence(timeout: 15))
         capture(app, named: "race-book")
@@ -70,8 +62,6 @@ final class ASCReleaseCaptureUITests: XCTestCase {
         scrollToHittable(export, in: app)
         XCTAssertTrue(export.isHittable)
         capture(app, named: "race-book-export")
-
-        app.navigationBars["Race Book"].buttons["Done"].tap()
 
         app.tabBars.buttons["Pattie"].tap()
         XCTAssertTrue(app.staticTexts["WHAT ARE YOU TRAINING FOR?"].waitForExistence(timeout: 15))

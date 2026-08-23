@@ -13,9 +13,9 @@ import SwiftUI
 /// without an unexpected personality on top of it.
 ///
 /// What keeps it fun rather than exhausting is the budget: a moment needs a
-/// quiet gap behind it, a line never repeats until the deck has been through,
-/// and each moment has its own cooldown so the same remark can come back later
-/// in a long session without coming back immediately.
+/// quiet gap behind it, a tip never repeats until the whole tip pool has been
+/// started, and each moment has its own cooldown so the same remark can come
+/// back later in a long session without coming back immediately.
 ///
 /// Each automatic line is paired with a complete solution recording from the
 /// Ask Pattie answer tree. The event deck decides when a tip appears, while the
@@ -47,7 +47,6 @@ final class PattieMode: ObservableObject {
         case resume             // the Resume tab
         case resumeExported     // built or shared the Race Book
         case pointers           // the Pointers library
-        case pointerPlayed      // started an episode
         case askOpened          // opened Ask Pattie
         case askAnswered        // reached an answer in Ask Pattie
         case noteSaved          // wrote a race note
@@ -67,7 +66,7 @@ final class PattieMode: ObservableObject {
                 return 2.5
             case .welcome, .claimed, .veteran:
                 return .infinity
-            case .personalBest, .worldChampionship, .askAnswered, .pointerPlayed:
+            case .personalBest, .worldChampionship, .askAnswered:
                 return 90
             default:
                 return 240
@@ -118,7 +117,7 @@ final class PattieMode: ObservableObject {
                 return .bike
             case "bests-1", "bests-2", "bests-filter-1", "bests-filter-2",
                  "search-1", "search-2", "resume-1", "pointers-1", "pointers-2",
-                 "pointer-played-1", "ask-1", "ask-2":
+                 "ask-1", "ask-2":
                 return .coach
             case "action-tab-1", "action-tab-2", "action-filter-1", "action-filter-2",
                  "action-selection-1", "action-selection-2", "action-search-1", "action-search-2",
@@ -152,10 +151,12 @@ final class PattieMode: ObservableObject {
 
     private var firedAt: [Moment: Date] = [:]
     private var firedActions: [Action: Date] = [:]
-    private var usedModeTipVoices: Set<String> = []
     private var lastFired: Date?
+    private var pointerPlaybackActive = false
     private let voice = PattieVoice.shared
     private let seenKey = "pattie.mode.seenLines"
+    private let playedModeTipIDsKey = "pattie.mode.playedTipIDs"
+    private let lastModeTipIDKey = "pattie.mode.lastTipID"
     /// Long enough that two taps in a row cannot both summon her, short enough
     /// that moving through three screens still gets more than one line out of
     /// her.
@@ -184,7 +185,7 @@ final class PattieMode: ObservableObject {
     /// Offer a meaningful screen moment. It lands if Pattie Mode is on, the
     /// moment's cooldown has expired, and the quiet period behind it has elapsed.
     func fire(_ moment: Moment, petState: PattiePetState? = nil) {
-        guard isEnabled, current == nil, !voice.isSpeaking else { return }
+        guard isEnabled, !pointerPlaybackActive, current == nil, !voice.isSpeaking else { return }
         if let last = firedAt[moment], Date.now.timeIntervalSince(last) < moment.cooldown { return }
         if let lastFired, Date.now.timeIntervalSince(lastFired) < quietPeriod { return }
         guard let line = pick(for: moment) else { return }
@@ -195,7 +196,7 @@ final class PattieMode: ObservableObject {
     /// The companion never stacks cards, and a speaking clip gets to finish
     /// before another reaction can appear.
     func react(_ action: Action, petState: PattiePetState? = nil) {
-        guard isEnabled, !voice.isSpeaking else { return }
+        guard isEnabled, !pointerPlaybackActive, !voice.isSpeaking else { return }
         if let last = firedActions[action], Date.now.timeIntervalSince(last) < action.cooldown {
             return
         }
@@ -210,20 +211,34 @@ final class PattieMode: ObservableObject {
     /// idle avatar so switching Pattie on feels like an invitation, not a new
     /// modal screen.
     func demo() {
+        guard !pointerPlaybackActive else { return }
         guard let line = Self.deck.first(where: { $0.action == .tap }) else { return }
         present(line, respectingBudget: false)
+    }
+
+    /// Silence the companion before an in-app pointer video starts. The video
+    /// uses the same audio session, so a mode clip must never play over it.
+    func beginPointerPlayback() {
+        pointerPlaybackActive = true
+        dismiss()
+    }
+
+    /// Allow normal companion reactions again after a pointer video closes.
+    func endPointerPlayback() {
+        pointerPlaybackActive = false
     }
 
     private func present(_ line: Line,
                          respectingBudget: Bool = true,
                          petState: PattiePetState? = nil) {
-        guard !voice.isSpeaking else { return }
+        guard !pointerPlaybackActive, !voice.isSpeaking else { return }
         var line = line
         line.petState = petState ?? line.defaultPetState
         // The event deck controls timing. The real answer tree controls the
-        // visible tip and the matching complete solution recording.
-        if let tip = PattieVoiceLibrary.nextModeTip(excluding: usedModeTipVoices) {
-            usedModeTipVoices.insert(tip.voice)
+        // visible tip and the matching complete solution recording. A tip is
+        // recorded before playback starts, so an interrupted clip still counts
+        // as started and the next tip waits for the rest of the pool.
+        if let tip = nextModeTip() {
             line.text = tip.text
             line.voice = tip.voice
             line.petState = petState ?? .forTopicID(tip.topic)
@@ -282,6 +297,28 @@ final class PattieMode: ObservableObject {
         // Once she has said everything, start the deck over rather than going quiet.
         if seen.count >= Self.deck.count { seen = [id] }
         UserDefaults.standard.set(Array(seen), forKey: seenKey)
+    }
+
+    private func nextModeTip() -> PattieVoiceLibrary.ModeTip? {
+        let tips = PattieVoiceLibrary.modeTips
+        guard !tips.isEmpty else { return nil }
+
+        let tipIDs = Set(tips.map(\.id))
+        let played = playedModeTipIDs.intersection(tipIDs)
+        let lastID = UserDefaults.standard.string(forKey: lastModeTipIDKey)
+        guard let tip = PattieVoiceLibrary.nextModeTip(excludingIDs: played,
+                                                       avoidingID: lastID) else { return nil }
+
+        var nextPlayed = played
+        if played.count >= tipIDs.count { nextPlayed.removeAll() }
+        nextPlayed.insert(tip.id)
+        UserDefaults.standard.set(Array(nextPlayed).sorted(), forKey: playedModeTipIDsKey)
+        UserDefaults.standard.set(tip.id, forKey: lastModeTipIDKey)
+        return tip
+    }
+
+    private var playedModeTipIDs: Set<String> {
+        Set(UserDefaults.standard.stringArray(forKey: playedModeTipIDsKey) ?? [])
     }
 }
 
@@ -443,9 +480,6 @@ extension PattieMode {
              voice: "pattie-away-you-go"),
         Line(id: "pointers-2", moment: .pointers, portrait: "pattie-profile",
              text: "Every one of these is something that went wrong for me first. That's how the list got written."),
-        Line(id: "pointer-played-1", moment: .pointerPlayed, portrait: "pattie-profile",
-             text: "Here's the situation, and then here's the solution. That's the whole format."),
-
         // Ask Pattie
         Line(id: "ask-1", moment: .askOpened, portrait: "pattie-profile",
              text: "Tell me what you're training for and what's bothering you. I've probably already made a clip about it.",

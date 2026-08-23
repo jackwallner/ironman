@@ -176,15 +176,28 @@ enum PattieVoiceLibrary {
         let voice: String
     }
 
-    /// Every bundled answer with a complete solution recording. There are
-    /// nineteen distinct solution clips across the answer tree, with repeated
-    /// clips retaining their different, useful text.
+    /// Every bundled answer with a complete solution recording. There are 29
+    /// tip entries and 19 distinct solution recordings, with repeated clips
+    /// retaining their different, useful text.
     static let modeTips: [ModeTip] = loadModeTips()
 
-    /// Rotate through distinct real solution recordings before reusing one.
-    static func nextModeTip(excluding usedVoices: Set<String>) -> ModeTip? {
-        let fresh = modeTips.filter { !usedVoices.contains($0.voice) }
-        return (fresh.isEmpty ? modeTips : fresh).first
+    /// Pick a random real tip that has not been started in the current cycle.
+    /// The caller persists the selected id when playback begins, so a clip that
+    /// gets interrupted still counts as started.
+    static func nextModeTip(excludingIDs playedIDs: Set<String>, avoidingID: String? = nil) -> ModeTip? {
+        guard !modeTips.isEmpty else { return nil }
+        let tipIDs = Set(modeTips.map(\.id))
+        let played = playedIDs.intersection(tipIDs)
+        let cycleComplete = played.count >= tipIDs.count
+        let source = cycleComplete
+            ? modeTips
+            : modeTips.filter { !played.contains($0.id) }
+        var candidates = source
+        if candidates.count > 1, let avoidingID {
+            candidates.removeAll { $0.id == avoidingID }
+        }
+        if candidates.isEmpty { candidates = source }
+        return candidates.randomElement()
     }
 
     private static func loadModeTips() -> [ModeTip] {

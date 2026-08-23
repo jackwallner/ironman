@@ -54,7 +54,7 @@ final class PattiePetStateTests: XCTestCase {
         XCTAssertTrue(tips.allSatisfy { !$0.text.isEmpty })
     }
 
-    func testSolutionTipRotationUsesDifferentRealRecordings() throws {
+    func testSolutionTipRotationUsesDifferentTips() throws {
         var used = Set<String>()
         let first = try XCTUnwrap(PattieVoiceLibrary.nextModeTip(excludingIDs: used))
         used.insert(first.id)

@@ -204,10 +204,11 @@ struct PointerLibraryView: View {
     }
 
     private func open(_ pointer: Pointer) {
-        pattie.fire(.pointerPlayed, petState: .forPointerID(pointer.id))
         if pointer.opensExternally, let url = pointer.playableURL {
+            pattie.dismiss()
             openURL(url)
         } else {
+            pattie.beginPointerPlayback()
             playing = pointer
         }
     }
@@ -380,18 +381,22 @@ struct PointerPlayerSheet: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Done") {
-                        pattie.react(.back)
                         dismiss()
                     }
                         .foregroundStyle(TriPalette.inkOnDark)
+                        .padding(.horizontal, TriSpace.x3)
                         .triTapTarget()
                 }
             }
         }
-        .task { await load() }
+        .task {
+            pattie.beginPointerPlayback()
+            await load()
+        }
         .onDisappear {
             player?.pause()
             player = nil
+            pattie.endPointerPlayback()
         }
     }
 

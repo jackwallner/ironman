@@ -294,8 +294,10 @@ struct StatTile: View {
                 .kerning(0.4)
                 .foregroundStyle(TriPalette.inkTertiary)
                 .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(1)
+                .minimumScaleFactor(0.78)
+                .allowsTightening(true)
         }
-        .frame(width: TriSpace.x10 + TriSpace.x6)
+        .frame(minWidth: TriSpace.x10 + TriSpace.x8)
     }
 }

@@ -155,6 +155,36 @@ final class RaceBookTests: XCTestCase {
                              "The shareable image should contain the full history, not a fixed cover")
     }
 
+    func testExportOptionsKeepTheRaceBookFocused() {
+        let athlete = Athlete(id: "athlete", name: "Test Athlete")
+        let result = Self.result(id: "race",
+                                 date: "2025-09-07T00:00:00Z",
+                                 bikeDistance: 180,
+                                 swim: 3_600,
+                                 bike: 18_000,
+                                 run: 14_400,
+                                 finish: 36_000)
+        let note = RaceNote(resultID: result.id, notes: "Keep the run controlled")
+        let options = RaceBookOptions(kinds: [.fullDistance],
+                                      includePodiumHighlights: false,
+                                      includePersonalBests: false,
+                                      includeProgression: false,
+                                      includeSplits: false,
+                                      includePlacements: false,
+                                      includeRaceNotes: false)
+
+        let text = RaceBookBuilder.plainText(athlete: athlete,
+                                             results: [result],
+                                             notes: [result.id: note],
+                                             options: options)
+
+        XCTAssertTrue(text.contains("CAREER AT A GLANCE"))
+        XCTAssertTrue(text.contains("RACE HISTORY"))
+        XCTAssertFalse(text.contains("PERSONAL BESTS"))
+        XCTAssertFalse(text.contains("Splits:"))
+        XCTAssertFalse(text.contains("Keep the run controlled"))
+    }
+
     func testProGateLeavesResultsFreeAndOnlyRaceBookUsesEntitlement() {
         let result = Self.result(id: "race",
                                  date: "2025-09-07T00:00:00Z",

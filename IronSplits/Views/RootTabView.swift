@@ -14,14 +14,13 @@ struct RootTabView: View {
     @Environment(\.requestReview) private var requestReview
 
     private enum Tab: CaseIterable, Hashable {
-        case locker, bests, pattie, resume, settings
+        case locker, pattie, resume, settings
 
         var title: String {
             switch self {
             case .locker: return "Locker"
-            case .bests: return "Bests"
             case .pattie: return "Pattie"
-            case .resume: return "Resume"
+            case .resume: return "Race Book"
             case .settings: return "Settings"
             }
         }
@@ -29,9 +28,8 @@ struct RootTabView: View {
         var symbol: String {
             switch self {
             case .locker: return "tray.full.fill"
-            case .bests: return "list.number"
             case .pattie: return "play.rectangle.fill"
-            case .resume: return "doc.text.fill"
+            case .resume: return "book.closed.fill"
             case .settings: return "gearshape.fill"
             }
         }
@@ -77,14 +75,11 @@ struct RootTabView: View {
             LockerView()
                 .tabItem { Label("Locker", systemImage: "tray.full.fill") }
                 .tag(Tab.locker)
-            BestsView()
-                .tabItem { Label("Bests", systemImage: "list.number") }
-                .tag(Tab.bests)
             PointersView()
                 .tabItem { Label("Pattie", systemImage: "play.rectangle.fill") }
                 .tag(Tab.pattie)
             ResumeView()
-                .tabItem { Label("Resume", systemImage: "doc.text.fill") }
+                .tabItem { Label("Race Book", systemImage: "book.closed.fill") }
                 .tag(Tab.resume)
             SettingsView()
                 .tabItem { Label("Settings", systemImage: "gearshape.fill") }
