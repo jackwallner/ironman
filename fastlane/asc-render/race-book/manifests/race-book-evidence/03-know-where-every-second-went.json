@@ -1,7 +1,7 @@
 {
   "filename": "03-know-where-every-second-went.png",
   "path": "race-book-evidence/03-know-where-every-second-went.png",
-  "output_sha256": "6ddee2eb00d8e8386ff4d81dad8575a6ec47e3a3fa41f549b976f9603b01ec22",
+  "output_sha256": "48a9ff9a7ab18649a469b081c051199d3bd477aace25962d4dde40dd95d425c1",
   "output_size": [
     1320,
     2868
@@ -21,12 +21,12 @@
     "proof": "The literal race detail capture shows official splits and the field context used to interpret them."
   },
   "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-detail.png",
-  "source_sha256": "1a7b24ce5321b65239a1aa7f09a5b61432035bccdd9d00a06b02353b579b4ad3",
+  "source_sha256": "6d9bc80c527ab4d930e15ed8765b63f77ae13376af43da1a21006bd85b14936a",
   "background_asset": null,
   "background_asset_sha256": null,
   "background_override": null,
   "foreground": "manifests/race-book-evidence/03-know-where-every-second-went.foreground.png",
-  "foreground_sha256": "ebe659660128526ac8ec9f5141a27d9fd4c50eb7e0520bf3d61fe9bdfe4acc1c",
+  "foreground_sha256": "85d43e17cab4adf10056ce3e2df6f7ec2916f24f3001035c0ffb547fe706df11",
   "ui_mask": "manifests/race-book-evidence/03-know-where-every-second-went.ui-mask.png",
   "ui_coverage": 0.6078,
   "imagegen_received_ui_source": false,
@@ -64,5 +64,5 @@
     406
   ],
   "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-detail.png",
-  "source_evidence_sha256": "1a7b24ce5321b65239a1aa7f09a5b61432035bccdd9d00a06b02353b579b4ad3"
+  "source_evidence_sha256": "6d9bc80c527ab4d930e15ed8765b63f77ae13376af43da1a21006bd85b14936a"
 }

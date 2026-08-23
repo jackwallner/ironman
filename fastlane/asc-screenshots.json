@@ -1,7 +1,7 @@
 {
   "app": "iron-splits",
   "display_name": "IM Tri Tracker",
-  "capture_report": "../asc-capture/race-book/capture-report.json",
+  "capture_report": "asc-capture/race-book/capture-report.json",
   "target": "iphone_69",
   "copy_contract": "single-header-benefit-story-v3",
   "market": {
@@ -20,15 +20,15 @@
     "proof_points": [
       {
         "claim": "The Race Book capture shows career personal bests and progression assembled from the claimed published results.",
-        "source": "../asc-capture/race-book/race-book.png"
+        "source": "asc-capture/race-book/race-book.png"
       },
       {
         "claim": "The Race Book compare action capture shows like-for-like comparison as a distinct paid action.",
-        "source": "../asc-capture/race-book/race-book-compare.png"
+        "source": "asc-capture/race-book/race-book-compare.png"
       },
       {
         "claim": "The race detail capture shows official splits, ranks, and field context for an individual result.",
-        "source": "../asc-capture/race-book/race-detail.png"
+        "source": "asc-capture/race-book/race-detail.png"
       }
     ]
   },
@@ -79,8 +79,8 @@
             "search_terms": ["race history", "triathlon race results"],
             "proof": "The literal Race Book capture shows the athlete's personal bests and progression cards built from the claimed history."
           },
-          "source": "../asc-capture/race-book/race-book.png",
-          "source_evidence": "../asc-capture/race-book/race-book.png",
+          "source": "asc-capture/race-book/race-book.png",
+          "source_evidence": "asc-capture/race-book/race-book.png",
           "capture_flow": "repo-command",
           "evidence_status": "canonical",
           "device": "iphone",
@@ -109,8 +109,8 @@
             "search_terms": ["race splits", "personal bests"],
             "proof": "The literal Race Book capture shows the Compare two races action in the paid Race Book surface."
           },
-          "source": "../asc-capture/race-book/race-book-compare.png",
-          "source_evidence": "../asc-capture/race-book/race-book-compare.png",
+          "source": "asc-capture/race-book/race-book-compare.png",
+          "source_evidence": "asc-capture/race-book/race-book-compare.png",
           "capture_flow": "repo-command",
           "evidence_status": "canonical",
           "device": "iphone",
@@ -139,8 +139,8 @@
             "search_terms": ["swim bike run", "race splits"],
             "proof": "The literal race detail capture shows official splits and the field context used to interpret them."
           },
-          "source": "../asc-capture/race-book/race-detail.png",
-          "source_evidence": "../asc-capture/race-book/race-detail.png",
+          "source": "asc-capture/race-book/race-detail.png",
+          "source_evidence": "asc-capture/race-book/race-detail.png",
           "capture_flow": "repo-command",
           "evidence_status": "canonical",
           "device": "iphone",
@@ -169,8 +169,8 @@
             "search_terms": ["triathlon race results", "race history"],
             "proof": "The literal locker capture shows multiple official finishes grouped under the claimed athlete."
           },
-          "source": "../asc-capture/race-book/locker.png",
-          "source_evidence": "../asc-capture/race-book/locker.png",
+          "source": "asc-capture/race-book/locker.png",
+          "source_evidence": "asc-capture/race-book/locker.png",
           "capture_flow": "repo-command",
           "evidence_status": "canonical",
           "device": "iphone",
@@ -199,8 +199,8 @@
             "search_terms": ["race history", "triathlon results"],
             "proof": "The literal Race Book capture shows the Build PDF and image action in the paid export surface."
           },
-          "source": "../asc-capture/race-book/race-book-export.png",
-          "source_evidence": "../asc-capture/race-book/race-book-export.png",
+          "source": "asc-capture/race-book/race-book-export.png",
+          "source_evidence": "asc-capture/race-book/race-book-export.png",
           "capture_flow": "repo-command",
           "evidence_status": "canonical",
           "device": "iphone",
@@ -229,8 +229,8 @@
             "search_terms": ["personal bests", "race splits"],
             "proof": "The literal Bests capture shows split rankings sourced from the official race history."
           },
-          "source": "../asc-capture/race-book/bests.png",
-          "source_evidence": "../asc-capture/race-book/bests.png",
+          "source": "asc-capture/race-book/bests.png",
+          "source_evidence": "asc-capture/race-book/bests.png",
           "capture_flow": "repo-command",
           "evidence_status": "canonical",
           "device": "iphone",
@@ -259,8 +259,8 @@
             "search_terms": ["triathlon tips", "swim bike run"],
             "proof": "The literal Pattie capture shows the app's coaching pointer surface organized around the athlete's question."
           },
-          "source": "../asc-capture/race-book/pattie.png",
-          "source_evidence": "../asc-capture/race-book/pattie.png",
+          "source": "asc-capture/race-book/pattie.png",
+          "source_evidence": "asc-capture/race-book/pattie.png",
           "capture_flow": "repo-command",
           "evidence_status": "canonical",
           "device": "iphone",

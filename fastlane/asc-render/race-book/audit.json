@@ -10,8 +10,8 @@
     "category": "triathlon and endurance race-history apps",
     "audience": "athletes who want their published race history, splits, and progress in one private place",
     "problem": "Official results are scattered across event pages, and a finish time alone does not explain where an athlete found or lost time.",
-    "advantage": "IM Iron Splits finds published results by name, keeps race kinds comparable, ranks every split, and turns the career record into a private Race Book with comparison and export tools.",
-    "competitive_context": "Event result pages show one race at a time, while training platforms usually require manual entry. IM Iron Splits uses published results as the source of truth, needs no account, and keeps the record on the phone.",
+    "advantage": "IM Tri Tracker finds published results by name, keeps race kinds comparable, ranks every split, and turns the career record into a Race Book with comparison and export tools.",
+    "competitive_context": "Event result pages show one race at a time, while training platforms usually require manual entry. IM Tri Tracker uses published results as the source of truth, needs no account, and keeps the record on the phone.",
     "search_intent": [
       "triathlon race results",
       "race splits",
@@ -89,12 +89,12 @@
           "story_role": "problem",
           "story_focus": "race history into a story",
           "background_id": "theme",
-          "foreground_sha256": "43f4665d8ebb3cb66f3be5ac50de6fed7f791e7d39ba4ecf075afbf76e7e404c",
+          "foreground_sha256": "b9486beefa91c2471fd3336a79a407a057db640de26e8513919fdd0f110e02ba",
           "background_contrast": {
             "top": 16.74,
             "bottom": 13.32
           },
-          "thumbnail_ocr": "a1 al @ Make your history tell astory See the best of your career, where your time is moving, and what each race contributed. Compare and export with one lifetime unlock Race Book unlocked CAREER AT A GLANCE 5 5 PERSONAL BESTS pa Finish 8:36:16 & Swim 1:02:46 Bike & 4:35:39 Run 22:42:51, Transitions ea",
+          "thumbnail_ocr": "a1 al @ Make your history tell astory See the best of your career, where your time is moving, and what each race contributed. Compare and export with one lifetime unlock Race Book unlocked CAREER AT A GLANCE 5 5 PERSONAL BESTS pa Finish 8:36:16 & Swim 1:02:46 Bike & 4:35:39 Run 2:42:51, Transitions ea",
           "corner_contrast_vs_ink": 14.99
         },
         {
@@ -137,12 +137,12 @@
           "story_role": "mechanism",
           "story_focus": "where you found time",
           "background_id": "theme",
-          "foreground_sha256": "ac7aa58836fabd36a0cf2bd6ce29a1de44af89a61fc36a004eeef83a0c88e5ef",
+          "foreground_sha256": "5f384fb755d4e2b5e25fc8272db303d4da313919d9e7fd876dfbbe4710235fd8",
           "background_contrast": {
             "top": 16.74,
             "bottom": 13.32
           },
-          "thumbnail_ocr": "a1 al \u00a9 Laer 2242251, Transitions e104 proonession 9:38:11 S 8:36:16 IRONMAN Tulsa IRONMAN Wisconsin 1015S faster than the frst compare races Put two full distance finishes side by side and Compare two races ; ss Som > EXPORT YOUR RACE BOOK with your history, official spits, podiums, career stats and private notes. Build PDF and image",
+          "thumbnail_ocr": "Sep 7, 2025, IRONMAN Wisconsin S B Finish iad ry \u2018Swim 0:31 S&S Bike",
           "corner_contrast_vs_ink": 14.99
         },
         {
@@ -185,12 +185,12 @@
           "story_role": "proof",
           "story_focus": "where every second went",
           "background_id": "theme",
-          "foreground_sha256": "ebe659660128526ac8ec9f5141a27d9fd4c50eb7e0520bf3d61fe9bdfe4acc1c",
+          "foreground_sha256": "85d43e17cab4adf10056ce3e2df6f7ec2916f24f3001035c0ffb547fe706df11",
           "background_contrast": {
             "top": 16.74,
             "bottom": 13.32
           },
-          "thumbnail_ocr": "Know where every second went (@) 2025 IRONMAN Wisconsin 8:36:16 ist : ist ist swim @ 1:02:46 1 5:59 S Bike 4:41:00 T2 3:48 ~ Fun @\u00ae 2:42:51 eo = a 5 #",
+          "thumbnail_ocr": "Know where every second went (@) 2025 IRONMAN Wisconsin 8:36:16 ist : ist ist swim @ 1:02:46 1 5:59 S Bike 4:41:00 T2 3:48 ~ Fun @\u00ae 2:42:51 oe = 8 5 #",
           "corner_contrast_vs_ink": 14.99
         },
         {
@@ -233,12 +233,12 @@
           "story_role": "support",
           "story_focus": "every race together",
           "background_id": "theme",
-          "foreground_sha256": "a5a4eb0c87e36491be89f90f16a3c0e66c644868758064bdc40861b49e35adf5",
+          "foreground_sha256": "e179b0afd03ab883afae9d8abd1e97726074269b54ef4ece68f642c334333700",
           "background_contrast": {
             "top": 16.74,
             "bottom": 13.32
           },
-          "thumbnail_ocr": "Keep every race together Daniel Winek 5 5 @ IRONMAN Wisconsin 8:36:16 aD cap exp IRONMAN World 8:40:36 Championship - Men ap IRONMAN Texas 9:03:38 @\u00ae = @ 6&6 #",
+          "thumbnail_ocr": "Keep every race together Daniel Winek 5 5 @ IRONMAN Wisconsin 8:36:16 aD cap cp IRONMAN World 8:40:36 Championship - Men ap IRONMAN Texas 9:03:38 e\u00ae = @ 6&6 #",
           "corner_contrast_vs_ink": 14.99
         },
         {
@@ -281,12 +281,12 @@
           "story_role": "support",
           "story_focus": "race book you can share",
           "background_id": "theme",
-          "foreground_sha256": "b6fe7b3ef5ea28059f7e9dc26f2700560a17da6b3596284bac0c884fbd5cf426",
+          "foreground_sha256": "d749a9c451c9eebf0d7a8de9e0ed2028070a40dd7e6446e1383dbcf7a1ff93c7",
           "background_contrast": {
             "top": 16.74,
             "bottom": 13.32
           },
-          "thumbnail_ocr": "a1 al \u00a9 Laer 2242251, Transitions e104 proonession 9:38:11 S 8:36:16 IRONMAN Tulsa IRONMAN Wisconsin 1015S faster than the frst compare races Put two full distance finishes side by side and Compare two races ; ss Som > EXPORT YOUR RACE BOOK with your history, official spits, podiums, career stats and private notes. Build PDF and image",
+          "thumbnail_ocr": "oat al > Transitions 6104 PROGRESSION 9:38:41 \u201c8:36:16 10155 faster than te fist compare naces see every leg's gain or loss. Compare two races . EXPORT YOUR RACE BOOK Create a complete PDF or tall shareable image with your history, official splits, podiums, career stats and private notes.",
           "corner_contrast_vs_ink": 14.99
         },
         {
@@ -329,12 +329,12 @@
           "story_role": "support",
           "story_focus": "fastest split",
           "background_id": "theme",
-          "foreground_sha256": "b487cd35b5e4503eb0c16705b4a52b086de173bab7f96816d18225bf66a42261",
+          "foreground_sha256": "5f892ca19cde0036edb81f55c7e0a4ae299f79faf9267195a529cea754c38bc0",
           "background_contrast": {
             "top": 16.74,
             "bottom": 13.32
           },
-          "thumbnail_ocr": "oa al > Bests 8:36:16 IRONMAN Wisconsin IRONMAN Wisconsin 8:36:16 IRONMAN World ao: 2 Championship - Men 8:40:36 5 IRONMAN Texas 9:03:30 IRONMAN Tulsa 9:38:11 (=) oO 6 #",
+          "thumbnail_ocr": "oa al > Bests 8:36:16 IRONMAN Wisconsin IRONMAN Wisconsin 8:36:16 IRONMAN World ao: 2 Championship - Men 8:40:36 5 IRONMAN Texas 9:03:30 IRONMAN Tulsa 9:38:11 a oO 6 #",
           "corner_contrast_vs_ink": 14.99
         },
         {
@@ -377,68 +377,20 @@
           "story_role": "support",
           "story_focus": "learn from every race day",
           "background_id": "theme",
-          "foreground_sha256": "6e6308cbdffb11eb709ae9acccdc03ed8f8a1a37690bd7c4a7c12bdc8ee47ca0",
+          "foreground_sha256": "e0ea97741b892ec0e3357fb8beaa702efe309db857580f37602589cdc9dc7b91",
           "background_contrast": {
             "top": 16.74,
             "bottom": 13.32
           },
-          "thumbnail_ocr": "Learn from every race day My first triathlon x > A full distance B > A marathon or run race Bw > a i= & co}",
-          "corner_contrast_vs_ink": 14.99
-        },
-        {
-          "filename": "08-keep-your-race-record-private.png",
-          "path": "race-book-evidence/08-keep-your-race-record-private.png",
-          "header": "Keep your race record private",
-          "pitch": {
-            "benefit": "Keep the race record and private notes on your phone without creating an account",
-            "problem": "Athletes should not have to hand over a profile or publish their race history to review it.",
-            "advantage": "IM Iron Splits has no account system and stores the claimed history and notes locally.",
-            "header_problem": "a public profile",
-            "header_advantage": "private on-device record",
-            "search_terms": [
-              "private race log",
-              "triathlon race history"
-            ],
-            "proof": "The literal Settings capture shows the local-only privacy and data controls."
-          },
-          "capture_flow": "repo-command",
-          "evidence_status": "canonical",
-          "benefit": "Keep the race record and private notes on your phone without creating an account",
-          "generic_header_terms": [],
-          "size": [
-            1320,
-            2868
-          ],
-          "mode": "RGB",
-          "header_only": true,
-          "compositor_text_layers": [
-            "header"
-          ],
-          "header_font_size": 164,
-          "header_lines": 2,
-          "header_bounds": [
-            145,
-            152,
-            1174,
-            465
-          ],
-          "story_role": "support",
-          "story_focus": "race record private",
-          "background_id": "theme",
-          "foreground_sha256": "e742b7b1ef34cc7974286302158338dceb38e2d7d41784a44c16690b942d2992",
-          "background_contrast": {
-            "top": 16.74,
-            "bottom": 13.32
-          },
-          "thumbnail_ocr": "Keep your race record private",
+          "thumbnail_ocr": "Learn from every race day on) \u2018 / X | \u2018Small things save a whole day. Pattie's pointers 6 Asprint or olympic @\u00ae = @ 6 #",
           "corner_contrast_vs_ink": 14.99
         }
       ],
       "errors": [],
       "warnings": [
         "01-turn-history-into-a-story.png: thumbnail OCR missed header words ['turn', 'into']",
-        "02-see-where-you-found-time.png: thumbnail OCR missed header words ['see', 'where', 'found', 'time']",
-        "05-build-a-race-book-you-can-share.png: thumbnail OCR missed header words ['can', 'share']",
+        "02-see-where-you-found-time.png: thumbnail OCR missed header words ['see', 'where', 'you', 'found', 'time']",
+        "05-build-a-race-book-you-can-share.png: thumbnail OCR missed header words ['build', 'can']",
         "06-find-your-fastest-split.png: thumbnail OCR missed header words ['find', 'your', 'fastest', 'split']"
       ],
       "status": "pass"
@@ -447,8 +399,8 @@
   "errors": [],
   "warnings": [
     "race-book-evidence: 01-turn-history-into-a-story.png: thumbnail OCR missed header words ['turn', 'into']",
-    "race-book-evidence: 02-see-where-you-found-time.png: thumbnail OCR missed header words ['see', 'where', 'found', 'time']",
-    "race-book-evidence: 05-build-a-race-book-you-can-share.png: thumbnail OCR missed header words ['can', 'share']",
+    "race-book-evidence: 02-see-where-you-found-time.png: thumbnail OCR missed header words ['see', 'where', 'you', 'found', 'time']",
+    "race-book-evidence: 05-build-a-race-book-you-can-share.png: thumbnail OCR missed header words ['build', 'can']",
     "race-book-evidence: 06-find-your-fastest-split.png: thumbnail OCR missed header words ['find', 'your', 'fastest', 'split']"
   ],
   "release_requested": true,

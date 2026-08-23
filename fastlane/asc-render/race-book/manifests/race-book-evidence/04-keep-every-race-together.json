@@ -1,7 +1,7 @@
 {
   "filename": "04-keep-every-race-together.png",
   "path": "race-book-evidence/04-keep-every-race-together.png",
-  "output_sha256": "725992b1f55c2631089b1f432938607d7e32c2129a31a90ad16fa5101ba3a083",
+  "output_sha256": "053336ef427c866945910468ac204f46adced4f261cb63b7eb52d89096510d5c",
   "output_size": [
     1320,
     2868
@@ -21,12 +21,12 @@
     "proof": "The literal locker capture shows multiple official finishes grouped under the claimed athlete."
   },
   "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/locker.png",
-  "source_sha256": "fd3c80ca63ed5cc61c86807e60ada264e01e73ad10e9dee16fbce73ac03436ac",
+  "source_sha256": "ecacb0af45e3e3f88088ef47f5423283f2eee1f60ed92674fbbafefb7ea3c561",
   "background_asset": null,
   "background_asset_sha256": null,
   "background_override": null,
   "foreground": "manifests/race-book-evidence/04-keep-every-race-together.foreground.png",
-  "foreground_sha256": "a5a4eb0c87e36491be89f90f16a3c0e66c644868758064bdc40861b49e35adf5",
+  "foreground_sha256": "e179b0afd03ab883afae9d8abd1e97726074269b54ef4ece68f642c334333700",
   "ui_mask": "manifests/race-book-evidence/04-keep-every-race-together.ui-mask.png",
   "ui_coverage": 0.6078,
   "imagegen_received_ui_source": false,
@@ -64,5 +64,5 @@
     467
   ],
   "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/locker.png",
-  "source_evidence_sha256": "fd3c80ca63ed5cc61c86807e60ada264e01e73ad10e9dee16fbce73ac03436ac"
+  "source_evidence_sha256": "ecacb0af45e3e3f88088ef47f5423283f2eee1f60ed92674fbbafefb7ea3c561"
 }
