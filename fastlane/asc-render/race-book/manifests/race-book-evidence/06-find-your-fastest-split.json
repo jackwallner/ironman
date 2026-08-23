@@ -1,7 +1,7 @@
 {
   "filename": "06-find-your-fastest-split.png",
   "path": "race-book-evidence/06-find-your-fastest-split.png",
-  "output_sha256": "cebeacd69d0edcf2361f7f59ec073369fabbe12aa3c7b61668ccd93540eb794a",
+  "output_sha256": "a4423a806ef2bb49027068e0a2386d22359df55ed116392033b913ad9881560f",
   "output_size": [
     1320,
     2868
@@ -21,12 +21,12 @@
     "proof": "The literal Bests capture shows split rankings sourced from the official race history."
   },
   "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/bests.png",
-  "source_sha256": "efc5c5e8aefe16490556208b48f3130dc441258efca06c02977ae6fa0caf0411",
+  "source_sha256": "6fc7588d4763827c62293c65319ee1fdae2deea4a6303b9a7368e055ae936284",
   "background_asset": null,
   "background_asset_sha256": null,
   "background_override": null,
   "foreground": "manifests/race-book-evidence/06-find-your-fastest-split.foreground.png",
-  "foreground_sha256": "b487cd35b5e4503eb0c16705b4a52b086de173bab7f96816d18225bf66a42261",
+  "foreground_sha256": "5f892ca19cde0036edb81f55c7e0a4ae299f79faf9267195a529cea754c38bc0",
   "ui_mask": "manifests/race-book-evidence/06-find-your-fastest-split.ui-mask.png",
   "ui_coverage": 0.6078,
   "imagegen_received_ui_source": false,
@@ -64,5 +64,5 @@
     465
   ],
   "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/bests.png",
-  "source_evidence_sha256": "efc5c5e8aefe16490556208b48f3130dc441258efca06c02977ae6fa0caf0411"
+  "source_evidence_sha256": "6fc7588d4763827c62293c65319ee1fdae2deea4a6303b9a7368e055ae936284"
 }

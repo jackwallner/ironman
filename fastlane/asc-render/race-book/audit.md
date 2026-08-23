@@ -10,8 +10,8 @@ This report combines file-spec checks with an independent thumbnail and OCR pass
 ## Warnings
 
 - race-book-evidence: 01-turn-history-into-a-story.png: thumbnail OCR missed header words ['turn', 'into']
-- race-book-evidence: 02-see-where-you-found-time.png: thumbnail OCR missed header words ['see', 'where', 'found', 'time']
-- race-book-evidence: 05-build-a-race-book-you-can-share.png: thumbnail OCR missed header words ['can', 'share']
+- race-book-evidence: 02-see-where-you-found-time.png: thumbnail OCR missed header words ['see', 'where', 'you', 'found', 'time']
+- race-book-evidence: 05-build-a-race-book-you-can-share.png: thumbnail OCR missed header words ['build', 'can']
 - race-book-evidence: 06-find-your-fastest-split.png: thumbnail OCR missed header words ['find', 'your', 'fastest', 'split']
 
 ## Market brief
@@ -19,14 +19,14 @@ This report combines file-spec checks with an independent thumbnail and OCR pass
 - Category: triathlon and endurance race-history apps
 - Audience: athletes who want their published race history, splits, and progress in one private place
 - Problem: Official results are scattered across event pages, and a finish time alone does not explain where an athlete found or lost time.
-- Advantage: IM Iron Splits finds published results by name, keeps race kinds comparable, ranks every split, and turns the career record into a private Race Book with comparison and export tools.
-- Competitive context: Event result pages show one race at a time, while training platforms usually require manual entry. IM Iron Splits uses published results as the source of truth, needs no account, and keeps the record on the phone.
+- Advantage: IM Tri Tracker finds published results by name, keeps race kinds comparable, ranks every split, and turns the career record into a Race Book with comparison and export tools.
+- Competitive context: Event result pages show one race at a time, while training platforms usually require manual entry. IM Tri Tracker uses published results as the source of truth, needs no account, and keeps the record on the phone.
 
 ## Sets
 
 | Set | Status | Frames |
 | --- | --- | ---: |
-| `race-book-evidence` | pass | 8 |
+| `race-book-evidence` | pass | 7 |
 
 ## Review contract
 

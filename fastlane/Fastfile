@@ -75,6 +75,7 @@ platform :ios do
       skip_binary_upload: true,
       skip_screenshots: skip_shots,
       overwrite_screenshots: !skip_shots,
+      app_rating_config_path: File.expand_path("metadata/app_rating_config.json", __dir__),
       submit_for_review: false,
       automatic_release: false,
       run_precheck_before_submit: false,
@@ -141,6 +142,7 @@ platform :ios do
       skip_binary_upload: true,
       skip_metadata: true,
       skip_screenshots: true,
+      app_rating_config_path: File.expand_path("metadata/app_rating_config.json", __dir__),
       force: true,
       # Matches upload_metadata. The 11 deprecated locale directories are still
       # required by ASC but rejected by deliver's validator, and this lane

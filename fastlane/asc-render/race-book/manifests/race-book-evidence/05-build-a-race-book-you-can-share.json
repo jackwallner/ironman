@@ -1,7 +1,7 @@
 {
   "filename": "05-build-a-race-book-you-can-share.png",
   "path": "race-book-evidence/05-build-a-race-book-you-can-share.png",
-  "output_sha256": "3f037f12bec98c7aae55f67939726ba89e21a8bbcf6108c8c10a9d78a0c4badb",
+  "output_sha256": "0194030ef8d5e9ce213dd50b8a08cd17a79ec951fb410f972faf7f31f9187f2d",
   "output_size": [
     1320,
     2868
@@ -21,12 +21,12 @@
     "proof": "The literal Race Book capture shows the Build PDF and image action in the paid export surface."
   },
   "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-export.png",
-  "source_sha256": "6ce14401a3b0ef43feec497d07f1f308f4e01722b93faae2e937023dd7eb6d95",
+  "source_sha256": "022dccf6ebf9c78b00cc5cc6bef8608a3f594f695916885a2b839b9d9fc1e551",
   "background_asset": null,
   "background_asset_sha256": null,
   "background_override": null,
   "foreground": "manifests/race-book-evidence/05-build-a-race-book-you-can-share.foreground.png",
-  "foreground_sha256": "b6fe7b3ef5ea28059f7e9dc26f2700560a17da6b3596284bac0c884fbd5cf426",
+  "foreground_sha256": "d749a9c451c9eebf0d7a8de9e0ed2028070a40dd7e6446e1383dbcf7a1ff93c7",
   "ui_mask": "manifests/race-book-evidence/05-build-a-race-book-you-can-share.ui-mask.png",
   "ui_coverage": 0.6078,
   "imagegen_received_ui_source": false,
@@ -64,5 +64,5 @@
     450
   ],
   "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-export.png",
-  "source_evidence_sha256": "6ce14401a3b0ef43feec497d07f1f308f4e01722b93faae2e937023dd7eb6d95"
+  "source_evidence_sha256": "022dccf6ebf9c78b00cc5cc6bef8608a3f594f695916885a2b839b9d9fc1e551"
 }

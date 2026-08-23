@@ -1,7 +1,7 @@
 {
   "filename": "02-see-where-you-found-time.png",
   "path": "race-book-evidence/02-see-where-you-found-time.png",
-  "output_sha256": "a615057677131c8b9d6cfa2263f15bedf26ecbdd2b080f9427da818851398370",
+  "output_sha256": "1ac9c51603f27b3c42e779a83a47c9740577862f0dc8d2c8c4e06b835dccff53",
   "output_size": [
     1320,
     2868
@@ -21,12 +21,12 @@
     "proof": "The literal Race Book capture shows the Compare two races action in the paid Race Book surface."
   },
   "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-compare.png",
-  "source_sha256": "6ce14401a3b0ef43feec497d07f1f308f4e01722b93faae2e937023dd7eb6d95",
+  "source_sha256": "d6ad434b0c3f05c9a5242a3070144daba80d5241e18b7905ca134670a5cef2b4",
   "background_asset": null,
   "background_asset_sha256": null,
   "background_override": null,
   "foreground": "manifests/race-book-evidence/02-see-where-you-found-time.foreground.png",
-  "foreground_sha256": "ac7aa58836fabd36a0cf2bd6ce29a1de44af89a61fc36a004eeef83a0c88e5ef",
+  "foreground_sha256": "5f384fb755d4e2b5e25fc8272db303d4da313919d9e7fd876dfbbe4710235fd8",
   "ui_mask": "manifests/race-book-evidence/02-see-where-you-found-time.ui-mask.png",
   "ui_coverage": 0.6078,
   "imagegen_received_ui_source": false,
@@ -64,5 +64,5 @@
     438
   ],
   "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-compare.png",
-  "source_evidence_sha256": "6ce14401a3b0ef43feec497d07f1f308f4e01722b93faae2e937023dd7eb6d95"
+  "source_evidence_sha256": "d6ad434b0c3f05c9a5242a3070144daba80d5241e18b7905ca134670a5cef2b4"
 }

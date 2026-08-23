@@ -1,7 +1,7 @@
 {
   "filename": "01-turn-history-into-a-story.png",
   "path": "race-book-evidence/01-turn-history-into-a-story.png",
-  "output_sha256": "664a472dd34ba4ad4e319719e340308adb2e4c45beab0ee3c997a2c8b78f8953",
+  "output_sha256": "8c8e26b5aec0d8606dd8b1cf3b972b413198410fd322460a86f6f76208f94f6d",
   "output_size": [
     1320,
     2868
@@ -21,12 +21,12 @@
     "proof": "The literal Race Book capture shows the athlete's personal bests and progression cards built from the claimed history."
   },
   "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book.png",
-  "source_sha256": "2606886381dce375d2b3e281ac6b47031f2c83ff9782dbdd730651c6dd1353c7",
+  "source_sha256": "899b3da502fa02ed0e461530dc9da50b8a2fc5e2671fd14d49ad63241a7f63ae",
   "background_asset": null,
   "background_asset_sha256": null,
   "background_override": null,
   "foreground": "manifests/race-book-evidence/01-turn-history-into-a-story.foreground.png",
-  "foreground_sha256": "43f4665d8ebb3cb66f3be5ac50de6fed7f791e7d39ba4ecf075afbf76e7e404c",
+  "foreground_sha256": "b9486beefa91c2471fd3336a79a407a057db640de26e8513919fdd0f110e02ba",
   "ui_mask": "manifests/race-book-evidence/01-turn-history-into-a-story.ui-mask.png",
   "ui_coverage": 0.6078,
   "imagegen_received_ui_source": false,
@@ -64,5 +64,5 @@
     432
   ],
   "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book.png",
-  "source_evidence_sha256": "2606886381dce375d2b3e281ac6b47031f2c83ff9782dbdd730651c6dd1353c7"
+  "source_evidence_sha256": "899b3da502fa02ed0e461530dc9da50b8a2fc5e2671fd14d49ad63241a7f63ae"
 }

@@ -12,7 +12,7 @@
         {
           "filename": "01-turn-history-into-a-story.png",
           "path": "race-book-evidence/01-turn-history-into-a-story.png",
-          "output_sha256": "664a472dd34ba4ad4e319719e340308adb2e4c45beab0ee3c997a2c8b78f8953",
+          "output_sha256": "8c8e26b5aec0d8606dd8b1cf3b972b413198410fd322460a86f6f76208f94f6d",
           "output_size": [
             1320,
             2868
@@ -32,12 +32,12 @@
             "proof": "The literal Race Book capture shows the athlete's personal bests and progression cards built from the claimed history."
           },
           "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book.png",
-          "source_sha256": "2606886381dce375d2b3e281ac6b47031f2c83ff9782dbdd730651c6dd1353c7",
+          "source_sha256": "899b3da502fa02ed0e461530dc9da50b8a2fc5e2671fd14d49ad63241a7f63ae",
           "background_asset": null,
           "background_asset_sha256": null,
           "background_override": null,
           "foreground": "manifests/race-book-evidence/01-turn-history-into-a-story.foreground.png",
-          "foreground_sha256": "43f4665d8ebb3cb66f3be5ac50de6fed7f791e7d39ba4ecf075afbf76e7e404c",
+          "foreground_sha256": "b9486beefa91c2471fd3336a79a407a057db640de26e8513919fdd0f110e02ba",
           "ui_mask": "manifests/race-book-evidence/01-turn-history-into-a-story.ui-mask.png",
           "ui_coverage": 0.6078,
           "imagegen_received_ui_source": false,
@@ -75,13 +75,13 @@
             432
           ],
           "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book.png",
-          "source_evidence_sha256": "2606886381dce375d2b3e281ac6b47031f2c83ff9782dbdd730651c6dd1353c7",
+          "source_evidence_sha256": "899b3da502fa02ed0e461530dc9da50b8a2fc5e2671fd14d49ad63241a7f63ae",
           "manifest": "manifests/race-book-evidence/01-turn-history-into-a-story.json"
         },
         {
           "filename": "02-see-where-you-found-time.png",
           "path": "race-book-evidence/02-see-where-you-found-time.png",
-          "output_sha256": "a615057677131c8b9d6cfa2263f15bedf26ecbdd2b080f9427da818851398370",
+          "output_sha256": "1ac9c51603f27b3c42e779a83a47c9740577862f0dc8d2c8c4e06b835dccff53",
           "output_size": [
             1320,
             2868
@@ -101,12 +101,12 @@
             "proof": "The literal Race Book capture shows the Compare two races action in the paid Race Book surface."
           },
           "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-compare.png",
-          "source_sha256": "6ce14401a3b0ef43feec497d07f1f308f4e01722b93faae2e937023dd7eb6d95",
+          "source_sha256": "d6ad434b0c3f05c9a5242a3070144daba80d5241e18b7905ca134670a5cef2b4",
           "background_asset": null,
           "background_asset_sha256": null,
           "background_override": null,
           "foreground": "manifests/race-book-evidence/02-see-where-you-found-time.foreground.png",
-          "foreground_sha256": "ac7aa58836fabd36a0cf2bd6ce29a1de44af89a61fc36a004eeef83a0c88e5ef",
+          "foreground_sha256": "5f384fb755d4e2b5e25fc8272db303d4da313919d9e7fd876dfbbe4710235fd8",
           "ui_mask": "manifests/race-book-evidence/02-see-where-you-found-time.ui-mask.png",
           "ui_coverage": 0.6078,
           "imagegen_received_ui_source": false,
@@ -144,13 +144,13 @@
             438
           ],
           "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-compare.png",
-          "source_evidence_sha256": "6ce14401a3b0ef43feec497d07f1f308f4e01722b93faae2e937023dd7eb6d95",
+          "source_evidence_sha256": "d6ad434b0c3f05c9a5242a3070144daba80d5241e18b7905ca134670a5cef2b4",
           "manifest": "manifests/race-book-evidence/02-see-where-you-found-time.json"
         },
         {
           "filename": "03-know-where-every-second-went.png",
           "path": "race-book-evidence/03-know-where-every-second-went.png",
-          "output_sha256": "6ddee2eb00d8e8386ff4d81dad8575a6ec47e3a3fa41f549b976f9603b01ec22",
+          "output_sha256": "48a9ff9a7ab18649a469b081c051199d3bd477aace25962d4dde40dd95d425c1",
           "output_size": [
             1320,
             2868
@@ -170,12 +170,12 @@
             "proof": "The literal race detail capture shows official splits and the field context used to interpret them."
           },
           "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-detail.png",
-          "source_sha256": "1a7b24ce5321b65239a1aa7f09a5b61432035bccdd9d00a06b02353b579b4ad3",
+          "source_sha256": "6d9bc80c527ab4d930e15ed8765b63f77ae13376af43da1a21006bd85b14936a",
           "background_asset": null,
           "background_asset_sha256": null,
           "background_override": null,
           "foreground": "manifests/race-book-evidence/03-know-where-every-second-went.foreground.png",
-          "foreground_sha256": "ebe659660128526ac8ec9f5141a27d9fd4c50eb7e0520bf3d61fe9bdfe4acc1c",
+          "foreground_sha256": "85d43e17cab4adf10056ce3e2df6f7ec2916f24f3001035c0ffb547fe706df11",
           "ui_mask": "manifests/race-book-evidence/03-know-where-every-second-went.ui-mask.png",
           "ui_coverage": 0.6078,
           "imagegen_received_ui_source": false,
@@ -213,13 +213,13 @@
             406
           ],
           "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-detail.png",
-          "source_evidence_sha256": "1a7b24ce5321b65239a1aa7f09a5b61432035bccdd9d00a06b02353b579b4ad3",
+          "source_evidence_sha256": "6d9bc80c527ab4d930e15ed8765b63f77ae13376af43da1a21006bd85b14936a",
           "manifest": "manifests/race-book-evidence/03-know-where-every-second-went.json"
         },
         {
           "filename": "04-keep-every-race-together.png",
           "path": "race-book-evidence/04-keep-every-race-together.png",
-          "output_sha256": "725992b1f55c2631089b1f432938607d7e32c2129a31a90ad16fa5101ba3a083",
+          "output_sha256": "053336ef427c866945910468ac204f46adced4f261cb63b7eb52d89096510d5c",
           "output_size": [
             1320,
             2868
@@ -239,12 +239,12 @@
             "proof": "The literal locker capture shows multiple official finishes grouped under the claimed athlete."
           },
           "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/locker.png",
-          "source_sha256": "fd3c80ca63ed5cc61c86807e60ada264e01e73ad10e9dee16fbce73ac03436ac",
+          "source_sha256": "ecacb0af45e3e3f88088ef47f5423283f2eee1f60ed92674fbbafefb7ea3c561",
           "background_asset": null,
           "background_asset_sha256": null,
           "background_override": null,
           "foreground": "manifests/race-book-evidence/04-keep-every-race-together.foreground.png",
-          "foreground_sha256": "a5a4eb0c87e36491be89f90f16a3c0e66c644868758064bdc40861b49e35adf5",
+          "foreground_sha256": "e179b0afd03ab883afae9d8abd1e97726074269b54ef4ece68f642c334333700",
           "ui_mask": "manifests/race-book-evidence/04-keep-every-race-together.ui-mask.png",
           "ui_coverage": 0.6078,
           "imagegen_received_ui_source": false,
@@ -282,13 +282,13 @@
             467
           ],
           "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/locker.png",
-          "source_evidence_sha256": "fd3c80ca63ed5cc61c86807e60ada264e01e73ad10e9dee16fbce73ac03436ac",
+          "source_evidence_sha256": "ecacb0af45e3e3f88088ef47f5423283f2eee1f60ed92674fbbafefb7ea3c561",
           "manifest": "manifests/race-book-evidence/04-keep-every-race-together.json"
         },
         {
           "filename": "05-build-a-race-book-you-can-share.png",
           "path": "race-book-evidence/05-build-a-race-book-you-can-share.png",
-          "output_sha256": "3f037f12bec98c7aae55f67939726ba89e21a8bbcf6108c8c10a9d78a0c4badb",
+          "output_sha256": "0194030ef8d5e9ce213dd50b8a08cd17a79ec951fb410f972faf7f31f9187f2d",
           "output_size": [
             1320,
             2868
@@ -308,12 +308,12 @@
             "proof": "The literal Race Book capture shows the Build PDF and image action in the paid export surface."
           },
           "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-export.png",
-          "source_sha256": "6ce14401a3b0ef43feec497d07f1f308f4e01722b93faae2e937023dd7eb6d95",
+          "source_sha256": "022dccf6ebf9c78b00cc5cc6bef8608a3f594f695916885a2b839b9d9fc1e551",
           "background_asset": null,
           "background_asset_sha256": null,
           "background_override": null,
           "foreground": "manifests/race-book-evidence/05-build-a-race-book-you-can-share.foreground.png",
-          "foreground_sha256": "b6fe7b3ef5ea28059f7e9dc26f2700560a17da6b3596284bac0c884fbd5cf426",
+          "foreground_sha256": "d749a9c451c9eebf0d7a8de9e0ed2028070a40dd7e6446e1383dbcf7a1ff93c7",
           "ui_mask": "manifests/race-book-evidence/05-build-a-race-book-you-can-share.ui-mask.png",
           "ui_coverage": 0.6078,
           "imagegen_received_ui_source": false,
@@ -351,13 +351,13 @@
             450
           ],
           "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-export.png",
-          "source_evidence_sha256": "6ce14401a3b0ef43feec497d07f1f308f4e01722b93faae2e937023dd7eb6d95",
+          "source_evidence_sha256": "022dccf6ebf9c78b00cc5cc6bef8608a3f594f695916885a2b839b9d9fc1e551",
           "manifest": "manifests/race-book-evidence/05-build-a-race-book-you-can-share.json"
         },
         {
           "filename": "06-find-your-fastest-split.png",
           "path": "race-book-evidence/06-find-your-fastest-split.png",
-          "output_sha256": "cebeacd69d0edcf2361f7f59ec073369fabbe12aa3c7b61668ccd93540eb794a",
+          "output_sha256": "a4423a806ef2bb49027068e0a2386d22359df55ed116392033b913ad9881560f",
           "output_size": [
             1320,
             2868
@@ -377,12 +377,12 @@
             "proof": "The literal Bests capture shows split rankings sourced from the official race history."
           },
           "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/bests.png",
-          "source_sha256": "efc5c5e8aefe16490556208b48f3130dc441258efca06c02977ae6fa0caf0411",
+          "source_sha256": "6fc7588d4763827c62293c65319ee1fdae2deea4a6303b9a7368e055ae936284",
           "background_asset": null,
           "background_asset_sha256": null,
           "background_override": null,
           "foreground": "manifests/race-book-evidence/06-find-your-fastest-split.foreground.png",
-          "foreground_sha256": "b487cd35b5e4503eb0c16705b4a52b086de173bab7f96816d18225bf66a42261",
+          "foreground_sha256": "5f892ca19cde0036edb81f55c7e0a4ae299f79faf9267195a529cea754c38bc0",
           "ui_mask": "manifests/race-book-evidence/06-find-your-fastest-split.ui-mask.png",
           "ui_coverage": 0.6078,
           "imagegen_received_ui_source": false,
@@ -420,13 +420,13 @@
             465
           ],
           "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/bests.png",
-          "source_evidence_sha256": "efc5c5e8aefe16490556208b48f3130dc441258efca06c02977ae6fa0caf0411",
+          "source_evidence_sha256": "6fc7588d4763827c62293c65319ee1fdae2deea4a6303b9a7368e055ae936284",
           "manifest": "manifests/race-book-evidence/06-find-your-fastest-split.json"
         },
         {
           "filename": "07-learn-from-every-race-day.png",
           "path": "race-book-evidence/07-learn-from-every-race-day.png",
-          "output_sha256": "021789e5902b28d3cf5f25ef540aed3bcfedba1d44014f1332cc1ef6e6474397",
+          "output_sha256": "96888748b3196edd8033366c7e1380347ec352cd88db7995da3f4c0275e84eb8",
           "output_size": [
             1320,
             2868
@@ -446,12 +446,12 @@
             "proof": "The literal Pattie capture shows the app's coaching pointer surface organized around the athlete's question."
           },
           "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/pattie.png",
-          "source_sha256": "2468080b8fb2dafac2ced92e1f042380db5b45c938aff3083049cc126f696f04",
+          "source_sha256": "37ac940a0a0eff2f8bb51b692df306c5de9af75f76582e5949239d3ac874b925",
           "background_asset": null,
           "background_asset_sha256": null,
           "background_override": null,
           "foreground": "manifests/race-book-evidence/07-learn-from-every-race-day.foreground.png",
-          "foreground_sha256": "6e6308cbdffb11eb709ae9acccdc03ed8f8a1a37690bd7c4a7c12bdc8ee47ca0",
+          "foreground_sha256": "e0ea97741b892ec0e3357fb8beaa702efe309db857580f37602589cdc9dc7b91",
           "ui_mask": "manifests/race-book-evidence/07-learn-from-every-race-day.ui-mask.png",
           "ui_coverage": 0.6078,
           "imagegen_received_ui_source": false,
@@ -489,77 +489,8 @@
             467
           ],
           "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/pattie.png",
-          "source_evidence_sha256": "2468080b8fb2dafac2ced92e1f042380db5b45c938aff3083049cc126f696f04",
+          "source_evidence_sha256": "37ac940a0a0eff2f8bb51b692df306c5de9af75f76582e5949239d3ac874b925",
           "manifest": "manifests/race-book-evidence/07-learn-from-every-race-day.json"
-        },
-        {
-          "filename": "08-keep-your-race-record-private.png",
-          "path": "race-book-evidence/08-keep-your-race-record-private.png",
-          "output_sha256": "cb978a7ffb4b02aaa48e6193ca3056594402158220b748f805c4f720e6607a3f",
-          "output_size": [
-            1320,
-            2868
-          ],
-          "device": "iphone",
-          "header": "Keep your race record private",
-          "pitch": {
-            "benefit": "Keep the race record and private notes on your phone without creating an account",
-            "problem": "Athletes should not have to hand over a profile or publish their race history to review it.",
-            "advantage": "IM Iron Splits has no account system and stores the claimed history and notes locally.",
-            "header_problem": "a public profile",
-            "header_advantage": "private on-device record",
-            "search_terms": [
-              "private race log",
-              "triathlon race history"
-            ],
-            "proof": "The literal Settings capture shows the local-only privacy and data controls."
-          },
-          "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/settings.png",
-          "source_sha256": "3f976f58684e35257bf20cc54bdd59ab261c1ad150ee5383dd89c78d7e0dac48",
-          "background_asset": null,
-          "background_asset_sha256": null,
-          "background_override": null,
-          "foreground": "manifests/race-book-evidence/08-keep-your-race-record-private.foreground.png",
-          "foreground_sha256": "e742b7b1ef34cc7974286302158338dceb38e2d7d41784a44c16690b942d2992",
-          "ui_mask": "manifests/race-book-evidence/08-keep-your-race-record-private.ui-mask.png",
-          "ui_coverage": 0.6078,
-          "imagegen_received_ui_source": false,
-          "target": "iphone_69",
-          "size": [
-            1320,
-            2868
-          ],
-          "background_mode": "theme",
-          "background_id": "theme",
-          "background_top": "#071A2F",
-          "background_bottom": "#102D4D",
-          "background_asset_applied": false,
-          "phone": {
-            "x": 127,
-            "y": 560,
-            "width": 1066,
-            "height": 2273,
-            "screen_x": 146,
-            "screen_y": 579,
-            "screen_width": 1028,
-            "screen_height": 2235
-          },
-          "header_only": true,
-          "compositor_text_layers": [
-            "header"
-          ],
-          "header_font_size": 164,
-          "header_lines": 2,
-          "header_text": "Keep your race record private",
-          "header_bounds": [
-            145,
-            152,
-            1174,
-            465
-          ],
-          "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/settings.png",
-          "source_evidence_sha256": "3f976f58684e35257bf20cc54bdd59ab261c1ad150ee5383dd89c78d7e0dac48",
-          "manifest": "manifests/race-book-evidence/08-keep-your-race-record-private.json"
         }
       ]
     }
