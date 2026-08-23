@@ -370,7 +370,10 @@ struct RaceNoteEditor: View {
             .triNavBar()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }.foregroundStyle(TriPalette.inkOnDark).triTapTarget()
+                    Button("Cancel") { dismiss() }
+                        .foregroundStyle(TriPalette.inkOnDark)
+                        .padding(.horizontal, TriSpace.x3)
+                        .triTapTarget()
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
@@ -378,6 +381,7 @@ struct RaceNoteEditor: View {
                         dismiss()
                     }
                     .foregroundStyle(TriPalette.inkOnDark)
+                    .padding(.horizontal, TriSpace.x3)
                     .fontWeight(.semibold)
                 }
             }

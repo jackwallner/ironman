@@ -199,6 +199,7 @@ enum TriGeo {
     static let padCard: CGFloat = TriSpace.x4
     static let padPage: CGFloat = TriSpace.x4
     static let padSection: CGFloat = TriSpace.x6
+    static let tabBarClearance: CGFloat = TriSpace.x10 + TriSpace.x10 + TriSpace.x4
 
     /// Apple's floor for anything a thumb has to hit.
     static let tapTarget: CGFloat = 44
@@ -356,17 +357,38 @@ struct TriSectionHeader: View {
     var trailing: String?
 
     var body: some View {
-        HStack(alignment: .firstTextBaseline) {
-            Text(title.uppercased())
-                .font(TriType.sectionTitle)
-                .kerning(0.8)
-                .foregroundStyle(TriPalette.inkSecondary)
-            Spacer(minLength: TriSpace.x2)
-            if let trailing {
-                Text(trailing)
-                    .font(TriType.small)
-                    .foregroundStyle(TriPalette.inkTertiary)
+        ViewThatFits(in: .horizontal) {
+            HStack(alignment: .firstTextBaseline, spacing: TriSpace.x2) {
+                heading
+                Spacer(minLength: TriSpace.x2)
+                trailingLabel
             }
+            VStack(alignment: .leading, spacing: TriSpace.x1) {
+                heading
+                trailingLabel
+            }
+        }
+    }
+
+    private var heading: some View {
+        Text(title.uppercased())
+            .font(TriType.sectionTitle)
+            .kerning(0.8)
+            .foregroundStyle(TriPalette.inkSecondary)
+            .lineLimit(1)
+            .minimumScaleFactor(0.68)
+            .allowsTightening(true)
+    }
+
+    @ViewBuilder
+    private var trailingLabel: some View {
+        if let trailing {
+            Text(trailing)
+                .font(TriType.small)
+                .foregroundStyle(TriPalette.inkTertiary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.78)
+                .allowsTightening(true)
         }
     }
 }
@@ -445,8 +467,8 @@ struct TriPrimaryButton: View {
                     .font(TriType.bodyBold)
             }
             .foregroundStyle(TriPalette.inkOnDark)
-            .frame(maxWidth: .infinity)
-            .frame(height: TriGeo.tapTarget + TriSpace.x1)
+            .frame(maxWidth: .infinity, minHeight: TriGeo.tapTarget + TriSpace.x1)
+            .padding(.vertical, TriSpace.x2)
             .background(TriPalette.sunrise)
             .clipShape(RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous))
         }

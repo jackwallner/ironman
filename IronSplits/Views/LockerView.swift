@@ -31,6 +31,7 @@ struct LockerView: View {
                         Text("Change")
                             .font(TriType.smallBold)
                             .foregroundStyle(TriPalette.inkOnDark)
+                            .padding(.horizontal, TriSpace.x3)
                             .frame(minWidth: TriGeo.tapTarget, minHeight: TriGeo.tapTarget)
                     }
                     .buttonStyle(.triPressSilent)
@@ -112,6 +113,16 @@ struct LockerView: View {
                 LockerHeader(athlete: locker.athlete, results: locker.results)
                     .listRowInsets(EdgeInsets())
                     .listRowBackground(Color.clear)
+            }
+
+            Section {
+                NavigationLink {
+                    RaceBookView()
+                } label: {
+                    LockerRaceBookCard()
+                }
+                .buttonStyle(.triPress)
+                .listRowBackground(TriPalette.surface)
             }
 
             if let warning = locker.refreshWarning {
@@ -242,5 +253,38 @@ private struct LockerHeader: View {
         .padding(TriGeo.padCard)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(TriPalette.deep)
+    }
+}
+
+private struct LockerRaceBookCard: View {
+    var body: some View {
+        HStack(alignment: .top, spacing: TriSpace.x3) {
+            Image(systemName: "book.closed.fill")
+                .font(TriType.pageTitle)
+                .foregroundStyle(TriPalette.sunrise)
+                .frame(width: TriSpace.x8, height: TriSpace.x8)
+                .background(TriPalette.sunrise.opacity(0.14), in: Circle())
+
+            VStack(alignment: .leading, spacing: TriSpace.x1) {
+                Text("Build your Race Book")
+                    .font(TriType.cardTitle)
+                    .foregroundStyle(TriPalette.ink)
+                Text("Best splits, podiums, race-day notes and a PDF you can read here before sharing.")
+                    .font(TriType.small)
+                    .foregroundStyle(TriPalette.inkTertiary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .layoutPriority(1)
+
+            Image(systemName: "chevron.right")
+                .font(TriType.smallBold)
+                .foregroundStyle(TriPalette.inkTertiary)
+                .frame(width: TriGeo.tapTarget, height: TriGeo.tapTarget)
+        }
+        .padding(.vertical, TriSpace.x2)
+        .frame(minHeight: TriGeo.tapTarget)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Race Book")
+        .accessibilityHint("Build and read a shareable PDF from your race history")
     }
 }

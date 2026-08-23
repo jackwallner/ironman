@@ -204,6 +204,7 @@ struct AskPattieAnswerCard: View {
     let answer: AskPattieGuide.Answer
 
     @ObservedObject private var voice = PattieVoice.shared
+    @EnvironmentObject private var pattie: PattieMode
     @State private var catalog: PointerCatalog = .empty
     @State private var playingEpisode: Pointer?
 
@@ -244,7 +245,7 @@ struct AskPattieAnswerCard: View {
                 if let episode {
                     Button {
                         Haptics.tap()
-                        voice.stop()
+                        pattie.beginPointerPlayback()
                         playingEpisode = episode
                     } label: {
                         Label("Full clip", systemImage: "play.rectangle")

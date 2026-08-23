@@ -84,23 +84,17 @@ final class DesignAuditUITests: XCTestCase {
         shoot(app, "04-race-detail")
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
-        for (tab, name) in [("Bests", "05-bests"), ("Pattie", "06-ask-pattie")] {
+        for (tab, name) in [("Pattie", "05-ask-pattie")] {
             app.tabBars.buttons[tab].tap()
             settle()
             shoot(app, name)
         }
 
-        app.tabBars.buttons["Resume"].tap()
-        XCTAssertTrue(app.navigationBars["Resume"].waitForExistence(timeout: 10))
-        settle()
-        shoot(app, "07-resume")
-
-        let openRaceBook = app.buttons["Open Race Book"]
-        XCTAssertTrue(openRaceBook.waitForExistence(timeout: 10))
-        openRaceBook.tap()
+        app.tabBars.buttons["Race Book"].tap()
         XCTAssertTrue(app.navigationBars["Race Book"].waitForExistence(timeout: 10))
         settle()
-        shoot(app, "08-race-book")
+        shoot(app, "06-race-book")
+        settle()
 
         let compareButton = app.buttons["Compare two races"]
         for _ in 0..<6 where !compareButton.isHittable {
@@ -113,7 +107,6 @@ final class DesignAuditUITests: XCTestCase {
         shoot(app, "09-race-compare")
         app.navigationBars["Compare races"].buttons.element(boundBy: 0).tap()
         XCTAssertTrue(app.navigationBars["Race Book"].waitForExistence(timeout: 10))
-        app.buttons["Done"].tap()
 
         app.tabBars.buttons["Settings"].tap()
         XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 10))

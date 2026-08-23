@@ -12,37 +12,56 @@ struct RaceBookView: View {
     @EnvironmentObject private var pattie: PattieMode
     @Environment(\.dismiss) private var dismiss
 
+    var showsDoneButton = false
+
     @State private var selectedKind: RaceKind?
     @State private var selectedDiscipline: Discipline = .finish
+    @State private var exportOptions = RaceBookOptions()
+    @State private var didInitializeExportOptions = false
     @State private var paywallTrigger: PaywallTrigger?
     @State private var isBuildingExports = false
     @State private var exportGeneration = 0
     @State private var exports: RaceBookExports?
     @State private var exportError: String?
+    @State private var pdfPreview: RaceBookPDFItem?
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                TriPalette.canvas.ignoresSafeArea()
-                content
-            }
-            .navigationTitle("Race Book")
-            .navigationBarTitleDisplayMode(.inline)
-            .triNavBar()
-            .toolbar {
+        ZStack {
+            TriPalette.canvas.ignoresSafeArea()
+            content
+        }
+        .navigationTitle("Race Book")
+        .navigationBarTitleDisplayMode(.inline)
+        .triNavBar()
+        .toolbar {
+            if showsDoneButton {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") { dismiss() }
-                        .font(TriType.bodyBold)
-                        .foregroundStyle(TriPalette.inkOnDark)
-                        .frame(minHeight: TriGeo.tapTarget)
-                        .buttonStyle(.triPressSilent)
+                    Button {
+                        dismiss()
+                    } label: {
+                        Text("Done")
+                            .font(TriType.bodyBold)
+                            .foregroundStyle(TriPalette.inkOnDark)
+                            .padding(.horizontal, TriSpace.x3)
+                            .frame(minHeight: TriGeo.tapTarget)
+                    }
+                    .buttonStyle(.triPressSilent)
                 }
             }
-            .onAppear { syncKind() }
-            .onChange(of: locker.availableKinds) { _, _ in syncKind() }
-            .sheet(item: $paywallTrigger) { trigger in
-                PaywallView(trigger: trigger)
-            }
+        }
+        .onAppear {
+            syncKind()
+            syncExportOptions()
+        }
+        .onChange(of: locker.availableKinds) { _, _ in
+            syncKind()
+            syncExportOptions()
+        }
+        .sheet(item: $paywallTrigger) { trigger in
+            PaywallView(trigger: trigger)
+        }
+        .sheet(item: $pdfPreview) { item in
+            RaceBookPDFPreview(url: item.url)
         }
     }
 
@@ -56,21 +75,22 @@ struct RaceBookView: View {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: TriSpace.x6) {
                     introCard
+                    exportCard
+                    includeCard
                     careerCard
                     kindFilter
                     personalBestsCard
                     progressionCard
-                    compareCard
-                    exportCard
                     Text("Official times are shown as published by the event timer. Race notes stay on this phone and are included only when you choose to export.")
                         .font(TriType.micro)
                         .foregroundStyle(TriPalette.inkTertiary)
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.horizontal, TriSpace.x1)
+                    compareCard
                 }
                 .padding(.horizontal, TriGeo.padPage)
                 .padding(.top, TriSpace.x4)
-                .padding(.bottom, TriSpace.x8)
+                .padding(.bottom, TriGeo.tabBarClearance)
             }
         }
     }
@@ -79,7 +99,7 @@ struct RaceBookView: View {
         VStack(alignment: .leading, spacing: TriSpace.x2) {
             HStack(alignment: .top, spacing: TriSpace.x3) {
                 Image(systemName: "book.closed.fill")
-                    .font(.system(size: 24, weight: .semibold))
+                    .font(TriType.pageTitle)
                     .foregroundStyle(TriPalette.sunrise)
                     .frame(width: TriSpace.x8, height: TriSpace.x8)
                     .background(TriPalette.sunrise.opacity(0.14), in: Circle())
@@ -137,6 +157,74 @@ struct RaceBookView: View {
             }
         }
         .triCard(padding: TriSpace.x3)
+    }
+
+    private var includeCard: some View {
+        VStack(alignment: .leading, spacing: TriSpace.x3) {
+            TriSectionHeader(title: "Things to include")
+            Text("Shape the book around the parts of your career you will want on race morning and after the finish.")
+                .font(TriType.small)
+                .foregroundStyle(TriPalette.inkTertiary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            VStack(spacing: TriSpace.x1) {
+                optionToggle("Career overview", detail: "Starts, finishes, podiums and years",
+                             isOn: $exportOptions.includeCareerSummary)
+                optionToggle("Podium highlights", detail: "Your top-three race moments",
+                             isOn: $exportOptions.includePodiumHighlights)
+                optionToggle("Personal bests", detail: "Fastest finish and leg at each distance",
+                             isOn: $exportOptions.includePersonalBests)
+                optionToggle("Progression", detail: "First and latest finish by distance",
+                             isOn: $exportOptions.includeProgression)
+                optionToggle("Race history", detail: "A complete timeline of selected races",
+                             isOn: $exportOptions.includeRaceHistory)
+                optionToggle("Official splits", detail: "Swim, T1, bike, T2 and run",
+                             isOn: $exportOptions.includeSplits)
+                optionToggle("Placements", detail: "Bib, age group and overall rank",
+                             isOn: $exportOptions.includePlacements)
+                optionToggle("Race-day notes", detail: "Conditions, nutrition, gear and notes",
+                             isOn: $exportOptions.includeRaceNotes)
+                optionToggle("Incomplete results", detail: "Include DNF, DNS and DQ entries",
+                             isOn: $exportOptions.includeIncomplete)
+            }
+
+            if locker.availableKinds.count > 1 {
+                TriSectionHeader(title: "Distances")
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: TriSpace.x2) {
+                        ForEach(locker.availableKinds, id: \.self) { kind in
+                            TriChip(title: kind.longTitle,
+                                    isSelected: exportOptions.kinds.contains(kind)) {
+                                toggleExportKind(kind)
+                            }
+                        }
+                    }
+                    .padding(.vertical, TriSpace.x1)
+                }
+            }
+        }
+        .triCard(padding: TriSpace.x3)
+    }
+
+    private func optionToggle(_ title: String,
+                              detail: String,
+                              isOn: Binding<Bool>) -> some View {
+        Toggle(isOn: isOn) {
+            VStack(alignment: .leading, spacing: TriSpace.x1) {
+                Text(title)
+                    .font(TriType.bodyBold)
+                    .foregroundStyle(TriPalette.ink)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.72)
+                    .allowsTightening(true)
+                Text(detail)
+                    .font(TriType.small)
+                    .foregroundStyle(TriPalette.inkTertiary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .tint(TriPalette.sunrise)
+        .frame(minHeight: TriGeo.tapTarget, alignment: .leading)
     }
 
     @ViewBuilder
@@ -262,8 +350,8 @@ struct RaceBookView: View {
 
     private var exportCard: some View {
         VStack(alignment: .leading, spacing: TriSpace.x3) {
-            TriSectionHeader(title: "Export your Race Book")
-            Text("Create a complete PDF or tall shareable image with your history, official splits, podiums, career stats and private notes.")
+            TriSectionHeader(title: "Build your Race Book")
+            Text("Build a polished PDF and a tall shareable image from the choices below. Everything is generated on this phone.")
                 .font(TriType.body)
                 .foregroundStyle(TriPalette.inkSecondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -284,7 +372,7 @@ struct RaceBookView: View {
                 HStack(spacing: TriSpace.x2) {
                     ProgressView()
                         .tint(TriPalette.deep)
-                    Text("Building both files locally…")
+                    Text("Building both files on this phone...")
                         .font(TriType.small)
                         .foregroundStyle(TriPalette.inkSecondary)
                 }
@@ -302,6 +390,15 @@ struct RaceBookView: View {
             }
 
             if let pdf = exports?.pdf {
+                Button {
+                    pdfPreview = RaceBookPDFItem(url: pdf)
+                } label: {
+                    RaceBookActionLabel(title: "View PDF",
+                                        subtitle: "Read it here before sharing",
+                                        systemImage: "doc.text.magnifyingglass")
+                }
+                .buttonStyle(.triPress)
+
                 ShareLink(item: pdf) {
                     Label("Share PDF", systemImage: "doc.richtext")
                 }
@@ -379,7 +476,7 @@ struct RaceBookView: View {
 
     private func progressionArrow(change: Int) -> some View {
         Image(systemName: change == 0 ? "arrow.right" : (change < 0 ? "arrow.down.right" : "arrow.up.right"))
-            .font(.system(size: 17, weight: .semibold))
+            .font(TriType.cardTitle)
             .foregroundStyle(changeColor(change))
             .frame(minWidth: TriGeo.tapTarget, minHeight: TriGeo.tapTarget)
             .accessibilityHidden(true)
@@ -394,15 +491,18 @@ struct RaceBookView: View {
         let generation = exportGeneration
         let results = locker.results
         let notes = notes.notes
+        let options = exportOptions
 
         Task { @MainActor in
             let built = await Task.detached(priority: .userInitiated) {
                 RaceBookExports(pdf: RaceBookBuilder.pdf(athlete: athlete,
                                                          results: results,
-                                                         notes: notes),
+                                                         notes: notes,
+                                                         options: options),
                                  image: RaceBookBuilder.image(athlete: athlete,
                                                               results: results,
-                                                              notes: notes))
+                                                              notes: notes,
+                                                              options: options))
             }.value
             guard !Task.isCancelled, generation == exportGeneration else { return }
             exports = built
@@ -425,6 +525,32 @@ struct RaceBookView: View {
         }
         if let selectedKind, available.contains(selectedKind) { return }
         selectedKind = available.first
+    }
+
+    private func syncExportOptions() {
+        let available = Set(locker.availableKinds)
+        guard !available.isEmpty else { return }
+        guard !didInitializeExportOptions else {
+            exportOptions.kinds.formIntersection(available)
+            if exportOptions.kinds.isEmpty {
+                exportOptions.kinds = available
+            }
+            return
+        }
+        exportOptions.kinds = available
+        didInitializeExportOptions = true
+    }
+
+    private func toggleExportKind(_ kind: RaceKind) {
+        if exportOptions.kinds.contains(kind) {
+            guard exportOptions.kinds.count > 1 else { return }
+            exportOptions.kinds.remove(kind)
+        } else {
+            exportOptions.kinds.insert(kind)
+        }
+        pattie.react(.selection)
+        exports = nil
+        exportError = nil
     }
 
     private func yearsText(_ years: ClosedRange<Int>?) -> String {
@@ -452,6 +578,12 @@ struct RaceBookView: View {
     }
 }
 
+private struct RaceBookPDFItem: Identifiable {
+    let url: URL
+
+    var id: URL { url }
+}
+
 private struct RaceBookExports: Sendable {
     let pdf: URL?
     let image: URL?
@@ -461,11 +593,19 @@ private struct RaceBookBestRow: View {
     let best: PersonalBest
 
     var body: some View {
-        HStack(spacing: TriSpace.x3) {
-            Image(systemName: best.discipline.symbol)
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(TriPalette.color(for: best.discipline))
-                .frame(width: TriSpace.x8)
+        ViewThatFits(in: .horizontal) {
+            wideRow
+            stackedRow
+        }
+        .frame(minHeight: TriGeo.tapTarget)
+        .padding(.vertical, TriSpace.x1)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Personal best, \(best.discipline.title), \(TimeFormat.hms(best.seconds)), \(best.result.raceName)")
+    }
+
+    private var wideRow: some View {
+        HStack(alignment: .top, spacing: TriSpace.x3) {
+            icon
             VStack(alignment: .leading, spacing: TriSpace.x1) {
                 Text(best.discipline.title)
                     .font(TriType.bodyBold)
@@ -475,16 +615,42 @@ private struct RaceBookBestRow: View {
                     .foregroundStyle(TriPalette.inkTertiary)
                     .fixedSize(horizontal: false, vertical: true)
             }
+            .frame(minWidth: TriSpace.x10 + TriSpace.x8, alignment: .leading)
+            .layoutPriority(1)
             Spacer(minLength: TriSpace.x2)
-            Text(TimeFormat.hms(best.seconds))
-                .font(TriType.statMed)
-                .foregroundStyle(TriPalette.ink)
-                .fixedSize(horizontal: true, vertical: false)
+            time
         }
-        .frame(minHeight: TriGeo.tapTarget)
-        .padding(.vertical, TriSpace.x1)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("Personal best, \(best.discipline.title), \(TimeFormat.hms(best.seconds)), \(best.result.raceName)")
+    }
+
+    private var stackedRow: some View {
+        HStack(alignment: .top, spacing: TriSpace.x3) {
+            icon
+            VStack(alignment: .leading, spacing: TriSpace.x1) {
+                Text(best.discipline.title)
+                    .font(TriType.bodyBold)
+                    .foregroundStyle(TriPalette.ink)
+                Text(best.result.raceName)
+                    .font(TriType.small)
+                    .foregroundStyle(TriPalette.inkTertiary)
+                    .fixedSize(horizontal: false, vertical: true)
+                time
+            }
+            .layoutPriority(1)
+        }
+    }
+
+    private var icon: some View {
+        Image(systemName: best.discipline.symbol)
+            .font(TriType.cardTitle)
+            .foregroundStyle(TriPalette.color(for: best.discipline))
+            .frame(width: TriSpace.x8, height: TriGeo.tapTarget)
+    }
+
+    private var time: some View {
+        Text(TimeFormat.hms(best.seconds))
+            .font(TriType.statMed)
+            .foregroundStyle(TriPalette.ink)
+            .fixedSize(horizontal: true, vertical: false)
     }
 }
 
@@ -496,25 +662,29 @@ private struct RaceBookActionLabel: View {
     var body: some View {
         HStack(spacing: TriSpace.x3) {
             Image(systemName: systemImage)
-                .font(.system(size: 17, weight: .semibold))
+                .font(TriType.cardTitle)
                 .foregroundStyle(TriPalette.sunrise)
                 .frame(width: TriSpace.x8)
             VStack(alignment: .leading, spacing: TriSpace.x1) {
                 Text(title)
                     .font(TriType.bodyBold)
                     .foregroundStyle(TriPalette.ink)
+                    .fixedSize(horizontal: false, vertical: true)
                 Text(subtitle)
                     .font(TriType.small)
                     .foregroundStyle(TriPalette.inkTertiary)
                     .fixedSize(horizontal: false, vertical: true)
             }
+            .layoutPriority(1)
             Spacer(minLength: TriSpace.x2)
             Image(systemName: "chevron.right")
-                .font(.system(size: 13, weight: .semibold))
+                .font(TriType.smallBold)
                 .foregroundStyle(TriPalette.inkTertiary)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .frame(minHeight: TriGeo.tapTarget)
         .padding(.vertical, TriSpace.x1)
+        .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(title)
         .accessibilityHint(subtitle)
@@ -701,7 +871,7 @@ private struct RaceBookDeltaRow: View {
     var body: some View {
         HStack(spacing: TriSpace.x3) {
             Image(systemName: delta.discipline.symbol)
-                .font(.system(size: 16, weight: .semibold))
+                .font(TriType.bodyBold)
                 .foregroundStyle(TriPalette.color(for: delta.discipline))
                 .frame(width: TriSpace.x8)
             VStack(alignment: .leading, spacing: TriSpace.x1) {

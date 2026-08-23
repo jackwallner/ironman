@@ -21,6 +21,45 @@ struct RaceBookProgressionPoint: Identifiable, Hashable, Sendable {
     var id: String { result.id }
 }
 
+/// The parts of a Race Book that matter to a triathlete. The options are also
+/// the contract between the in-app builder and the exported PDF or image.
+struct RaceBookOptions: Sendable, Hashable, Equatable {
+    var kinds: Set<RaceKind>
+    var includeCareerSummary: Bool
+    var includePodiumHighlights: Bool
+    var includePersonalBests: Bool
+    var includeProgression: Bool
+    var includeRaceHistory: Bool
+    var includeSplits: Bool
+    var includePlacements: Bool
+    var includeRaceNotes: Bool
+    var includeIncomplete: Bool
+
+    init(kinds: Set<RaceKind> = Set(RaceKind.allCases),
+         includeCareerSummary: Bool = true,
+         includePodiumHighlights: Bool = true,
+         includePersonalBests: Bool = true,
+         includeProgression: Bool = true,
+         includeRaceHistory: Bool = true,
+         includeSplits: Bool = true,
+         includePlacements: Bool = true,
+         includeRaceNotes: Bool = true,
+         includeIncomplete: Bool = false) {
+        self.kinds = kinds
+        self.includeCareerSummary = includeCareerSummary
+        self.includePodiumHighlights = includePodiumHighlights
+        self.includePersonalBests = includePersonalBests
+        self.includeProgression = includeProgression
+        self.includeRaceHistory = includeRaceHistory
+        self.includeSplits = includeSplits
+        self.includePlacements = includePlacements
+        self.includeRaceNotes = includeRaceNotes
+        self.includeIncomplete = includeIncomplete
+    }
+
+    static let `default` = RaceBookOptions()
+}
+
 /// Free calculations used by the Race Book preview and its paid comparison
 /// screen. No method crosses a race kind boundary.
 enum RaceBookAnalytics {
@@ -65,8 +104,8 @@ enum RaceBookAnalytics {
     }
 }
 
-/// Builds the artifact people pay for. The output is local, deterministic and
-/// contains only the official results plus notes the athlete wrote on-device.
+/// Builds the local artifact people pay for. It contains official results plus
+/// notes the athlete wrote on-device, and never sends either anywhere.
 enum RaceBookBuilder {
     private struct ImageLine {
         let text: String
@@ -78,69 +117,105 @@ enum RaceBookBuilder {
 
     static func plainText(athlete: Athlete,
                           results: [RaceResult],
-                          notes: [String: RaceNote]) -> String {
-        let summary = RaceAnalytics.summary(results)
+                          notes: [String: RaceNote],
+                          options: RaceBookOptions = .default) -> String {
+        let scopedResults = filteredResults(results, options: options)
+        let summary = RaceAnalytics.summary(scopedResults)
         var lines: [String] = [
-            "RACE BOOK: \(athlete.name.uppercased())",
-            athlete.location ?? "",
-            "\(summary.finishes) finishes, \(summary.podiums) podiums"
+            "RACE BOOK: \(athlete.name.uppercased())"
         ]
-        if let years = summary.years {
-            lines.append("Racing from \(years.lowerBound) to \(years.upperBound)")
+        if let location = athlete.location, !location.isEmpty {
+            lines.append(location)
         }
-        lines.append("")
 
-        for kind in RaceAnalytics.availableKinds(results) {
-            lines.append(kind.longTitle.uppercased())
-            for best in RaceBookAnalytics.bests(results, kind: kind) {
-                lines.append("  Best \(best.discipline.title): \(TimeFormat.hms(best.seconds)) at \(best.result.raceName)")
-            }
-            let points = RaceBookAnalytics.progression(results, discipline: .finish, kind: kind)
-            if let first = points.first,
-               let latest = points.last,
-               first.result.id != latest.result.id {
-                lines.append("  Progression: \(TimeFormat.hms(first.seconds)) to \(TimeFormat.hms(latest.seconds))")
-            }
+        if options.includeCareerSummary {
             lines.append("")
+            lines.append("CAREER AT A GLANCE")
+            lines.append("\(summary.finishes) finishes, \(summary.podiums) podiums, \(summary.starts) starts")
+            lines.append("\(summary.fullDistance) full distance, \(summary.halfDistance) half distance")
+            if let years = summary.years {
+                lines.append("Racing from \(years.lowerBound) to \(years.upperBound)")
+            }
         }
 
-        lines.append("RACE HISTORY")
-        for result in results.sortedByDateDescending() {
-            let status = result.isComplete ? TimeFormat.hms(result.finish) : (ResumeBuilder.statusLabel(for: result) ?? "Incomplete")
-            var line = "\(dateText(result))  \(result.raceName)  \(status)"
-            if let bib = result.bib { line += "  Bib \(bib)" }
-            if let group = result.ageGroup, let place = result.finishRankGroup {
-                line += "  \(group) #\(place)"
-            } else if let place = result.finishRankGroup {
-                line += "  Division #\(place)"
-            }
-            if let overall = result.finishRankOverall {
-                line += "  \(overall) overall"
-            }
-            lines.append(line)
-
-            if result.isComplete {
-                let splitLine = [Discipline.swim, .t1, .bike, .t2, .run]
-                    .compactMap { discipline -> String? in
-                        guard let seconds = result.seconds(for: discipline), seconds > 0 else { return nil }
-                        return "\(discipline.title) \(TimeFormat.hms(seconds))"
+        if options.includePodiumHighlights {
+            lines.append("")
+            lines.append("PODIUM HIGHLIGHTS")
+            let podiums = scopedResults.filter { $0.isComplete && ($0.finishRankGroup ?? .max) <= 3 }
+            if podiums.isEmpty {
+                lines.append("No podium finishes recorded.")
+            } else {
+                for result in podiums {
+                    var line = "\(dateText(result)) - \(result.raceName) - \(TimeFormat.hms(result.finish))"
+                    if let place = result.finishRankGroup {
+                        let group = result.ageGroup ?? "Division"
+                        line += " - \(group) #\(place)"
                     }
-                if !splitLine.isEmpty {
-                    lines.append("  Splits: " + splitLine.joined(separator: "  "))
+                    lines.append(line)
                 }
             }
+        }
 
-            if let note = notes[result.id], !note.isEmpty {
-                let fields: [(String, String)] = [
-                    ("Conditions", note.conditions),
-                    ("Nutrition", note.nutrition),
-                    ("Gear", note.gear),
-                    ("Notes", note.notes)
-                ]
-                for (label, value) in fields {
-                    let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
-                    if !trimmed.isEmpty {
-                        lines.append("  \(label): \(trimmed)")
+        if options.includePersonalBests {
+            lines.append("")
+            lines.append("PERSONAL BESTS")
+            for kind in RaceAnalytics.availableKinds(scopedResults) {
+                lines.append(kind.longTitle.uppercased())
+                for best in RaceBookAnalytics.bests(scopedResults, kind: kind) {
+                    lines.append("  Best \(best.discipline.title): \(TimeFormat.hms(best.seconds)) at \(best.result.raceName)")
+                }
+            }
+        }
+
+        if options.includeProgression {
+            lines.append("")
+            lines.append("PROGRESSION")
+            var progressionCount = 0
+            for kind in RaceAnalytics.availableKinds(scopedResults) {
+                let points = RaceBookAnalytics.progression(scopedResults, discipline: .finish, kind: kind)
+                guard let first = points.first,
+                      let latest = points.last,
+                      first.result.id != latest.result.id else { continue }
+                lines.append("  \(kind.longTitle): \(TimeFormat.hms(first.seconds)) to \(TimeFormat.hms(latest.seconds))")
+                progressionCount += 1
+            }
+            if progressionCount == 0 {
+                lines.append("No second complete race at a distance yet.")
+            }
+        }
+
+        if options.includeRaceHistory {
+            lines.append("")
+            lines.append("RACE HISTORY")
+            if scopedResults.isEmpty {
+                lines.append("No races match these choices.")
+            }
+            for result in scopedResults {
+                lines.append(historyLine(for: result, includePlacements: options.includePlacements))
+
+                if options.includeSplits, result.isComplete {
+                    let splitLine = [Discipline.swim, .t1, .bike, .t2, .run]
+                        .compactMap { discipline -> String? in
+                            guard let seconds = result.seconds(for: discipline), seconds > 0 else { return nil }
+                            return "\(discipline.title) \(TimeFormat.hms(seconds))"
+                        }
+                    if !splitLine.isEmpty {
+                        lines.append("  Splits: " + splitLine.joined(separator: "  "))
+                    }
+                }
+
+                if options.includeRaceNotes, let note = notes[result.id], !note.isEmpty {
+                    let fields: [(String, String)] = [
+                        ("Conditions", note.conditions),
+                        ("Nutrition", note.nutrition),
+                        ("Gear", note.gear),
+                        ("Notes", note.notes)
+                    ]
+                    for (label, value) in fields {
+                        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+                        if !trimmed.isEmpty {
+                            lines.append("  \(label): \(trimmed)")
+                        }
                     }
                 }
             }
@@ -151,31 +226,34 @@ enum RaceBookBuilder {
         return lines.joined(separator: "\n")
     }
 
-    /// A paginated letter-sized PDF. Core Text gives long race histories a
-    /// measured frame, so the last race cannot be silently clipped.
+    /// A paginated letter-sized PDF with a cover band and styled sections.
+    /// Core Text gives long race histories a measured frame, so the last race
+    /// cannot be silently clipped.
     static func pdf(athlete: Athlete,
                     results: [RaceResult],
-                    notes: [String: RaceNote]) -> URL? {
-        let text = plainText(athlete: athlete, results: results, notes: notes)
+                    notes: [String: RaceNote],
+                    options: RaceBookOptions = .default) -> URL? {
+        let text = plainText(athlete: athlete, results: results, notes: notes, options: options)
+        let body = styledPDFText(text)
         let pageSize = CGSize(width: 612, height: 792)
         let url = FileManager.default.temporaryDirectory
             .appendingPathComponent("\(fileSafe(athlete.name))-race-book.pdf")
-        let bodyFont = UIFont.monospacedSystemFont(ofSize: 9.5, weight: .regular)
-        let body = NSAttributedString(string: text, attributes: [
-            .font: bodyFont,
-            .foregroundColor: UIColor(red: 0.075, green: 0.098, blue: 0.129, alpha: 1)
-        ])
-        let framesetter = CTFramesetterCreateWithAttributedString(body)
-        let renderer = UIGraphicsPDFRenderer(bounds: CGRect(origin: .zero, size: pageSize))
+        let format = UIGraphicsPDFRendererFormat()
+        format.documentInfo = [
+            kCGPDFContextTitle as String: "Race Book - \(athlete.name)",
+            kCGPDFContextCreator as String: "IM Tri Tracker"
+        ]
+        let renderer = UIGraphicsPDFRenderer(bounds: CGRect(origin: .zero, size: pageSize), format: format)
         let margin: CGFloat = 48
         let bodyRect = CGRect(x: margin,
-                              y: 148,
+                              y: margin,
                               width: pageSize.width - margin * 2,
-                              height: pageSize.height - 188)
+                              height: pageSize.height - margin * 2 - 100)
 
         do {
             try renderer.writePDF(to: url) { context in
                 var location = 0
+                var pageNumber = 1
                 repeat {
                     context.beginPage()
                     guard let cgContext = UIGraphicsGetCurrentContext() else { return }
@@ -183,20 +261,34 @@ enum RaceBookBuilder {
                     cgContext.translateBy(x: 0, y: pageSize.height)
                     cgContext.scaleBy(x: 1, y: -1)
 
-                    cgContext.setFillColor(UIColor(red: 0.051, green: 0.149, blue: 0.271, alpha: 1).cgColor)
-                    cgContext.fill(CGRect(x: 0, y: 0, width: pageSize.width, height: 120))
+                    cgContext.setFillColor(pdfDeep.cgColor)
+                    cgContext.fill(CGRect(x: 0,
+                                          y: pageSize.height - 120,
+                                          width: pageSize.width,
+                                          height: 120))
                     drawHeader(athlete: athlete, in: cgContext, pageSize: pageSize)
 
                     let path = CGPath(rect: bodyRect, transform: nil)
+                    let framesetter = CTFramesetterCreateWithAttributedString(body)
                     let frame = CTFramesetterCreateFrame(framesetter,
                                                          CFRangeMake(location, 0),
                                                          path,
                                                          nil)
                     CTFrameDraw(frame, cgContext)
                     let visible = CTFrameGetVisibleStringRange(frame)
+                    drawCoreText("Page \(pageNumber)",
+                                 in: CGRect(x: pageSize.width - 112,
+                                            y: pageSize.height - 38,
+                                            width: 64,
+                                            height: 18),
+                                 in: cgContext,
+                                 font: UIFont.systemFont(ofSize: 8.5),
+                                 color: pdfMuted,
+                                 alignment: .right)
                     cgContext.restoreGState()
                     guard visible.length > 0 else { return }
                     location += visible.length
+                    pageNumber += 1
                 } while location < body.length
             }
             return url
@@ -205,13 +297,14 @@ enum RaceBookBuilder {
         }
     }
 
-    /// A complete, tall image for messages and social sharing. It includes the
-    /// same history as the PDF, with measured wrapping so long race names and
-    /// private notes remain visible instead of disappearing below a fixed card.
+    /// A complete, tall image for messages and social sharing. It uses the same
+    /// selected sections as the PDF, with measured wrapping for long race names
+    /// and private notes.
     static func image(athlete: Athlete,
                       results: [RaceResult],
-                      notes: [String: RaceNote]) -> URL? {
-        let text = plainText(athlete: athlete, results: results, notes: notes)
+                      notes: [String: RaceNote],
+                      options: RaceBookOptions = .default) -> URL? {
+        let text = plainText(athlete: athlete, results: results, notes: notes, options: options)
         let lines = imageLines(from: text)
         let contentWidth: CGFloat = 1026
         let bodyTop: CGFloat = 426
@@ -224,21 +317,24 @@ enum RaceBookBuilder {
         let renderer = UIGraphicsImageRenderer(size: size)
         let image = renderer.image { context in
             let cg = context.cgContext
-            cg.setFillColor(UIColor(red: 0.949, green: 0.953, blue: 0.961, alpha: 1).cgColor)
+            cg.setFillColor(pdfCanvas.cgColor)
             cg.fill(CGRect(origin: .zero, size: size))
-            cg.setFillColor(UIColor(red: 0.051, green: 0.149, blue: 0.271, alpha: 1).cgColor)
+            cg.setFillColor(pdfDeep.cgColor)
             cg.fill(CGRect(x: 0, y: 0, width: size.width, height: 354))
 
-            let summary = RaceAnalytics.summary(results)
+            let summary = RaceAnalytics.summary(filteredResults(results, options: options))
             draw("RACE BOOK", in: CGRect(x: 72, y: 72, width: 1026, height: 40),
-                 font: .systemFont(ofSize: 25, weight: .semibold), color: .white)
+                 font: UIFont.systemFont(ofSize: 25, weight: .semibold), color: .white)
             draw(athlete.name, in: CGRect(x: 72, y: 122, width: 1026, height: 100),
-                 font: .boldSystemFont(ofSize: 48), color: .white)
-            var subtitle = ["\(summary.finishes) finishes  •  \(summary.podiums) podiums"]
+                 font: UIFont.boldSystemFont(ofSize: 48), color: .white)
+            var subtitle: [String] = []
+            if options.includeCareerSummary {
+                subtitle.append("\(summary.finishes) finishes - \(summary.podiums) podiums")
+            }
             if let location = athlete.location, !location.isEmpty { subtitle.append(location) }
             draw(subtitle.joined(separator: "\n"),
                  in: CGRect(x: 72, y: 246, width: 1026, height: 72),
-                 font: .systemFont(ofSize: 24, weight: .regular), color: .white.withAlphaComponent(0.82))
+                 font: UIFont.systemFont(ofSize: 24), color: .white.withAlphaComponent(0.82))
 
             var y = bodyTop
             for line in lines {
@@ -255,8 +351,8 @@ enum RaceBookBuilder {
             draw("Official results, private notes, one clear story.",
                  in: CGRect(x: 72, y: size.height - bodyBottom + 12,
                             width: 1026, height: 40),
-                 font: .systemFont(ofSize: 22, weight: .regular),
-                 color: UIColor(red: 0.439, green: 0.471, blue: 0.522, alpha: 1))
+                 font: UIFont.systemFont(ofSize: 22),
+                 color: pdfMuted)
         }
         let url = FileManager.default.temporaryDirectory
             .appendingPathComponent("\(fileSafe(athlete.name))-race-book.png")
@@ -267,6 +363,83 @@ enum RaceBookBuilder {
         } catch {
             return nil
         }
+    }
+
+    private static func filteredResults(_ results: [RaceResult], options: RaceBookOptions) -> [RaceResult] {
+        results
+            .filter { options.kinds.contains($0.kind) }
+            .filter { options.includeIncomplete || $0.isComplete }
+            .sortedByDateDescending()
+    }
+
+    private static func historyLine(for result: RaceResult, includePlacements: Bool) -> String {
+        let status = result.isComplete
+            ? TimeFormat.hms(result.finish)
+            : (ResumeBuilder.statusLabel(for: result) ?? "Incomplete")
+        var line = "\(dateText(result)) - \(result.raceName) - \(status)"
+        if let bib = result.bib { line += " - Bib \(bib)" }
+        guard includePlacements else { return line }
+        if let group = result.ageGroup, let place = result.finishRankGroup {
+            line += " - \(group) #\(place)"
+        } else if let place = result.finishRankGroup {
+            line += " - Division #\(place)"
+        }
+        if let overall = result.finishRankOverall {
+            line += " - \(overall) overall"
+        }
+        return line
+    }
+
+    private static func styledPDFText(_ text: String) -> NSAttributedString {
+        let output = NSMutableAttributedString()
+        let sectionTitles: Set<String> = [
+            "CAREER AT A GLANCE",
+            "PODIUM HIGHLIGHTS",
+            "PERSONAL BESTS",
+            "PROGRESSION",
+            "RACE HISTORY"
+        ]
+        let lines = text.components(separatedBy: .newlines)
+        for (index, line) in lines.enumerated() {
+            let paragraph = NSMutableParagraphStyle()
+            paragraph.lineBreakMode = .byWordWrapping
+            paragraph.lineSpacing = 2
+            if line.isEmpty {
+                paragraph.paragraphSpacing = 5
+            } else if sectionTitles.contains(line) {
+                paragraph.paragraphSpacingBefore = 8
+                paragraph.paragraphSpacing = 4
+            } else if index == 0 {
+                paragraph.paragraphSpacing = 3
+            } else {
+                paragraph.paragraphSpacing = 1
+            }
+
+            let attributes: [NSAttributedString.Key: Any]
+            if index == 0 {
+                attributes = [.font: UIFont.systemFont(ofSize: 15, weight: .bold),
+                              .foregroundColor: pdfDeep,
+                              .paragraphStyle: paragraph]
+            } else if sectionTitles.contains(line) {
+                attributes = [.font: UIFont.systemFont(ofSize: 13, weight: .bold),
+                              .foregroundColor: pdfDeep,
+                              .paragraphStyle: paragraph]
+            } else if line == line.uppercased(), !line.isEmpty, !line.hasPrefix(" ") {
+                attributes = [.font: UIFont.systemFont(ofSize: 10.5, weight: .semibold),
+                              .foregroundColor: pdfAccent,
+                              .paragraphStyle: paragraph]
+            } else if line.hasPrefix("  ") {
+                attributes = [.font: UIFont.systemFont(ofSize: 9.5),
+                              .foregroundColor: pdfSecondary,
+                              .paragraphStyle: paragraph]
+            } else {
+                attributes = [.font: UIFont.systemFont(ofSize: 10.5),
+                              .foregroundColor: pdfInk,
+                              .paragraphStyle: paragraph]
+            }
+            output.append(NSAttributedString(string: line + "\n", attributes: attributes))
+        }
+        return output
     }
 
     private static func imageLines(from text: String) -> [ImageLine] {
@@ -280,30 +453,26 @@ enum RaceBookBuilder {
 
         return bodyLines.map { line in
             guard !line.isEmpty else {
-                return ImageLine(text: "", font: .systemFont(ofSize: 18),
+                return ImageLine(text: "", font: UIFont.systemFont(ofSize: 18),
                                  color: .clear, indent: 0, spacingAfter: 8)
             }
             let trimmed = line.trimmingCharacters(in: .whitespaces)
             if trimmed == trimmed.uppercased() && !line.hasPrefix("  ") {
-                return ImageLine(text: trimmed, font: .systemFont(ofSize: 25, weight: .semibold),
-                                 color: UIColor(red: 0.051, green: 0.149, blue: 0.271, alpha: 1),
-                                 indent: 0, spacingAfter: 16)
+                return ImageLine(text: trimmed, font: UIFont.systemFont(ofSize: 25, weight: .semibold),
+                                 color: pdfDeep, indent: 0, spacingAfter: 16)
             }
             if line.hasPrefix("  Splits:") || line.hasPrefix("  Conditions:")
                 || line.hasPrefix("  Nutrition:") || line.hasPrefix("  Gear:")
                 || line.hasPrefix("  Notes:") {
-                return ImageLine(text: trimmed, font: .systemFont(ofSize: 21),
-                                 color: UIColor(red: 0.439, green: 0.471, blue: 0.522, alpha: 1),
-                                 indent: 38, spacingAfter: 7)
+                return ImageLine(text: trimmed, font: UIFont.systemFont(ofSize: 21),
+                                 color: pdfMuted, indent: 38, spacingAfter: 7)
             }
             if line.hasPrefix("  Best ") || line.hasPrefix("  Progression:") {
-                return ImageLine(text: trimmed, font: .systemFont(ofSize: 22),
-                                 color: UIColor(red: 0.259, green: 0.290, blue: 0.333, alpha: 1),
-                                 indent: 24, spacingAfter: 8)
+                return ImageLine(text: trimmed, font: UIFont.systemFont(ofSize: 22),
+                                 color: pdfSecondary, indent: 24, spacingAfter: 8)
             }
-            return ImageLine(text: trimmed, font: .systemFont(ofSize: 23, weight: .medium),
-                             color: UIColor(red: 0.075, green: 0.098, blue: 0.129, alpha: 1),
-                             indent: 0, spacingAfter: 10)
+            return ImageLine(text: trimmed, font: UIFont.systemFont(ofSize: 23, weight: .medium),
+                             color: pdfInk, indent: 0, spacingAfter: 10)
         }
     }
 
@@ -325,13 +494,49 @@ enum RaceBookBuilder {
     private static func drawHeader(athlete: Athlete,
                                    in context: CGContext,
                                    pageSize: CGSize) {
+        let eyebrow = NSAttributedString(string: "IM TRI TRACKER", attributes: [
+            .font: UIFont.systemFont(ofSize: 8.5, weight: .bold),
+            .foregroundColor: pdfAccent
+        ])
+        let eyebrowPath = CGPath(rect: CGRect(x: 48,
+                                              y: pageSize.height - 38,
+                                              width: pageSize.width - 96,
+                                              height: 18),
+                                 transform: nil)
+        CTFrameDraw(CTFramesetterCreateFrame(CTFramesetterCreateWithAttributedString(eyebrow),
+                                             CFRangeMake(0, 0), eyebrowPath, nil), context)
+
         let header = NSAttributedString(string: "RACE BOOK\n\(athlete.name)", attributes: [
-            .font: UIFont.systemFont(ofSize: 21, weight: .semibold),
+            .font: UIFont.systemFont(ofSize: 19, weight: .semibold),
             .foregroundColor: UIColor.white
         ])
-        let path = CGPath(rect: CGRect(x: 48, y: 28, width: pageSize.width - 96, height: 76), transform: nil)
-        let frame = CTFramesetterCreateFrame(CTFramesetterCreateWithAttributedString(header),
-                                             CFRangeMake(0, 0), path, nil)
+        let path = CGPath(rect: CGRect(x: 48,
+                                       y: pageSize.height - 110,
+                                       width: pageSize.width - 96,
+                                       height: 70),
+                          transform: nil)
+        CTFrameDraw(CTFramesetterCreateFrame(CTFramesetterCreateWithAttributedString(header),
+                                             CFRangeMake(0, 0), path, nil), context)
+    }
+
+    private static func drawCoreText(_ text: String,
+                                     in rect: CGRect,
+                                     in context: CGContext,
+                                     font: UIFont,
+                                     color: UIColor,
+                                     alignment: NSTextAlignment = .left) {
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.alignment = alignment
+        paragraph.lineBreakMode = .byWordWrapping
+        let attributed = NSAttributedString(string: text, attributes: [
+            .font: font,
+            .foregroundColor: color,
+            .paragraphStyle: paragraph
+        ])
+        let frame = CTFramesetterCreateFrame(CTFramesetterCreateWithAttributedString(attributed),
+                                             CFRangeMake(0, 0),
+                                             CGPath(rect: rect, transform: nil),
+                                             nil)
         CTFrameDraw(frame, context)
     }
 
@@ -365,4 +570,11 @@ enum RaceBookBuilder {
             .joined(separator: "-")
         return safe.isEmpty ? "iron-splits" : safe
     }
+
+    private static let pdfDeep = UIColor(red: 0.051, green: 0.149, blue: 0.271, alpha: 1)
+    private static let pdfAccent = UIColor(red: 0.910, green: 0.400, blue: 0.086, alpha: 1)
+    private static let pdfCanvas = UIColor(red: 0.949, green: 0.953, blue: 0.961, alpha: 1)
+    private static let pdfInk = UIColor(red: 0.075, green: 0.098, blue: 0.129, alpha: 1)
+    private static let pdfSecondary = UIColor(red: 0.259, green: 0.290, blue: 0.333, alpha: 1)
+    private static let pdfMuted = UIColor(red: 0.439, green: 0.471, blue: 0.522, alpha: 1)
 }

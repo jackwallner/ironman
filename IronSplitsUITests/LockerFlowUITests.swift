@@ -53,26 +53,25 @@ final class LockerFlowUITests: XCTestCase {
         attachScreenshot(app, name: "3-race-detail")
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
-        // Split leaderboards
-        app.tabBars.buttons["Bests"].tap()
-        XCTAssertTrue(app.navigationBars["Bests"].waitForExistence(timeout: 10))
-        attachScreenshot(app, name: "4-bests")
-
-        // Resume
-        app.tabBars.buttons["Resume"].tap()
-        XCTAssertTrue(app.navigationBars["Resume"].waitForExistence(timeout: 10))
-        attachScreenshot(app, name: "5-resume")
-        let openRaceBook = app.buttons["Open Race Book"]
-        XCTAssertTrue(openRaceBook.waitForExistence(timeout: 10))
-        openRaceBook.tap()
+        // Race Book is the single home for the resume and personal bests.
+        app.tabBars.buttons["Race Book"].tap()
         XCTAssertTrue(app.navigationBars["Race Book"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["PERSONAL BESTS"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["THINGS TO INCLUDE"].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.staticTexts["PODI-UMS"].exists)
+        attachScreenshot(app, name: "4-race-book")
 
         let compareButton = app.buttons["Compare two races"]
-        for _ in 0..<6 where !compareButton.isHittable {
+        XCTAssertTrue(compareButton.waitForExistence(timeout: 10))
+        let tabBar = app.tabBars.firstMatch
+        for _ in 0..<12 {
+            guard compareButton.exists else { break }
+            if compareButton.isHittable && compareButton.frame.maxY <= tabBar.frame.minY { break }
             app.swipeUp()
         }
-        XCTAssertTrue(compareButton.waitForExistence(timeout: 10))
+        XCTAssertTrue(compareButton.isHittable)
+        XCTAssertLessThanOrEqual(compareButton.frame.maxY, tabBar.frame.minY,
+                                  "Comparison must clear the custom tab bar before it can be tapped")
         compareButton.tap()
         XCTAssertTrue(app.navigationBars["Compare races"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["TIME BY LEG"].waitForExistence(timeout: 10))
@@ -80,12 +79,15 @@ final class LockerFlowUITests: XCTestCase {
 
         let buildExportButton = app.buttons["Build PDF and image"]
         for _ in 0..<6 where !buildExportButton.isHittable {
-            app.swipeUp()
+            app.swipeDown()
         }
         XCTAssertTrue(buildExportButton.waitForExistence(timeout: 10))
         buildExportButton.tap()
         XCTAssertTrue(app.buttons["Share PDF"].waitForExistence(timeout: 15))
         XCTAssertTrue(app.buttons["Share image"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.buttons["View PDF"].waitForExistence(timeout: 15))
+        app.buttons["View PDF"].tap()
+        XCTAssertTrue(app.navigationBars["Race Book PDF"].waitForExistence(timeout: 15))
         app.buttons["Done"].tap()
 
         // Pattie: Ask Pattie, then the episode library behind the same tab.
@@ -114,19 +116,20 @@ final class LockerFlowUITests: XCTestCase {
         XCTAssertTrue(searchAndClaim(app, name: "Daniel Winek"), "Search should return the athlete")
         XCTAssertTrue(app.navigationBars["Locker"].waitForExistence(timeout: 30))
 
-        app.tabBars.buttons["Resume"].tap()
-        XCTAssertTrue(app.navigationBars["Resume"].waitForExistence(timeout: 10))
-        let openRaceBook = app.buttons["Open Race Book"]
-        XCTAssertTrue(openRaceBook.waitForExistence(timeout: 10))
-        openRaceBook.tap()
+        app.tabBars.buttons["Race Book"].tap()
         XCTAssertTrue(app.navigationBars["Race Book"].waitForExistence(timeout: 10))
 
         let compareButton = app.buttons["Compare two races"]
-        for _ in 0..<12 where !compareButton.isHittable {
+        XCTAssertTrue(compareButton.waitForExistence(timeout: 10))
+        let tabBar = app.tabBars.firstMatch
+        for _ in 0..<12 {
+            guard compareButton.exists else { break }
+            if compareButton.isHittable && compareButton.frame.maxY <= tabBar.frame.minY { break }
             app.swipeUp()
         }
-        XCTAssertTrue(compareButton.waitForExistence(timeout: 10))
         XCTAssertTrue(compareButton.isHittable, "Comparison should remain reachable at accessibility text size")
+        XCTAssertLessThanOrEqual(compareButton.frame.maxY, tabBar.frame.minY,
+                                 "Comparison must clear the custom tab bar at accessibility text size")
         compareButton.tap()
         XCTAssertTrue(app.navigationBars["Compare races"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["TIME BY LEG"].waitForExistence(timeout: 10))
@@ -134,7 +137,7 @@ final class LockerFlowUITests: XCTestCase {
 
         let exportButton = app.buttons["Build PDF and image"]
         for _ in 0..<12 where !exportButton.isHittable {
-            app.swipeUp()
+            app.swipeDown()
         }
         XCTAssertTrue(exportButton.waitForExistence(timeout: 10))
         XCTAssertTrue(exportButton.isHittable, "Export should remain reachable at accessibility text size")
@@ -157,17 +160,10 @@ final class LockerFlowUITests: XCTestCase {
                        "The retired full-history paywall must not return")
         attachScreenshot(app, name: "8-unlocked-locker")
 
-        // Split leaderboards remain free.
-        app.tabBars.buttons["Bests"].tap()
-        XCTAssertTrue(app.navigationBars["Bests"].waitForExistence(timeout: 10))
-        XCTAssertFalse(app.staticTexts["Split leaderboards"].exists,
-                       "Bests should show the board, not the locked placeholder")
-        attachScreenshot(app, name: "9-unlocked-bests")
-
-        app.tabBars.buttons["Resume"].tap()
-        XCTAssertTrue(app.navigationBars["Resume"].waitForExistence(timeout: 10))
-        XCTAssertTrue(app.staticTexts["INCLUDE"].waitForExistence(timeout: 10),
-                      "Resume should show its options, not a locked placeholder")
+        app.tabBars.buttons["Race Book"].tap()
+        XCTAssertTrue(app.navigationBars["Race Book"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["THINGS TO INCLUDE"].waitForExistence(timeout: 10),
+                      "Race Book should expose its configuration without a locked placeholder")
         let exportButton = app.buttons["Unlock Race Book exports"]
         XCTAssertTrue(exportButton.waitForExistence(timeout: 10))
         exportButton.tap()

@@ -32,6 +32,7 @@ struct IronSplitsApp: App {
                         "pointers.mode",
                         "askpattie.guide.cached", "askpattie.guide.cachedAt",
                         "pattie.mode.enabled", "pattie.mode.seenLines",
+                        "pattie.mode.playedTipIDs", "pattie.mode.lastTipID",
                         "settings.haptics.enabled", "settings.appearance"] {
                 UserDefaults.standard.removeObject(forKey: key)
             }
