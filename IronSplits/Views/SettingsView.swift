@@ -20,6 +20,21 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             List {
+                Section("About") {
+                    if AppStoreReviewLinks.isConfigured {
+                        Button("Rate or send feedback") {
+                            reviewCoordinator.requestEnjoymentPrompt()
+                        }
+                    } else {
+                        Button("Send feedback") {
+                            reviewCoordinator.requestFeedback()
+                        }
+                    }
+                    Link("Privacy policy", destination: IronSplitsLegal.privacyURL)
+                    Link("Terms of use", destination: IronSplitsLegal.termsURL)
+                    LabeledContent("Version", value: versionText)
+                }
+
                 Section("Athlete") {
                     if let athlete = locker.athlete {
                         VStack(alignment: .leading, spacing: TriSpace.x1) {
@@ -145,21 +160,6 @@ struct SettingsView: View {
                     Text("Episodes are saved the first time you watch them so they play offline. Clearing them just means the next play downloads again.")
                         .font(TriType.micro)
                         .foregroundStyle(TriPalette.inkTertiary)
-                }
-
-                Section("About") {
-                    if AppStoreReviewLinks.isConfigured {
-                        Button("Rate or send feedback") {
-                            reviewCoordinator.requestEnjoymentPrompt()
-                        }
-                    } else {
-                        Button("Send feedback") {
-                            reviewCoordinator.requestFeedback()
-                        }
-                    }
-                    Link("Privacy policy", destination: IronSplitsLegal.privacyURL)
-                    Link("Terms of use", destination: IronSplitsLegal.termsURL)
-                    LabeledContent("Version", value: versionText)
                 }
 
                 Section {

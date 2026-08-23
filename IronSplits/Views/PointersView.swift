@@ -214,58 +214,57 @@ struct PointerLibraryView: View {
 
 }
 
-/// A clean, app-owned profile moment for Pattie's own results.
+/// A clean, app-owned profile moment for Pattie's coaching library.
 struct PattieFeaturedHero: View {
-    @EnvironmentObject private var locker: LockerStore
+    var body: some View {
+        VStack(alignment: .leading, spacing: TriSpace.x2) {
+            ZStack(alignment: .bottomLeading) {
+                Image("pattie-finish")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxWidth: .infinity)
+                    .frame(height: heroImageHeight, alignment: .top)
+                    .clipped()
 
-    private var isPattieProfile: Bool {
-        guard let name = locker.athlete?.name.lowercased() else { return false }
-        return name.contains("pattie") && name.contains("wallner")
+                LinearGradient(
+                    colors: [TriPalette.deep.opacity(0), TriPalette.deep.opacity(0.92)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+
+                VStack(alignment: .leading, spacing: TriSpace.x2) {
+                    Text("PATTIE WALLNER")
+                        .font(TriType.micro)
+                        .kerning(1.1)
+                        .foregroundStyle(TriPalette.sunrise)
+                    Text("Small things save a whole day.")
+                        .font(TriType.cardTitle)
+                        .foregroundStyle(TriPalette.inkOnDark)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(TriGeo.padCard)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: heroImageHeight, alignment: .bottomLeading)
+            .background(TriPalette.deep, in: RoundedRectangle(cornerRadius: TriGeo.radiusCard,
+                                                                style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous))
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Pattie Wallner, sharing race stories and small fixes")
+
+            Text("Pattie's pointers")
+                .font(TriType.cardTitle)
+                .foregroundStyle(TriPalette.ink)
+            Text("The athlete behind the voice, the race stories, and the little things that save a whole day.")
+                .font(TriType.small)
+                .foregroundStyle(TriPalette.inkSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    var body: some View {
-        if isPattieProfile {
-            VStack(alignment: .leading, spacing: TriSpace.x2) {
-                HStack(spacing: TriSpace.x5) {
-                    Image("pattie-profile")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: TriSpace.x10 + TriSpace.x10 + TriSpace.x4,
-                               height: TriSpace.x10 + TriSpace.x10 + TriSpace.x4)
-                        .clipShape(Circle())
-                        .overlay {
-                            Circle()
-                                .stroke(TriPalette.inkOnDark.opacity(0.35), lineWidth: TriGeo.hairline)
-                        }
-
-                    VStack(alignment: .leading, spacing: TriSpace.x2) {
-                        Text("PATTIE WALLNER")
-                            .font(TriType.micro)
-                            .kerning(1.1)
-                            .foregroundStyle(TriPalette.sunrise)
-                        Text("Small things save a whole day.")
-                            .font(TriType.cardTitle)
-                            .foregroundStyle(TriPalette.inkOnDark)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
-                .padding(TriSpace.x5)
-                .frame(maxWidth: .infinity, minHeight: TriSpace.x10 * 4, alignment: .leading)
-                .background(TriPalette.deep, in: RoundedRectangle(cornerRadius: TriGeo.radiusCard,
-                                                                    style: .continuous))
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel("Pattie Wallner, sharing race stories and small fixes")
-
-                Text("Pattie's pointers")
-                    .font(TriType.cardTitle)
-                    .foregroundStyle(TriPalette.ink)
-                Text("The athlete behind the voice, the race stories, and the little things that save a whole day.")
-                    .font(TriType.small)
-                    .foregroundStyle(TriPalette.inkSecondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
+    private var heroImageHeight: CGFloat {
+        TriSpace.x10 * 4 + TriSpace.x4
     }
 }
 

@@ -115,6 +115,9 @@ struct RootTabView: View {
                         Text(tab.title)
                             .font(TriType.small)
                             .fontWeight(.semibold)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
+                            .dynamicTypeSize(.xSmall ... .large)
                     }
                     .foregroundStyle(tab == selectedTab ? TriPalette.sunrise : TriPalette.ink)
                     .frame(maxWidth: .infinity, minHeight: 64)

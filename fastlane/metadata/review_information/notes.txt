@@ -1,1 +1,27 @@
+IM Tri Tracker is a read-only viewer for published race results. There are
+no accounts and no sign-in.
 
+Core flow:
+1. Launch: the first screen asks for the athlete's name
+2. Type a name. The app searches published results and lists matches.
+3. Tap a match to claim it. The locker fills with that athlete's races.
+4. Tap a race for splits, ranks, and field percentiles.
+5. Bests tab ranks the athlete's races by swim, bike, run, or transitions.
+6. Resume tab previews the free history and opens Race Book for comparison and export.
+
+To review without a name of your own, search "Daniel Winek", a public
+result set with five full-distance finishes.
+
+The free core includes search, full history, splits, rankings and basic
+race details. Race Book is a one-time lifetime purchase for comparison
+and unlimited PDF/image export. There is no subscription or per-export
+charge. Existing Iron Splits+ customers can restore prior access.
+
+Data: results come from the public results service used by the events and
+are shown as published. The app is independent and claims no affiliation
+with any race organiser. Race names appear only to identify the results
+they belong to.
+
+Verified: light and dark mode, including accessibility text sizes.
+No accounts, no social features, no user-generated content shared
+between users.

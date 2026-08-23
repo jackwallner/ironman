@@ -36,6 +36,10 @@ targets:
       configs:
         Debug:
           CODE_SIGN_IDENTITY: "Apple Development"
+        Release:
+          # Temporary TestFlight review switch. Remove this condition and the
+          # matching ProGate branch before enabling paid Race Book access.
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) RACE_BOOK_TEST_UNLOCK"
     dependencies:
       - package: RevenueCat
 
