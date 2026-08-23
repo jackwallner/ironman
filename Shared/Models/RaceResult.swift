@@ -171,6 +171,15 @@ enum RaceKind: String, Codable, Sendable, CaseIterable {
     case running
     case unknown
 
+    /// IM Tri Tracker is intentionally a two-distance app. Other feed rows
+    /// remain classifiable for migration and diagnostics, but they never enter
+    /// the athlete's product surface.
+    static let supportedKinds: Set<Self> = [.fullDistance, .halfDistance]
+
+    var isSupported: Bool {
+        Self.supportedKinds.contains(self)
+    }
+
     var title: String {
         switch self {
         case .fullDistance: return "Full"

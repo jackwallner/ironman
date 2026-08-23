@@ -21,6 +21,9 @@ struct AthleteSearchView: View {
     /// contact search that adds another registration to the current profile.
     var isOnboarding: Bool = false
     var addingToCurrentAthlete: Bool = false
+    /// Explore uses the same official search but must not mutate the Locker.
+    /// When present, selecting a result returns it to the caller instead.
+    var onSelect: ((Athlete) -> Void)?
 
     @State private var query = ""
     @State private var matches: [Athlete] = []
@@ -282,6 +285,13 @@ struct AthleteSearchView: View {
     private func claim(_ athlete: Athlete) {
         Haptics.tap(.medium)
         claiming = athlete
+        if let onSelect {
+            onSelect(athlete)
+            claiming = nil
+            Haptics.success()
+            dismiss()
+            return
+        }
         Task {
             if addingToCurrentAthlete {
                 await locker.addContact(from: athlete)
@@ -297,12 +307,16 @@ struct AthleteSearchView: View {
     private var title: String {
         if isOnboarding { return "Find your races" }
         if addingToCurrentAthlete { return "Find another registration" }
+        if onSelect != nil { return "Find a racer" }
         return "Change athlete"
     }
 
     private var introText: String {
         if addingToCurrentAthlete {
             return "Search the official results feed for another name you raced under. Choose the right person and those published races will be added to this profile."
+        }
+        if onSelect != nil {
+            return "Search the official results feed, then open a racer’s career without changing the athlete in your Locker."
         }
         return "Every race you have finished is already published under the name you registered with. Find yourself once and your locker fills in: bibs, splits, division places and all."
     }

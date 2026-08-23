@@ -100,7 +100,7 @@ struct RaceRow: View {
                 if !personalBestLegs.isEmpty {
                     HStack(spacing: TriSpace.x1) {
                         ForEach(Discipline.rankable.filter { personalBestLegs.contains($0) }) { leg in
-                            TriBadge(text: "PB \(leg.title)", color: TriPalette.sunrise, filled: true)
+                            TriBadge(text: "PB \(leg.shortTitle)", color: TriPalette.sunrise, filled: true)
                         }
                     }
                 }
@@ -295,6 +295,7 @@ struct StatTile: View {
                 .foregroundStyle(TriPalette.inkTertiary)
                 .multilineTextAlignment(.center)
                 .lineLimit(1)
+                .fixedSize(horizontal: true, vertical: false)
                 .minimumScaleFactor(0.78)
                 .allowsTightening(true)
         }

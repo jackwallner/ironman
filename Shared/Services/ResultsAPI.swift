@@ -104,14 +104,19 @@ struct ResultsAPI: ResultsProviding {
         let clause = ids.map { "wtc_ContactId/contactid eq \($0)" }.joined(separator: " or ")
         let rows = try await fetch(filter: ids.count == 1 ? clause : "(\(clause))",
                                    orderBy: "wtc_EventId/wtc_eventdate desc")
-        return Self.deduplicatedRows(rows).map(\.result).sortedByDateDescending()
+        return Self.deduplicatedRows(rows)
+            .map(\.result)
+            .filter(\.kind.isSupported)
+            .sortedByDateDescending()
     }
 
     func results(forEventID eventID: String) async throws -> [RaceResult] {
         guard Self.isGUID(eventID) else { throw ResultsAPIError.badConfiguration }
         let rows = try await fetch(filter: "_wtc_eventid_value eq \(eventID) and wtc_AgeGroupId/wtc_agegroupname ne 'ODIV'",
                                    orderBy: "wtc_finishrankoverall")
-        return Self.deduplicatedRows(rows).map(\.result)
+        return Self.deduplicatedRows(rows)
+            .map(\.result)
+            .filter(\.kind.isSupported)
     }
 
     // MARK: - Transport
@@ -253,6 +258,7 @@ struct ResultsAPI: ResultsProviding {
         for row in rows {
             guard let contact = row.contact, let id = contact.contactid else { continue }
             let result = row.result
+            guard result.kind.isSupported else { continue }
             let key = identityKey(for: contact, fallback: id)
             let year = result.year
             if var athlete = byKey[key] {

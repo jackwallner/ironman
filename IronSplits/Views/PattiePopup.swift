@@ -24,7 +24,9 @@ struct PattieCompanion: View {
     private static let avatarHeight: CGFloat = TriSpace.x10 + TriSpace.x10 + TriSpace.x10
     private static let avatarFrameWidth: CGFloat = avatarWidth + TriSpace.x4
     private static let avatarFrameHeight: CGFloat = avatarHeight + TriSpace.x2
+    private static let idleAvatarScale: CGFloat = 0.45
     private var petState: PattiePetState { line?.petState ?? idleState }
+    private var avatarScale: CGFloat { line == nil ? Self.idleAvatarScale : 1 }
 
     var body: some View {
         companionContent
@@ -86,6 +88,10 @@ struct PattieCompanion: View {
         .accessibilityIdentifier("pattie-avatar")
         .accessibilityLabel(line == nil ? "Pattie, hear a tip" : "Pattie, replay the tip")
         .accessibilityValue(petState.accessibilityName)
+        .scaleEffect(avatarScale, anchor: .bottomLeading)
+        .frame(width: Self.avatarFrameWidth * avatarScale,
+               height: Self.avatarFrameHeight * avatarScale,
+               alignment: .bottomLeading)
     }
 
     @ViewBuilder

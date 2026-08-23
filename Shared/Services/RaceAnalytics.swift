@@ -40,7 +40,7 @@ struct FieldPlacement: Sendable, Hashable {
 enum RaceAnalytics {
     /// Results eligible for comparison: finished, and of the requested kind.
     static func comparable(_ results: [RaceResult], kind: RaceKind?) -> [RaceResult] {
-        results.filter { $0.isComplete && (kind == nil || $0.kind == kind) }
+        results.filter { $0.kind.isSupported && $0.isComplete && (kind == nil || $0.kind == kind) }
     }
 
     /// The kinds present in a set, in the order the app should offer them:
@@ -48,7 +48,7 @@ enum RaceAnalytics {
     /// doesn't land on the full every time they open the app.
     static func availableKinds(_ results: [RaceResult]) -> [RaceKind] {
         var counts: [RaceKind: Int] = [:]
-        for result in results where result.isComplete {
+        for result in results where result.isComplete && result.kind.isSupported {
             counts[result.kind, default: 0] += 1
         }
         return counts.sorted {
@@ -156,7 +156,7 @@ enum RaceAnalytics {
     }
 
     static func summary(_ results: [RaceResult]) -> CareerSummary {
-        let started = results.filter { !$0.didNotStart }
+        let started = results.filter { $0.kind.isSupported && !$0.didNotStart }
         let finished = started.filter(\.isComplete)
         let years = started.map(\.year).filter { $0 > 0 }
         return CareerSummary(
