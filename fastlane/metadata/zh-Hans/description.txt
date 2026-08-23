@@ -1,0 +1,12 @@
+把你完成过的每场比赛集中在一个地方，并按你真正关心的方式整理。
+
+只需输入一次姓名。IM Iron Splits 会查找已发布的成绩，显示游泳、换项、自行车和跑步分段、号码布以及组别和总排名。
+
+查看个人最佳，比较同类型比赛，了解每个用时在参赛者中的位置。Race Book 通过一次性终身购买解锁比较，以及 PDF 或图片导出。没有订阅，也不会按导出次数收费。
+
+核心功能免费提供：搜索、完整历史、分段、排名、笔记和 Pointers 内容库。
+
+隐私政策: https://jackwallner.github.io/ironman/privacy-policy.html
+使用条款: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
+IM Iron Splits 是独立应用，与任何比赛主办方或计时公司没有关联。

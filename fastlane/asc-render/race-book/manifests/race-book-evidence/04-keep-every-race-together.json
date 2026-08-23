@@ -1,0 +1,68 @@
+{
+  "filename": "04-keep-every-race-together.png",
+  "path": "race-book-evidence/04-keep-every-race-together.png",
+  "output_sha256": "725992b1f55c2631089b1f432938607d7e32c2129a31a90ad16fa5101ba3a083",
+  "output_size": [
+    1320,
+    2868
+  ],
+  "device": "iphone",
+  "header": "Keep every race together",
+  "pitch": {
+    "benefit": "Keep the full result history, bibs, splits, and places in one private locker",
+    "problem": "Race records become hard to revisit when they are spread across organizers and browser tabs.",
+    "advantage": "The locker stores the claimed athlete's complete published history on the phone with no account.",
+    "header_problem": "scattered race records",
+    "header_advantage": "one private locker",
+    "search_terms": [
+      "triathlon race results",
+      "race history"
+    ],
+    "proof": "The literal locker capture shows multiple official finishes grouped under the claimed athlete."
+  },
+  "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/locker.png",
+  "source_sha256": "fd3c80ca63ed5cc61c86807e60ada264e01e73ad10e9dee16fbce73ac03436ac",
+  "background_asset": null,
+  "background_asset_sha256": null,
+  "background_override": null,
+  "foreground": "manifests/race-book-evidence/04-keep-every-race-together.foreground.png",
+  "foreground_sha256": "a5a4eb0c87e36491be89f90f16a3c0e66c644868758064bdc40861b49e35adf5",
+  "ui_mask": "manifests/race-book-evidence/04-keep-every-race-together.ui-mask.png",
+  "ui_coverage": 0.6078,
+  "imagegen_received_ui_source": false,
+  "target": "iphone_69",
+  "size": [
+    1320,
+    2868
+  ],
+  "background_mode": "theme",
+  "background_id": "theme",
+  "background_top": "#071A2F",
+  "background_bottom": "#102D4D",
+  "background_asset_applied": false,
+  "phone": {
+    "x": 127,
+    "y": 560,
+    "width": 1066,
+    "height": 2273,
+    "screen_x": 146,
+    "screen_y": 579,
+    "screen_width": 1028,
+    "screen_height": 2235
+  },
+  "header_only": true,
+  "compositor_text_layers": [
+    "header"
+  ],
+  "header_font_size": 164,
+  "header_lines": 2,
+  "header_text": "Keep every race together",
+  "header_bounds": [
+    109,
+    152,
+    1211,
+    467
+  ],
+  "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/locker.png",
+  "source_evidence_sha256": "fd3c80ca63ed5cc61c86807e60ada264e01e73ad10e9dee16fbce73ac03436ac"
+}

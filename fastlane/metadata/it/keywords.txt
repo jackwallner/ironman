@@ -1,0 +1,1 @@
+triathlon,risultati gara,split,nuoto,bici,corsa,pettorale,tempo finale,record,storico gare

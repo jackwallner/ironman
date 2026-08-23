@@ -1,0 +1,1 @@
+triatlon,yarış sonuçları,ara zamanlar,yüzme,bisiklet,koşu,göğüs numarası,bitiş süresi,kişisel rekor

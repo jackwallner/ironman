@@ -1,0 +1,1 @@
+triathlon,résultats,course,temps intermédiaires,natation,vélo,course à pied,dossard,temps final

@@ -1,0 +1,12 @@
+Svaka utrka koju si završio na jednom mjestu, poredana prema onome što želiš razumjeti.
+
+Upiši ime jednom. IM Iron Splits pronalazi objavljene rezultate i prikazuje vremena plivanja, izmjena, bicikla i trčanja, startni broj te plasmane.
+
+Pogledaj osobne rekorde, usporedi utrke iste vrste i vidi mjesto svakog vremena u poretku. Race Book otključava usporedbe i izvoz u PDF ili sliku jednokratnom doživotnom kupnjom, bez pretplate i bez naplate izvoza.
+
+Osnovne značajke ostaju besplatne: pretraživanje, cijela povijest, vremena, plasmani, bilješke i knjižnica Pointers.
+
+Privatnost: https://jackwallner.github.io/ironman/privacy-policy.html
+Uvjeti: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
+IM Iron Splits je neovisna aplikacija bez veze s organizatorima utrka ili tvrtkama za mjerenje vremena.

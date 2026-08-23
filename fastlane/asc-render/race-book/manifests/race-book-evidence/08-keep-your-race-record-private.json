@@ -1,0 +1,68 @@
+{
+  "filename": "08-keep-your-race-record-private.png",
+  "path": "race-book-evidence/08-keep-your-race-record-private.png",
+  "output_sha256": "cb978a7ffb4b02aaa48e6193ca3056594402158220b748f805c4f720e6607a3f",
+  "output_size": [
+    1320,
+    2868
+  ],
+  "device": "iphone",
+  "header": "Keep your race record private",
+  "pitch": {
+    "benefit": "Keep the race record and private notes on your phone without creating an account",
+    "problem": "Athletes should not have to hand over a profile or publish their race history to review it.",
+    "advantage": "IM Iron Splits has no account system and stores the claimed history and notes locally.",
+    "header_problem": "a public profile",
+    "header_advantage": "private on-device record",
+    "search_terms": [
+      "private race log",
+      "triathlon race history"
+    ],
+    "proof": "The literal Settings capture shows the local-only privacy and data controls."
+  },
+  "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/settings.png",
+  "source_sha256": "3f976f58684e35257bf20cc54bdd59ab261c1ad150ee5383dd89c78d7e0dac48",
+  "background_asset": null,
+  "background_asset_sha256": null,
+  "background_override": null,
+  "foreground": "manifests/race-book-evidence/08-keep-your-race-record-private.foreground.png",
+  "foreground_sha256": "e742b7b1ef34cc7974286302158338dceb38e2d7d41784a44c16690b942d2992",
+  "ui_mask": "manifests/race-book-evidence/08-keep-your-race-record-private.ui-mask.png",
+  "ui_coverage": 0.6078,
+  "imagegen_received_ui_source": false,
+  "target": "iphone_69",
+  "size": [
+    1320,
+    2868
+  ],
+  "background_mode": "theme",
+  "background_id": "theme",
+  "background_top": "#071A2F",
+  "background_bottom": "#102D4D",
+  "background_asset_applied": false,
+  "phone": {
+    "x": 127,
+    "y": 560,
+    "width": 1066,
+    "height": 2273,
+    "screen_x": 146,
+    "screen_y": 579,
+    "screen_width": 1028,
+    "screen_height": 2235
+  },
+  "header_only": true,
+  "compositor_text_layers": [
+    "header"
+  ],
+  "header_font_size": 164,
+  "header_lines": 2,
+  "header_text": "Keep your race record private",
+  "header_bounds": [
+    145,
+    152,
+    1174,
+    465
+  ],
+  "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/settings.png",
+  "source_evidence_sha256": "3f976f58684e35257bf20cc54bdd59ab261c1ad150ee5383dd89c78d7e0dac48"
+}

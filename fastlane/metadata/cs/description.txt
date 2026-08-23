@@ -1,0 +1,12 @@
+Každý dokončený závod na jednom místě, seřazený podle toho, co vás skutečně zajímá.
+
+Zadejte jméno jednou. IM Iron Splits najde zveřejněné výsledky a zobrazí mezičasy plavání, depa, kola a běhu, startovní číslo i pořadí v kategorii a celkově.
+
+Prohlédněte si osobní rekordy, porovnávejte závody stejného typu a zjistěte své místo v poli. Race Book odemyká porovnání a export do PDF nebo obrázku jednorázovým doživotním nákupem, bez předplatného a bez poplatku za export.
+
+Základ zůstává zdarma: hledání, celá historie, mezičasy, pořadí, poznámky a knihovna Pointers.
+
+Zásady ochrany soukromí: https://jackwallner.github.io/ironman/privacy-policy.html
+Podmínky použití: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
+IM Iron Splits je nezávislá aplikace bez spojení s pořadateli závodů nebo časomírou.

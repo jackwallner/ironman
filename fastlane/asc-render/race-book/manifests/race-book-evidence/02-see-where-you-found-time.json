@@ -1,0 +1,68 @@
+{
+  "filename": "02-see-where-you-found-time.png",
+  "path": "race-book-evidence/02-see-where-you-found-time.png",
+  "output_sha256": "a615057677131c8b9d6cfa2263f15bedf26ecbdd2b080f9427da818851398370",
+  "output_size": [
+    1320,
+    2868
+  ],
+  "device": "iphone",
+  "header": "See where you found time",
+  "pitch": {
+    "benefit": "Find the race legs that made your latest result faster or slower",
+    "problem": "Two finish times do not explain which discipline changed between races.",
+    "advantage": "Race Book offers like-for-like comparison by distance and exposes the leg-level action from the same official splits.",
+    "header_problem": "two finish times",
+    "header_advantage": "time by leg",
+    "search_terms": [
+      "race splits",
+      "personal bests"
+    ],
+    "proof": "The literal Race Book capture shows the Compare two races action in the paid Race Book surface."
+  },
+  "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-compare.png",
+  "source_sha256": "6ce14401a3b0ef43feec497d07f1f308f4e01722b93faae2e937023dd7eb6d95",
+  "background_asset": null,
+  "background_asset_sha256": null,
+  "background_override": null,
+  "foreground": "manifests/race-book-evidence/02-see-where-you-found-time.foreground.png",
+  "foreground_sha256": "ac7aa58836fabd36a0cf2bd6ce29a1de44af89a61fc36a004eeef83a0c88e5ef",
+  "ui_mask": "manifests/race-book-evidence/02-see-where-you-found-time.ui-mask.png",
+  "ui_coverage": 0.6078,
+  "imagegen_received_ui_source": false,
+  "target": "iphone_69",
+  "size": [
+    1320,
+    2868
+  ],
+  "background_mode": "theme",
+  "background_id": "theme",
+  "background_top": "#071A2F",
+  "background_bottom": "#102D4D",
+  "background_asset_applied": false,
+  "phone": {
+    "x": 127,
+    "y": 560,
+    "width": 1066,
+    "height": 2273,
+    "screen_x": 146,
+    "screen_y": 579,
+    "screen_width": 1028,
+    "screen_height": 2235
+  },
+  "header_only": true,
+  "compositor_text_layers": [
+    "header"
+  ],
+  "header_font_size": 164,
+  "header_lines": 2,
+  "header_text": "See where you found time",
+  "header_bounds": [
+    155,
+    152,
+    1165,
+    438
+  ],
+  "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-compare.png",
+  "source_evidence_sha256": "6ce14401a3b0ef43feec497d07f1f308f4e01722b93faae2e937023dd7eb6d95"
+}

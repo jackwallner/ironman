@@ -1,0 +1,12 @@
+Toutes les courses que tu as terminées, au même endroit et classées selon ce que tu veux vraiment comprendre.
+
+Saisis ton nom une fois. IM Iron Splits retrouve tes résultats publiés et affiche les temps de natation, transitions, vélo et course, ton dossard et tes classements.
+
+Vois tes meilleures performances, compare les courses du même type et comprends la place de chaque temps dans le peloton. Race Book déverrouille les comparaisons et l'export PDF ou image avec un achat unique à vie, sans abonnement ni frais par export.
+
+Le cœur reste gratuit : recherche, historique complet, temps intermédiaires, classements, notes et bibliothèque Pointers.
+
+Confidentialité : https://jackwallner.github.io/ironman/privacy-policy.html
+Conditions : https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
+IM Iron Splits est indépendant et n'est affilié à aucun organisateur ni chronométreur.

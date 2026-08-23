@@ -1,0 +1,1 @@
+triatlon,versenyeredmények,részidők,úszás,kerékpár,futás,rajtszám,nettó idő,csúcs,versenynapló

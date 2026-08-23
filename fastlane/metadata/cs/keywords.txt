@@ -1,0 +1,1 @@
+triatlon,výsledky,závody,mezičasy,plavání,kolo,běh,startovní číslo,čas,osobní rekord,historie

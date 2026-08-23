@@ -1,0 +1,567 @@
+{
+  "app": "iron-splits",
+  "manifest": "/Users/jackwallner/ironman/fastlane/asc-screenshots.json",
+  "target": "iphone_69",
+  "copy_contract": "single-header-benefit-story-v3",
+  "background_override": null,
+  "sets": [
+    {
+      "id": "race-book-evidence",
+      "style": "navy-race-book",
+      "frames": [
+        {
+          "filename": "01-turn-history-into-a-story.png",
+          "path": "race-book-evidence/01-turn-history-into-a-story.png",
+          "output_sha256": "664a472dd34ba4ad4e319719e340308adb2e4c45beab0ee3c997a2c8b78f8953",
+          "output_size": [
+            1320,
+            2868
+          ],
+          "device": "iphone",
+          "header": "Turn your race history into a story",
+          "pitch": {
+            "benefit": "See a complete racing career as one meaningful story instead of a pile of event pages",
+            "problem": "A finish history is difficult to understand when every race lives on a different results page.",
+            "advantage": "Race Book gathers personal bests, progression, and official history after one name search.",
+            "header_problem": "scattered results",
+            "header_advantage": "one race story",
+            "search_terms": [
+              "race history",
+              "triathlon race results"
+            ],
+            "proof": "The literal Race Book capture shows the athlete's personal bests and progression cards built from the claimed history."
+          },
+          "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book.png",
+          "source_sha256": "2606886381dce375d2b3e281ac6b47031f2c83ff9782dbdd730651c6dd1353c7",
+          "background_asset": null,
+          "background_asset_sha256": null,
+          "background_override": null,
+          "foreground": "manifests/race-book-evidence/01-turn-history-into-a-story.foreground.png",
+          "foreground_sha256": "43f4665d8ebb3cb66f3be5ac50de6fed7f791e7d39ba4ecf075afbf76e7e404c",
+          "ui_mask": "manifests/race-book-evidence/01-turn-history-into-a-story.ui-mask.png",
+          "ui_coverage": 0.6078,
+          "imagegen_received_ui_source": false,
+          "target": "iphone_69",
+          "size": [
+            1320,
+            2868
+          ],
+          "background_mode": "theme",
+          "background_id": "theme",
+          "background_top": "#071A2F",
+          "background_bottom": "#102D4D",
+          "background_asset_applied": false,
+          "phone": {
+            "x": 127,
+            "y": 560,
+            "width": 1066,
+            "height": 2273,
+            "screen_x": 146,
+            "screen_y": 579,
+            "screen_width": 1028,
+            "screen_height": 2235
+          },
+          "header_only": true,
+          "compositor_text_layers": [
+            "header"
+          ],
+          "header_font_size": 148,
+          "header_lines": 2,
+          "header_text": "Turn your race history into a story",
+          "header_bounds": [
+            98,
+            149,
+            1222,
+            432
+          ],
+          "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book.png",
+          "source_evidence_sha256": "2606886381dce375d2b3e281ac6b47031f2c83ff9782dbdd730651c6dd1353c7",
+          "manifest": "manifests/race-book-evidence/01-turn-history-into-a-story.json"
+        },
+        {
+          "filename": "02-see-where-you-found-time.png",
+          "path": "race-book-evidence/02-see-where-you-found-time.png",
+          "output_sha256": "a615057677131c8b9d6cfa2263f15bedf26ecbdd2b080f9427da818851398370",
+          "output_size": [
+            1320,
+            2868
+          ],
+          "device": "iphone",
+          "header": "See where you found time",
+          "pitch": {
+            "benefit": "Find the race legs that made your latest result faster or slower",
+            "problem": "Two finish times do not explain which discipline changed between races.",
+            "advantage": "Race Book offers like-for-like comparison by distance and exposes the leg-level action from the same official splits.",
+            "header_problem": "two finish times",
+            "header_advantage": "time by leg",
+            "search_terms": [
+              "race splits",
+              "personal bests"
+            ],
+            "proof": "The literal Race Book capture shows the Compare two races action in the paid Race Book surface."
+          },
+          "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-compare.png",
+          "source_sha256": "6ce14401a3b0ef43feec497d07f1f308f4e01722b93faae2e937023dd7eb6d95",
+          "background_asset": null,
+          "background_asset_sha256": null,
+          "background_override": null,
+          "foreground": "manifests/race-book-evidence/02-see-where-you-found-time.foreground.png",
+          "foreground_sha256": "ac7aa58836fabd36a0cf2bd6ce29a1de44af89a61fc36a004eeef83a0c88e5ef",
+          "ui_mask": "manifests/race-book-evidence/02-see-where-you-found-time.ui-mask.png",
+          "ui_coverage": 0.6078,
+          "imagegen_received_ui_source": false,
+          "target": "iphone_69",
+          "size": [
+            1320,
+            2868
+          ],
+          "background_mode": "theme",
+          "background_id": "theme",
+          "background_top": "#071A2F",
+          "background_bottom": "#102D4D",
+          "background_asset_applied": false,
+          "phone": {
+            "x": 127,
+            "y": 560,
+            "width": 1066,
+            "height": 2273,
+            "screen_x": 146,
+            "screen_y": 579,
+            "screen_width": 1028,
+            "screen_height": 2235
+          },
+          "header_only": true,
+          "compositor_text_layers": [
+            "header"
+          ],
+          "header_font_size": 164,
+          "header_lines": 2,
+          "header_text": "See where you found time",
+          "header_bounds": [
+            155,
+            152,
+            1165,
+            438
+          ],
+          "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-compare.png",
+          "source_evidence_sha256": "6ce14401a3b0ef43feec497d07f1f308f4e01722b93faae2e937023dd7eb6d95",
+          "manifest": "manifests/race-book-evidence/02-see-where-you-found-time.json"
+        },
+        {
+          "filename": "03-know-where-every-second-went.png",
+          "path": "race-book-evidence/03-know-where-every-second-went.png",
+          "output_sha256": "6ddee2eb00d8e8386ff4d81dad8575a6ec47e3a3fa41f549b976f9603b01ec22",
+          "output_size": [
+            1320,
+            2868
+          ],
+          "device": "iphone",
+          "header": "Know where every second went",
+          "pitch": {
+            "benefit": "Read every swim, transition, bike, and run split beside its ranks and field context",
+            "problem": "A finish time without split evidence cannot show what actually happened in the race.",
+            "advantage": "The race detail view keeps official splits, ranks, field size, and percentile together for one result.",
+            "header_problem": "one finish time",
+            "header_advantage": "split evidence",
+            "search_terms": [
+              "swim bike run",
+              "race splits"
+            ],
+            "proof": "The literal race detail capture shows official splits and the field context used to interpret them."
+          },
+          "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-detail.png",
+          "source_sha256": "1a7b24ce5321b65239a1aa7f09a5b61432035bccdd9d00a06b02353b579b4ad3",
+          "background_asset": null,
+          "background_asset_sha256": null,
+          "background_override": null,
+          "foreground": "manifests/race-book-evidence/03-know-where-every-second-went.foreground.png",
+          "foreground_sha256": "ebe659660128526ac8ec9f5141a27d9fd4c50eb7e0520bf3d61fe9bdfe4acc1c",
+          "ui_mask": "manifests/race-book-evidence/03-know-where-every-second-went.ui-mask.png",
+          "ui_coverage": 0.6078,
+          "imagegen_received_ui_source": false,
+          "target": "iphone_69",
+          "size": [
+            1320,
+            2868
+          ],
+          "background_mode": "theme",
+          "background_id": "theme",
+          "background_top": "#071A2F",
+          "background_bottom": "#102D4D",
+          "background_asset_applied": false,
+          "phone": {
+            "x": 127,
+            "y": 560,
+            "width": 1066,
+            "height": 2273,
+            "screen_x": 146,
+            "screen_y": 579,
+            "screen_width": 1028,
+            "screen_height": 2235
+          },
+          "header_only": true,
+          "compositor_text_layers": [
+            "header"
+          ],
+          "header_font_size": 148,
+          "header_lines": 2,
+          "header_text": "Know where every second went",
+          "header_bounds": [
+            93,
+            148,
+            1226,
+            406
+          ],
+          "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-detail.png",
+          "source_evidence_sha256": "1a7b24ce5321b65239a1aa7f09a5b61432035bccdd9d00a06b02353b579b4ad3",
+          "manifest": "manifests/race-book-evidence/03-know-where-every-second-went.json"
+        },
+        {
+          "filename": "04-keep-every-race-together.png",
+          "path": "race-book-evidence/04-keep-every-race-together.png",
+          "output_sha256": "725992b1f55c2631089b1f432938607d7e32c2129a31a90ad16fa5101ba3a083",
+          "output_size": [
+            1320,
+            2868
+          ],
+          "device": "iphone",
+          "header": "Keep every race together",
+          "pitch": {
+            "benefit": "Keep the full result history, bibs, splits, and places in one private locker",
+            "problem": "Race records become hard to revisit when they are spread across organizers and browser tabs.",
+            "advantage": "The locker stores the claimed athlete's complete published history on the phone with no account.",
+            "header_problem": "scattered race records",
+            "header_advantage": "one private locker",
+            "search_terms": [
+              "triathlon race results",
+              "race history"
+            ],
+            "proof": "The literal locker capture shows multiple official finishes grouped under the claimed athlete."
+          },
+          "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/locker.png",
+          "source_sha256": "fd3c80ca63ed5cc61c86807e60ada264e01e73ad10e9dee16fbce73ac03436ac",
+          "background_asset": null,
+          "background_asset_sha256": null,
+          "background_override": null,
+          "foreground": "manifests/race-book-evidence/04-keep-every-race-together.foreground.png",
+          "foreground_sha256": "a5a4eb0c87e36491be89f90f16a3c0e66c644868758064bdc40861b49e35adf5",
+          "ui_mask": "manifests/race-book-evidence/04-keep-every-race-together.ui-mask.png",
+          "ui_coverage": 0.6078,
+          "imagegen_received_ui_source": false,
+          "target": "iphone_69",
+          "size": [
+            1320,
+            2868
+          ],
+          "background_mode": "theme",
+          "background_id": "theme",
+          "background_top": "#071A2F",
+          "background_bottom": "#102D4D",
+          "background_asset_applied": false,
+          "phone": {
+            "x": 127,
+            "y": 560,
+            "width": 1066,
+            "height": 2273,
+            "screen_x": 146,
+            "screen_y": 579,
+            "screen_width": 1028,
+            "screen_height": 2235
+          },
+          "header_only": true,
+          "compositor_text_layers": [
+            "header"
+          ],
+          "header_font_size": 164,
+          "header_lines": 2,
+          "header_text": "Keep every race together",
+          "header_bounds": [
+            109,
+            152,
+            1211,
+            467
+          ],
+          "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/locker.png",
+          "source_evidence_sha256": "fd3c80ca63ed5cc61c86807e60ada264e01e73ad10e9dee16fbce73ac03436ac",
+          "manifest": "manifests/race-book-evidence/04-keep-every-race-together.json"
+        },
+        {
+          "filename": "05-build-a-race-book-you-can-share.png",
+          "path": "race-book-evidence/05-build-a-race-book-you-can-share.png",
+          "output_sha256": "3f037f12bec98c7aae55f67939726ba89e21a8bbcf6108c8c10a9d78a0c4badb",
+          "output_size": [
+            1320,
+            2868
+          ],
+          "device": "iphone",
+          "header": "Build a race book you can share",
+          "pitch": {
+            "benefit": "Turn the career record into a polished artifact for a coach, family member, or your own archive",
+            "problem": "A useful race history is difficult to share when it exists only as raw result pages.",
+            "advantage": "Race Book includes a paid PDF and image export action with official splits, podiums, stats, and optional private notes.",
+            "header_problem": "raw result pages",
+            "header_advantage": "shareable race book",
+            "search_terms": [
+              "race history",
+              "triathlon results"
+            ],
+            "proof": "The literal Race Book capture shows the Build PDF and image action in the paid export surface."
+          },
+          "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-export.png",
+          "source_sha256": "6ce14401a3b0ef43feec497d07f1f308f4e01722b93faae2e937023dd7eb6d95",
+          "background_asset": null,
+          "background_asset_sha256": null,
+          "background_override": null,
+          "foreground": "manifests/race-book-evidence/05-build-a-race-book-you-can-share.foreground.png",
+          "foreground_sha256": "b6fe7b3ef5ea28059f7e9dc26f2700560a17da6b3596284bac0c884fbd5cf426",
+          "ui_mask": "manifests/race-book-evidence/05-build-a-race-book-you-can-share.ui-mask.png",
+          "ui_coverage": 0.6078,
+          "imagegen_received_ui_source": false,
+          "target": "iphone_69",
+          "size": [
+            1320,
+            2868
+          ],
+          "background_mode": "theme",
+          "background_id": "theme",
+          "background_top": "#071A2F",
+          "background_bottom": "#102D4D",
+          "background_asset_applied": false,
+          "phone": {
+            "x": 127,
+            "y": 560,
+            "width": 1066,
+            "height": 2273,
+            "screen_x": 146,
+            "screen_y": 579,
+            "screen_width": 1028,
+            "screen_height": 2235
+          },
+          "header_only": true,
+          "compositor_text_layers": [
+            "header"
+          ],
+          "header_font_size": 156,
+          "header_lines": 2,
+          "header_text": "Build a race book you can share",
+          "header_bounds": [
+            103,
+            149,
+            1217,
+            450
+          ],
+          "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-export.png",
+          "source_evidence_sha256": "6ce14401a3b0ef43feec497d07f1f308f4e01722b93faae2e937023dd7eb6d95",
+          "manifest": "manifests/race-book-evidence/05-build-a-race-book-you-can-share.json"
+        },
+        {
+          "filename": "06-find-your-fastest-split.png",
+          "path": "race-book-evidence/06-find-your-fastest-split.png",
+          "output_sha256": "cebeacd69d0edcf2361f7f59ec073369fabbe12aa3c7b61668ccd93540eb794a",
+          "output_size": [
+            1320,
+            2868
+          ],
+          "device": "iphone",
+          "header": "Find your fastest split",
+          "pitch": {
+            "benefit": "See your fastest swim, bike, run, and transition splits at a glance",
+            "problem": "Personal bests are easy to lose inside a long list of finished races.",
+            "advantage": "Bests ranks each discipline while keeping race distance comparisons honest.",
+            "header_problem": "a long race list",
+            "header_advantage": "fastest split at a glance",
+            "search_terms": [
+              "personal bests",
+              "race splits"
+            ],
+            "proof": "The literal Bests capture shows split rankings sourced from the official race history."
+          },
+          "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/bests.png",
+          "source_sha256": "efc5c5e8aefe16490556208b48f3130dc441258efca06c02977ae6fa0caf0411",
+          "background_asset": null,
+          "background_asset_sha256": null,
+          "background_override": null,
+          "foreground": "manifests/race-book-evidence/06-find-your-fastest-split.foreground.png",
+          "foreground_sha256": "b487cd35b5e4503eb0c16705b4a52b086de173bab7f96816d18225bf66a42261",
+          "ui_mask": "manifests/race-book-evidence/06-find-your-fastest-split.ui-mask.png",
+          "ui_coverage": 0.6078,
+          "imagegen_received_ui_source": false,
+          "target": "iphone_69",
+          "size": [
+            1320,
+            2868
+          ],
+          "background_mode": "theme",
+          "background_id": "theme",
+          "background_top": "#071A2F",
+          "background_bottom": "#102D4D",
+          "background_asset_applied": false,
+          "phone": {
+            "x": 127,
+            "y": 560,
+            "width": 1066,
+            "height": 2273,
+            "screen_x": 146,
+            "screen_y": 579,
+            "screen_width": 1028,
+            "screen_height": 2235
+          },
+          "header_only": true,
+          "compositor_text_layers": [
+            "header"
+          ],
+          "header_font_size": 164,
+          "header_lines": 2,
+          "header_text": "Find your fastest split",
+          "header_bounds": [
+            92,
+            152,
+            1228,
+            465
+          ],
+          "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/bests.png",
+          "source_evidence_sha256": "efc5c5e8aefe16490556208b48f3130dc441258efca06c02977ae6fa0caf0411",
+          "manifest": "manifests/race-book-evidence/06-find-your-fastest-split.json"
+        },
+        {
+          "filename": "07-learn-from-every-race-day.png",
+          "path": "race-book-evidence/07-learn-from-every-race-day.png",
+          "output_sha256": "021789e5902b28d3cf5f25ef540aed3bcfedba1d44014f1332cc1ef6e6474397",
+          "output_size": [
+            1320,
+            2868
+          ],
+          "device": "iphone",
+          "header": "Learn from every race day",
+          "pitch": {
+            "benefit": "Pair the result history with a focused coaching pointer for the next start",
+            "problem": "A result can show what happened without helping an athlete revisit race-day choices.",
+            "advantage": "The Pointers library organizes real coaching clips by race leg and keeps the core library free.",
+            "header_problem": "a result without context",
+            "header_advantage": "race-day pointer",
+            "search_terms": [
+              "triathlon tips",
+              "swim bike run"
+            ],
+            "proof": "The literal Pattie capture shows the app's coaching pointer surface organized around the athlete's question."
+          },
+          "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/pattie.png",
+          "source_sha256": "2468080b8fb2dafac2ced92e1f042380db5b45c938aff3083049cc126f696f04",
+          "background_asset": null,
+          "background_asset_sha256": null,
+          "background_override": null,
+          "foreground": "manifests/race-book-evidence/07-learn-from-every-race-day.foreground.png",
+          "foreground_sha256": "6e6308cbdffb11eb709ae9acccdc03ed8f8a1a37690bd7c4a7c12bdc8ee47ca0",
+          "ui_mask": "manifests/race-book-evidence/07-learn-from-every-race-day.ui-mask.png",
+          "ui_coverage": 0.6078,
+          "imagegen_received_ui_source": false,
+          "target": "iphone_69",
+          "size": [
+            1320,
+            2868
+          ],
+          "background_mode": "theme",
+          "background_id": "theme",
+          "background_top": "#071A2F",
+          "background_bottom": "#102D4D",
+          "background_asset_applied": false,
+          "phone": {
+            "x": 127,
+            "y": 560,
+            "width": 1066,
+            "height": 2273,
+            "screen_x": 146,
+            "screen_y": 579,
+            "screen_width": 1028,
+            "screen_height": 2235
+          },
+          "header_only": true,
+          "compositor_text_layers": [
+            "header"
+          ],
+          "header_font_size": 164,
+          "header_lines": 2,
+          "header_text": "Learn from every race day",
+          "header_bounds": [
+            162,
+            152,
+            1158,
+            467
+          ],
+          "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/pattie.png",
+          "source_evidence_sha256": "2468080b8fb2dafac2ced92e1f042380db5b45c938aff3083049cc126f696f04",
+          "manifest": "manifests/race-book-evidence/07-learn-from-every-race-day.json"
+        },
+        {
+          "filename": "08-keep-your-race-record-private.png",
+          "path": "race-book-evidence/08-keep-your-race-record-private.png",
+          "output_sha256": "cb978a7ffb4b02aaa48e6193ca3056594402158220b748f805c4f720e6607a3f",
+          "output_size": [
+            1320,
+            2868
+          ],
+          "device": "iphone",
+          "header": "Keep your race record private",
+          "pitch": {
+            "benefit": "Keep the race record and private notes on your phone without creating an account",
+            "problem": "Athletes should not have to hand over a profile or publish their race history to review it.",
+            "advantage": "IM Iron Splits has no account system and stores the claimed history and notes locally.",
+            "header_problem": "a public profile",
+            "header_advantage": "private on-device record",
+            "search_terms": [
+              "private race log",
+              "triathlon race history"
+            ],
+            "proof": "The literal Settings capture shows the local-only privacy and data controls."
+          },
+          "source": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/settings.png",
+          "source_sha256": "3f976f58684e35257bf20cc54bdd59ab261c1ad150ee5383dd89c78d7e0dac48",
+          "background_asset": null,
+          "background_asset_sha256": null,
+          "background_override": null,
+          "foreground": "manifests/race-book-evidence/08-keep-your-race-record-private.foreground.png",
+          "foreground_sha256": "e742b7b1ef34cc7974286302158338dceb38e2d7d41784a44c16690b942d2992",
+          "ui_mask": "manifests/race-book-evidence/08-keep-your-race-record-private.ui-mask.png",
+          "ui_coverage": 0.6078,
+          "imagegen_received_ui_source": false,
+          "target": "iphone_69",
+          "size": [
+            1320,
+            2868
+          ],
+          "background_mode": "theme",
+          "background_id": "theme",
+          "background_top": "#071A2F",
+          "background_bottom": "#102D4D",
+          "background_asset_applied": false,
+          "phone": {
+            "x": 127,
+            "y": 560,
+            "width": 1066,
+            "height": 2273,
+            "screen_x": 146,
+            "screen_y": 579,
+            "screen_width": 1028,
+            "screen_height": 2235
+          },
+          "header_only": true,
+          "compositor_text_layers": [
+            "header"
+          ],
+          "header_font_size": 164,
+          "header_lines": 2,
+          "header_text": "Keep your race record private",
+          "header_bounds": [
+            145,
+            152,
+            1174,
+            465
+          ],
+          "source_evidence": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/settings.png",
+          "source_evidence_sha256": "3f976f58684e35257bf20cc54bdd59ab261c1ad150ee5383dd89c78d7e0dac48",
+          "manifest": "manifests/race-book-evidence/08-keep-your-race-record-private.json"
+        }
+      ]
+    }
+  ]
+}

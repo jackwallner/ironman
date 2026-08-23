@@ -1,0 +1,12 @@
+Minden teljesített versenyed egy helyen, úgy rendezve, ahogy valóban értelmezni szeretnéd.
+
+Írd be egyszer a neved. Az IM Iron Splits megkeresi a közzétett eredményeidet, és megmutatja az úszás, depó, kerékpár és futás részideit, a rajtszámot, valamint a helyezéseket.
+
+Nézd meg az egyéni csúcsokat, hasonlítsd össze az azonos típusú versenyeket, és lásd, hol állsz a mezőnyben. A Race Book egyszeri, élethosszig tartó vásárlással nyitja meg az összehasonlítást és a PDF- vagy képexportot, előfizetés és exportdíj nélkül.
+
+Az alap ingyenes: keresés, teljes előzmény, részidők, helyezések, jegyzetek és a Pointers könyvtár.
+
+Adatvédelem: https://jackwallner.github.io/ironman/privacy-policy.html
+Felhasználási feltételek: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
+Az IM Iron Splits független alkalmazás, nem kapcsolódik versenyszervezőkhöz vagy időmérő cégekhez.
