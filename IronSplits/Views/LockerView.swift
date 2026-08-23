@@ -166,7 +166,7 @@ struct LockerView: View {
                     kindFilter = nil
                     pattie.react(.filter)
                 }
-                ForEach(locker.availableKinds, id: \.self) { kind in
+                ForEach(locker.availableKinds.filter { $0 != .running }, id: \.self) { kind in
                     TriChip(title: kind.longTitle, isSelected: kindFilter == kind) {
                         kindFilter = kind
                         pattie.react(.filter)
