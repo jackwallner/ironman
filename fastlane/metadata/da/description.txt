@@ -1,6 +1,6 @@
 Alle løb, du har gennemført, samlet ét sted og sorteret efter det, du faktisk vil vide.
 
-Skriv dit navn én gang. IM Iron Splits finder dine offentliggjorte resultater og viser tider for svømning, skiftezoner, cykling og løb samt startnummer og placeringer.
+Skriv dit navn én gang. IM Tri Tracker finder dine offentliggjorte resultater og viser tider for svømning, skiftezoner, cykling og løb samt startnummer og placeringer.
 
 Se personlige rekorder, sammenlign løb af samme type og forstå din placering i feltet. Race Book låser sammenligning og eksport til PDF eller billede op med et engangskøb for livstid, uden abonnement eller gebyr pr. eksport.
 
@@ -9,4 +9,4 @@ Kernen er gratis: søgning, fuld historik, tider, placeringer, noter og Pointers
 Privatliv: https://jackwallner.github.io/ironman/privacy-policy.html
 Vilkår: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Iron Splits er en uafhængig app uden tilknytning til løbsarrangører eller tidtagningsfirmaer.
+IM Tri Tracker er en uafhængig app uden tilknytning til løbsarrangører eller tidtagningsfirmaer.

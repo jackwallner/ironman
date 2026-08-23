@@ -28,7 +28,6 @@ struct RaceDetailView: View {
                 fieldCard
                 notesCard
             }
-            .padding(.bottom, TriGeo.tabBarClearance)
         }
         .background(TriPalette.canvas)
         .navigationTitle(String(result.year))
@@ -74,31 +73,33 @@ struct RaceDetailView: View {
         VStack(spacing: TriSpace.x3) {
             Text(result.raceName)
                 .font(TriType.pageTitle)
-                .foregroundStyle(.white)
+                .foregroundStyle(TriPalette.inkOnDark)
                 .multilineTextAlignment(.center)
             Text(dateText)
                 .font(TriType.small)
-                .foregroundStyle(.white.opacity(0.7))
+                .foregroundStyle(TriPalette.inkOnDark.opacity(0.7))
 
             Text(result.isComplete ? TimeFormat.hms(result.finish) : statusText)
                 .font(TriType.statHero)
-                .foregroundStyle(result.isComplete ? .white : TriPalette.sunrise)
+                .foregroundStyle(result.isComplete ? TriPalette.inkOnDark : TriPalette.sunrise)
 
-            HStack(spacing: TriSpace.x2) {
-                TriBadge(text: result.kind.longTitle, color: .white.opacity(0.85))
-                if let group = result.ageGroup {
-                    TriBadge(text: group, color: .white.opacity(0.85))
-                }
-                if let bib = result.bib {
-                    TriBadge(text: "Bib \(bib)", color: .white.opacity(0.85))
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: TriSpace.x2) {
+                    TriBadge(text: result.kind.longTitle, color: TriPalette.inkOnDark.opacity(0.85))
+                    if let group = result.ageGroup {
+                        TriBadge(text: group, color: TriPalette.inkOnDark.opacity(0.85))
+                    }
+                    if let bib = result.bib {
+                        TriBadge(text: "Bib \(bib)", color: TriPalette.inkOnDark.opacity(0.85))
+                    }
                 }
             }
 
             if result.isComplete {
                 HStack(spacing: 0) {
-                    StatTile(value: Ordinal.text(result.finishRankGroup) ?? "--", caption: "Division", tint: .white)
-                    StatTile(value: Ordinal.text(result.finishRankGender) ?? "--", caption: "Gender", tint: .white)
-                    StatTile(value: Ordinal.text(result.finishRankOverall) ?? "--", caption: "Overall", tint: .white)
+                    StatTile(value: Ordinal.text(result.finishRankGroup) ?? "--", caption: "Division", tint: TriPalette.inkOnDark)
+                    StatTile(value: Ordinal.text(result.finishRankGender) ?? "--", caption: "Gender", tint: TriPalette.inkOnDark)
+                    StatTile(value: Ordinal.text(result.finishRankOverall) ?? "--", caption: "Overall", tint: TriPalette.inkOnDark)
                 }
                 .padding(.top, TriSpace.x1)
             }
@@ -287,8 +288,10 @@ private struct SplitRow: View {
                     Text(pace)
                         .font(TriType.small)
                         .foregroundStyle(TriPalette.inkTertiary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
+            .layoutPriority(1)
 
             Spacer(minLength: TriSpace.x2)
 
@@ -296,6 +299,7 @@ private struct SplitRow: View {
                 Text(TimeFormat.hms(seconds))
                     .font(TriType.statMed)
                     .foregroundStyle(TriPalette.ink)
+                    .fixedSize(horizontal: true, vertical: false)
                 if let divisionRank {
                     Text("\(Ordinal.text(divisionRank) ?? "") in division")
                         .font(TriType.small)
@@ -324,10 +328,12 @@ private struct PlacementRow: View {
                 Text("\(placement.rank) of \(placement.fieldSize)")
                     .font(TriType.small)
                     .foregroundStyle(TriPalette.inkTertiary)
+                    .fixedSize(horizontal: true, vertical: false)
                 Text("\(placement.percentile)%")
                     .font(TriType.statSmall)
                     .foregroundStyle(TriPalette.textColor(forPercentile: placement.percentile))
-                    .frame(width: 28, alignment: .trailing)
+                    .fixedSize(horizontal: true, vertical: false)
+                    .frame(minWidth: TriSpace.x8, alignment: .trailing)
             }
             PercentileBar(percentile: placement.percentile)
         }
@@ -364,14 +370,14 @@ struct RaceNoteEditor: View {
             .triNavBar()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }.foregroundStyle(.white).triTapTarget()
+                    Button("Cancel") { dismiss() }.foregroundStyle(TriPalette.inkOnDark).triTapTarget()
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
                         onSave(note)
                         dismiss()
                     }
-                    .foregroundStyle(.white)
+                    .foregroundStyle(TriPalette.inkOnDark)
                     .fontWeight(.semibold)
                 }
             }

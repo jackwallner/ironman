@@ -1,6 +1,6 @@
 Setiap perlumbaan yang anda tamatkan, dalam satu tempat dan disusun untuk memahami prestasi anda.
 
-Masukkan nama sekali. IM Iron Splits mencari keputusan yang diterbitkan dan memaparkan split renang, transisi, basikal dan larian, nombor bib serta kedudukan.
+Masukkan nama sekali. IM Tri Tracker mencari keputusan yang diterbitkan dan memaparkan split renang, transisi, basikal dan larian, nombor bib serta kedudukan.
 
 Lihat rekod peribadi, bandingkan perlumbaan yang sama jenis dan fahami kedudukan setiap masa dalam medan. Race Book membuka perbandingan dan eksport PDF atau imej dengan pembelian sekali seumur hidup, tanpa langganan atau caj setiap eksport.
 
@@ -9,4 +9,4 @@ Ciri teras kekal percuma: carian, sejarah penuh, split, kedudukan, nota dan pust
 Privasi: https://jackwallner.github.io/ironman/privacy-policy.html
 Syarat penggunaan: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Iron Splits ialah aplikasi bebas dan tidak bergabung dengan penganjur perlumbaan atau syarikat pemasaan.
+IM Tri Tracker ialah aplikasi bebas dan tidak bergabung dengan penganjur perlumbaan atau syarikat pemasaan.

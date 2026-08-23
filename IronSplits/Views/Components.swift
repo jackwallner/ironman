@@ -74,22 +74,11 @@ struct RaceRow: View {
                     Text(result.raceName)
                         .font(TriType.cardTitle)
                         .foregroundStyle(TriPalette.ink)
-                        .lineLimit(2)
-                    HStack(spacing: TriSpace.x2) {
-                        Text(dateText)
-                            .font(TriType.small)
-                            .foregroundStyle(TriPalette.inkTertiary)
-                        TriBadge(text: result.kind.title, color: TriPalette.inkTertiary)
-                        if let bib = result.bib {
-                            Text("Bib " + String(bib))
-                                .font(TriType.small)
-                                .foregroundStyle(TriPalette.inkTertiary)
-                        }
-                        if hasNote {
-                            Image(systemName: "note.text")
-                                .font(.system(size: 10))
-                                .foregroundStyle(TriPalette.inkTertiary)
-                        }
+                        .fixedSize(horizontal: false, vertical: true)
+                        .layoutPriority(1)
+                    ViewThatFits(in: .horizontal) {
+                        metadataRow
+                        compactMetadataRow
                     }
                 }
                 Spacer(minLength: TriSpace.x2)
@@ -97,6 +86,7 @@ struct RaceRow: View {
                     Text(result.isComplete ? TimeFormat.hms(result.finish) : statusText)
                         .font(TriType.statLarge)
                         .foregroundStyle(result.isComplete ? TriPalette.ink : TriPalette.negative)
+                        .fixedSize(horizontal: true, vertical: false)
                     if let group = result.ageGroup, let place = result.finishRankGroup {
                         Text(group + " #" + String(place))
                             .font(TriType.small)
@@ -120,6 +110,50 @@ struct RaceRow: View {
         .padding(.vertical, TriSpace.x1)
     }
 
+    private var metadataRow: some View {
+        HStack(spacing: TriSpace.x2) {
+            Text(dateText)
+                .font(TriType.small)
+                .foregroundStyle(TriPalette.inkTertiary)
+            TriBadge(text: result.kind.title, color: TriPalette.inkTertiary)
+            if let bib = result.bib {
+                Text("Bib " + String(bib))
+                    .font(TriType.small)
+                    .foregroundStyle(TriPalette.inkTertiary)
+            }
+            if hasNote {
+                Image(systemName: "note.text")
+                    .font(.system(size: 10))
+                    .foregroundStyle(TriPalette.inkTertiary)
+                    .accessibilityLabel("Has notes")
+            }
+        }
+    }
+
+    private var compactMetadataRow: some View {
+        VStack(alignment: .leading, spacing: TriSpace.x1) {
+            HStack(spacing: TriSpace.x2) {
+                Text(dateText)
+                    .font(TriType.small)
+                    .foregroundStyle(TriPalette.inkTertiary)
+                TriBadge(text: result.kind.title, color: TriPalette.inkTertiary)
+            }
+            HStack(spacing: TriSpace.x2) {
+                if let bib = result.bib {
+                    Text("Bib " + String(bib))
+                        .font(TriType.small)
+                        .foregroundStyle(TriPalette.inkTertiary)
+                }
+                if hasNote {
+                    Image(systemName: "note.text")
+                        .font(.system(size: 10))
+                        .foregroundStyle(TriPalette.inkTertiary)
+                        .accessibilityLabel("Has notes")
+                }
+            }
+        }
+    }
+
     private var statusText: String {
         if result.disqualified { return "DQ" }
         if result.didNotStart { return "DNS" }
@@ -137,26 +171,33 @@ struct RaceRow: View {
 /// Legend for the split bar's colours.
 struct SplitLegend: View {
     var body: some View {
-        HStack(spacing: TriSpace.x3) {
-            ForEach([Discipline.swim, .t1, .bike, .t2, .run]) { leg in
-                HStack(spacing: TriSpace.x1) {
-                    Circle()
-                        .fill(TriPalette.color(for: leg))
-                        .frame(width: 7, height: 7)
-                    Text(leg.title)
-                        .font(TriType.micro)
-                        .foregroundStyle(TriPalette.inkTertiary)
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: TriSpace.x3) {
+                ForEach([Discipline.swim, .t1, .bike, .t2, .run]) { leg in
+                    HStack(spacing: TriSpace.x1) {
+                        Circle()
+                            .fill(TriPalette.color(for: leg))
+                            .frame(width: 7, height: 7)
+                        Text(leg.title)
+                            .font(TriType.micro)
+                            .foregroundStyle(TriPalette.inkTertiary)
+                    }
+                    .fixedSize(horizontal: true, vertical: false)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.horizontal, TriSpace.x1)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Split colors: swim, T1, bike, T2, run")
     }
 }
 
 /// The standard "this needs Pro" row, used wherever a list is truncated.
 ///
-/// Nothing calls it while `ProGate.everythingUnlocked` is set, and that is the
-/// point: the gate came out of the screens, not out of the codebase, so turning
-/// the flag back on is a one-line change rather than a rebuild of every list.
+/// The legacy row remains available for any future paid surface that needs a
+/// concise call to action. The current product keeps the result history free
+/// and uses Race Book actions for the only purchase boundary.
 struct LockedRow: View {
     let title: String
     let subtitle: String
@@ -182,14 +223,15 @@ struct LockedRow: View {
                 Spacer(minLength: TriSpace.x2)
                 Text(cta)
                     .font(TriType.smallBold)
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
+                    .foregroundStyle(TriPalette.inkOnDark)
+                    .padding(.horizontal, TriSpace.x3)
+                    .padding(.vertical, TriSpace.x1)
                     .background(TriPalette.sunrise, in: Capsule())
             }
-            .padding(.vertical, 6)
+            .padding(.vertical, TriSpace.x1)
+            .frame(minHeight: TriGeo.tapTarget)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.triPress)
     }
 }
 
@@ -204,12 +246,13 @@ struct TriPlaceholder: View {
     var body: some View {
         VStack(spacing: TriSpace.x3) {
             Image(systemName: systemImage)
-                .font(.system(size: 38, weight: .light))
+                .font(.system(size: 38, weight: .regular))
                 .foregroundStyle(TriPalette.inkTertiary)
             Text(title)
                 .font(TriType.cardTitle)
                 .foregroundStyle(TriPalette.inkSecondary)
                 .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
             if let message {
                 Text(message)
                     .font(TriType.small)
@@ -250,7 +293,9 @@ struct StatTile: View {
                 .font(TriType.micro)
                 .kerning(0.4)
                 .foregroundStyle(TriPalette.inkTertiary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
         }
-        .frame(maxWidth: .infinity)
+        .frame(width: TriSpace.x10 + TriSpace.x6)
     }
 }

@@ -1,6 +1,6 @@
 Mọi cuộc đua bạn đã hoàn thành, ở một nơi và được sắp xếp để bạn hiểu thành tích của mình.
 
-Nhập tên một lần. IM Iron Splits tìm kết quả đã công bố và hiển thị thời gian bơi, chuyển tiếp, đạp xe và chạy, số báo danh cùng thứ hạng.
+Nhập tên một lần. IM Tri Tracker tìm kết quả đã công bố và hiển thị thời gian bơi, chuyển tiếp, đạp xe và chạy, số báo danh cùng thứ hạng.
 
 Xem thành tích tốt nhất, so sánh các cuộc đua cùng loại và hiểu vị trí của từng thời gian trong nhóm. Race Book mở khóa so sánh và xuất PDF hoặc hình ảnh bằng một lần mua trọn đời, không đăng ký và không tính phí mỗi lần xuất.
 
@@ -9,4 +9,4 @@ Các tính năng cốt lõi vẫn miễn phí: tìm kiếm, lịch sử đầy �
 Quyền riêng tư: https://jackwallner.github.io/ironman/privacy-policy.html
 Điều khoản: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Iron Splits là ứng dụng độc lập, không liên kết với ban tổ chức hay công ty tính giờ cuộc đua.
+IM Tri Tracker là ứng dụng độc lập, không liên kết với ban tổ chức hay công ty tính giờ cuộc đua.

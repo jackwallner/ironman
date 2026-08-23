@@ -1,6 +1,6 @@
 Tamamladığın her yarış tek yerde ve performansını anlamanı kolaylaştıracak şekilde sıralanır.
 
-Adını bir kez yaz. IM Iron Splits yayımlanmış sonuçlarını bulur; yüzme, geçiş, bisiklet ve koşu sürelerini, göğüs numaranı ve derecelerini gösterir.
+Adını bir kez yaz. IM Tri Tracker yayımlanmış sonuçlarını bulur; yüzme, geçiş, bisiklet ve koşu sürelerini, göğüs numaranı ve derecelerini gösterir.
 
 Kişisel en iyilerini gör, aynı tür yarışları karşılaştır ve her sürenin yarış alanındaki yerini anla. Race Book, tek seferlik ömür boyu satın alımla karşılaştırma ve PDF veya görsel dışa aktarmayı açar; abonelik ya da dışa aktarma başına ücret yoktur.
 
@@ -9,4 +9,4 @@ Temel özellikler ücretsizdir: arama, tam geçmiş, ara zamanlar, sıralamalar,
 Gizlilik: https://jackwallner.github.io/ironman/privacy-policy.html
 Koşullar: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Iron Splits bağımsızdır, yarış organizatörleri veya zamanlama şirketleriyle bağlantılı değildir.
+IM Tri Tracker bağımsızdır, yarış organizatörleri veya zamanlama şirketleriyle bağlantılı değildir.

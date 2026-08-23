@@ -7,15 +7,22 @@ import XCTest
 /// would only ever prove the mock still matches what I wrote down. This test
 /// types a name, waits for real athletes to come back, claims one, and checks
 /// that the locker fills in.
+@MainActor
 final class LockerFlowUITests: XCTestCase {
 
     override func setUp() {
         continueAfterFailure = false
     }
 
-    private func launch(forcePro: Bool = false) -> XCUIApplication {
+    private func launch(forcePro: Bool = false,
+                         accessibilityTextSize: Bool = false) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments += ["-UITest", "-ResetLocker"]
+        if accessibilityTextSize {
+            app.launchArguments += ["-AuditLight",
+                                    "-UIPreferredContentSizeCategoryName",
+                                    "UICTContentSizeCategoryAccessibilityXXXL"]
+        }
         if forcePro {
             app.launchEnvironment["FORCE_PRO"] = "1"
         }
@@ -32,6 +39,8 @@ final class LockerFlowUITests: XCTestCase {
         let locker = app.navigationBars["Locker"]
         XCTAssertTrue(locker.waitForExistence(timeout: 30), "Claiming should open the locker")
         XCTAssertTrue(app.staticTexts["FINISHES"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["Change athlete"].waitForExistence(timeout: 10),
+                      "Changing the athlete should be visible from Locker")
         attachScreenshot(app, name: "2-locker")
 
         // Race detail. Tapped by name rather than by cell index: the locker's
@@ -53,6 +62,31 @@ final class LockerFlowUITests: XCTestCase {
         app.tabBars.buttons["Resume"].tap()
         XCTAssertTrue(app.navigationBars["Resume"].waitForExistence(timeout: 10))
         attachScreenshot(app, name: "5-resume")
+        let openRaceBook = app.buttons["Open Race Book"]
+        XCTAssertTrue(openRaceBook.waitForExistence(timeout: 10))
+        openRaceBook.tap()
+        XCTAssertTrue(app.navigationBars["Race Book"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["PERSONAL BESTS"].waitForExistence(timeout: 10))
+
+        let compareButton = app.buttons["Compare two races"]
+        for _ in 0..<6 where !compareButton.isHittable {
+            app.swipeUp()
+        }
+        XCTAssertTrue(compareButton.waitForExistence(timeout: 10))
+        compareButton.tap()
+        XCTAssertTrue(app.navigationBars["Compare races"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["TIME BY LEG"].waitForExistence(timeout: 10))
+        app.navigationBars["Compare races"].buttons.element(boundBy: 0).tap()
+
+        let buildExportButton = app.buttons["Build PDF and image"]
+        for _ in 0..<6 where !buildExportButton.isHittable {
+            app.swipeUp()
+        }
+        XCTAssertTrue(buildExportButton.waitForExistence(timeout: 10))
+        buildExportButton.tap()
+        XCTAssertTrue(app.buttons["Share PDF"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.buttons["Share image"].waitForExistence(timeout: 15))
+        app.buttons["Done"].tap()
 
         // Pattie: Ask Pattie, then the episode library behind the same tab.
         app.tabBars.buttons["Pattie"].tap()
@@ -63,19 +97,54 @@ final class LockerFlowUITests: XCTestCase {
         // Settings
         app.tabBars.buttons["Settings"].tap()
         XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["System"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["Light"].exists)
+        XCTAssertTrue(app.buttons["Dark"].exists)
+        app.buttons["Dark"].tap()
+        XCTAssertTrue(app.buttons["Dark"].isSelected)
+        app.buttons["Light"].tap()
+        XCTAssertTrue(app.buttons["Light"].isSelected)
+        app.buttons["System"].tap()
         attachScreenshot(app, name: "7-settings")
     }
 
-    /// Nothing in the app is gated: `ProGate.everythingUnlocked` is set.
-    ///
-    /// This test used to assert the opposite, that a free athlete saw three
-    /// races and a "2 more races" row that opened the paywall. It is inverted
-    /// rather than deleted, because the thing worth pinning is the same either
-    /// way: whatever `ProGate` says, the locker has to agree with it. If the
-    /// flag ever goes back, this is the test that has to be flipped again, and
-    /// it will fail loudly rather than silently pass.
-    func testEverythingIsUnlockedWithNoPurchase() throws {
-        // No FORCE_PRO: this is a plain launch with no entitlement at all.
+    func testRaceBookActionsRemainReachableAtAccessibilitySize() throws {
+        let app = launch(forcePro: true, accessibilityTextSize: true)
+
+        XCTAssertTrue(searchAndClaim(app, name: "Daniel Winek"), "Search should return the athlete")
+        XCTAssertTrue(app.navigationBars["Locker"].waitForExistence(timeout: 30))
+
+        app.tabBars.buttons["Resume"].tap()
+        XCTAssertTrue(app.navigationBars["Resume"].waitForExistence(timeout: 10))
+        let openRaceBook = app.buttons["Open Race Book"]
+        XCTAssertTrue(openRaceBook.waitForExistence(timeout: 10))
+        openRaceBook.tap()
+        XCTAssertTrue(app.navigationBars["Race Book"].waitForExistence(timeout: 10))
+
+        let compareButton = app.buttons["Compare two races"]
+        for _ in 0..<12 where !compareButton.isHittable {
+            app.swipeUp()
+        }
+        XCTAssertTrue(compareButton.waitForExistence(timeout: 10))
+        XCTAssertTrue(compareButton.isHittable, "Comparison should remain reachable at accessibility text size")
+        compareButton.tap()
+        XCTAssertTrue(app.navigationBars["Compare races"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["TIME BY LEG"].waitForExistence(timeout: 10))
+        app.navigationBars["Compare races"].buttons.element(boundBy: 0).tap()
+
+        let exportButton = app.buttons["Build PDF and image"]
+        for _ in 0..<12 where !exportButton.isHittable {
+            app.swipeUp()
+        }
+        XCTAssertTrue(exportButton.waitForExistence(timeout: 10))
+        XCTAssertTrue(exportButton.isHittable, "Export should remain reachable at accessibility text size")
+        attachScreenshot(app, name: "race-book-accessibility")
+    }
+
+    /// The core results remain complete without Race Book, while the actual
+    /// comparison and export actions open the contextual lifetime paywall.
+    func testFreeCoreStaysAvailableWithoutRaceBookPurchase() throws {
+        // No FORCE_PRO: this is a plain launch with no entitlement.
         let app = launch()
 
         XCTAssertTrue(searchAndClaim(app, name: "Daniel Winek"), "Search should return the athlete")
@@ -83,11 +152,12 @@ final class LockerFlowUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["FINISHES"].waitForExistence(timeout: 15))
 
         XCTAssertFalse(app.staticTexts["2 more races"].exists,
-                       "No locked row should exist while everything is unlocked")
-        XCTAssertFalse(app.staticTexts["Unlock Every Race"].exists, "No paywall should be reachable")
+                       "The free locker must never hide history")
+        XCTAssertFalse(app.staticTexts["Unlock Every Race"].exists,
+                       "The retired full-history paywall must not return")
         attachScreenshot(app, name: "8-unlocked-locker")
 
-        // The three surfaces that used to be behind the paywall.
+        // Split leaderboards remain free.
         app.tabBars.buttons["Bests"].tap()
         XCTAssertTrue(app.navigationBars["Bests"].waitForExistence(timeout: 10))
         XCTAssertFalse(app.staticTexts["Split leaderboards"].exists,
@@ -97,8 +167,41 @@ final class LockerFlowUITests: XCTestCase {
         app.tabBars.buttons["Resume"].tap()
         XCTAssertTrue(app.navigationBars["Resume"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["INCLUDE"].waitForExistence(timeout: 10),
-                      "Resume should show its options, not the locked placeholder")
+                      "Resume should show its options, not a locked placeholder")
+        let exportButton = app.buttons["Unlock Race Book exports"]
+        XCTAssertTrue(exportButton.waitForExistence(timeout: 10))
+        exportButton.tap()
+        XCTAssertTrue(app.staticTexts["Share your Race Book"].waitForExistence(timeout: 15),
+                      "Export should open the Race Book paywall")
+        attachScreenshot(app, name: "race-book-paywall")
+        app.buttons["Close"].tap()
         attachScreenshot(app, name: "10-unlocked-resume")
+    }
+
+    func testReviewPromptScrollsAtAccessibilitySize() throws {
+        let app = launch(accessibilityTextSize: true)
+        XCTAssertTrue(searchAndClaim(app, name: "Daniel Winek"), "Search should return the athlete")
+        XCTAssertTrue(app.navigationBars["Locker"].waitForExistence(timeout: 30))
+
+        app.tabBars.buttons["Settings"].tap()
+        let reviewButton = app.buttons["Rate or send feedback"]
+        for _ in 0..<8 where !reviewButton.isHittable {
+            app.swipeUp()
+        }
+        XCTAssertTrue(reviewButton.waitForExistence(timeout: 10))
+        XCTAssertTrue(reviewButton.isHittable, "About actions should remain reachable after scrolling at accessibility text size")
+        reviewButton.tap()
+
+        XCTAssertTrue(app.navigationBars["Enjoying IM Tri Tracker?"].waitForExistence(timeout: 10))
+        app.buttons["Not really"].tap()
+        XCTAssertTrue(app.navigationBars["Help us improve"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["What would make IM Tri Tracker work better for you?"].exists)
+        let sendButton = app.buttons["Send feedback"]
+        if !sendButton.isHittable {
+            app.swipeUp()
+        }
+        XCTAssertTrue(sendButton.isHittable, "Feedback submission should remain reachable above the keyboard")
+        attachScreenshot(app, name: "accessibility-review-feedback")
     }
 
     /// Type a name and wait for the athlete to come back, retrying once.

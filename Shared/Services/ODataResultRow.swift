@@ -1,4 +1,5 @@
 import Foundation
+import CryptoKit
 
 struct ODataErrorEnvelope: Decodable {
     let error: String?
@@ -75,18 +76,19 @@ struct ODataResultRow: Decodable, Sendable {
     let wtc_bikerankgroup: LooseInt?
     let wtc_runrankgroup: LooseInt?
 
-    let wtc_finisher: Bool?
-    let wtc_dnf: Bool?
-    let wtc_dns: Bool?
-    let wtc_dq: Bool?
+    let wtc_finisher: LooseBool?
+    let wtc_dnf: LooseBool?
+    let wtc_dns: LooseBool?
+    let wtc_dq: LooseBool?
 
     var contact: Contact? { wtc_ContactId }
 
     var result: RaceResult {
         let name = wtc_ContactId?.fullname
             ?? [wtc_ContactId?.firstname, wtc_ContactId?.lastname].compactMap { $0 }.joined(separator: " ")
+        let resultID = wtc_resultid?.trimmingCharacters(in: .whitespacesAndNewlines)
         return RaceResult(
-            id: wtc_resultid ?? UUID().uuidString,
+            id: resultID.flatMap { $0.isEmpty ? nil : $0 } ?? stableResultID,
             eventID: _wtc_eventid_value ?? wtc_EventId?.wtc_eventid ?? "",
             eventName: wtc_EventId?.wtc_name ?? "Unknown race",
             eventDate: Self.parseDate(wtc_EventId?.wtc_eventdate),
@@ -114,11 +116,42 @@ struct ODataResultRow: Decodable, Sendable {
             swimRankGroup: Self.rank(wtc_swimrankgroup),
             bikeRankGroup: Self.rank(wtc_bikerankgroup),
             runRankGroup: Self.rank(wtc_runrankgroup),
-            isFinisher: wtc_finisher ?? false,
-            didNotFinish: wtc_dnf ?? false,
-            didNotStart: wtc_dns ?? false,
-            disqualified: wtc_dq ?? false
+            isFinisher: wtc_finisher?.value ?? false,
+            didNotFinish: wtc_dnf?.value ?? false,
+            didNotStart: wtc_dns?.value ?? false,
+            disqualified: wtc_dq?.value ?? false
         )
+    }
+
+    /// Missing result ids used to become a new UUID on every decode. That made
+    /// SwiftUI rows flicker, orphaned race notes, and allowed duplicate feed
+    /// rows to inflate a history. The result fields below are stable for the
+    /// same upstream row, so a bad or incomplete response still has a durable
+    /// local identity.
+    private var stableResultID: String {
+        let seed = [
+            wtc_ContactId?.contactid,
+            _wtc_eventid_value ?? wtc_EventId?.wtc_eventid,
+            wtc_EventId?.wtc_eventdate,
+            wtc_bibnumber?.value.map(String.init),
+            wtc_finishtime?.value.map(String.init),
+            wtc_swimtime?.value.map(String.init),
+            wtc_biketime?.value.map(String.init),
+            wtc_runtime?.value.map(String.init),
+            wtc_ContactId?.fullname
+        ].compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .joined(separator: "|")
+        let digest = Array(SHA256.hash(data: Data(seed.utf8)).prefix(16))
+        let bytes = digest.enumerated().map { index, byte -> UInt8 in
+            if index == 6 { return (byte & 0x0f) | 0x50 }
+            if index == 8 { return (byte & 0x3f) | 0x80 }
+            return byte
+        }
+        return String(format: "%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+                      bytes[0], bytes[1], bytes[2], bytes[3],
+                      bytes[4], bytes[5], bytes[6], bytes[7],
+                      bytes[8], bytes[9], bytes[10], bytes[11],
+                      bytes[12], bytes[13], bytes[14], bytes[15])
     }
 
     /// Zero is the feed's "no data" for both times and ranks. A DNF carries a
@@ -204,6 +237,34 @@ struct LooseDouble: Decodable, Sendable {
             value = double
         } else if let string = try? container.decode(String.self) {
             value = Double(string.replacingOccurrences(of: ",", with: ""))
+        } else {
+            value = nil
+        }
+    }
+}
+
+/// Boolean columns in the feed have the same inconsistency as numeric ones.
+/// Dynamics sometimes emits `true`, sometimes `1`, and older rows contain the
+/// strings `"true"` and `"false"`.
+struct LooseBool: Decodable, Sendable {
+    let value: Bool?
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if container.decodeNil() {
+            value = nil
+        } else if let bool = try? container.decode(Bool.self) {
+            value = bool
+        } else if let int = try? container.decode(Int.self) {
+            value = int != 0
+        } else if let double = try? container.decode(Double.self) {
+            value = double != 0
+        } else if let string = try? container.decode(String.self) {
+            switch string.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
+            case "true", "yes", "1": value = true
+            case "false", "no", "0": value = false
+            default: value = nil
+            }
         } else {
             value = nil
         }

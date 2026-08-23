@@ -74,6 +74,31 @@ final class ResultsAPITests: XCTestCase {
         XCTAssertEqual(components.queryItems?.first { $0.name == "pageSize" }?.value, "42")
     }
 
+    func testFeedConfigRejectsUnsafeOverrides() {
+        var config = FeedConfig.bundled
+        XCTAssertTrue(config.isValid)
+
+        config.proxyURL = "http://labs-v2.competitor.com/api/results-proxy"
+        XCTAssertFalse(config.isValid)
+
+        config = FeedConfig.bundled
+        config.resultsURL = "https://example.com/web/results"
+        XCTAssertFalse(config.isValid)
+
+        config = FeedConfig.bundled
+        config.maxPages = 0
+        XCTAssertFalse(config.isValid)
+    }
+
+    func testNextLinkMustRemainOnTheUpstreamResultsHost() {
+        XCTAssertNotNil(FeedConfig.bundled.requestURL(
+            nextLink: "https://api.competitor.com/web/results?$skiptoken=abc"))
+        XCTAssertNil(FeedConfig.bundled.requestURL(
+            nextLink: "https://example.com/web/results?$skiptoken=abc"))
+        XCTAssertNil(FeedConfig.bundled.requestURL(
+            nextLink: "https://api.competitor.com:8443/web/results?$skiptoken=abc"))
+    }
+
     // MARK: - Collapsing rows to athletes
 
     func testCollapseGroupsRowsByContactAndKeepsTheLatestRace() {
@@ -90,6 +115,28 @@ final class ResultsAPITests: XCTestCase {
     func testCollapseSortsTheMostRacedAthleteFirst() {
         let athletes = ResultsAPI.collapseToAthletes(ODataResultRow.athleteFixtures())
         XCTAssertEqual(athletes.first?.name, "Daniel Winek")
+    }
+
+    func testCollapseRemovesDuplicateRowsBeforeCountingRaces() {
+        let rows = ODataResultRow.athleteFixtures()
+        let athletes = ResultsAPI.collapseToAthletes(rows + [rows[1]])
+        XCTAssertEqual(athletes.first?.name, "Daniel Winek")
+        XCTAssertEqual(athletes.first?.knownRaceCount, 2)
+    }
+
+    func testResumeLabelsIncompleteResultsPrecisely() {
+        let dnf = ODataResultRow.decode("{\"wtc_resultid\":\"dnf\",\"wtc_dnf\":true}").result
+        let dns = ODataResultRow.decode("{\"wtc_resultid\":\"dns\",\"wtc_dns\":true}").result
+        let dq = ODataResultRow.decode("{\"wtc_resultid\":\"dq\",\"wtc_dq\":true}").result
+
+        XCTAssertEqual(ResumeBuilder.statusLabel(for: dnf), "DNF")
+        XCTAssertEqual(ResumeBuilder.statusLabel(for: dns), "DNS")
+        XCTAssertEqual(ResumeBuilder.statusLabel(for: dq), "DQ")
+        let text = ResumeBuilder.plainText(athlete: Athlete(id: "test", name: "Test Athlete"),
+                                           results: [dns],
+                                           options: .init(kinds: Set(RaceKind.allCases), includeSplits: false, includeDNF: true))
+        XCTAssertTrue(text.contains("DNS"))
+        XCTAssertFalse(text.contains("00:00:00"))
     }
 }
 
@@ -147,6 +194,20 @@ extension ResultsAPITests {
                                       contact: Self.contactB, city: "Austin", state: "TX",
                                       gender: "Male", event: "2025 IRONMAN Texas",
                                       date: "2025-04-26T00:00:00Z"),
+        ]
+        XCTAssertEqual(ResultsAPI.collapseToAthletes(rows).count, 2)
+    }
+
+    func testSameCityDifferentStatesStaySeparatePeople() {
+        let rows = [
+            ODataResultRow.contactRow(id: "1", first: "John", last: "Smith",
+                                      contact: Self.contactA, city: "Springfield", state: "IL",
+                                      gender: "Male", event: "2024 IRONMAN Wisconsin",
+                                      date: "2024-09-08T00:00:00Z"),
+            ODataResultRow.contactRow(id: "2", first: "John", last: "Smith",
+                                      contact: Self.contactB, city: "Springfield", state: "MO",
+                                      gender: "Male", event: "2025 IRONMAN Texas",
+                                      date: "2025-04-26T00:00:00Z")
         ]
         XCTAssertEqual(ResultsAPI.collapseToAthletes(rows).count, 2)
     }

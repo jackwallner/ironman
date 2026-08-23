@@ -20,9 +20,13 @@ final class LockerStore: ObservableObject {
     @Published private(set) var results: [RaceResult] = []
     @Published private(set) var state: LoadState = .idle
     @Published private(set) var lastRefreshed: Date?
+    @Published private(set) var refreshWarning: String?
 
     private let api: ResultsProviding
     private let storage: LockerStorage
+    /// Invalidates an older network response when the user claims another
+    /// athlete, adds a contact, or starts a newer refresh.
+    private var refreshGeneration = 0
 
     init(api: ResultsProviding = ResultsAPI(), storage: LockerStorage = .init()) {
         self.api = api
@@ -50,9 +54,11 @@ final class LockerStore: ObservableObject {
     var availableKinds: [RaceKind] { RaceAnalytics.availableKinds(results) }
 
     func claim(_ athlete: Athlete) async {
+        refreshGeneration &+= 1
         self.athlete = athlete
         results = []
         state = .loading
+        refreshWarning = nil
         await refresh(force: true)
     }
 
@@ -72,19 +78,23 @@ final class LockerStore: ObservableObject {
             .compactMap { $0 as? String }
         guard mergedIDs != current.contactIDs else { return }
 
+        refreshGeneration &+= 1
         current.contactIDs = mergedIDs
         current.knownRaceCount = max(current.knownRaceCount, candidate.knownRaceCount)
         athlete = current
         results = []
         state = .loading
+        refreshWarning = nil
         await refresh(force: true)
     }
 
     func unclaim() {
+        refreshGeneration &+= 1
         athlete = nil
         results = []
         lastRefreshed = nil
         state = .idle
+        refreshWarning = nil
         storage.clear()
     }
 
@@ -96,6 +106,10 @@ final class LockerStore: ObservableObject {
     func refresh(force: Bool = false) async {
         guard let athlete else { return }
         if !force, let lastRefreshed, Date.now.timeIntervalSince(lastRefreshed) < 60 * 30 { return }
+        refreshGeneration &+= 1
+        let generation = refreshGeneration
+        let contactIDs = athlete.contactIDs
+        refreshWarning = nil
         if results.isEmpty { state = .loading }
         // Deliberately not awaited. `FeedConfigLoader.config()` already answers
         // from the cached or bundled config without touching the network, so
@@ -105,13 +119,22 @@ final class LockerStore: ObservableObject {
         // upstream moves.
         Task.detached(priority: .utility) { await FeedConfigLoader.shared.refreshIfStale() }
         do {
-            let fetched = try await api.results(forContactIDs: athlete.contactIDs)
+            let fetched = try await api.results(forContactIDs: contactIDs)
+            guard generation == refreshGeneration,
+                  self.athlete?.contactIDs == contactIDs else { return }
             results = fetched
             lastRefreshed = .now
             state = .loaded
+            refreshWarning = nil
             persist()
         } catch {
             guard !isTaskCancellation(error) else { return }
+            guard generation == refreshGeneration,
+                  self.athlete?.contactIDs == contactIDs else { return }
+            if let apiError = error as? ResultsAPIError,
+               case .pageLimitReached = apiError {
+                refreshWarning = apiError.localizedDescription
+            }
             if results.isEmpty {
                 state = .failed(error.localizedDescription)
             } else {

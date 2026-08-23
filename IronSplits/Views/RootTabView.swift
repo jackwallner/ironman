@@ -6,14 +6,35 @@ struct RootTabView: View {
     @EnvironmentObject private var settings: AppSettings
     @EnvironmentObject private var reviewCoordinator: ReviewPromptCoordinator
     @EnvironmentObject private var pattie: PattieMode
+    @Environment(\.colorScheme) private var colorScheme
 
     @State private var reviewSheet: ReviewPromptSheet.Step?
     @State private var pendingRequestReview = false
     @State private var selectedTab: Tab = .locker
     @Environment(\.requestReview) private var requestReview
 
-    private enum Tab: Hashable {
+    private enum Tab: CaseIterable, Hashable {
         case locker, bests, pattie, resume, settings
+
+        var title: String {
+            switch self {
+            case .locker: return "Locker"
+            case .bests: return "Bests"
+            case .pattie: return "Pattie"
+            case .resume: return "Resume"
+            case .settings: return "Settings"
+            }
+        }
+
+        var symbol: String {
+            switch self {
+            case .locker: return "tray.full.fill"
+            case .bests: return "list.number"
+            case .pattie: return "play.rectangle.fill"
+            case .resume: return "doc.text.fill"
+            case .settings: return "gearshape.fill"
+            }
+        }
     }
 
     var body: some View {
@@ -24,6 +45,7 @@ struct RootTabView: View {
                 AthleteSearchView(isOnboarding: true)
             }
         }
+        .background(TriPalette.canvas.ignoresSafeArea())
         .pattieHost(pattie)
         .onChange(of: locker.hasClaimedAthlete) { _, claimed in
             if claimed {
@@ -69,11 +91,58 @@ struct RootTabView: View {
                 .tag(Tab.settings)
         }
         .tint(TriPalette.sunrise)
+        .toolbar(.hidden, for: .tabBar)
+        .background(TriPalette.canvas.ignoresSafeArea())
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            tabBar
+        }
         .onChange(of: selectedTab) { _, _ in
             Haptics.selection()
             pattie.react(.tab)
         }
         .task { await locker.refresh() }
+    }
+
+    private var tabBar: some View {
+        HStack(spacing: TriSpace.x1) {
+            ForEach(Tab.allCases, id: \.self) { tab in
+                Button {
+                    selectedTab = tab
+                } label: {
+                    VStack(spacing: TriSpace.x1) {
+                        Image(systemName: tab.symbol)
+                            .font(.system(size: 22, weight: .semibold))
+                        Text(tab.title)
+                            .font(TriType.small)
+                            .fontWeight(.semibold)
+                    }
+                    .foregroundStyle(tab == selectedTab ? TriPalette.sunrise : TriPalette.ink)
+                    .frame(maxWidth: .infinity, minHeight: 64)
+                    .background {
+                        if tab == selectedTab {
+                            Capsule()
+                                .fill(TriPalette.surfaceSunk)
+                        }
+                    }
+                }
+                .buttonStyle(.triPressSilent)
+                .accessibilityLabel(tab.title)
+                .accessibilityAddTraits(tab == selectedTab ? [.isSelected] : [])
+            }
+        }
+        .padding(TriSpace.x1)
+        .background(TriPalette.surface, in: Capsule())
+        .overlay {
+            Capsule()
+                .stroke(TriPalette.hairline, lineWidth: TriGeo.hairline)
+        }
+        .shadow(color: TriShadow.card(colorScheme).0,
+                radius: TriShadow.card(colorScheme).1,
+                y: TriShadow.card(colorScheme).2)
+        .padding(.horizontal, TriSpace.x4)
+        .padding(.top, TriSpace.x2)
+        .padding(.bottom, TriSpace.x2)
+        .background(TriPalette.canvas)
     }
 
     private func presentReviewPromptIfEligible() {

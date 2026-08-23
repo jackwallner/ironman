@@ -1,6 +1,7 @@
 import XCTest
 
 /// Temporary demo-drive: claims Pattie Wallner and screenshots every surface.
+@MainActor
 final class PattieWallnerSmokeUITests: XCTestCase {
 
     override func setUp() { continueAfterFailure = false }

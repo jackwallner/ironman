@@ -27,6 +27,9 @@ struct AthleteSearchView: View {
     @State private var phase: Phase = .idle
     @State private var errorMessage: String?
     @State private var claiming: Athlete?
+    @State private var searchTask: Task<Void, Never>?
+    @State private var searchGeneration = 0
+    @State private var lastSearchTerm: String?
     @FocusState private var fieldFocused: Bool
 
     private enum Phase: Equatable {
@@ -53,7 +56,7 @@ struct AthleteSearchView: View {
                 if !isOnboarding {
                     ToolbarItem(placement: .cancellationAction) {
                         Button("Cancel") { dismiss() }
-                            .foregroundStyle(.white)
+                            .foregroundStyle(TriPalette.inkOnDark)
                             .triTapTarget()
                     }
                 }
@@ -64,6 +67,9 @@ struct AthleteSearchView: View {
             // Not awaited before the first search can run: the hotfix channel
             // is a nice-to-have and the cached config already works.
             await FeedConfigLoader.shared.refreshIfStale()
+        }
+        .onDisappear {
+            searchTask?.cancel()
         }
     }
 
@@ -98,9 +104,11 @@ struct AthleteSearchView: View {
                            message: "Try the name exactly as it appeared on your race entry. Results are listed under the name you registered with, which is often a full legal first name.")
             Spacer()
         } else if matches.isEmpty {
-            Spacer()
-            introBlurb
-            Spacer()
+            ScrollView {
+                introBlurb
+                    .padding(.vertical, TriSpace.x8)
+            }
+            .safeAreaPadding(.bottom, TriSpace.x8)
         } else {
             List(matches) { athlete in
                 Button {
@@ -140,13 +148,15 @@ struct AthleteSearchView: View {
     private var searchField: some View {
         HStack(spacing: TriSpace.x2) {
             Image(systemName: "magnifyingglass")
-                .font(.system(size: 16, weight: .medium))
+                .font(.system(size: 16, weight: .regular))
                 .foregroundStyle(fieldFocused ? TriPalette.sunrise : TriPalette.inkTertiary)
 
             TextField("Your name as you registered", text: $query)
                 .font(TriType.field)
                 .foregroundStyle(TriPalette.ink)
                 .tint(TriPalette.sunrise)
+                .lineLimit(1)
+                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 .textInputAutocapitalization(.words)
                 .autocorrectionDisabled()
                 .textContentType(.name)
@@ -158,10 +168,13 @@ struct AthleteSearchView: View {
                 Button {
                     Haptics.tap()
                     pattie.react(.selection)
+                    searchTask?.cancel()
+                    searchGeneration &+= 1
                     query = ""
                     matches = []
                     phase = .idle
                     errorMessage = nil
+                    lastSearchTerm = nil
                 } label: {
                     Image(systemName: "xmark.circle.fill")
                         .font(.system(size: 17))
@@ -185,21 +198,31 @@ struct AthleteSearchView: View {
         // Debounced rather than per-keystroke: each search is a real request to
         // somebody else's service, and "Pattie" would otherwise fire six.
         .task(id: query) {
-            guard query.trimmingCharacters(in: .whitespaces).count >= 3 else { return }
+            searchTask?.cancel()
+            let term = query.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard term.count >= 3 else {
+                matches = []
+                phase = .idle
+                errorMessage = nil
+                lastSearchTerm = nil
+                return
+            }
             try? await Task.sleep(for: .milliseconds(400))
             guard !Task.isCancelled else { return }
-            runSearch()
+            guard lastSearchTerm != term else { return }
+            runSearch(for: term)
         }
     }
 
     private var introBlurb: some View {
         VStack(spacing: TriSpace.x4) {
             Image(systemName: "figure.open.water.swim")
-                .font(.system(size: 44, weight: .light))
+                .font(.system(size: 44, weight: .regular))
                 .foregroundStyle(TriPalette.inkSecondary)
             Text("Type your name")
                 .font(TriType.cardTitle)
                 .foregroundStyle(TriPalette.inkSecondary)
+                .fixedSize(horizontal: false, vertical: true)
             Text(introText)
                 .font(TriType.small)
                 .foregroundStyle(TriPalette.inkTertiary)
@@ -211,28 +234,48 @@ struct AthleteSearchView: View {
 
     private func runSearch() {
         let term = query.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard term.count >= 2 else { return }
+        guard term.count >= 2 else {
+            searchTask?.cancel()
+            matches = []
+            phase = .idle
+            errorMessage = nil
+            lastSearchTerm = nil
+            return
+        }
+        runSearch(for: term)
+    }
+
+    private func runSearch(for term: String) {
+        searchTask?.cancel()
+        searchGeneration &+= 1
+        let generation = searchGeneration
+        lastSearchTerm = term
         errorMessage = nil
         pattie.react(.search)
         phase = .quick
-        Task {
+        searchTask = Task { @MainActor in
             do {
                 var found = try await api.searchAthletes(matching: term, depth: .prefix)
                 if found.isEmpty {
-                    guard !Task.isCancelled, query.trimmingCharacters(in: .whitespacesAndNewlines) == term else { return }
+                    guard !Task.isCancelled, isCurrentSearch(term, generation: generation) else { return }
                     phase = .deep
                     found = try await api.searchAthletes(matching: term, depth: .substring)
                 }
-                guard !Task.isCancelled else { return }
+                guard !Task.isCancelled, isCurrentSearch(term, generation: generation) else { return }
                 matches = found
                 phase = .done
                 if !found.isEmpty { Haptics.success() }
             } catch {
-                guard !isTaskCancellation(error) else { return }
+                guard !isTaskCancellation(error), isCurrentSearch(term, generation: generation) else { return }
                 errorMessage = error.localizedDescription
                 phase = .done
             }
         }
+    }
+
+    private func isCurrentSearch(_ term: String, generation: Int) -> Bool {
+        generation == searchGeneration &&
+        query.trimmingCharacters(in: .whitespacesAndNewlines) == term
     }
 
     private func claim(_ athlete: Athlete) {
@@ -275,12 +318,14 @@ private struct AthleteRow: View {
                     .font(TriType.cardTitle)
                     .foregroundStyle(TriPalette.ink)
                     .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .layoutPriority(1)
                 if !athlete.subtitle.isEmpty {
                     Text(athlete.subtitle)
                         .font(TriType.small)
                         .foregroundStyle(TriPalette.inkTertiary)
                         .multilineTextAlignment(.leading)
-                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
             Spacer(minLength: TriSpace.x2)
@@ -292,6 +337,7 @@ private struct AthleteRow: View {
                 Text(String(athlete.knownRaceCount) + "+ races")
                     .font(TriType.statSmall)
                     .foregroundStyle(TriPalette.inkTertiary)
+                    .fixedSize(horizontal: true, vertical: false)
                 Image(systemName: "chevron.right")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(TriPalette.inkTertiary)

@@ -45,7 +45,7 @@ final class PattieMode: ObservableObject {
         case bests              // the Bests tab
         case bestsFiltered      // changed the leg on the leaderboard
         case resume             // the Resume tab
-        case resumeExported     // shared or built the resume
+        case resumeExported     // built or shared the Race Book
         case pointers           // the Pointers library
         case pointerPlayed      // started an episode
         case askOpened          // opened Ask Pattie
@@ -302,67 +302,67 @@ extension PattieMode {
         Line(id: "action-tab-1", moment: .action, portrait: "pattie-profile",
              text: "Here's the situation: a race story is easier to use when the swim, bike, run, and finish stay together. Keep it all in one place.",
              action: .tab),
-        Line(id: "action-tab-2", moment: .action, portrait: "pattie-ready",
+        Line(id: "action-tab-2", moment: .action, portrait: "pattie-profile",
              text: "Here's the solution: look at the whole pattern, not one shiny number. The useful clue is usually in the split beside it.",
              action: .tab),
-        Line(id: "action-filter-1", moment: .action, portrait: "pattie-ride",
+        Line(id: "action-filter-1", moment: .action, portrait: "pattie-profile",
              text: "A half and a full are different races. Compare like with like before you call something your best.",
              action: .filter),
-        Line(id: "action-filter-2", moment: .action, portrait: "pattie-grit",
+        Line(id: "action-filter-2", moment: .action, portrait: "pattie-profile",
              text: "Different leg, different story. The transition number is often the free time hiding in plain sight.",
              action: .filter),
-        Line(id: "action-selection-1", moment: .action, portrait: "pattie-excited",
+        Line(id: "action-selection-1", moment: .action, portrait: "pattie-profile",
              text: "Pick the piece you can practise. Small changes are the ones that make it to race day.",
              action: .selection),
-        Line(id: "action-selection-2", moment: .action, portrait: "pattie-ready",
+        Line(id: "action-selection-2", moment: .action, portrait: "pattie-profile",
              text: "Good choice. If it matters on race day, give it one rehearsal before you need it.",
              action: .selection),
-        Line(id: "action-search-1", moment: .action, portrait: "pattie-ready",
+        Line(id: "action-search-1", moment: .action, portrait: "pattie-profile",
              text: "Here's the situation: the timing feed knows the name on your registration. Start there, then we can find the rest.",
              action: .search),
         Line(id: "action-search-2", moment: .action, portrait: "pattie-profile",
              text: "Surname first works too. The important thing is matching the entry, not guessing at a nickname.",
              action: .search),
-        Line(id: "action-choice-1", moment: .action, portrait: "pattie-excited",
+        Line(id: "action-choice-1", moment: .action, portrait: "pattie-profile",
              text: "Here's the solution: choose the race first, then the problem you want to solve. No typing, no invented advice.",
              action: .choice),
         Line(id: "action-choice-2", moment: .action, portrait: "pattie-profile",
              text: "That is the useful choice. Take one pointer and try it on a training day before race day.",
              action: .choice),
-        Line(id: "action-save-1", moment: .action, portrait: "pattie-grit",
+        Line(id: "action-save-1", moment: .action, portrait: "pattie-profile",
              text: "Write down the weather and what went wrong while it is fresh. In two years, that detail will be worth more than the time.",
              action: .save),
-        Line(id: "action-save-2", moment: .action, portrait: "pattie-ready",
+        Line(id: "action-save-2", moment: .action, portrait: "pattie-profile",
              text: "That is smart racecraft. The small detail you save today becomes your best advice later.",
              action: .save),
-        Line(id: "action-export-1", moment: .action, portrait: "pattie-kona-finish",
+        Line(id: "action-export-1", moment: .action, portrait: "pattie-profile",
              text: "Away you go. Put the race history in front of the next person who needs to see it.",
              action: .export),
-        Line(id: "action-export-2", moment: .action, portrait: "pattie-excited",
+        Line(id: "action-export-2", moment: .action, portrait: "pattie-profile",
              text: "Here's the solution: one clean resume, with the splits that prove the story.",
              action: .export),
-        Line(id: "action-play-1", moment: .action, portrait: "pattie-ready",
+        Line(id: "action-play-1", moment: .action, portrait: "pattie-profile",
              text: "Here's the situation, then here's the solution. Listen for the small thing you can try before the next start.",
              action: .play),
         Line(id: "action-play-2", moment: .action, portrait: "pattie-profile",
              text: "Press play when you have a quiet minute. These pointers are built from the things that went wrong first.",
              action: .play),
-        Line(id: "action-refresh-1", moment: .action, portrait: "pattie-ride",
+        Line(id: "action-refresh-1", moment: .action, portrait: "pattie-profile",
              text: "Fresh results, straight from the timers. If the latest race is not here, it has not been posted yet.",
              action: .refresh),
-        Line(id: "action-refresh-2", moment: .action, portrait: "pattie-excited",
+        Line(id: "action-refresh-2", moment: .action, portrait: "pattie-profile",
              text: "A refresh checks the official feed again. It cannot make an unpublished result appear early.",
              action: .refresh),
-        Line(id: "action-tap-1", moment: .action, portrait: "pattie-excited",
+        Line(id: "action-tap-1", moment: .action, portrait: "pattie-profile",
              text: "One small move at a time. The next useful clue is usually one tap away.",
              action: .tap),
         Line(id: "action-tap-2", moment: .action, portrait: "pattie-profile",
              text: "Good. Keep going. We are looking for the detail that makes the next race easier.",
              action: .tap),
-        Line(id: "action-back-1", moment: .action, portrait: "pattie-ready",
+        Line(id: "action-back-1", moment: .action, portrait: "pattie-profile",
              text: "Good, take the pointer with you. You do not need to stay on a screen after you have got the useful bit.",
              action: .back),
-        Line(id: "action-back-2", moment: .action, portrait: "pattie-ride",
+        Line(id: "action-back-2", moment: .action, portrait: "pattie-profile",
              text: "Away you go. The best tip is the one you can try before the next start.",
              action: .back),
 
@@ -375,13 +375,13 @@ extension PattieMode {
              voice: "pattie-here-s-the-solution", impact: .big),
 
         // Search
-        Line(id: "search-1", moment: .searching, portrait: "pattie-ready",
+        Line(id: "search-1", moment: .searching, portrait: "pattie-profile",
              text: "Type your name the way you registered. Full legal first name, usually, whether you like it or not."),
-        Line(id: "search-2", moment: .searching, portrait: "pattie-excited",
+        Line(id: "search-2", moment: .searching, portrait: "pattie-profile",
              text: "Surname first works too. I've spelled mine both ways on an entry form and so has everyone else."),
 
         // Claim
-        Line(id: "claimed-1", moment: .claimed, portrait: "pattie-excited",
+        Line(id: "claimed-1", moment: .claimed, portrait: "pattie-profile",
              text: "There you are. That's your whole career, straight off the timing feed.",
              voice: "pattie-now-that-s-a-great-idea", impact: .big),
         Line(id: "claimed-2", moment: .claimed, portrait: "pattie-profile",
@@ -389,28 +389,28 @@ extension PattieMode {
              voice: "pattie-nice", impact: .big),
 
         // Race detail
-        Line(id: "race-1", moment: .raceOpened, portrait: "pattie-ready",
+        Line(id: "race-1", moment: .raceOpened, portrait: "pattie-profile",
              text: "Look at your transitions. That's free time sitting right there, and it costs nothing to practise."),
-        Line(id: "race-2", moment: .raceOpened, portrait: "pattie-ride",
+        Line(id: "race-2", moment: .raceOpened, portrait: "pattie-profile",
              text: "The bike is where the day is won or thrown away. Everything after it is just holding on.",
              voice: "pattie-bike"),
-        Line(id: "race-3", moment: .raceOpened, portrait: "pattie-ready",
+        Line(id: "race-3", moment: .raceOpened, portrait: "pattie-profile",
              text: "Splits don't lie. They just don't tell you how hot it was that day."),
-        Line(id: "race-4", moment: .raceOpened, portrait: "pattie-grit",
+        Line(id: "race-4", moment: .raceOpened, portrait: "pattie-profile",
              text: "Somewhere in this one there's a mile you'd rather not talk about. There is in all of mine too."),
 
         // Personal best
         Line(id: "pb-1", moment: .personalBest, portrait: "pattie-profile",
              text: "That's a personal best. Go on, look at it for a minute. You earned that one.",
              voice: "pattie-that-s-a-great-idea", impact: .big),
-        Line(id: "pb-2", moment: .personalBest, portrait: "pattie-excited",
+        Line(id: "pb-2", moment: .personalBest, portrait: "pattie-profile",
              text: "Best you've ever gone at that distance. Now that's a great idea.",
              voice: "pattie-now-that-s-a-great-idea", impact: .big),
 
         // DNF
-        Line(id: "dnf-1", moment: .didNotFinish, portrait: "pattie-ready",
+        Line(id: "dnf-1", moment: .didNotFinish, portrait: "pattie-profile",
              text: "A DNF is a day, not a verdict. I've had mine. The next one still counts the same."),
-        Line(id: "dnf-2", moment: .didNotFinish, portrait: "pattie-grit",
+        Line(id: "dnf-2", moment: .didNotFinish, portrait: "pattie-profile",
              text: "Everybody who races long enough collects one of these. It stays on the record and so do you."),
 
         // World Championship
@@ -419,60 +419,60 @@ extension PattieMode {
              voice: "pattie-good", impact: .big),
 
         // Bests
-        Line(id: "bests-1", moment: .bests, portrait: "pattie-excited",
+        Line(id: "bests-1", moment: .bests, portrait: "pattie-profile",
              text: "Best swim, best bike, best run, all scoped to the right distance. A half and a full were never the same race."),
-        Line(id: "bests-2", moment: .bests, portrait: "pattie-grit",
+        Line(id: "bests-2", moment: .bests, portrait: "pattie-profile",
              text: "Sorted by your fastest leg. This is the list you quote at dinner.",
              voice: "pattie-nice"),
-        Line(id: "bests-filter-1", moment: .bestsFiltered, portrait: "pattie-ready",
+        Line(id: "bests-filter-1", moment: .bestsFiltered, portrait: "pattie-profile",
              text: "Different leg, different story. The transitions one is the list nobody wants to look at."),
-        Line(id: "bests-filter-2", moment: .bestsFiltered, portrait: "pattie-excited",
+        Line(id: "bests-filter-2", moment: .bestsFiltered, portrait: "pattie-profile",
              text: "Watch the gap column. That number is the whole training plan in one line."),
 
         // Resume
-        Line(id: "resume-1", moment: .resume, portrait: "pattie-ready",
+        Line(id: "resume-1", moment: .resume, portrait: "pattie-profile",
              text: "Here's the situation: a race wants your history for validation. Here's the solution. Export it and send it.",
              voice: "pattie-here-s-the-solution"),
-        Line(id: "resume-2", moment: .resumeExported, portrait: "pattie-excited",
+        Line(id: "resume-2", moment: .resumeExported, portrait: "pattie-profile",
              text: "That's the sheet they ask for, in one tap. Away you go.",
              voice: "pattie-away-you-go"),
 
         // Pointers
-        Line(id: "pointers-1", moment: .pointers, portrait: "pattie-ready",
+        Line(id: "pointers-1", moment: .pointers, portrait: "pattie-profile",
              text: "These are my pointers. Little things that cost nothing and save your whole day.",
              voice: "pattie-away-you-go"),
-        Line(id: "pointers-2", moment: .pointers, portrait: "pattie-excited",
+        Line(id: "pointers-2", moment: .pointers, portrait: "pattie-profile",
              text: "Every one of these is something that went wrong for me first. That's how the list got written."),
-        Line(id: "pointer-played-1", moment: .pointerPlayed, portrait: "pattie-ready",
+        Line(id: "pointer-played-1", moment: .pointerPlayed, portrait: "pattie-profile",
              text: "Here's the situation, and then here's the solution. That's the whole format."),
 
         // Ask Pattie
         Line(id: "ask-1", moment: .askOpened, portrait: "pattie-profile",
              text: "Tell me what you're training for and what's bothering you. I've probably already made a clip about it.",
              voice: "pattie-here-s-the-situation", impact: .big),
-        Line(id: "ask-2", moment: .askOpened, portrait: "pattie-ready",
+        Line(id: "ask-2", moment: .askOpened, portrait: "pattie-profile",
              text: "Pick the race, pick the problem. No typing, and no waiting on me to answer."),
-        Line(id: "ask-answered-1", moment: .askAnswered, portrait: "pattie-excited",
+        Line(id: "ask-answered-1", moment: .askAnswered, portrait: "pattie-profile",
              text: "That's the one. Tap play and you'll get it in my own words.",
              voice: "pattie-here-s-the-solution"),
-        Line(id: "ask-answered-2", moment: .askAnswered, portrait: "pattie-ready",
+        Line(id: "ask-answered-2", moment: .askAnswered, portrait: "pattie-profile",
              text: "Try it on a training day first. Race day is a bad time to learn a new trick."),
 
         // Notes
-        Line(id: "note-1", moment: .noteSaved, portrait: "pattie-ready",
+        Line(id: "note-1", moment: .noteSaved, portrait: "pattie-profile",
              text: "Write down the conditions while you still remember them. In two years that note is worth more than the time."),
 
         // Long career
-        Line(id: "veteran-1", moment: .veteran, portrait: "pattie-grit",
+        Line(id: "veteran-1", moment: .veteran, portrait: "pattie-profile",
              text: "That is a lot of start lines. Most people talk about doing one of these. You kept going back.",
              voice: "pattie-good", impact: .big),
 
         // Refresh
-        Line(id: "refresh-1", moment: .refreshed, portrait: "pattie-ride",
+        Line(id: "refresh-1", moment: .refreshed, portrait: "pattie-profile",
              text: "Pulled it again, straight from the timers. If your latest race isn't here, they haven't posted it yet."),
 
         // Settings
-        Line(id: "settings-1", moment: .settings, portrait: "pattie-ready",
+        Line(id: "settings-1", moment: .settings, portrait: "pattie-profile",
              text: "If I'm getting on your nerves there's a switch on this very screen. No hard feelings."),
     ]
 }

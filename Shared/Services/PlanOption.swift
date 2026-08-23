@@ -98,7 +98,7 @@ enum BundledStoreKitCatalog {
             options.append(PlanOption(
                 id: productID,
                 kind: .lifetime,
-                displayName: displayName(product) ?? "Lifetime",
+                displayName: displayName(product) ?? "Race Book",
                 priceLabel: "$\(price)",
                 introOfferLabel: nil,
                 perMonthLabel: nil

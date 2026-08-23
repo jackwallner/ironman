@@ -38,8 +38,12 @@ enum TriPalette {
     static let ink          = adaptive(light: (0.075, 0.098, 0.129), dark: (0.949, 0.961, 0.973))
     static let inkSecondary = adaptive(light: (0.259, 0.290, 0.333), dark: (0.678, 0.722, 0.769))
     static let inkTertiary  = adaptive(light: (0.439, 0.471, 0.522), dark: (0.482, 0.529, 0.588))
+    static let shadow       = adaptive(light: (0.000, 0.000, 0.000), dark: (0.000, 0.000, 0.000))
     /// Type that sits on `deep`, which is dark in both schemes.
-    static let inkOnDark    = Color.white
+    static let inkOnDark    = adaptive(light: (1.000, 1.000, 1.000), dark: (1.000, 1.000, 1.000))
+    /// Deliberately black media stage, resolved through the same token path as
+    /// every other full-screen surface.
+    static let mediaCanvas  = adaptive(light: (0.000, 0.000, 0.000), dark: (0.000, 0.000, 0.000))
 
     // MARK: Brand
 
@@ -47,6 +51,9 @@ enum TriPalette {
     /// hero, selected chips. It lifts slightly in dark mode so a navy hero does
     /// not dissolve into a near-black canvas.
     static let deep    = adaptive(light: (0.051, 0.149, 0.271), dark: (0.071, 0.161, 0.259))
+    /// Finish markers need a lighter dark-mode blue than the structural navy
+    /// so the checkered flag remains legible on a dark card.
+    static let finish  = adaptive(light: (0.051, 0.149, 0.271), dark: (0.302, 0.545, 0.820))
     /// Sunrise. The single accent, reserved for "your best" and for the one
     /// primary action on a screen.
     static let sunrise = adaptive(light: (0.910, 0.400, 0.086), dark: (1.000, 0.545, 0.239))
@@ -72,7 +79,7 @@ enum TriPalette {
         case .t1, .t2, .transitions:
             return adaptive(light: (0.549, 0.573, 0.612), dark: (0.478, 0.518, 0.573))
         case .finish:
-            return deep
+            return finish
         }
     }
 
@@ -196,8 +203,6 @@ enum TriGeo {
     /// Apple's floor for anything a thumb has to hit.
     static let tapTarget: CGFloat = 44
     static let rowHeight: CGFloat = 44
-    /// Extra content space for the floating system tab bar.
-    static let tabBarClearance: CGFloat = TriSpace.x10 + TriSpace.x8 + TriSpace.x4
 }
 
 /// Two elevations: one for a card sitting on the canvas, one for something
@@ -205,11 +210,11 @@ enum TriGeo {
 /// not decoration, so there is no third.
 enum TriShadow {
     static func card(_ scheme: ColorScheme) -> (Color, CGFloat, CGFloat) {
-        scheme == .dark ? (.black.opacity(0.5), 10, 3) : (.black.opacity(0.07), 10, 3)
+        scheme == .dark ? (TriPalette.shadow.opacity(0.5), 10, 3) : (TriPalette.shadow.opacity(0.07), 10, 3)
     }
 
     static func floating(_ scheme: ColorScheme) -> (Color, CGFloat, CGFloat) {
-        scheme == .dark ? (.black.opacity(0.7), 28, 12) : (.black.opacity(0.22), 28, 12)
+        scheme == .dark ? (TriPalette.shadow.opacity(0.7), 28, 12) : (TriPalette.shadow.opacity(0.22), 28, 12)
     }
 }
 
@@ -313,11 +318,6 @@ extension View {
         }
     }
 
-    /// Keeps the floating tab bar from covering the last interactive content.
-    func triTabBarClearance() -> some View {
-        safeAreaPadding(.bottom, TriGeo.tabBarClearance)
-    }
-
     /// The standard card: surface, hairline, one radius, one elevation.
     func triCard(padding: CGFloat = TriGeo.padCard) -> some View {
         modifier(TriCard(padding: padding))
@@ -339,7 +339,7 @@ struct TriBackButton: View {
         } label: {
             Image(systemName: "chevron.left")
                 .font(.system(size: 15, weight: .semibold))
-                .foregroundStyle(.white)
+                .foregroundStyle(TriPalette.inkOnDark)
                 .frame(width: TriGeo.tapTarget, height: TriGeo.tapTarget)
                 .triToolbarCircleBackground()
         }
@@ -381,7 +381,7 @@ struct TriBadge: View {
         Text(text.uppercased())
             .font(TriType.micro)
             .kerning(0.5)
-            .foregroundStyle(filled ? Color.white : color)
+            .foregroundStyle(filled ? TriPalette.inkOnDark : color)
             .padding(.horizontal, TriSpace.x2)
             .padding(.vertical, TriSpace.x1)
             .background(filled ? color : color.opacity(0.14))
@@ -405,9 +405,9 @@ struct TriChip: View {
         } label: {
             Text(title)
                 .font(TriType.smallBold)
-                .foregroundStyle(isSelected ? Color.white : TriPalette.inkSecondary)
+                .foregroundStyle(isSelected ? TriPalette.inkOnDark : TriPalette.inkSecondary)
                 .padding(.horizontal, TriSpace.x4)
-                .frame(minHeight: TriGeo.tapTarget - TriSpace.x2)
+                .frame(minHeight: TriGeo.tapTarget)
                 .background(isSelected ? TriPalette.deep : TriPalette.surface, in: Capsule())
                 .overlay(
                     Capsule().stroke(TriPalette.hairline,
@@ -416,6 +416,8 @@ struct TriChip: View {
                 .contentShape(Capsule())
         }
         .buttonStyle(.triPressSilent)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityValue(isSelected ? "Selected" : "")
     }
 }
 
@@ -434,7 +436,7 @@ struct TriPrimaryButton: View {
         } label: {
             HStack(spacing: TriSpace.x2) {
                 if isBusy {
-                    ProgressView().tint(.white)
+                    ProgressView().tint(TriPalette.inkOnDark)
                 } else if let systemImage {
                     Image(systemName: systemImage)
                         .font(.system(size: 15, weight: .semibold))
@@ -442,7 +444,7 @@ struct TriPrimaryButton: View {
                 Text(title)
                     .font(TriType.bodyBold)
             }
-            .foregroundStyle(.white)
+            .foregroundStyle(TriPalette.inkOnDark)
             .frame(maxWidth: .infinity)
             .frame(height: TriGeo.tapTarget + TriSpace.x1)
             .background(TriPalette.sunrise)

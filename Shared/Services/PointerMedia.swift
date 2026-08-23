@@ -1,4 +1,5 @@
 import Foundation
+import CryptoKit
 import os
 
 /// Downloads pointer episodes to disk so they can actually be played.
@@ -39,11 +40,11 @@ actor PointerMediaCache {
     private var inFlight: [String: Task<URL, Error>] = [:]
 
     private var directory: URL? {
-        guard let caches = try? FileManager.default.url(for: .cachesDirectory,
-                                                        in: .userDomainMask,
-                                                        appropriateFor: nil,
-                                                        create: true) else { return nil }
-        let directory = caches.appendingPathComponent("PointerMedia", isDirectory: true)
+        guard let applicationSupport = try? FileManager.default.url(for: .applicationSupportDirectory,
+                                                                     in: .userDomainMask,
+                                                                     appropriateFor: nil,
+                                                                     create: true) else { return nil }
+        let directory = applicationSupport.appendingPathComponent("PointerMedia", isDirectory: true)
         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         return directory
     }
@@ -51,7 +52,14 @@ actor PointerMediaCache {
     private func localURL(for pointer: Pointer) -> URL? {
         // Keyed on the pointer id, not on the remote filename, so re-publishing
         // an episode under a new asset name replaces it rather than orphaning it.
-        directory?.appendingPathComponent("\(pointer.id).mp4")
+        directory?.appendingPathComponent(Self.cacheFilename(for: pointer.id))
+    }
+
+    private static func cacheFilename(for id: String) -> String {
+        let digest = SHA256.hash(data: Data(id.utf8))
+            .map { String(format: "%02x", $0) }
+            .joined()
+        return digest + ".mp4"
     }
 
     /// A already-downloaded file, if there is one. Cheap enough for a view body.
@@ -116,6 +124,8 @@ actor PointerMediaCache {
     }
 
     func clear() {
+        inFlight.values.forEach { $0.cancel() }
+        inFlight.removeAll()
         guard let directory else { return }
         try? FileManager.default.removeItem(at: directory)
         _ = self.directory

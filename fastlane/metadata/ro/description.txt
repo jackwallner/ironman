@@ -1,6 +1,6 @@
 Fiecare cursă terminată, într-un singur loc și ordonată pentru a-ți înțelege performanța.
 
-Scrie-ți numele o singură dată. IM Iron Splits găsește rezultatele publicate și afișează timpii de înot, tranziții, bicicletă și alergare, numărul de concurs și clasamentele.
+Scrie-ți numele o singură dată. IM Tri Tracker găsește rezultatele publicate și afișează timpii de înot, tranziții, bicicletă și alergare, numărul de concurs și clasamentele.
 
 Vezi recordurile personale, compară curse de același tip și înțelege locul fiecărui timp în pluton. Race Book deblochează comparațiile și exportul PDF sau imagine printr-o achiziție unică pe viață, fără abonament și fără taxă pentru export.
 
@@ -9,4 +9,4 @@ Funcțiile de bază rămân gratuite: căutare, istoric complet, splituri, clasa
 Confidențialitate: https://jackwallner.github.io/ironman/privacy-policy.html
 Termeni: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Iron Splits este o aplicație independentă, fără legătură cu organizatorii sau cronometrorii curselor.
+IM Tri Tracker este o aplicație independentă, fără legătură cu organizatorii sau cronometrorii curselor.

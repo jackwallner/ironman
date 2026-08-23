@@ -3,12 +3,10 @@ import SwiftUI
 /// Every race the athlete has done, newest first.
 struct LockerView: View {
     @EnvironmentObject private var locker: LockerStore
-    @EnvironmentObject private var store: StoreService
     @EnvironmentObject private var notes: RaceNotesStore
     @EnvironmentObject private var pattie: PattieMode
 
     @State private var showingAthleteSearch = false
-    @State private var showingOptions = false
     @State private var kindFilter: RaceKind?
 
     var body: some View {
@@ -27,17 +25,38 @@ struct LockerView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        showingOptions = true
+                        pattie.react(.selection)
+                        showingAthleteSearch = true
+                    } label: {
+                        Text("Change")
+                            .font(TriType.smallBold)
+                            .foregroundStyle(TriPalette.inkOnDark)
+                            .frame(minWidth: TriGeo.tapTarget, minHeight: TriGeo.tapTarget)
+                    }
+                    .buttonStyle(.triPressSilent)
+                    .accessibilityLabel("Change athlete")
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        Button {
+                            pattie.react(.refresh)
+                            Task { await locker.refresh(force: true) }
+                        } label: {
+                            Label("Refresh results", systemImage: "arrow.clockwise")
+                        }
                     } label: {
                         Image(systemName: "ellipsis")
                             .font(.system(size: 15, weight: .bold))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(TriPalette.inkOnDark)
                             .frame(width: TriGeo.tapTarget, height: TriGeo.tapTarget)
                             .triToolbarCircleBackground()
                     }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel("More")
+                    .accessibilityLabel("More locker actions")
                 }
+            }
+            .onChange(of: locker.athlete?.id) { _, _ in kindFilter = nil }
+            .onChange(of: locker.availableKinds) { _, kinds in
+                if let kindFilter, !kinds.contains(kindFilter) { self.kindFilter = nil }
             }
             .sheet(isPresented: $showingAthleteSearch) {
                 AthleteSearchView()
@@ -45,20 +64,6 @@ struct LockerView: View {
             .refreshable {
                 await locker.refresh(force: true)
                 pattie.fire(.refreshed)
-            }
-            .confirmationDialog("Locker options", isPresented: $showingOptions) {
-                Button {
-                    pattie.react(.refresh)
-                    Task { await locker.refresh(force: true) }
-                } label: {
-                    Label("Refresh results", systemImage: "arrow.clockwise")
-                }
-                Button {
-                    pattie.react(.selection)
-                    showingAthleteSearch = true
-                } label: {
-                    Label("Change athlete", systemImage: "person.crop.circle.badge.questionmark")
-                }
             }
         }
     }
@@ -109,6 +114,17 @@ struct LockerView: View {
                     .listRowBackground(Color.clear)
             }
 
+            if let warning = locker.refreshWarning {
+                Section {
+                    Label(warning, systemImage: "exclamationmark.triangle.fill")
+                        .font(TriType.small)
+                        .foregroundStyle(TriPalette.negative)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(minHeight: TriGeo.tapTarget, alignment: .leading)
+                        .listRowBackground(TriPalette.surface)
+                }
+            }
+
             if locker.availableKinds.count > 1 {
                 Section {
                     kindPicker
@@ -141,7 +157,6 @@ struct LockerView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
-        .triTabBarClearance()
     }
 
     private var kindPicker: some View {
@@ -162,19 +177,10 @@ struct LockerView: View {
         }
     }
 
-    /// Every race that matches the filter.
-    ///
-    /// This still routes through `ProGate` rather than returning
-    /// `filteredResults` directly. While `everythingUnlocked` is set the gate is
-    /// a pass-through, and keeping the call here means turning the switch back
-    /// off restores the free window without anybody having to remember that this
-    /// screen had its own copy of the rule. The rule it enforces when it is on:
-    /// the window applies to the athlete's whole history, not to whatever the
-    /// filter happens to show, or switching to "Half" would hand out three more
-    /// races each time.
+    /// Every race that matches the filter. The complete history is free. Race
+    /// Book is the paid interpretation/export layer, never the source data.
     private var visibleResults: [RaceResult] {
-        let allowed = Set(ProGate.visibleResults(locker.results, isPro: store.isPro).map(\.id))
-        return filteredResults.filter { allowed.contains($0.id) }
+        filteredResults
     }
 
     private var footerText: String? {
@@ -201,31 +207,36 @@ private struct LockerHeader: View {
                 VStack(alignment: .leading, spacing: TriSpace.x1) {
                     Text(athlete.name)
                         .font(TriType.athleteName)
-                        .foregroundStyle(.white)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
+                        .foregroundStyle(TriPalette.inkOnDark)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .layoutPriority(1)
                     if let location = athlete.location {
                         Text(location)
                             .font(TriType.small)
-                            .foregroundStyle(.white.opacity(0.7))
+                            .foregroundStyle(TriPalette.inkOnDark.opacity(0.7))
                     }
                 }
             }
 
-            HStack(spacing: 0) {
-                StatTile(value: "\(summary.finishes)", caption: "Finishes", tint: .white)
-                StatTile(value: "\(summary.fullDistance)", caption: "Full", tint: .white)
-                StatTile(value: "\(summary.halfDistance)", caption: "Half", tint: .white)
-                if summary.podiums > 0 {
-                    StatTile(value: "\(summary.podiums)", caption: "Podiums", tint: TriPalette.sunrise)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: TriSpace.x6) {
+                    StatTile(value: "\(summary.finishes)", caption: "Finishes", tint: TriPalette.inkOnDark)
+                    StatTile(value: "\(summary.fullDistance)", caption: "Full", tint: TriPalette.inkOnDark)
+                    StatTile(value: "\(summary.halfDistance)", caption: "Half", tint: TriPalette.inkOnDark)
+                    if summary.podiums > 0 {
+                        StatTile(value: "\(summary.podiums)", caption: "Podiums", tint: TriPalette.sunrise)
+                    }
                 }
+                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical, TriSpace.x1)
             }
 
             if let years = summary.years {
                 Text("Racing since " + String(years.lowerBound))
                     .font(TriType.micro)
                     .kerning(0.5)
-                    .foregroundStyle(.white.opacity(0.6))
+                    .foregroundStyle(TriPalette.inkOnDark.opacity(0.6))
             }
         }
         .padding(TriGeo.padCard)

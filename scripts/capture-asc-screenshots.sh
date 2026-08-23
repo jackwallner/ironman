@@ -45,10 +45,11 @@ names = (
 )
 
 for name in names:
+    expected_stem = Path(name).stem
     matches = [
         record
         for record in records
-        if record.get("suggestedHumanReadableName", "").startswith(name)
+        if Path(record.get("suggestedHumanReadableName", "")).stem.startswith(expected_stem + "_")
     ]
     if len(matches) != 1:
         raise SystemExit(f"expected one XCTest attachment named {name}, found {len(matches)}")
