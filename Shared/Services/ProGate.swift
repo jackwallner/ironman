@@ -9,9 +9,13 @@ import Foundation
 /// screen from quietly putting a lock on the athlete's own data.
 enum ProGate {
 
-    /// Legacy escape hatch retained for local review builds. It is deliberately
-    /// off in the shipped product so entitlement state is the source of truth.
+    /// Temporary switch for TestFlight and App Review builds. Remove the
+    /// RACE_BOOK_TEST_UNLOCK build condition before enabling paid access.
+    #if RACE_BOOK_TEST_UNLOCK
+    static let everythingUnlocked = true
+    #else
     static let everythingUnlocked = false
+    #endif
 
     /// Whether the Race Book can be opened for paid actions.
     static func raceBookUnlocked(isPro: Bool) -> Bool {

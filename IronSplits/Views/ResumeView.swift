@@ -67,23 +67,6 @@ struct ResumeView: View {
     private var list: some View {
         List {
             Section {
-                ForEach(locker.availableKinds, id: \.self) { kind in
-                    Toggle(kind.longTitle, isOn: Binding(
-                        get: { selectedKinds.contains(kind) },
-                        set: { isOn in
-                            if isOn { selectedKinds.insert(kind) } else { selectedKinds.remove(kind) }
-                            pattie.react(.selection)
-                        }
-                    ))
-                }
-                Toggle("Include splits", isOn: $includeSplits)
-                Toggle("Include incomplete results", isOn: $includeIncomplete)
-            } header: {
-                TriSectionHeader(title: "Include")
-            }
-            .listRowBackground(TriPalette.surface)
-
-            Section {
                 if rows.isEmpty {
                     Text("Select at least one distance to open Race Book.")
                         .font(TriType.small)
@@ -115,6 +98,23 @@ struct ResumeView: View {
             .listRowBackground(TriPalette.surface)
 
             Section {
+                ForEach(locker.availableKinds, id: \.self) { kind in
+                    Toggle(kind.longTitle, isOn: Binding(
+                        get: { selectedKinds.contains(kind) },
+                        set: { isOn in
+                            if isOn { selectedKinds.insert(kind) } else { selectedKinds.remove(kind) }
+                            pattie.react(.selection)
+                        }
+                    ))
+                }
+                Toggle("Include splits", isOn: $includeSplits)
+                Toggle("Include incomplete results", isOn: $includeIncomplete)
+            } header: {
+                TriSectionHeader(title: "Include")
+            }
+            .listRowBackground(TriPalette.surface)
+
+            Section {
                 if rows.isEmpty {
                     Text("No races match these options. Select a distance or include incomplete results.")
                         .font(TriType.small)
@@ -137,6 +137,7 @@ struct ResumeView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
+        .safeAreaPadding(.bottom, TriSpace.x4)
         .onChange(of: includeSplits) { _, _ in
             pattie.react(.selection)
         }
