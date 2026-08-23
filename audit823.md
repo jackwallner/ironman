@@ -1294,3 +1294,43 @@ Before another agent implements changes, hand off these concrete instructions:
 - Keep all future release artifacts tied to a commit, build, ASC record, and
   RevenueCat configuration revision.
 
+## Activity and success context, 2026-08-23
+
+Classification: **traffic without monetization**. Confidence: **low**. Trend: **no ASC comparison displayed**.
+
+ASC release state: `iOS 1.0 Waiting for Review`. ASC evidence: [Analytics Overview](https://appstoreconnect.apple.com/apps/6803727074/analytics/overview?dateSpec=d90), selected range `dateSpec=d90`.
+RevenueCat evidence: [Project Overview](https://app.revenuecat.com/projects/d27c8a1b/overview), production mode, selected range `Last 28 days, 2026-07-27 through 2026-08-23`.
+
+### Observed activity
+
+| Source | Metric | Value | Window or comparison |
+| --- | --- | ---: | --- |
+| ASC | first-time downloads | not available | 90-day Analytics Overview |
+| ASC | redownloads | not available | 90-day Analytics Overview |
+| ASC | conversion rate | not available | comparison not displayed |
+| ASC | proceeds | not available | 90-day Analytics Overview |
+| ASC | in-app purchases | not available | 90-day Analytics Overview |
+| RevenueCat | new customers | 4 | last 28 days |
+| RevenueCat | active customers | 27 | last 28 days |
+| RevenueCat | active trials | 0 | current total |
+| RevenueCat | active subscriptions | 0 | current total |
+| RevenueCat | MRR | $0 | current total |
+| RevenueCat | revenue | $0 | last 28 days |
+
+A missing value above means the source did not expose that metric in this read-only snapshot. It is not a zero.
+
+### Interpretation and implementation focus
+
+IM Iron Splits is ASC Waiting for Review with no ASC downloads or monetization cards, while RevenueCat shows 4 new customers and 27 active customers. The local name and ASC name also differ, so this is a release and identity baseline problem rather than a success or death verdict. Reconcile the name, ship state, and production versus pre-release customer source before applying growth metrics.
+
+The deterministic classifier recommends: Treat this as an activation and offer problem until a mature paid cohort appears. Verify the free-to-trial path and product loading.
+
+- Join ASC first-time download, first launch, first value, paywall shown, offer loaded, trial started, trial canceled, trial converted, entitlement active, restore, and purchase failure events with the app version and build.
+- Keep ASC's 90-day acquisition and proceeds window separate from RevenueCat's 28-day customer and revenue window. Do not calculate a conversion rate by dividing values from different windows.
+- Use a mature trial cohort and a minimum sample before choosing a native paywall or onboarding A/B winner. Record the offering identifier, package, placement, experiment variant, and build.
+- Put the app's classification and the next baseline date in the release handoff so Cursor, Claude, and Codex do not optimize from an old qualitative audit.
+
+### Boundary on success or death
+
+This snapshot supports the label **traffic without monetization**, not a lifetime verdict. The app has downloads or new customers, but no current paid signal was supplied. A later decision should include a clean 28-day RevenueCat trend, ASC acquisition and conversion trend, ratings and review count, crash and hang evidence, and a release-specific cohort.
+This dated section supersedes earlier statements in this file that per-app ASC or RevenueCat activity was unavailable as of 2026-08-23. Earlier statements remain historical evidence boundaries for their original audit pass.
