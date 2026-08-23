@@ -13,10 +13,9 @@ struct PattieCompanion: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var appeared = false
-    @State private var idleBreathe = false
-    @State private var animationTrigger = 0
-    @State private var idleState: PattiePetState = .idle
+    @State private var idleState: PattiePetState = .warmup
     @State private var idleIndex = 0
+    @State private var animationStart = Date.now
 
     /// The companion is hosted above the tab bar and the device safe area.
     static let tabBarHeight: CGFloat = 49
@@ -25,25 +24,14 @@ struct PattieCompanion: View {
     private static let avatarHeight: CGFloat = TriSpace.x10 + TriSpace.x10 + TriSpace.x10
     private static let avatarFrameWidth: CGFloat = avatarWidth + TriSpace.x4
     private static let avatarFrameHeight: CGFloat = avatarHeight + TriSpace.x2
-    private static let idleStates: [PattiePetState] = [
-        .idle, .coach, .encourage, .celebrate, .shoes, .swim, .bike
-    ]
-
     private var petState: PattiePetState { line?.petState ?? idleState }
 
     var body: some View {
-        HStack(alignment: .bottom, spacing: TriSpace.x2) {
-            avatar
-            if let line {
-                speechBubble(for: line)
-                    .transition(.move(edge: .leading).combined(with: .opacity))
-            }
-        }
-        .padding(.horizontal, TriSpace.x4)
+        companionContent
         .offset(y: appeared ? 0 : TriSpace.x3)
         .opacity(appeared ? 1 : 0)
         .animation(reduceMotion ? nil : .spring(response: 0.42, dampingFraction: 0.82),
-                   value: line?.id)
+                   value: line?.text)
         .transaction { transaction in
             if reduceMotion { transaction.animation = nil }
         }
@@ -55,17 +43,30 @@ struct PattieCompanion: View {
             withAnimation(.spring(response: 0.42, dampingFraction: 0.82)) {
                 appeared = true
             }
-            withAnimation(.easeInOut(duration: 1.8).repeatForever(autoreverses: true)) {
-                idleBreathe = true
-            }
-            animationTrigger += 1
+            animationStart = .now
         }
-        .onChange(of: line?.id) { _, _ in
-            guard !reduceMotion else { return }
-            animationTrigger += 1
+        .onChange(of: line?.text) { _, _ in
+            animationStart = .now
         }
-        .task(id: line?.id) { await run(line: line) }
+        .onChange(of: idleState) { _, _ in animationStart = .now }
+        .task(id: line?.text) { await run(line: line) }
         .task { await animateIdle() }
+    }
+
+    @ViewBuilder
+    private var companionContent: some View {
+        if let line, line.isGiantCatchphrase {
+            giantTakeover(for: line)
+        } else {
+            HStack(alignment: .bottom, spacing: TriSpace.x2) {
+                avatar
+                if let line {
+                    speechBubble(for: line)
+                        .transition(.move(edge: .leading).combined(with: .opacity))
+                }
+            }
+            .padding(.horizontal, TriSpace.x4)
+        }
     }
 
     private var avatar: some View {
@@ -89,34 +90,25 @@ struct PattieCompanion: View {
 
     @ViewBuilder
     private var petImage: some View {
-        let image = Image(petState.imageName)
-            .resizable()
-            .scaledToFit()
-            .frame(width: Self.avatarWidth, height: Self.avatarHeight, alignment: .bottom)
-
         if reduceMotion {
-            image
+            petImage(for: petState.animationFrame(at: 0))
         } else {
-            image
-                .phaseAnimator([false, true], trigger: animationTrigger) { content, phase in
-                    content
-                        .offset(y: phase ? -TriSpace.x1 : 0)
-                        .rotationEffect(.degrees(phase ? rotation(for: petState) : 0))
-                } animation: { _ in
-                    .spring(response: 0.42, dampingFraction: 0.68)
-                }
-                .offset(y: line == nil && idleBreathe ? -TriSpace.x1 / 2 : 0)
+            TimelineView(.animation(minimumInterval: 1.0 / 30.0)) { context in
+                let elapsed = context.date.timeIntervalSince(animationStart)
+                petImage(for: petState.animationFrame(at: elapsed))
+            }
         }
     }
 
-    private func rotation(for state: PattiePetState) -> Double {
-        switch state {
-        case .celebrate: return -3
-        case .shoes: return 3
-        case .swim: return -2
-        case .bike: return 2
-        default: return 0
-        }
+    private func petImage(for frame: PattiePetState.MotionFrame) -> some View {
+        Image(frame.assetName)
+            .resizable()
+            .scaledToFit()
+            .frame(width: Self.avatarWidth, height: Self.avatarHeight, alignment: .bottom)
+            .offset(x: TriSpace.x1 * CGFloat(frame.horizontalShift),
+                    y: -TriSpace.x1 * CGFloat(frame.verticalLift))
+            .rotationEffect(.degrees(frame.rotationDegrees))
+            .scaleEffect(frame.scale)
     }
 
     @ViewBuilder
@@ -133,15 +125,14 @@ struct PattieCompanion: View {
         if reduceMotion {
             icon
         } else {
-            icon
-                .phaseAnimator([false, true], trigger: animationTrigger) { content, phase in
-                    content
-                        .offset(x: phase ? TriSpace.x1 : 0,
-                                y: phase ? -TriSpace.x1 : 0)
-                        .rotationEffect(.degrees(phase ? 8 : 0))
-                } animation: { _ in
-                    .spring(response: 0.48, dampingFraction: 0.7)
-                }
+            TimelineView(.animation(minimumInterval: 1.0 / 30.0)) { context in
+                let elapsed = context.date.timeIntervalSince(animationStart)
+                let phase = sin(elapsed * 2 * .pi / 0.9)
+                icon
+                    .offset(x: TriSpace.x1 * CGFloat(phase),
+                            y: -TriSpace.x1 * CGFloat(phase + 1) * 0.5)
+                    .rotationEffect(.degrees(5 * phase))
+            }
         }
     }
 
@@ -181,11 +172,65 @@ struct PattieCompanion: View {
         .contentShape(RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous))
     }
 
+    private func giantTakeover(for line: PattieMode.Line) -> some View {
+        ZStack {
+            TriPalette.deep
+
+            VStack(spacing: TriSpace.x4) {
+                Text("PATTIE MODE")
+                    .font(TriType.sectionTitle)
+                    .foregroundStyle(TriPalette.sunrise)
+
+                Button(action: onDismiss) {
+                    ZStack(alignment: .bottom) {
+                        petImage
+                            .overlay(alignment: .topTrailing) {
+                                if let symbol = petState.accessorySymbol {
+                                    accessory(symbol)
+                                }
+                            }
+                    }
+                    .scaleEffect(5)
+                    .frame(width: Self.avatarFrameWidth * 5,
+                           height: Self.avatarFrameHeight * 5,
+                           alignment: .bottom)
+                }
+                .buttonStyle(.triPressSilent)
+                .accessibilityLabel("Pattie, celebrate")
+
+                Text(line.text)
+                    .font(TriType.pageTitle)
+                    .foregroundStyle(TriPalette.inkOnDark)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .minimumScaleFactor(0.7)
+                    .accessibilityIdentifier("pattie-giant-catchphrase")
+
+                Button("Keep moving", action: onDismiss)
+                    .font(TriType.bodyBold)
+                    .foregroundStyle(TriPalette.deep)
+                    .frame(minHeight: TriGeo.tapTarget)
+                    .padding(.horizontal, TriSpace.x6)
+                    .background(TriPalette.sunrise, in: Capsule())
+                    .buttonStyle(.triPressSilent)
+            }
+            .padding(TriSpace.x6)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(TriPalette.deep)
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("pattie-giant-takeover")
+        .accessibilityLabel("Pattie says: \(line.text)")
+    }
+
     private func run(line: PattieMode.Line?) async {
         if reduceMotion { appeared = true }
         guard let line else { return }
 
-        let readingTime = min(4.0, max(2.0, 1.5 + Double(line.text.count) / 80.0))
+        let minimumReadingTime = line.isGiantCatchphrase ? 3.2 : 2.0
+        let maximumReadingTime = line.isGiantCatchphrase ? 5.0 : 4.0
+        let readingTime = min(maximumReadingTime,
+                              max(minimumReadingTime, 1.5 + Double(line.text.count) / 80.0))
         do {
             try await Task.sleep(for: .seconds(readingTime))
             while voice.isPlaying(line.voice) {
@@ -203,16 +248,15 @@ struct PattieCompanion: View {
     private func animateIdle() async {
         guard !reduceMotion else { return }
         while !Task.isCancelled {
+            let nextState = PattiePetState.motionState(at: idleIndex)
+            idleState = nextState
+            idleIndex += 1
+
             do {
-                try await Task.sleep(for: .seconds(2.8))
+                let cadence = max(1.2, nextState.motionProfile.duration * 2.5)
+                try await Task.sleep(for: .seconds(cadence))
             } catch {
                 return
-            }
-            guard !Task.isCancelled else { return }
-            withAnimation(.spring(response: 0.48, dampingFraction: 0.76)) {
-                idleIndex = (idleIndex + 1) % Self.idleStates.count
-                idleState = Self.idleStates[idleIndex]
-                animationTrigger += 1
             }
         }
     }
@@ -236,17 +280,28 @@ private struct PattieHostModifier: ViewModifier {
     func body(content: Content) -> some View {
         content.overlay(alignment: .bottomLeading) {
             if pattie.isEnabled {
-                PattieCompanion(
-                    line: pattie.current,
-                    onReplay: { pattie.replayVoice() },
-                    onDismiss: { pattie.dismiss() },
-                    onInvite: { pattie.demo() }
-                )
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.bottom, PattieCompanion.tabBarHeight + PattieCompanion.tabBarGap)
-                .safeAreaPadding(.bottom)
-                .zIndex(10)
+                if pattie.current?.isGiantCatchphrase == true {
+                    companion
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .ignoresSafeArea()
+                        .zIndex(20)
+                } else {
+                    companion
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.bottom, PattieCompanion.tabBarHeight + PattieCompanion.tabBarGap)
+                        .safeAreaPadding(.bottom)
+                        .zIndex(10)
+                }
             }
         }
+    }
+
+    private var companion: some View {
+        PattieCompanion(
+            line: pattie.current,
+            onReplay: { pattie.replayVoice() },
+            onDismiss: { pattie.dismiss() },
+            onInvite: { pattie.demo() }
+        )
     }
 }
