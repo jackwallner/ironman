@@ -185,6 +185,17 @@ final class RaceBookTests: XCTestCase {
         XCTAssertFalse(text.contains("Keep the run controlled"))
     }
 
+    func testRaceBookOnlyOffersSupportedDistances() {
+        XCTAssertEqual(RaceKind.supportedKinds, [.fullDistance, .halfDistance])
+        XCTAssertTrue(RaceKind.fullDistance.isSupported)
+        XCTAssertTrue(RaceKind.halfDistance.isSupported)
+        XCTAssertFalse(RaceKind.running.isSupported)
+        XCTAssertFalse(RaceKind.otherTriathlon.isSupported)
+        XCTAssertFalse(RaceKind.unknown.isSupported)
+        XCTAssertEqual(RaceBookOptions().kinds, RaceKind.supportedKinds)
+        XCTAssertEqual(ResumeBuilder.Options.default.kinds, RaceKind.supportedKinds)
+    }
+
     func testProGateLeavesResultsFreeAndOnlyRaceBookUsesEntitlement() {
         let result = Self.result(id: "race",
                                  date: "2025-09-07T00:00:00Z",

@@ -55,6 +55,7 @@ final class PattiePetStateTests: XCTestCase {
     }
 
     func testEveryFourthTipSlotUsesAGiantRealCatchphrase() {
+        PattieVoice.shared.stop()
         let tipSlotKey = "pattie.mode.tipSlot"
         let catchphraseIndexKey = "pattie.mode.catchphraseIndex"
         let playedTipIDsKey = "pattie.mode.playedTipIDs"
@@ -67,6 +68,7 @@ final class PattiePetStateTests: XCTestCase {
         let mode = PattieMode()
         defer {
             mode.dismiss()
+            PattieVoice.shared.stop()
             mode.isEnabled = false
             UserDefaults.standard.removeObject(forKey: tipSlotKey)
             UserDefaults.standard.removeObject(forKey: catchphraseIndexKey)

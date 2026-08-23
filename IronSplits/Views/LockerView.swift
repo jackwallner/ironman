@@ -177,7 +177,7 @@ struct LockerView: View {
                     kindFilter = nil
                     pattie.react(.filter)
                 }
-                ForEach(locker.availableKinds.filter { $0 != .running }, id: \.self) { kind in
+                ForEach(locker.availableKinds, id: \.self) { kind in
                     TriChip(title: kind.longTitle, isSelected: kindFilter == kind) {
                         kindFilter = kind
                         pattie.react(.filter)
@@ -275,11 +275,6 @@ private struct LockerRaceBookCard: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
             .layoutPriority(1)
-
-            Image(systemName: "chevron.right")
-                .font(TriType.smallBold)
-                .foregroundStyle(TriPalette.inkTertiary)
-                .frame(width: TriGeo.tapTarget, height: TriGeo.tapTarget)
         }
         .padding(.vertical, TriSpace.x2)
         .frame(minHeight: TriGeo.tapTarget)

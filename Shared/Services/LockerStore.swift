@@ -42,7 +42,7 @@ final class LockerStore: ObservableObject {
         #endif
         if let snapshot = storage.load() {
             athlete = snapshot.athlete
-            results = snapshot.results
+            results = snapshot.results.filter(\.kind.isSupported)
             lastRefreshed = snapshot.refreshedAt
             state = .loaded
         }
@@ -122,7 +122,7 @@ final class LockerStore: ObservableObject {
             let fetched = try await api.results(forContactIDs: contactIDs)
             guard generation == refreshGeneration,
                   self.athlete?.contactIDs == contactIDs else { return }
-            results = fetched
+            results = fetched.filter(\.kind.isSupported)
             lastRefreshed = .now
             state = .loaded
             refreshWarning = nil

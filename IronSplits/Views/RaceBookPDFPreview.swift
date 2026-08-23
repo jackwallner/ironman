@@ -24,7 +24,8 @@ struct RaceBookPDFPreview: View {
                                 .font(TriType.bodyBold)
                                 .foregroundStyle(TriPalette.inkOnDark)
                                 .padding(.horizontal, TriSpace.x3)
-                                .frame(minHeight: TriGeo.tapTarget)
+                                .frame(minWidth: TriSpace.x10 + TriSpace.x8,
+                                       minHeight: TriGeo.tapTarget)
                         }
                         .buttonStyle(.triPressSilent)
                     }

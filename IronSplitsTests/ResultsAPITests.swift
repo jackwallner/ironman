@@ -124,9 +124,42 @@ final class ResultsAPITests: XCTestCase {
         XCTAssertEqual(athletes.first?.knownRaceCount, 2)
     }
 
+    func testCollapseExcludesNonTriathlonResultsFromAthleteSearch() {
+        let ironman = ODataResultRow.athleteFixtures()[0]
+        let running = ODataResultRow.decode("""
+        {
+          "wtc_resultid": "run-1",
+          "wtc_rundistancecompleted": 42.2,
+          "wtc_finisher": true,
+          "wtc_ContactId": {
+            "contactid": "a508fd19-3e5e-45d2-9a18-47215c7bcb40",
+            "firstname": "Daniel",
+            "lastname": "Winek",
+            "fullname": "Daniel Winek",
+            "address1_city": "MADISON",
+            "address1_stateorprovince": "WI"
+          },
+          "wtc_EventId": {
+            "wtc_name": "2024 Madison Marathon",
+            "wtc_eventdate": "2024-10-06T00:00:00Z"
+          }
+        }
+        """)
+
+        let athlete = ResultsAPI.collapseToAthletes([ironman, running]).first
+        XCTAssertEqual(athlete?.knownRaceCount, 1)
+        XCTAssertEqual(athlete?.latestRaceYear, 2023)
+    }
+
     func testResumeLabelsIncompleteResultsPrecisely() {
         let dnf = ODataResultRow.decode("{\"wtc_resultid\":\"dnf\",\"wtc_dnf\":true}").result
-        let dns = ODataResultRow.decode("{\"wtc_resultid\":\"dns\",\"wtc_dns\":true}").result
+        let dns = ODataResultRow.decode("""
+        {
+          "wtc_resultid": "dns",
+          "wtc_dns": true,
+          "wtc_EventId": { "wtc_name": "2025 IRONMAN Wisconsin" }
+        }
+        """).result
         let dq = ODataResultRow.decode("{\"wtc_resultid\":\"dq\",\"wtc_dq\":true}").result
 
         XCTAssertEqual(ResumeBuilder.statusLabel(for: dnf), "DNF")

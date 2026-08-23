@@ -1,4 +1,3 @@
-import CoreText
 import Foundation
 import UIKit
 
@@ -35,7 +34,7 @@ struct RaceBookOptions: Sendable, Hashable, Equatable {
     var includeRaceNotes: Bool
     var includeIncomplete: Bool
 
-    init(kinds: Set<RaceKind> = Set(RaceKind.allCases),
+    init(kinds: Set<RaceKind> = RaceKind.supportedKinds,
          includeCareerSummary: Bool = true,
          includePodiumHighlights: Bool = true,
          includePersonalBests: Bool = true,
@@ -65,7 +64,7 @@ struct RaceBookOptions: Sendable, Hashable, Equatable {
 enum RaceBookAnalytics {
     static func comparableRaces(_ results: [RaceResult], kind: RaceKind?) -> [RaceResult] {
         results
-            .filter { $0.isComplete && (kind == nil || $0.kind == kind) }
+            .filter { $0.kind.isSupported && $0.isComplete && (kind == nil || $0.kind == kind) }
             .sortedByDateDescending()
     }
 
@@ -226,75 +225,16 @@ enum RaceBookBuilder {
         return lines.joined(separator: "\n")
     }
 
-    /// A paginated letter-sized PDF with a cover band and styled sections.
-    /// Core Text gives long race histories a measured frame, so the last race
-    /// cannot be silently clipped.
+    /// A paginated letter-sized career artifact with measured cards and
+    /// distance-specific highlights.
     static func pdf(athlete: Athlete,
                     results: [RaceResult],
                     notes: [String: RaceNote],
                     options: RaceBookOptions = .default) -> URL? {
-        let text = plainText(athlete: athlete, results: results, notes: notes, options: options)
-        let body = styledPDFText(text)
-        let pageSize = CGSize(width: 612, height: 792)
-        let url = FileManager.default.temporaryDirectory
-            .appendingPathComponent("\(fileSafe(athlete.name))-race-book.pdf")
-        let format = UIGraphicsPDFRendererFormat()
-        format.documentInfo = [
-            kCGPDFContextTitle as String: "Race Book - \(athlete.name)",
-            kCGPDFContextCreator as String: "IM Tri Tracker"
-        ]
-        let renderer = UIGraphicsPDFRenderer(bounds: CGRect(origin: .zero, size: pageSize), format: format)
-        let margin: CGFloat = 48
-        let bodyRect = CGRect(x: margin,
-                              y: margin,
-                              width: pageSize.width - margin * 2,
-                              height: pageSize.height - margin * 2 - 100)
-
-        do {
-            try renderer.writePDF(to: url) { context in
-                var location = 0
-                var pageNumber = 1
-                repeat {
-                    context.beginPage()
-                    guard let cgContext = UIGraphicsGetCurrentContext() else { return }
-                    cgContext.saveGState()
-                    cgContext.translateBy(x: 0, y: pageSize.height)
-                    cgContext.scaleBy(x: 1, y: -1)
-
-                    cgContext.setFillColor(pdfDeep.cgColor)
-                    cgContext.fill(CGRect(x: 0,
-                                          y: pageSize.height - 120,
-                                          width: pageSize.width,
-                                          height: 120))
-                    drawHeader(athlete: athlete, in: cgContext, pageSize: pageSize)
-
-                    let path = CGPath(rect: bodyRect, transform: nil)
-                    let framesetter = CTFramesetterCreateWithAttributedString(body)
-                    let frame = CTFramesetterCreateFrame(framesetter,
-                                                         CFRangeMake(location, 0),
-                                                         path,
-                                                         nil)
-                    CTFrameDraw(frame, cgContext)
-                    let visible = CTFrameGetVisibleStringRange(frame)
-                    drawCoreText("Page \(pageNumber)",
-                                 in: CGRect(x: pageSize.width - 112,
-                                            y: pageSize.height - 38,
-                                            width: 64,
-                                            height: 18),
-                                 in: cgContext,
-                                 font: UIFont.systemFont(ofSize: 8.5),
-                                 color: pdfMuted,
-                                 alignment: .right)
-                    cgContext.restoreGState()
-                    guard visible.length > 0 else { return }
-                    location += visible.length
-                    pageNumber += 1
-                } while location < body.length
-            }
-            return url
-        } catch {
-            return nil
-        }
+        RaceBookPDFRenderer.make(athlete: athlete,
+                                 results: results,
+                                 notes: notes,
+                                 options: options)
     }
 
     /// A complete, tall image for messages and social sharing. It uses the same
@@ -365,9 +305,9 @@ enum RaceBookBuilder {
         }
     }
 
-    private static func filteredResults(_ results: [RaceResult], options: RaceBookOptions) -> [RaceResult] {
+    static func filteredResults(_ results: [RaceResult], options: RaceBookOptions) -> [RaceResult] {
         results
-            .filter { options.kinds.contains($0.kind) }
+            .filter { $0.kind.isSupported && options.kinds.contains($0.kind) }
             .filter { options.includeIncomplete || $0.isComplete }
             .sortedByDateDescending()
     }
@@ -388,58 +328,6 @@ enum RaceBookBuilder {
             line += " - \(overall) overall"
         }
         return line
-    }
-
-    private static func styledPDFText(_ text: String) -> NSAttributedString {
-        let output = NSMutableAttributedString()
-        let sectionTitles: Set<String> = [
-            "CAREER AT A GLANCE",
-            "PODIUM HIGHLIGHTS",
-            "PERSONAL BESTS",
-            "PROGRESSION",
-            "RACE HISTORY"
-        ]
-        let lines = text.components(separatedBy: .newlines)
-        for (index, line) in lines.enumerated() {
-            let paragraph = NSMutableParagraphStyle()
-            paragraph.lineBreakMode = .byWordWrapping
-            paragraph.lineSpacing = 2
-            if line.isEmpty {
-                paragraph.paragraphSpacing = 5
-            } else if sectionTitles.contains(line) {
-                paragraph.paragraphSpacingBefore = 8
-                paragraph.paragraphSpacing = 4
-            } else if index == 0 {
-                paragraph.paragraphSpacing = 3
-            } else {
-                paragraph.paragraphSpacing = 1
-            }
-
-            let attributes: [NSAttributedString.Key: Any]
-            if index == 0 {
-                attributes = [.font: UIFont.systemFont(ofSize: 15, weight: .bold),
-                              .foregroundColor: pdfDeep,
-                              .paragraphStyle: paragraph]
-            } else if sectionTitles.contains(line) {
-                attributes = [.font: UIFont.systemFont(ofSize: 13, weight: .bold),
-                              .foregroundColor: pdfDeep,
-                              .paragraphStyle: paragraph]
-            } else if line == line.uppercased(), !line.isEmpty, !line.hasPrefix(" ") {
-                attributes = [.font: UIFont.systemFont(ofSize: 10.5, weight: .semibold),
-                              .foregroundColor: pdfAccent,
-                              .paragraphStyle: paragraph]
-            } else if line.hasPrefix("  ") {
-                attributes = [.font: UIFont.systemFont(ofSize: 9.5),
-                              .foregroundColor: pdfSecondary,
-                              .paragraphStyle: paragraph]
-            } else {
-                attributes = [.font: UIFont.systemFont(ofSize: 10.5),
-                              .foregroundColor: pdfInk,
-                              .paragraphStyle: paragraph]
-            }
-            output.append(NSAttributedString(string: line + "\n", attributes: attributes))
-        }
-        return output
     }
 
     private static func imageLines(from text: String) -> [ImageLine] {
@@ -489,55 +377,6 @@ enum RaceBookBuilder {
             context: nil
         )
         return ceil(bounds.height) + line.spacingAfter
-    }
-
-    private static func drawHeader(athlete: Athlete,
-                                   in context: CGContext,
-                                   pageSize: CGSize) {
-        let eyebrow = NSAttributedString(string: "IM TRI TRACKER", attributes: [
-            .font: UIFont.systemFont(ofSize: 8.5, weight: .bold),
-            .foregroundColor: pdfAccent
-        ])
-        let eyebrowPath = CGPath(rect: CGRect(x: 48,
-                                              y: pageSize.height - 38,
-                                              width: pageSize.width - 96,
-                                              height: 18),
-                                 transform: nil)
-        CTFrameDraw(CTFramesetterCreateFrame(CTFramesetterCreateWithAttributedString(eyebrow),
-                                             CFRangeMake(0, 0), eyebrowPath, nil), context)
-
-        let header = NSAttributedString(string: "RACE BOOK\n\(athlete.name)", attributes: [
-            .font: UIFont.systemFont(ofSize: 19, weight: .semibold),
-            .foregroundColor: UIColor.white
-        ])
-        let path = CGPath(rect: CGRect(x: 48,
-                                       y: pageSize.height - 110,
-                                       width: pageSize.width - 96,
-                                       height: 70),
-                          transform: nil)
-        CTFrameDraw(CTFramesetterCreateFrame(CTFramesetterCreateWithAttributedString(header),
-                                             CFRangeMake(0, 0), path, nil), context)
-    }
-
-    private static func drawCoreText(_ text: String,
-                                     in rect: CGRect,
-                                     in context: CGContext,
-                                     font: UIFont,
-                                     color: UIColor,
-                                     alignment: NSTextAlignment = .left) {
-        let paragraph = NSMutableParagraphStyle()
-        paragraph.alignment = alignment
-        paragraph.lineBreakMode = .byWordWrapping
-        let attributed = NSAttributedString(string: text, attributes: [
-            .font: font,
-            .foregroundColor: color,
-            .paragraphStyle: paragraph
-        ])
-        let frame = CTFramesetterCreateFrame(CTFramesetterCreateWithAttributedString(attributed),
-                                             CFRangeMake(0, 0),
-                                             CGPath(rect: rect, transform: nil),
-                                             nil)
-        CTFrameDraw(frame, context)
     }
 
     private static func draw(_ text: String,

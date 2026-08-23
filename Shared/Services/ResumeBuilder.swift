@@ -13,12 +13,12 @@ enum ResumeBuilder {
         var includeSplits: Bool
         var includeDNF: Bool
 
-        static let `default` = Options(kinds: Set(RaceKind.allCases), includeSplits: true, includeDNF: false)
+        static let `default` = Options(kinds: RaceKind.supportedKinds, includeSplits: true, includeDNF: false)
     }
 
     static func rows(for results: [RaceResult], options: Options) -> [RaceResult] {
         results
-            .filter { options.kinds.contains($0.kind) }
+            .filter { $0.kind.isSupported && options.kinds.contains($0.kind) }
             .filter { options.includeDNF || $0.isComplete }
             .sortedByDateDescending()
     }
