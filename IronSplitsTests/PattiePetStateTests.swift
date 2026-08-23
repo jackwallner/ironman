@@ -54,6 +54,44 @@ final class PattiePetStateTests: XCTestCase {
         XCTAssertTrue(tips.allSatisfy { !$0.text.isEmpty })
     }
 
+    func testEveryFourthTipSlotUsesAGiantRealCatchphrase() {
+        let tipSlotKey = "pattie.mode.tipSlot"
+        let catchphraseIndexKey = "pattie.mode.catchphraseIndex"
+        let playedTipIDsKey = "pattie.mode.playedTipIDs"
+        let lastTipIDKey = "pattie.mode.lastTipID"
+        UserDefaults.standard.set(0, forKey: tipSlotKey)
+        UserDefaults.standard.removeObject(forKey: catchphraseIndexKey)
+        UserDefaults.standard.removeObject(forKey: playedTipIDsKey)
+        UserDefaults.standard.removeObject(forKey: lastTipIDKey)
+
+        let mode = PattieMode()
+        defer {
+            mode.dismiss()
+            mode.isEnabled = false
+            UserDefaults.standard.removeObject(forKey: tipSlotKey)
+            UserDefaults.standard.removeObject(forKey: catchphraseIndexKey)
+            UserDefaults.standard.removeObject(forKey: playedTipIDsKey)
+            UserDefaults.standard.removeObject(forKey: lastTipIDKey)
+        }
+
+        for slot in 1...4 {
+            mode.demo()
+            let line = mode.current
+            XCTAssertNotNil(line)
+            XCTAssertEqual(line?.isGiantCatchphrase, slot == 4)
+
+            if slot == 4 {
+                XCTAssertTrue(PattieVoiceLibrary.catchphrases.contains {
+                    $0.text == line?.text && $0.voice == line?.voice
+                })
+                XCTAssertEqual(line?.petState, .dance)
+            } else {
+                XCTAssertTrue(line?.voice?.hasPrefix("pattie-solution-") == true)
+            }
+            mode.dismiss()
+        }
+    }
+
     func testSolutionTipRotationUsesDifferentTips() throws {
         var used = Set<String>()
         let first = try XCTUnwrap(PattieVoiceLibrary.nextModeTip(excludingIDs: used))
@@ -141,14 +179,32 @@ final class PattiePetStateTests: XCTestCase {
     }
 
     func testNewStatesUseBundledPetImagesAndActiveAccessories() {
-        XCTAssertEqual(PattiePetState.run.imageName, "pattie-pet-encourage")
+        XCTAssertEqual(PattiePetState.run.imageName, "pattie-pet-run")
         XCTAssertEqual(PattiePetState.transition.imageName, "pattie-pet-shoes")
         XCTAssertEqual(PattiePetState.finish.imageName, "pattie-pet-celebrate")
-        XCTAssertEqual(PattiePetState.dance.imageName, "pattie-pet-celebrate")
+        XCTAssertEqual(PattiePetState.dance.imageName, "pattie-pet-dance")
         XCTAssertEqual(PattiePetState.run.accessorySymbol, "figure.run")
         XCTAssertEqual(PattiePetState.transition.accessorySymbol,
                        "arrow.triangle.2.circlepath")
         XCTAssertEqual(PattiePetState.finish.accessorySymbol, "flag.checkered")
         XCTAssertEqual(PattiePetState.dance.accessorySymbol, "music.note")
+    }
+
+    func testCompanionAnimationUsesContinuousBoundedKeyframes() {
+        for state in PattiePetState.activeMotionStates {
+            XCTAssertGreaterThanOrEqual(state.animationFrames.count, 5)
+            XCTAssertGreaterThan(state.animationCycleDuration, 0)
+            XCTAssertEqual(state.animationFrame(at: 0).assetName, state.imageName)
+            XCTAssertEqual(state.animationFrame(at: state.animationCycleDuration).assetName,
+                           state.imageName)
+            for frame in state.animationFrames {
+                XCTAssertGreaterThan(frame.duration, 0)
+                XCTAssertGreaterThanOrEqual(frame.scale, 0.97)
+                XCTAssertLessThanOrEqual(frame.scale, 1.03)
+                XCTAssertLessThanOrEqual(abs(frame.rotationDegrees), 6)
+                XCTAssertLessThanOrEqual(abs(frame.horizontalShift), 1.1)
+                XCTAssertLessThanOrEqual(frame.verticalLift, 1.1)
+            }
+        }
     }
 }

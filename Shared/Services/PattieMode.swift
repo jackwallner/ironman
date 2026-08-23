@@ -103,6 +103,9 @@ final class PattieMode: ObservableObject {
         var impact: Impact = .banner
         var action: Action? = nil
         var petState: PattiePetState = .idle
+        /// Every fourth tip slot is a short celebration instead of another
+        /// solution paragraph.
+        var isGiantCatchphrase = false
 
         /// The stable, content-backed state used when a caller has not
         /// supplied a more specific pointer or topic state.
@@ -157,6 +160,8 @@ final class PattieMode: ObservableObject {
     private let seenKey = "pattie.mode.seenLines"
     private let playedModeTipIDsKey = "pattie.mode.playedTipIDs"
     private let lastModeTipIDKey = "pattie.mode.lastTipID"
+    private let tipSlotKey = "pattie.mode.tipSlot"
+    private let catchphraseIndexKey = "pattie.mode.catchphraseIndex"
     /// Long enough that two taps in a row cannot both summon her, short enough
     /// that moving through three screens still gets more than one line out of
     /// her.
@@ -237,13 +242,22 @@ final class PattieMode: ObservableObject {
         // The event deck controls timing. The real answer tree controls the
         // visible tip and the matching complete solution recording. A tip is
         // recorded before playback starts, so an interrupted clip still counts
-        // as started and the next tip waits for the rest of the pool.
-        if let tip = nextModeTip() {
-            line.text = tip.text
-            line.voice = tip.voice
-            line.petState = petState ?? .forTopicID(tip.topic)
-        } else {
-            line.petState = petState ?? line.defaultPetState
+        // as started and the next tip waits for the rest of the pool. Every
+        // fourth slot is deliberately not added to that pool, it is a short
+        // catchphrase celebration instead.
+        if let presentation = nextModePresentation() {
+            switch presentation {
+            case .tip(let tip):
+                line.text = tip.text
+                line.voice = tip.voice
+                line.petState = petState ?? .forTopicID(tip.topic)
+            case .catchphrase(let catchphrase):
+                line.text = catchphrase.text
+                line.voice = catchphrase.voice
+                line.petState = .dance
+                line.impact = .big
+                line.isGiantCatchphrase = true
+            }
         }
         if respectingBudget {
             firedAt[line.moment] = .now
@@ -315,6 +329,34 @@ final class PattieMode: ObservableObject {
         UserDefaults.standard.set(Array(nextPlayed).sorted(), forKey: playedModeTipIDsKey)
         UserDefaults.standard.set(tip.id, forKey: lastModeTipIDKey)
         return tip
+    }
+
+    private enum ModePresentation {
+        case tip(PattieVoiceLibrary.ModeTip)
+        case catchphrase(PattieVoiceLibrary.Catchphrase)
+    }
+
+    private func nextModePresentation() -> ModePresentation? {
+        guard !PattieVoiceLibrary.modeTips.isEmpty else { return nil }
+
+        let slot = max(0, UserDefaults.standard.integer(forKey: tipSlotKey)) + 1
+        UserDefaults.standard.set(slot, forKey: tipSlotKey)
+
+        if slot.isMultiple(of: 4), let catchphrase = nextCatchphrase() {
+            return .catchphrase(catchphrase)
+        }
+        guard let tip = nextModeTip() else { return nil }
+        return .tip(tip)
+    }
+
+    private func nextCatchphrase() -> PattieVoiceLibrary.Catchphrase? {
+        let catchphrases = PattieVoiceLibrary.catchphrases
+        guard !catchphrases.isEmpty else { return nil }
+
+        let index = max(0, UserDefaults.standard.integer(forKey: catchphraseIndexKey))
+        let catchphrase = catchphrases[index % catchphrases.count]
+        UserDefaults.standard.set(index + 1, forKey: catchphraseIndexKey)
+        return catchphrase
     }
 
     private var playedModeTipIDs: Set<String> {

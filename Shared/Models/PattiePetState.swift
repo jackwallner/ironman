@@ -31,6 +31,33 @@ enum PattiePetState: String, CaseIterable, Sendable {
         let duration: TimeInterval
     }
 
+    /// One keyframe in the companion's continuous loop. The asset name is
+    /// allowed to change between frames, while the transform values interpolate
+    /// so a semantic pose never appears to jump between unrelated positions.
+    struct MotionFrame: Equatable, Sendable {
+        let assetName: String
+        let horizontalShift: Double
+        let verticalLift: Double
+        let rotationDegrees: Double
+        let scale: Double
+        let duration: TimeInterval
+
+        func interpolated(to next: Self, progress: Double) -> Self {
+            let amount = max(0, min(1, progress))
+            func mix(_ first: Double, _ second: Double) -> Double {
+                first + (second - first) * amount
+            }
+            return Self(
+                assetName: amount < 0.5 ? assetName : next.assetName,
+                horizontalShift: mix(horizontalShift, next.horizontalShift),
+                verticalLift: mix(verticalLift, next.verticalLift),
+                rotationDegrees: mix(rotationDegrees, next.rotationDegrees),
+                scale: mix(scale, next.scale),
+                duration: duration
+            )
+        }
+    }
+
     /// A finite cycle keeps Pattie moving without introducing random or
     /// unbounded state into the UI.
     static let activeMotionStates: [Self] = [
@@ -130,6 +157,83 @@ enum PattiePetState: String, CaseIterable, Sendable {
         Self.activeMotionStates.contains(self)
     }
 
+    /// A short, looping sequence for the visible companion. The run and dance
+    /// recipes use denser keyframes so their motion reads as an action instead
+    /// of a portrait slideshow. All other poses get the same continuous
+    /// breathing, sway, and lift treatment with their own semantic asset.
+    var animationFrames: [MotionFrame] {
+        let profile = motionProfile
+        let asset = imageName
+        switch self {
+        case .run:
+            return Self.frames(asset: asset,
+                               values: [
+                                (-1.0, 0.0, 3.0, 0.98),
+                                (-0.35, 0.65, 1.0, 1.0),
+                                (0.55, 1.0, -2.0, 1.018),
+                                (1.0, 0.35, -4.0, 1.0),
+                                (0.45, 0.0, -1.0, 0.98),
+                                (-0.45, 0.55, 2.0, 1.0)
+                               ],
+                               duration: 0.11)
+        case .dance:
+            return Self.frames(asset: asset,
+                               values: [
+                                (-1.0, 0.0, -5.0, 0.98),
+                                (-0.35, 0.8, 0.0, 1.01),
+                                (0.75, 1.0, 6.0, 1.02),
+                                (0.2, 0.45, 2.0, 1.0),
+                                (-0.7, 0.1, -6.0, 0.98),
+                                (-0.15, 0.7, -1.0, 1.01)
+                               ],
+                               duration: 0.13)
+        default:
+            let lift = profile.verticalLift
+            let shift = profile.horizontalShift
+            let rotation = profile.rotationDegrees
+            return Self.frames(asset: asset,
+                               values: [
+                                (-shift, 0.0, -rotation * 0.55, 0.99),
+                                (-shift * 0.35, lift * 0.65, -rotation * 0.1, 1.0),
+                                (shift, lift, rotation, 1.018),
+                                (shift * 0.3, lift * 0.5, rotation * 0.15, 1.0),
+                                (-shift, 0.0, -rotation * 0.55, 0.99)
+                               ],
+                               duration: max(0.09, profile.duration / 5))
+        }
+    }
+
+    var animationCycleDuration: TimeInterval {
+        animationFrames.reduce(0) { $0 + $1.duration }
+    }
+
+    /// Samples the loop continuously. A TimelineView can call this at display
+    /// cadence without owning another timer or spawning a task per frame.
+    func animationFrame(at elapsed: TimeInterval) -> MotionFrame {
+        let frames = animationFrames
+        guard let first = frames.first else {
+            return MotionFrame(assetName: imageName,
+                               horizontalShift: 0,
+                               verticalLift: 0,
+                               rotationDegrees: 0,
+                               scale: 1,
+                               duration: 1)
+        }
+        let cycle = max(animationCycleDuration, first.duration)
+        var remaining = elapsed.truncatingRemainder(dividingBy: cycle)
+        if remaining < 0 { remaining += cycle }
+        for index in frames.indices {
+            let frame = frames[index]
+            let next = frames[(index + 1) % frames.count]
+            if remaining <= frame.duration {
+                return frame.interpolated(to: next,
+                                          progress: remaining / max(frame.duration, 0.001))
+            }
+            remaining -= frame.duration
+        }
+        return first
+    }
+
     /// Returns a repeatable state for any animation tick, including negative
     /// indexes used by previews or restored UI state.
     static func motionState(at index: Int) -> Self {
@@ -155,6 +259,19 @@ enum PattiePetState: String, CaseIterable, Sendable {
         let length = min(count, activeMotionStates.count)
         let startIndex = activeMotionStates.firstIndex(of: state) ?? 0
         return (0..<length).map { motionState(at: startIndex + $0) }
+    }
+
+    private static func frames(asset: String,
+                               values: [(Double, Double, Double, Double)],
+                               duration: TimeInterval) -> [MotionFrame] {
+        values.map { value in
+            MotionFrame(assetName: asset,
+                        horizontalShift: value.0,
+                        verticalLift: value.1,
+                        rotationDegrees: value.2,
+                        scale: value.3,
+                        duration: duration)
+        }
     }
 
     static func forPointerID(_ id: String) -> Self {
@@ -191,9 +308,11 @@ enum PattiePetState: String, CaseIterable, Sendable {
 
     private var bundledAssetState: Self {
         switch self {
-        case .run, .stretch, .recovery: return .encourage
+        case .run: return .run
+        case .stretch, .recovery: return .encourage
         case .transition: return .shoes
-        case .finish, .dance: return .celebrate
+        case .finish: return .celebrate
+        case .dance: return .dance
         case .warmup: return .idle
         case .hydrate: return .swim
         default: return self

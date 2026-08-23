@@ -176,6 +176,23 @@ enum PattieVoiceLibrary {
         let voice: String
     }
 
+    struct Catchphrase: Equatable, Sendable {
+        let text: String
+        let voice: String
+    }
+
+    /// Short real clips for the occasional celebration slot. These stay
+    /// separate from the solution catalog so the big moment is just Pattie,
+    /// not another paragraph of advice.
+    static let catchphrases: [Catchphrase] = [
+        Catchphrase(text: "Away you go!", voice: "pattie-away-you-go"),
+        Catchphrase(text: "Good!", voice: "pattie-good"),
+        Catchphrase(text: "Great idea!", voice: "pattie-great-idea"),
+        Catchphrase(text: "Nice!", voice: "pattie-nice"),
+        Catchphrase(text: "Now that's a great idea!", voice: "pattie-now-that-s-a-great-idea"),
+        Catchphrase(text: "That's a great idea!", voice: "pattie-that-s-a-great-idea")
+    ]
+
     /// Every bundled answer with a complete solution recording. There are 29
     /// tip entries and 19 distinct solution recordings, with repeated clips
     /// retaining their different, useful text.
