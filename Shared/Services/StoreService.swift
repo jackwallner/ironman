@@ -5,9 +5,12 @@ import StoreKit
 
 enum IronSplitsProduct {
     static let lifetime = "com.jackwallner.ironman.pro"
+    /// Kept for receipt recognition so customers from the earlier subscription
+    /// model can still restore access. They are not offered to new customers.
     static let yearly = "com.jackwallner.ironman.pro.yearly"
     static let monthly = "com.jackwallner.ironman.pro.monthly"
-    static let all: [String] = [lifetime, yearly, monthly]
+    static let legacySubscriptions: Set<String> = [yearly, monthly]
+    static let all: [String] = [lifetime]
 }
 
 enum RevenueCatConfig {
@@ -16,8 +19,12 @@ enum RevenueCatConfig {
     #else
     static let apiKey = IronSplitsSecrets.revenueCatKey
     #endif
-    static let proEntitlement = "Iron Splits+"
-    static let fallbackEntitlement = "pro"
+    static let proEntitlement = "pro"
+    static let fallbackEntitlement = "Iron Splits+"
+    /// Entitlement created by the first RevenueCat setup before the app's
+    /// settled public entitlement names were documented. Keep it readable so
+    /// those customers can still restore access.
+    static let legacyEntitlement = "Ironman App Pro"
 }
 
 enum IronSplitsLegal {
@@ -51,7 +58,7 @@ enum PurchaseState {
     case pending
 }
 
-/// Result of a one-tap CTA that transacts the yearly plan in place.
+/// Result of a one-tap CTA that transacts the lifetime Race Book unlock.
 ///
 /// `.needsPlanPicker` is the only case that may open `PaywallView`: it means
 /// the offering never loaded, so there is nothing to buy and the plan picker's
@@ -113,7 +120,7 @@ extension Package {
 
     var displayName: String {
         switch productKind {
-        case .lifetime: return "Lifetime"
+        case .lifetime: return "Race Book"
         case .yearly: return "Yearly"
         case .monthly: return "Monthly"
         case .other: return storeProduct.localizedTitle
@@ -137,10 +144,9 @@ extension Package {
         }
     }
 
-    /// Localized per-month price for any recurring package. For a yearly
-    /// product priced at $29.99/yr this returns "$2.50". Lifetime / non-
-    /// recurring products return nil. Used on the paywall plan card so the
-    /// annual price doesn't look like sticker shock next to monthly.
+    /// Localized per-month price for any recurring package. Lifetime and
+    /// non-recurring products return nil. Kept for recognizing legacy
+    /// subscription receipts, which are not offered to new customers.
     var monthlyEquivalentLabel: String? {
         guard let period = storeProduct.subscriptionPeriod else { return nil }
         let monthsDecimal: Decimal
@@ -209,7 +215,8 @@ extension CustomerInfo {
     var hasProEntitlement: Bool {
         let active = entitlements.active
         if active[RevenueCatConfig.proEntitlement]?.isActive == true
-            || active[RevenueCatConfig.fallbackEntitlement]?.isActive == true {
+            || active[RevenueCatConfig.fallbackEntitlement]?.isActive == true
+            || active[RevenueCatConfig.legacyEntitlement]?.isActive == true {
             return true
         }
         // Belt-and-suspenders: if the entitlement mapping on the dashboard is
@@ -218,8 +225,7 @@ extension CustomerInfo {
         if nonSubscriptions.contains(where: { $0.productIdentifier == IronSplitsProduct.lifetime }) {
             return true
         }
-        let recurring: Set<String> = [IronSplitsProduct.yearly, IronSplitsProduct.monthly]
-        if !activeSubscriptions.intersection(recurring).isEmpty {
+        if !activeSubscriptions.intersection(IronSplitsProduct.legacySubscriptions).isEmpty {
             return true
         }
         return false
@@ -227,10 +233,10 @@ extension CustomerInfo {
 }
 
 extension Offering {
-    /// Paywall display order: yearly first (conversion default with trial +
-    /// savings badge), then monthly (price anchor), then lifetime (commitment).
+    /// Keep the one-time Race Book unlock first. Legacy recurring products are
+    /// still recognizable for existing customers, but are never offered.
     var sortedPackages: [Package] {
-        let displayOrder: [RCProductKind] = [.yearly, .monthly, .lifetime, .other]
+        let displayOrder: [RCProductKind] = [.lifetime, .other, .yearly, .monthly]
         return availablePackages.sorted {
             let lhs = displayOrder.firstIndex(of: $0.productKind) ?? displayOrder.count
             let rhs = displayOrder.firstIndex(of: $1.productKind) ?? displayOrder.count
@@ -256,12 +262,9 @@ final class StoreService: NSObject, ObservableObject {
     @Published private(set) var planOptions: [PlanOption] = []
     @Published private(set) var currentOffering: Offering?
     @Published private(set) var customerInfo: CustomerInfo?
-    /// Whether this athlete has Iron Splits+.
-    ///
-    /// While `ProGate.everythingUnlocked` is set this is unconditionally true
-    /// and the entitlement is never consulted, so no screen in the app can
-    /// draw a lock. `apply(customerInfo:)` still records the real entitlement
-    /// in `customerInfo`; it just stops being what the UI asks.
+    /// Whether this athlete has the lifetime Race Book unlock. Legacy
+    /// Iron Splits+ subscriptions also resolve true so existing customers keep
+    /// the access they bought.
     ///
     /// `IRONSPLITS_FORCE_PRO=1` on the scheme is the Debug-only override that
     /// predates the switch, kept so the gated build can still be exercised in
@@ -286,151 +289,34 @@ final class StoreService: NSObject, ObservableObject {
         products.first(where: { $0.productKind == .lifetime })?.storeProduct.localizedPriceString
     }
 
-    /// CTA label for the blurred contextual paywalls (leaderboards, resume
-    /// export). Leads with the yearly free-trial offer when available so the
-    /// upsell emphasizes the low-friction option instead of the lifetime price.
+    /// CTA label for a Race Book entry point.
     var paywallBlurCTA: String {
-        directCTALabel(for: .upgrade)
+        "Unlock Race Book"
     }
 
-    /// The short label every "go to Iron Splits+" entry point wears: the toolbar
-    /// pill, the Settings button, the leaderboard footer. Trial-aware, because
-    /// "Try Free" converts and "Upgrade" reads as an account setting, but the
-    /// same everywhere, because three names for one door is three doors.
-    ///
-    /// This is the terse form. The direct-purchase CTAs that actually take the
-    /// money use `directCTALabel(for:)`, which carries the price.
-    ///
-    /// Split into a pure function over one Bool so the copy is unit-testable.
-    /// It otherwise wasn't testable anywhere: `configureIfNeeded()` refuses to
-    /// configure RevenueCat on a simulator, so `yearlyPackage` is nil in every
-    /// simulator run and a `.storekit` config can't change that. The trial
-    /// branch could only ever be seen on a real device.
+    /// Short, stable copy for settings and contextual entry points.
     nonisolated static func upgradeCTALabel(trialAvailable: Bool) -> String {
-        trialAvailable ? "Try Free" : "Upgrade"
-    }
-
-    /// Whether the yearly plan is currently offering an intro trial this user
-    /// is eligible to take.
-    var isYearlyTrialAvailable: Bool {
-        #if DEBUG
-        // Simulator-only: lets the trial-copy state of every upgrade surface be
-        // captured headlessly, since the real path needs a device. Same shape
-        // as the existing IRONSPLITS_FORCE_PRO hook, and stripped from Release.
-        if ProcessInfo.processInfo.environment["IRONSPLITS_FORCE_TRIAL_CTA"] == "1" { return true }
-        #endif
-        guard let yearly = yearlyPackage else { return false }
-        return isEligibleForIntroOffer(yearly) && yearly.introOfferLabel != nil
+        "Unlock Race Book"
     }
 
     var upgradeCTALabel: String {
-        Self.upgradeCTALabel(trialAvailable: isYearlyTrialAvailable)
+        Self.upgradeCTALabel(trialAvailable: false)
     }
 
     func directCTALabel(for trigger: PaywallTrigger) -> String {
-        if let yearly = yearlyPackage {
-            if trigger != .winback,
-               isEligibleForIntroOffer(yearly),
-               let trial = yearly.introOfferLabel {
-                return "Start \(trial)"
-            }
-            let verb = trigger == .winback ? "Restart" : "Try"
-            return "\(verb) Iron Splits+ for \(yearly.priceLabel)"
-        }
-        if let price = proPrice {
-            let verb = trigger == .winback ? "Restart" : "Unlock"
-            return "\(verb) Iron Splits+ for \(price)"
-        }
-        return trigger == .winback ? "Restart Iron Splits+" : "Unlock Iron Splits+"
+        guard let price = proPrice else { return "Unlock Race Book" }
+        return "Unlock Race Book for \(price)"
     }
 
     /// One-line secondary caption shown under the CTA when a trial is offered,
     /// so the price after the trial isn't hidden.
     var paywallBlurSubtext: String? {
-        guard let yearly = products.first(where: { $0.productKind == .yearly }),
-              isEligibleForIntroOffer(yearly),
-              yearly.introOfferLabel != nil else { return nil }
-        return "Then \(yearly.priceLabel). Cancel anytime."
+        "One-time purchase. No subscription."
     }
 
-    /// The yearly package, the one-tap conversion target for every trial /
-    /// teaser pop-up (onboarding, TrialPitchSheet, blur CTAs). Those surfaces
-    /// purchase this directly, trial or not; the full `PaywallView` is only the
-    /// fallback when this is nil (products not loaded), or for deliberate
-    /// upgrade entry points where the user should pick a plan.
-    var yearlyPackage: Package? {
-        products.first { $0.productKind == .yearly }
-    }
-
-    /// Full Apple-3.1.2 auto-renew disclosure for the yearly plan, shown next
-    /// to any direct-purchase CTA so the price (and trial terms, when offered)
-    /// are present at the point of purchase.
-    var yearlyCTADisclosureText: String? {
-        guard let yearly = yearlyPackage else { return nil }
-        let renew = "Auto-renews unless cancelled at least 24 hours before the end of the current period. Manage or cancel in Settings › Apple ID › Subscriptions."
-        if isEligibleForIntroOffer(yearly), let trial = yearly.introOfferLabel {
-            return "\(trial.capitalized), then \(yearly.priceLabel). \(renew)"
-        }
-        return "\(yearly.priceLabel). \(renew)"
-    }
-
-    var onboardingMonthlyCTALabel: String {
-        guard let monthly = monthlyPackage else { return "Upgrade to Iron Splits+" }
-        if isEligibleForIntroOffer(monthly), let trial = monthly.introOfferLabel {
-            return "Start \(trial)"
-        }
-        return "Try Iron Splits+ for \(monthly.priceLabel)"
-    }
-
-    var onboardingMonthlyDisclosureText: String? {
-        guard let monthly = monthlyPackage else { return nil }
-        let renew = "Auto-renews unless cancelled at least 24 hours before the end of the current period. Manage or cancel in Settings › Apple ID › Subscriptions."
-        if isEligibleForIntroOffer(monthly), let trial = monthly.introOfferLabel {
-            return "\(trial.capitalized), then \(monthly.priceLabel). \(renew)"
-        }
-        return "\(monthly.priceLabel). \(renew)"
-    }
-
-    /// The monthly package, when present. Used as the anchor when computing
-    /// yearly savings % and rendering a strike-through monthly-equivalent price.
-    var monthlyPackage: Package? {
-        products.first { $0.productKind == .monthly }
-    }
-
-    /// Integer savings % the yearly package offers vs. 12× the monthly price.
-    /// Returns nil unless both packages are present and the math is favorable.
-    func yearlySavingsPercent(yearly: Package) -> Int? {
-        guard yearly.productKind == .yearly, let monthly = monthlyPackage else { return nil }
-        let yearlyPrice = yearly.storeProduct.price
-        let twelveMonths = monthly.storeProduct.price * Decimal(12)
-        guard twelveMonths > 0, yearlyPrice < twelveMonths else { return nil }
-        let saving = (twelveMonths - yearlyPrice) / twelveMonths * Decimal(100)
-        var rounded = Decimal()
-        var src = saving
-        NSDecimalRound(&rounded, &src, 0, .plain)
-        let percent = NSDecimalNumber(decimal: rounded).intValue
-        return percent > 0 ? percent : nil
-    }
-
-    /// Strike-through anchor price for the yearly card, "$1.99/mo" if a
-    /// monthly plan exists. Nil when there's nothing to anchor against.
-    ///
-    /// Falls back to the plan options so the anchor survives a simulator
-    /// render, where there is no `Package` behind the monthly card.
-    var monthlyAnchorPriceLabel: String? {
-        if let label = monthlyPackage?.monthlyEquivalentAnchorLabel { return label }
-        guard let monthly = planOptions.first(where: { $0.kind == .monthly }) else { return nil }
-        let amount = monthly.priceLabel.split(separator: "/").first?
-            .trimmingCharacters(in: .whitespaces) ?? monthly.priceLabel
-        return "\(amount)/mo"
-    }
-
-    /// True when this package advertises a free trial and the user is eligible.
-    /// Unknown eligibility resolves to true so a transient lookup failure does
-    /// not hide a trial the user likely qualifies for (Vitals pattern).
-    func isEligibleForIntroOffer(_ package: Package) -> Bool {
-        guard package.introOfferLabel != nil else { return false }
-        return introEligibility[package.storeProduct.productIdentifier] ?? true
+    /// The only package offered to new customers.
+    var lifetimePackage: Package? {
+        products.first { $0.productKind == .lifetime }
     }
 
     /// Reports a custom-paywall impression to RevenueCat (required for native UI).
@@ -448,21 +334,6 @@ final class StoreService: NSObject, ObservableObject {
         )
     }
 
-    /// True when the user once held a Pro entitlement that has since expired and
-    /// isn't currently active. Used to show a tailored win-back paywall.
-    var isLapsed: Bool {
-        guard !isPro, let info = customerInfo else { return false }
-        return info.entitlements.all.values.contains { entitlement in
-            !entitlement.isActive
-                && (entitlement.expirationDate.map { $0 < Date() } ?? false)
-        }
-    }
-
-    /// The generic "upgrade" ask, swapped to a win-back variant for lapsed users.
-    var defaultUpgradeTrigger: PaywallTrigger {
-        isLapsed ? .winback : .upgrade
-    }
-
     private let logger = Logger(subsystem: "com.jackwallner.ironman", category: "Store")
     private var isConfigured = false
 
@@ -470,8 +341,8 @@ final class StoreService: NSObject, ObservableObject {
 
     func start() {
         #if DEBUG
-        // UI-test / local hook: force Pro so the gated surfaces (leaderboards,
-        // full history) render without a sandbox purchase. Never compiled into Release.
+        // UI-test / local hook: force Race Book so the paid actions render
+        // without a sandbox purchase. Never compiled into Release.
         if ProcessInfo.processInfo.environment["FORCE_PRO"] == "1" {
             isPro = true
             return
@@ -500,13 +371,13 @@ final class StoreService: NSObject, ObservableObject {
             let offerings = try await Purchases.shared.offerings()
             let offering = offerings.paywallOffering
             currentOffering = offering
-            products = offering?.sortedPackages ?? []
+            products = offering?.sortedPackages.filter { $0.productKind == .lifetime } ?? []
             lastError = nil
             await refreshIntroEligibility()
             rebuildPlanOptions()
         } catch {
             logger.error("Product fetch failed: \(String(describing: error), privacy: .public)")
-            lastError = "Couldn't load subscription options. Check your connection and try again."
+            lastError = "Couldn't load the Race Book unlock. Check your connection and try again."
         }
     }
 
@@ -529,21 +400,18 @@ final class StoreService: NSObject, ObservableObject {
         }
     }
 
-    /// The single conversion path behind every pitch in the app.
+    /// The single conversion path behind every Race Book pitch in the app.
     ///
-    /// A CTA that names an offer ("Start 7-day free trial") has to *be* that
-    /// offer: the next thing the user sees is Apple's confirm sheet, never a
-    /// second pitch asking them to agree again. Surfaces that used to hand off
-    /// to `PaywallView` call this instead; the plan picker is now reachable
-    /// only from a deliberate "See all plans" link, or as the fallback when the
-    /// offering failed to load and there is genuinely nothing to buy.
-    func purchaseYearlyDirect() async -> DirectPurchaseOutcome {
-        if yearlyPackage == nil, currentOffering == nil {
+    /// A CTA that names the lifetime unlock has to be that product: the next
+    /// thing the user sees is Apple's confirmation sheet, never a second pitch
+    /// asking them to choose a plan.
+    func purchaseLifetimeDirect() async -> DirectPurchaseOutcome {
+        if lifetimePackage == nil, currentOffering == nil {
             await fetchProducts()
         }
-        guard let yearly = yearlyPackage else { return .needsPlanPicker }
+        guard let lifetime = lifetimePackage else { return .needsPlanPicker }
         do {
-            switch try await purchase(yearly) {
+            switch try await purchase(lifetime) {
             case .purchased:
                 return .unlocked
             case .pending:
@@ -564,7 +432,7 @@ final class StoreService: NSObject, ObservableObject {
             lastError = nil
         } catch {
             logger.error("Customer info refresh failed: \(String(describing: error), privacy: .public)")
-            lastError = "Couldn't refresh your subscription status. Check your connection and try again."
+            lastError = "Couldn't refresh your Race Book purchase status. Check your connection and try again."
         }
     }
 
@@ -577,7 +445,7 @@ final class StoreService: NSObject, ObservableObject {
         do {
             let info = try await Purchases.shared.restorePurchases()
             apply(customerInfo: info)
-            lastError = isPro ? nil : "No active Iron Splits+ purchase was found for this Apple ID."
+            lastError = isPro ? nil : "No Race Book purchase was found for this Apple ID."
         } catch {
             logger.error("Restore failed: \(String(describing: error), privacy: .public)")
             lastError = "Couldn't restore purchases. Try again."
@@ -598,7 +466,9 @@ final class StoreService: NSObject, ObservableObject {
     }
 
     private func rebuildPlanOptions() {
-        planOptions = products.map { PlanOption(package: $0, introOfferEligible: isEligibleForIntroOffer($0)) }
+        planOptions = products
+            .filter { $0.productKind == .lifetime }
+            .map { PlanOption(package: $0, introOfferEligible: false) }
     }
 
     /// The package behind a plan card, or nil for a display-only simulator row.
@@ -611,13 +481,11 @@ final class StoreService: NSObject, ObservableObject {
         let activeKeys = customerInfo.entitlements.active.keys.sorted().joined(separator: ", ")
         let allKeys = customerInfo.entitlements.all.keys.sorted().joined(separator: ", ")
         logger.info("Applied customerInfo, active: [\(activeKeys, privacy: .public)] all: [\(allKeys, privacy: .public)]")
-        let hasActiveSubscription = customerInfo.hasProEntitlement
-        // While the app is fully unlocked, a customerInfo that says "not
-        // subscribed" must not be allowed to close a door the switch opened.
+        let hasRaceBookAccess = customerInfo.hasProEntitlement
         guard !ProGate.everythingUnlocked else { return }
-        if isPro != hasActiveSubscription {
-            isPro = hasActiveSubscription
-            logger.info("isPro updated to \(hasActiveSubscription, privacy: .public)")
+        if isPro != hasRaceBookAccess {
+            isPro = hasRaceBookAccess
+            logger.info("Race Book access updated to \(hasRaceBookAccess, privacy: .public)")
         }
     }
 

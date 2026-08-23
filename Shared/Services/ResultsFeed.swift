@@ -34,8 +34,23 @@ struct FeedConfig: Codable, Sendable, Equatable {
         referer: "https://labs-v2.competitor.com/"
     )
 
+    /// The remote file is a hotfix channel, not a general-purpose proxy
+    /// configuration. Rejecting an unexpected host, scheme, or range keeps a
+    /// malformed Pages deploy from turning every launch into a broken request.
+    var isValid: Bool {
+        isValidEndpoint(proxyURL, host: "labs-v2.competitor.com", path: "/api/results-proxy") &&
+        isValidEndpoint(resultsURL, host: "api.competitor.com", path: "/web/results") &&
+        isValidReferer(referer) &&
+        proxyURLParameter == "url" &&
+        pageSizeParameter == "pageSize" &&
+        (1...2_000).contains(pageSize) &&
+        (1...100).contains(maxPages)
+    }
+
     /// Build the proxied request URL for one OData query string.
     func requestURL(query: String, pageSize overridePageSize: Int? = nil) -> URL? {
+        guard isValid else { return nil }
+        if let overridePageSize, !(1...2_000).contains(overridePageSize) { return nil }
         guard var upstream = URLComponents(string: resultsURL) else { return nil }
         upstream.percentEncodedQuery = query
         guard let upstreamURL = upstream.url?.absoluteString,
@@ -50,12 +65,41 @@ struct FeedConfig: Codable, Sendable, Equatable {
     /// A `@odata.nextLink` is already an absolute upstream URL; it still has to
     /// go back through the proxy to be signed.
     func requestURL(nextLink: String) -> URL? {
+        guard isValid,
+              let nextURL = URL(string: nextLink),
+              nextURL.scheme?.lowercased() == "https",
+              nextURL.host?.lowercased() == "api.competitor.com",
+              nextURL.port == nil || nextURL.port == 443,
+              nextURL.path == "/web/results" else { return nil }
         guard var components = URLComponents(string: proxyURL) else { return nil }
         components.queryItems = [
             URLQueryItem(name: proxyURLParameter, value: nextLink),
             URLQueryItem(name: pageSizeParameter, value: String(pageSize)),
         ]
         return components.url
+    }
+
+    private func isValidEndpoint(_ raw: String, host: String, path: String) -> Bool {
+        guard let components = URLComponents(string: raw),
+              components.scheme?.lowercased() == "https",
+              components.host?.lowercased() == host,
+              components.port == nil || components.port == 443,
+              components.path == path,
+              components.query == nil,
+              components.user == nil,
+              components.password == nil else { return false }
+        return true
+    }
+
+    private func isValidReferer(_ raw: String) -> Bool {
+        guard let components = URLComponents(string: raw),
+              components.scheme?.lowercased() == "https",
+              components.host?.lowercased() == "labs-v2.competitor.com",
+              components.port == nil || components.port == 443,
+              components.user == nil,
+              components.password == nil,
+              components.query == nil else { return false }
+        return components.path.isEmpty || components.path == "/"
     }
 }
 
@@ -78,7 +122,8 @@ actor FeedConfigLoader {
     func config() -> FeedConfig {
         if let current { return current }
         if let data = UserDefaults.standard.data(forKey: Self.cacheKey),
-           let cached = try? JSONDecoder().decode(FeedConfig.self, from: data) {
+           let cached = try? JSONDecoder().decode(FeedConfig.self, from: data),
+           cached.isValid {
             current = cached
             return cached
         }
@@ -97,7 +142,8 @@ actor FeedConfigLoader {
         request.timeoutInterval = 10
         guard let (data, response) = try? await URLSession.shared.data(for: request),
               let http = response as? HTTPURLResponse, 200..<300 ~= http.statusCode,
-              let config = try? JSONDecoder().decode(FeedConfig.self, from: data) else {
+              let config = try? JSONDecoder().decode(FeedConfig.self, from: data),
+              config.isValid else {
             // Stamp the attempt anyway so a persistently unreachable config
             // file doesn't mean a request on every single launch.
             defaults.set(Date.now, forKey: Self.cacheDateKey)

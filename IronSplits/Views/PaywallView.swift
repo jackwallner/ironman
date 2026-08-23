@@ -4,98 +4,53 @@ import SwiftUI
 enum PaywallTrigger: Identifiable, Hashable {
     var id: Self { self }
 
-    /// Reached for a race older than the free window.
-    case fullHistory
-    /// A specific locked year the athlete tapped. Naming the year they were
-    /// curious about converts better than a generic "unlock more" pitch.
-    case lockedYear(Int)
-    case splitLeaderboards
-    case raceResume
-    case fieldPercentiles
-    case raceNotes
-    case pointers
-    case onboarding
+    case raceBookCompare
+    case raceBookExport
     case upgrade
-    case winback
 
     var icon: String {
         switch self {
-        case .fullHistory:       return "clock.arrow.circlepath"
-        case .lockedYear:        return "calendar.badge.clock"
-        case .splitLeaderboards: return "list.number"
-        case .raceResume:        return "doc.text.fill"
-        case .fieldPercentiles:  return "chart.bar.fill"
-        case .raceNotes:         return "note.text"
-        case .pointers:          return "play.rectangle.fill"
-        case .onboarding:        return "crown.fill"
+        case .raceBookCompare:    return "arrow.left.arrow.right"
+        case .raceBookExport:     return "square.and.arrow.up"
         case .upgrade:           return "crown.fill"
-        case .winback:           return "arrow.counterclockwise.circle.fill"
         }
     }
 
     var title: String {
         switch self {
-        case .fullHistory:       return "Unlock Every Race"
-        case .lockedYear(let year): return "Unlock \(year)"
-        case .splitLeaderboards: return "Your Best Splits"
-        case .raceResume:        return "Race Resume"
-        case .fieldPercentiles:  return "How You Ranked"
-        case .raceNotes:         return "Race Notes"
-        case .pointers:          return "Tri Pointers"
-        case .onboarding:        return "Your Whole Racing Career"
-        case .upgrade:           return "Your Whole Racing Career"
-        case .winback:           return "Welcome Back"
+        case .raceBookCompare:    return "Compare your races"
+        case .raceBookExport:     return "Share your Race Book"
+        case .upgrade:           return "Unlock Race Book"
         }
     }
 
     var subtitle: String {
         switch self {
-        case .fullHistory:
-            return "Every race you have ever finished, with full splits, bib numbers and division places, back to your first start."
-        case .lockedYear(let year):
-            return "See your \(year) races with full splits, and put them beside every other season you have raced."
-        case .splitLeaderboards:
-            return "Your races ranked by swim, bike, run and transitions, so you can see the personal best on every leg and how far off you are today."
-        case .raceResume:
-            return "One tap for the sheet every race entry asks for: date, distance, bib, official time and division place, ready to share."
-        case .fieldPercentiles:
-            return "Where each of your splits landed in the field that raced it. A rank means nothing without the size of the field behind it."
-        case .raceNotes:
-            return "Keep the conditions, nutrition and gear that produced each result attached to the result itself."
-        case .pointers:
-            return "The full Tri Pointers library, on every leg of the race."
-        case .onboarding, .upgrade:
-            return "Every race, every split, ranked. Personal bests on all four legs, field percentiles, race notes and a resume you can send."
-        case .winback:
-            return "Your Iron Splits+ access has lapsed. Pick it back up for your full history, split leaderboards and race resume."
+        case .raceBookCompare:
+            return "See exactly where one like-for-like race gained or lost time against another."
+        case .raceBookExport:
+            return "Create a polished race-history PDF or image with splits, podiums, notes and career stats."
+        case .upgrade:
+            return "Compare like-for-like races and create unlimited polished exports with one lifetime purchase."
         }
     }
 
     /// RevenueCat custom-paywall impression id for this entry point.
     var paywallImpressionId: String {
         switch self {
-        case .fullHistory:       return "ironsplits_paywall_full_history"
-        case .lockedYear:        return "ironsplits_paywall_locked_year"
-        case .splitLeaderboards: return "ironsplits_paywall_split_leaderboards"
-        case .raceResume:        return "ironsplits_paywall_race_resume"
-        case .fieldPercentiles:  return "ironsplits_paywall_field_percentiles"
-        case .raceNotes:         return "ironsplits_paywall_race_notes"
-        case .pointers:          return "ironsplits_paywall_pointers"
-        case .onboarding:        return "ironsplits_paywall_onboarding"
+        case .raceBookCompare:    return "ironsplits_paywall_race_book_compare"
+        case .raceBookExport:     return "ironsplits_paywall_race_book_export"
         case .upgrade:           return "ironsplits_paywall_upgrade"
-        case .winback:           return "ironsplits_paywall_winback"
         }
     }
 
-    /// What the subscription actually opens. Keep this in step with the gates
-    /// in `ProGate`. A pitch that sells less than the product does is the
-    /// failure mode this list exists to prevent.
+    /// What the one-time unlock actually opens. The underlying race data is
+    /// intentionally absent because it is free for everyone.
     private static let proFeatures: [(icon: String, title: String)] = [
-        ("clock.arrow.circlepath", "Your full race history, not just the last three"),
-        ("list.number", "Split leaderboards: best swim, bike, run and transitions"),
-        ("chart.bar.fill", "Field percentiles on every leg of every race"),
-        ("doc.text.fill", "Race resume export with bibs, times and division places"),
-        ("note.text", "Race notes: conditions, nutrition and gear per result")
+        ("arrow.left.arrow.right", "Compare like-for-like races leg by leg"),
+        ("chart.xyaxis.line", "Career personal-best and progression timeline"),
+        ("doc.richtext", "Beautiful race-history PDF and image exports"),
+        ("note.text", "Unlimited exports with notes, podiums and splits")
     ]
 
     var features: [(icon: String, title: String)] {
@@ -103,7 +58,7 @@ enum PaywallTrigger: Identifiable, Hashable {
     }
 }
 
-/// Native Iron Splits+ paywall. Purchases flow through `StoreService.purchase`
+/// Native Race Book paywall. Purchases flow through `StoreService.purchase`
 /// → `Purchases.shared.purchase` so RevenueCat records transactions unchanged.
 struct PaywallView: View {
     @EnvironmentObject private var store: StoreService
@@ -151,7 +106,7 @@ struct PaywallView: View {
     // MARK: - States
 
     private var loadingState: some View {
-        VStack(spacing: 14) {
+        VStack(spacing: TriSpace.x3) {
             ProgressView()
                 .tint(TriPalette.sunrise)
             Text("Loading plans…")
@@ -161,7 +116,7 @@ struct PaywallView: View {
     }
 
     private var emptyState: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: TriSpace.x3) {
             Image(systemName: "wifi.exclamationmark")
                 .font(.system(size: 40))
                 .foregroundStyle(TriPalette.inkTertiary)
@@ -172,7 +127,7 @@ struct PaywallView: View {
                 .font(TriType.small)
                 .foregroundStyle(TriPalette.inkTertiary)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
+                .padding(.horizontal, TriSpace.x8)
             Button("Try Again") {
                 Task {
                     await store.fetchProducts()
@@ -189,15 +144,15 @@ struct PaywallView: View {
             VStack(spacing: 0) {
                 heroHeader
 
-                VStack(spacing: 16) {
+                VStack(spacing: TriSpace.x4) {
                     featureList
                     trustRow
                     planCards
                     purchaseSection
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 16)
-                .padding(.bottom, 20)
+                .padding(.horizontal, TriSpace.x5)
+                .padding(.top, TriSpace.x4)
+                .padding(.bottom, TriSpace.x5)
             }
         }
         .ignoresSafeArea(edges: .top)
@@ -217,54 +172,52 @@ struct PaywallView: View {
             PaywallBarBackdrop()
                 .opacity(0.16)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                .padding(.horizontal, 28)
-                .padding(.bottom, 12)
+                .padding(.horizontal, TriSpace.x6)
+                .padding(.bottom, TriSpace.x3)
 
-            VStack(spacing: 10) {
+            VStack(spacing: TriSpace.x3) {
                 ZStack {
                     Circle()
-                        .fill(.white.opacity(0.12))
+                        .fill(TriPalette.inkOnDark.opacity(0.12))
                         .frame(width: 70, height: 70)
                     Image(systemName: trigger.icon)
                         .font(.system(size: 30, weight: .semibold))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(TriPalette.inkOnDark)
                 }
 
-                Text("IRON SPLITS+")
+                Text("RACE BOOK")
                     .font(TriType.micro)
                     .tracking(2.5)
-                    .foregroundStyle(.white.opacity(0.65))
+                    .foregroundStyle(TriPalette.inkOnDark.opacity(0.65))
 
                 Text(trigger.title)
                     .font(TriType.athleteName)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(TriPalette.inkOnDark)
                     .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.9)
+                    .fixedSize(horizontal: false, vertical: true)
 
                 Text(trigger.subtitle)
                     .font(TriType.small)
-                    .foregroundStyle(.white.opacity(0.85))
+                    .foregroundStyle(TriPalette.inkOnDark.opacity(0.85))
                     .multilineTextAlignment(.center)
-                    .lineLimit(3)
-                    .minimumScaleFactor(0.9)
-                    .padding(.horizontal, 22)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, TriSpace.x6)
             }
-            .padding(.top, 64)
-            .padding(.bottom, 22)
+            .padding(.top, TriSpace.x10 + TriSpace.x6)
+            .padding(.bottom, TriSpace.x5)
             .frame(maxWidth: .infinity)
         }
         .fixedSize(horizontal: false, vertical: true)
     }
 
     private var featureList: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: TriSpace.x2) {
             ForEach(trigger.features, id: \.title) { feature in
-                HStack(spacing: 12) {
+                HStack(spacing: TriSpace.x3) {
                     Image(systemName: feature.icon)
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(TriPalette.sunrise)
-                        .frame(width: 26)
+                        .frame(width: TriSpace.x6)
                     Text(feature.title)
                         .font(TriType.body)
                         .foregroundStyle(TriPalette.ink)
@@ -280,8 +233,19 @@ struct PaywallView: View {
     // results, not times anyone typed in. No fabricated ratings or user
     // counts.
     private var trustRow: some View {
-        HStack(spacing: 14) {
-            HStack(spacing: 5) {
+        ViewThatFits(in: .horizontal) {
+            trustHorizontal
+            trustVertical
+        }
+        .font(TriType.smallBold)
+        .tracking(0.2)
+        .foregroundStyle(TriPalette.inkTertiary)
+        .frame(maxWidth: .infinity)
+    }
+
+    private var trustHorizontal: some View {
+        HStack(spacing: TriSpace.x3) {
+            HStack(spacing: TriSpace.x1) {
                 Image(systemName: "bolt.fill")
                     .font(.system(size: 11, weight: .semibold))
                 Text("Official race results")
@@ -289,28 +253,32 @@ struct PaywallView: View {
                     .tracking(0.2)
             }
             Text("·")
-                .font(TriType.smallBold)
-            HStack(spacing: 5) {
+            HStack(spacing: TriSpace.x1) {
                 Image(systemName: "checkmark.shield.fill")
                     .font(.system(size: 11, weight: .semibold))
-                Text("Cancel anytime")
+                    Text("No subscription")
                     .font(TriType.smallBold)
                     .tracking(0.2)
             }
         }
-        .foregroundStyle(TriPalette.inkTertiary)
-        .frame(maxWidth: .infinity)
+    }
+
+    private var trustVertical: some View {
+        VStack(spacing: TriSpace.x1) {
+            Text("Official race results")
+            Text("No subscription")
+        }
     }
 
     private var planCards: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: TriSpace.x2) {
             ForEach(store.planOptions) { option in
                 PaywallPlanCard(
                     option: option,
                     isSelected: selectedPlan?.id == option.id,
-                    isMostPopular: option.kind == .yearly,
-                    savingsPercent: savingsPercent(for: option),
-                    monthlyAnchorLabel: option.kind == .yearly ? store.monthlyAnchorPriceLabel : nil
+                    isMostPopular: false,
+                    savingsPercent: nil,
+                    monthlyAnchorLabel: nil
                 ) {
                     selectedPlan = option
                 }
@@ -318,45 +286,24 @@ struct PaywallView: View {
         }
     }
 
-    /// Yearly savings against 12x the monthly plan, computed from whichever
-    /// source the options came from so the badge survives a simulator render.
-    private func savingsPercent(for option: PlanOption) -> Int? {
-        guard option.kind == .yearly else { return nil }
-        if let package = store.package(for: option) {
-            return store.yearlySavingsPercent(yearly: package)
-        }
-        guard let monthly = store.planOptions.first(where: { $0.kind == .monthly }),
-              let yearlyPerMonth = Self.amount(from: option.perMonthLabel),
-              let monthlyPrice = Self.amount(from: monthly.priceLabel),
-              monthlyPrice > 0, yearlyPerMonth < monthlyPrice else { return nil }
-        let percent = Int((((monthlyPrice - yearlyPerMonth) / monthlyPrice) * 100).rounded())
-        return percent > 0 ? percent : nil
-    }
-
-    private static func amount(from label: String?) -> Double? {
-        guard let label else { return nil }
-        let digits = label.filter { $0.isNumber || $0 == "." }
-        return Double(digits)
-    }
-
     private var purchaseSection: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: TriSpace.x3) {
             Button(action: startPurchase) {
                 ZStack {
                     Text(ctaTitle)
                         .font(TriType.bodyBold)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(TriPalette.inkOnDark)
                         .opacity(isPurchasing ? 0 : 1)
                     if isPurchasing {
-                        ProgressView().tint(.white)
+                        ProgressView().tint(TriPalette.inkOnDark)
                     }
                 }
                 .frame(maxWidth: .infinity)
-                .frame(height: 50)
+                .frame(height: TriGeo.tapTarget + TriSpace.x1)
                 .background(TriPalette.sunrise)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .clipShape(RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous))
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.triPressSilent)
             .disabled(isPurchasing || selectedPlan?.isPurchasable != true)
 
             if let disclosure = disclosureText {
@@ -386,10 +333,10 @@ struct PaywallView: View {
                     .font(TriType.smallBold)
                     .foregroundStyle(TriPalette.inkSecondary)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.triPressSilent)
             .disabled(isRestoring || isPurchasing)
 
-            HStack(spacing: 12) {
+            HStack(spacing: TriSpace.x3) {
                 Link("Terms", destination: IronSplitsLegal.termsURL)
                 Link("Privacy", destination: IronSplitsLegal.privacyURL)
             }
@@ -406,10 +353,10 @@ struct PaywallView: View {
                 Button { dismissOnce() } label: {
                     Image(systemName: "xmark.circle.fill")
                         .font(.system(size: 28))
-                        .foregroundStyle(.white, .black.opacity(0.28))
-                        .padding(16)
+                        .foregroundStyle(TriPalette.inkOnDark, TriPalette.ink.opacity(0.28))
+                        .frame(width: TriGeo.tapTarget, height: TriGeo.tapTarget)
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(.triPressSilent)
                 .accessibilityLabel("Close")
             }
             Spacer()
@@ -425,9 +372,8 @@ struct PaywallView: View {
         // behind this card, and the button says so rather than failing on tap.
         if !plan.isPurchasable { return "Preview only" }
         #endif
-        if plan.kind == .lifetime { return "Unlock Lifetime" }
-        if plan.introOfferLabel != nil { return "Start Free Trial" }
-        return "Subscribe"
+        if plan.kind == .lifetime { return "Unlock Race Book" }
+        return "Continue"
     }
 
     /// Apple 3.1.2 disclosure adjacent to the purchase button.
@@ -437,11 +383,7 @@ struct PaywallView: View {
         if plan.kind == .lifetime {
             return "\(price). One-time purchase. Lifetime access, no subscription."
         }
-        let renew = "Auto-renews unless cancelled at least 24 hours before the end of the current period. Manage or cancel in Settings › Apple ID › Subscriptions."
-        if let trial = plan.introOfferLabel {
-            return "\(trial.capitalized), then \(price). \(renew)"
-        }
-        return "\(price). \(renew)"
+        return "\(price). One-time purchase. Lifetime access to Race Book. No subscription."
     }
 
     // MARK: - Actions
@@ -450,18 +392,16 @@ struct PaywallView: View {
         #if DEBUG
         if let mode = PaywallScreenshotMode.current, !store.planOptions.isEmpty {
             switch mode {
-            case .monthly:
-                selectedPlan = store.planOptions.first { $0.kind == .monthly }
             case .lifetime:
                 selectedPlan = store.planOptions.first { $0.kind == .lifetime }
-            case .yearly, .trial:
-                selectedPlan = store.planOptions.first { $0.kind == .yearly }
+            case .monthly, .yearly, .trial:
+                selectedPlan = store.planOptions.first { $0.kind == .lifetime }
             }
             return
         }
         #endif
         guard selectedPlan == nil, !store.planOptions.isEmpty else { return }
-        selectedPlan = store.planOptions.first { $0.kind == .yearly } ?? store.planOptions.first
+        selectedPlan = store.planOptions.first { $0.kind == .lifetime } ?? store.planOptions.first
     }
 
     private func startPurchase() {
@@ -478,7 +418,7 @@ struct PaywallView: View {
                 case .pending:
                     // Ask-to-Buy / deferred payment: nothing is unlocked yet and
                     // no error occurred, tell the user instead of going silent.
-                    restoreMessage = "Purchase pending approval. Iron Splits+ unlocks automatically once it's approved."
+                    restoreMessage = "Purchase pending approval. Race Book unlocks automatically once it's approved."
                 case .cancelled:
                     errorMessage = "Purchase cancelled. Tap again to continue."
                 }
@@ -496,7 +436,7 @@ struct PaywallView: View {
             defer { isRestoring = false }
             await store.restorePurchases()
             if !store.isPro {
-                restoreMessage = store.lastError ?? "No active Iron Splits+ purchase was found for this Apple ID."
+                restoreMessage = store.lastError ?? "No Race Book purchase was found for this Apple ID."
             }
         }
     }
@@ -514,11 +454,11 @@ private struct PaywallBarBackdrop: View {
     private let percentiles: [Int] = [94, 81, 67, 52, 38, 88, 73, 60, 45, 83, 70]
 
     var body: some View {
-        HStack(alignment: .bottom, spacing: 7) {
+        HStack(alignment: .bottom, spacing: TriSpace.x2) {
             ForEach(Array(percentiles.enumerated()), id: \.offset) { _, pct in
-                RoundedRectangle(cornerRadius: 3)
-                    .fill(Color.white)
-                    .frame(width: 13, height: CGFloat(pct) * 1.05)
+                RoundedRectangle(cornerRadius: TriGeo.radiusInner, style: .continuous)
+                    .fill(TriPalette.inkOnDark)
+                    .frame(width: TriSpace.x3, height: CGFloat(pct) * 1.05)
             }
         }
         .frame(maxHeight: .infinity, alignment: .bottom)
@@ -537,79 +477,129 @@ private struct PaywallPlanCard: View {
 
     var body: some View {
         Button(action: onTap) {
-            HStack(spacing: 12) {
-                ZStack {
-                    Circle()
-                        .stroke(isSelected ? TriPalette.sunrise : TriPalette.hairline, lineWidth: 2)
-                        .frame(width: 22, height: 22)
-                    if isSelected {
-                        Circle()
-                            .fill(TriPalette.sunrise)
-                            .frame(width: 12, height: 12)
-                    }
-                }
-
-                VStack(alignment: .leading, spacing: 3) {
-                    HStack(spacing: 6) {
-                        Text(option.displayName)
-                            .font(TriType.bodyBold)
-                            .foregroundStyle(TriPalette.ink)
-                        if let savingsPercent {
-                            Text("SAVE \(savingsPercent)%")
-                                .font(TriType.micro)
-                                .tracking(0.4)
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(TriPalette.sunrise, in: Capsule())
-                        }
-                    }
-                    if let trial = option.introOfferLabel {
-                        Text(trial.capitalized)
-                            .font(TriType.micro)
-                            .tracking(0.3)
-                            .foregroundStyle(TriPalette.sunrise)
-                    } else if isMostPopular {
-                        Text("Best value")
-                            .font(TriType.micro)
-                            .tracking(0.3)
-                            .foregroundStyle(TriPalette.sunrise)
-                    }
-                }
-
-                Spacer(minLength: 8)
-
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text(option.priceLabel)
-                        .font(TriType.smallBold)
-                        .foregroundStyle(TriPalette.inkSecondary)
-                    if let perMonthLabel = option.perMonthLabel {
-                        HStack(spacing: 5) {
-                            if let monthlyAnchorLabel, savingsPercent != nil {
-                                Text(monthlyAnchorLabel)
-                                    .font(TriType.micro)
-                                    .foregroundStyle(TriPalette.inkTertiary)
-                                    .strikethrough(true, color: TriPalette.inkTertiary)
-                            }
-                            Text("\(perMonthLabel)/mo")
-                                .font(TriType.micro)
-                                .tracking(0.2)
-                                .foregroundStyle(TriPalette.ink)
-                        }
-                    }
-                }
+            ViewThatFits(in: .horizontal) {
+                horizontalLayout
+                verticalLayout
             }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 12)
+            .padding(.horizontal, TriSpace.x3)
+            .padding(.vertical, TriSpace.x3)
             .background(TriPalette.surface)
-            .clipShape(RoundedRectangle(cornerRadius: TriGeo.radiusCard))
+            .clipShape(RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous))
             .overlay {
-                RoundedRectangle(cornerRadius: TriGeo.radiusCard)
+                RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous)
                     .stroke(isSelected ? TriPalette.sunrise : TriPalette.hairline, lineWidth: isSelected ? 2 : 0.5)
             }
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.triPressSilent)
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(isSelected ? [.isSelected, .isButton] : .isButton)
+    }
+
+    private var horizontalLayout: some View {
+        HStack(alignment: .top, spacing: TriSpace.x3) {
+            selectionIndicator
+            planInfo
+            Spacer(minLength: TriSpace.x2)
+            priceInfo
+        }
+    }
+
+    private var verticalLayout: some View {
+        VStack(alignment: .leading, spacing: TriSpace.x2) {
+            HStack(alignment: .top, spacing: TriSpace.x3) {
+                selectionIndicator
+                planInfo
+            }
+            priceInfo
+                .padding(.leading, TriSpace.x8 + TriSpace.x3)
+        }
+    }
+
+    private var selectionIndicator: some View {
+        ZStack {
+            Circle()
+                .stroke(isSelected ? TriPalette.sunrise : TriPalette.hairline, lineWidth: 2)
+                .frame(width: 22, height: 22)
+            if isSelected {
+                Circle()
+                    .fill(TriPalette.sunrise)
+                    .frame(width: 12, height: 12)
+            }
+        }
+        .accessibilityHidden(true)
+    }
+
+    private var planInfo: some View {
+        VStack(alignment: .leading, spacing: TriSpace.x1) {
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: TriSpace.x1) {
+                    planTitle
+                    savingsBadge
+                }
+                VStack(alignment: .leading, spacing: TriSpace.x1) {
+                    planTitle
+                    savingsBadge
+                }
+            }
+            if let trial = option.introOfferLabel {
+                Text(trial.capitalized)
+                    .font(TriType.micro)
+                    .tracking(0.3)
+                    .foregroundStyle(TriPalette.sunrise)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else if isMostPopular {
+                Text("Best value")
+                    .font(TriType.micro)
+                    .tracking(0.3)
+                    .foregroundStyle(TriPalette.sunrise)
+            }
+        }
+        .layoutPriority(1)
+    }
+
+    private var planTitle: some View {
+        Text(option.displayName)
+            .font(TriType.bodyBold)
+            .foregroundStyle(TriPalette.ink)
+            .fixedSize(horizontal: false, vertical: true)
+    }
+
+    @ViewBuilder
+    private var savingsBadge: some View {
+        if let savingsPercent {
+            Text("SAVE \(savingsPercent)%")
+                .font(TriType.micro)
+                .tracking(0.4)
+                .foregroundStyle(TriPalette.inkOnDark)
+                .padding(.horizontal, TriSpace.x2)
+                .padding(.vertical, TriSpace.x1)
+                .background(TriPalette.sunrise, in: Capsule())
+        }
+    }
+
+    private var priceInfo: some View {
+        VStack(alignment: .trailing, spacing: TriSpace.x1) {
+            Text(option.priceLabel)
+                .font(TriType.smallBold)
+                .foregroundStyle(TriPalette.inkSecondary)
+                .fixedSize(horizontal: true, vertical: false)
+            if let perMonthLabel = option.perMonthLabel {
+                HStack(spacing: TriSpace.x1) {
+                    if let monthlyAnchorLabel, savingsPercent != nil {
+                        Text(monthlyAnchorLabel)
+                            .font(TriType.micro)
+                            .foregroundStyle(TriPalette.inkTertiary)
+                            .strikethrough(true, color: TriPalette.inkTertiary)
+                            .fixedSize(horizontal: true, vertical: false)
+                    }
+                    Text("\(perMonthLabel)/mo")
+                        .font(TriType.micro)
+                        .tracking(0.2)
+                        .foregroundStyle(TriPalette.ink)
+                        .fixedSize(horizontal: true, vertical: false)
+                }
+            }
+        }
+        .fixedSize(horizontal: true, vertical: true)
     }
 }

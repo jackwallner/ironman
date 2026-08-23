@@ -62,6 +62,37 @@ struct AskPattieGuide: Codable, Sendable, Equatable {
     func goal(_ id: String) -> Goal? { goals.first { $0.id == id } }
     func topic(_ id: String) -> Topic? { topics.first { $0.id == id } }
 
+    /// Validate every path a user can take before accepting hosted content.
+    /// Nonempty goals and answers are not enough: a typo in one topic id can
+    /// still turn a visible goal into a dead end.
+    var isValid: Bool {
+        guard version > 0, !goals.isEmpty, !topics.isEmpty, !answers.isEmpty else { return false }
+
+        let goalIDs = Set(goals.map(\.id))
+        let topicIDs = Set(topics.map(\.id))
+        guard goalIDs.count == goals.count, topicIDs.count == topics.count else { return false }
+
+        for goal in goals {
+            guard !goal.topics.isEmpty,
+                  goal.topics.allSatisfy({ topicIDs.contains($0) }),
+                  goal.topics.allSatisfy({ answers(for: goal.id, topic: $0).isEmpty == false }) else {
+                return false
+            }
+        }
+
+        for answer in answers {
+            guard topicIDs.contains(answer.topic),
+                  !answer.goals.isEmpty,
+                  answer.goals.allSatisfy({ goalIDs.contains($0) }),
+                  !answer.headline.isEmpty,
+                  !answer.situation.isEmpty,
+                  !answer.solution.isEmpty else {
+                return false
+            }
+        }
+        return true
+    }
+
     /// Topics offered for a goal, in the tree's order, with any that have no
     /// answers dropped. The generator guarantees there are none, but a
     /// hot-loaded tree is a file on the internet and this screen should degrade
@@ -102,13 +133,15 @@ actor AskPattieLibrary {
     func guide() -> AskPattieGuide {
         if let current { return current }
         if let data = UserDefaults.standard.data(forKey: Self.cacheKey),
-           let cached = try? JSONDecoder().decode(AskPattieGuide.self, from: data) {
+           let cached = try? JSONDecoder().decode(AskPattieGuide.self, from: data),
+           cached.isValid {
             current = cached
             return cached
         }
         if let url = Bundle.main.url(forResource: "ask-pattie", withExtension: "json"),
            let data = try? Data(contentsOf: url),
-           let bundled = try? JSONDecoder().decode(AskPattieGuide.self, from: data) {
+           let bundled = try? JSONDecoder().decode(AskPattieGuide.self, from: data),
+           bundled.isValid {
             current = bundled
             return bundled
         }
@@ -127,9 +160,9 @@ actor AskPattieLibrary {
         guard let (data, response) = try? await URLSession.shared.data(for: request),
               let http = response as? HTTPURLResponse, 200..<300 ~= http.statusCode,
               let fetched = try? JSONDecoder().decode(AskPattieGuide.self, from: data),
+              fetched.isValid,
               // Never let a truncated or reordered publish replace a good tree
-              // with an empty screen.
-              !fetched.goals.isEmpty, !fetched.answers.isEmpty,
+              // with a broken path or an empty screen.
               fetched.version >= guide().version else {
             defaults.set(Date.now, forKey: Self.cacheDateKey)
             return guide()

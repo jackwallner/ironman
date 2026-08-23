@@ -1,7 +1,7 @@
 import Foundation
 import StoreKit
 
-/// App Store review deep links for IM Iron Splits.
+/// App Store review deep links for IM Tri Tracker.
 enum AppStoreReviewLinks {
     static let appStoreID = "6803727074"
 

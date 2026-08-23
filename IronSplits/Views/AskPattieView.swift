@@ -73,7 +73,6 @@ struct AskPattieGoalList: View {
                     }
                 }
                 .padding(TriGeo.padPage)
-                .padding(.bottom, TriGeo.tabBarClearance)
             }
         }
     }
@@ -107,7 +106,6 @@ struct AskPattieTopicList: View {
                     }
                 }
                 .padding(TriGeo.padPage)
-                .padding(.bottom, TriGeo.tabBarClearance)
             }
         }
         .navigationTitle(goal?.title ?? "Ask Pattie")
@@ -140,7 +138,6 @@ struct AskPattieAnswerList: View {
                     }
                 }
                 .padding(TriGeo.padPage)
-                .padding(.bottom, TriGeo.tabBarClearance)
             }
         }
         .navigationTitle(model.guide.topic(topicID)?.title ?? "Pointers")
@@ -237,7 +234,7 @@ struct AskPattieAnswerCard: View {
                     Label(isSpeaking ? "Stop" : "Hear it from Pattie",
                           systemImage: isSpeaking ? "stop.fill" : "play.fill")
                         .font(TriType.smallBold)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(TriPalette.inkOnDark)
                         .padding(.horizontal, TriSpace.x4)
                         .frame(minHeight: TriGeo.tapTarget)
                         .background(TriPalette.sunrise, in: Capsule())

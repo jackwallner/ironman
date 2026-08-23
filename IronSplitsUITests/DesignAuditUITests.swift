@@ -35,10 +35,14 @@ final class DesignAuditUITests: XCTestCase {
         case "dark":
             app.launchArguments += ["-AuditDark"]
         case "light":
-            app.launchArguments += ["-AuditLight"]
+            // The simulator is set to light before this run. Do not force the
+            // app's scheme here, because the audit later selects Dark in
+            // Settings and must prove that the live preference takes effect.
+            break
         default:
             break
         }
+        app.launchEnvironment["FORCE_PRO"] = "1"
         app.launch()
 
         // Onboarding first: the highest-leverage screen in the app and the only
@@ -80,35 +84,96 @@ final class DesignAuditUITests: XCTestCase {
         shoot(app, "04-race-detail")
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
-        for (tab, name) in [("Bests", "05-bests"), ("Pattie", "06-ask-pattie"),
-                            ("Resume", "07-resume"), ("Settings", "08-settings")] {
+        for (tab, name) in [("Bests", "05-bests"), ("Pattie", "06-ask-pattie")] {
             app.tabBars.buttons[tab].tap()
             settle()
             shoot(app, name)
         }
 
+        app.tabBars.buttons["Resume"].tap()
+        XCTAssertTrue(app.navigationBars["Resume"].waitForExistence(timeout: 10))
+        settle()
+        shoot(app, "07-resume")
+
+        let openRaceBook = app.buttons["Open Race Book"]
+        XCTAssertTrue(openRaceBook.waitForExistence(timeout: 10))
+        openRaceBook.tap()
+        XCTAssertTrue(app.navigationBars["Race Book"].waitForExistence(timeout: 10))
+        settle()
+        shoot(app, "08-race-book")
+
+        let compareButton = app.buttons["Compare two races"]
+        for _ in 0..<6 where !compareButton.isHittable {
+            app.swipeUp()
+        }
+        XCTAssertTrue(compareButton.waitForExistence(timeout: 10))
+        compareButton.tap()
+        XCTAssertTrue(app.navigationBars["Compare races"].waitForExistence(timeout: 10))
+        settle()
+        shoot(app, "09-race-compare")
+        app.navigationBars["Compare races"].buttons.element(boundBy: 0).tap()
+        XCTAssertTrue(app.navigationBars["Race Book"].waitForExistence(timeout: 10))
+        app.buttons["Done"].tap()
+
+        app.tabBars.buttons["Settings"].tap()
+        XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["System"].waitForExistence(timeout: 10),
+                      "Settings must expose the appearance picker")
+        XCTAssertTrue(app.buttons["Light"].exists)
+        XCTAssertTrue(app.buttons["Dark"].exists)
+        app.buttons["Dark"].tap()
+        settle()
+        shoot(app, "10-settings-dark-toggle")
+        app.buttons["System"].tap()
+        settle()
+        shoot(app, "10-settings")
+
         // The episode library, and one level into Ask Pattie, which are the two
         // screens the tab switch does not reach on its own.
         app.tabBars.buttons["Pattie"].tap()
-        if app.buttons["All episodes"].waitForExistence(timeout: 10) {
-            app.buttons["All episodes"].tap()
-            _ = app.staticTexts["Mud In Shoes"].waitForExistence(timeout: 25)
-            settle()
-            shoot(app, "09-episode-library")
-            app.buttons["Ask Pattie"].tap()
-        }
-        if app.staticTexts["A 70.3"].waitForExistence(timeout: 10) {
-            app.staticTexts["A 70.3"].tap()
-            _ = app.staticTexts["WHAT DO YOU NEED HELP WITH?"].waitForExistence(timeout: 10)
-            settle()
-            shoot(app, "10-ask-topics")
-            if app.staticTexts["Transitions"].waitForExistence(timeout: 5) {
-                app.staticTexts["Transitions"].tap()
-                _ = app.staticTexts["HERE'S THE SITUATION"].waitForExistence(timeout: 10)
-                settle()
-                shoot(app, "11-ask-answers")
-            }
-        }
+        XCTAssertTrue(app.buttons["All episodes"].waitForExistence(timeout: 10),
+                      "The Pattie tab must expose the episode library switch")
+        app.buttons["All episodes"].tap()
+        XCTAssertTrue(app.staticTexts["Mud In Shoes"].waitForExistence(timeout: 25),
+                      "The episode catalog must load for the visual audit")
+        settle()
+        shoot(app, "11-episode-library")
+        XCTAssertTrue(app.buttons["Ask Pattie"].waitForExistence(timeout: 10),
+                      "The Pattie tab must switch back to Ask Pattie")
+        app.buttons["Ask Pattie"].tap()
+
+        XCTAssertTrue(app.staticTexts["A 70.3"].waitForExistence(timeout: 10),
+                      "The Ask Pattie goal list must render")
+        app.staticTexts["A 70.3"].tap()
+        XCTAssertTrue(app.staticTexts["WHAT DO YOU NEED HELP WITH?"].waitForExistence(timeout: 10),
+                      "The Ask Pattie topic list must render")
+        settle()
+        shoot(app, "12-ask-topics")
+        XCTAssertTrue(app.staticTexts["Transitions"].waitForExistence(timeout: 5),
+                      "The transitions topic must render")
+        app.staticTexts["Transitions"].tap()
+        XCTAssertTrue(app.staticTexts["HERE'S THE SITUATION"].waitForExistence(timeout: 10),
+                      "The Ask Pattie answer list must render")
+        settle()
+        shoot(app, "13-ask-answers")
+    }
+
+    func testAccessibilityTextSizeOnOnboarding() throws {
+        let app = XCUIApplication()
+        app.launchArguments += [
+            "-UITest", "-ResetLocker", "-AuditLight",
+            "-UIPreferredContentSizeCategoryName",
+            "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        app.launch()
+
+        XCTAssertTrue(app.staticTexts["Type your name"].waitForExistence(timeout: 20),
+                      "The onboarding title must not clip at accessibility sizes")
+        XCTAssertTrue(app.textFields["Your name as you registered"].exists)
+        let attachment = XCTAttachment(screenshot: app.screenshot())
+        attachment.name = "accessibility-onboarding"
+        attachment.lifetime = .keepAlways
+        add(attachment)
     }
 
     private func settle() {

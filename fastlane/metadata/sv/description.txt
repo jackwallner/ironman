@@ -1,6 +1,6 @@
 Alla lopp du har genomfört, på ett ställe och sorterade så att du kan förstå prestationen.
 
-Skriv ditt namn en gång. IM Iron Splits hittar publicerade resultat och visar tider för simning, växlingar, cykling och löpning, nummer och placeringar.
+Skriv ditt namn en gång. IM Tri Tracker hittar publicerade resultat och visar tider för simning, växlingar, cykling och löpning, nummer och placeringar.
 
 Se personliga rekord, jämför lopp av samma typ och förstå var varje tid hamnar i fältet. Race Book låser upp jämförelser och export till PDF eller bild med ett engångsköp för livet, utan abonnemang eller avgift per export.
 
@@ -9,4 +9,4 @@ Kärnan är gratis: sökning, full historik, mellantider, placeringar, antecknin
 Integritet: https://jackwallner.github.io/ironman/privacy-policy.html
 Villkor: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Iron Splits är oberoende och inte kopplad till tävlingsarrangörer eller tidtagningsföretag.
+IM Tri Tracker är oberoende och inte kopplad till tävlingsarrangörer eller tidtagningsföretag.

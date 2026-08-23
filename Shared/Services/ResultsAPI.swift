@@ -17,6 +17,7 @@ enum ResultsAPIError: LocalizedError {
     case badConfiguration
     case badResponse(Int)
     case upstreamRejected(String)
+    case pageLimitReached
 
     var errorDescription: String? {
         switch self {
@@ -26,6 +27,8 @@ enum ResultsAPIError: LocalizedError {
             return "The results service returned an error (\(code))."
         case .upstreamRejected(let message):
             return message
+        case .pageLimitReached:
+            return "The results feed returned more pages than expected. Some races may be missing, so refresh and try again."
         }
     }
 }
@@ -79,7 +82,8 @@ struct ResultsAPI: ResultsProviding {
                                    orderBy: nil,
                                    pageLimit: 2,
                                    pageSize: 250,
-                                   timeout: depth == .prefix ? 20 : 60)
+                                   timeout: depth == .prefix ? 20 : 60,
+                                   allowTruncation: true)
         return Self.collapseToAthletes(rows)
     }
 
@@ -100,14 +104,14 @@ struct ResultsAPI: ResultsProviding {
         let clause = ids.map { "wtc_ContactId/contactid eq \($0)" }.joined(separator: " or ")
         let rows = try await fetch(filter: ids.count == 1 ? clause : "(\(clause))",
                                    orderBy: "wtc_EventId/wtc_eventdate desc")
-        return rows.map(\.result).sortedByDateDescending()
+        return Self.deduplicatedRows(rows).map(\.result).sortedByDateDescending()
     }
 
     func results(forEventID eventID: String) async throws -> [RaceResult] {
         guard Self.isGUID(eventID) else { throw ResultsAPIError.badConfiguration }
         let rows = try await fetch(filter: "_wtc_eventid_value eq \(eventID) and wtc_AgeGroupId/wtc_agegroupname ne 'ODIV'",
                                    orderBy: "wtc_finishrankoverall")
-        return rows.map(\.result)
+        return Self.deduplicatedRows(rows).map(\.result)
     }
 
     // MARK: - Transport
@@ -117,7 +121,8 @@ struct ResultsAPI: ResultsProviding {
                        orderBy: String?,
                        pageLimit: Int? = nil,
                        pageSize: Int? = nil,
-                       timeout: TimeInterval = 25) async throws -> [ODataResultRow] {
+                       timeout: TimeInterval = 25,
+                       allowTruncation: Bool = false) async throws -> [ODataResultRow] {
         let config = await FeedConfigLoader.shared.config()
         var query = "$filter=" + Self.encodeODataValue(filter)
         query += "&$expand=" + Self.encodeODataValue(Self.expandClause)
@@ -130,10 +135,17 @@ struct ResultsAPI: ResultsProviding {
 
         var rows: [ODataResultRow] = []
         let limit = min(pageLimit ?? config.maxPages, config.maxPages)
-        for _ in 0..<max(limit, 1) {
+        for pageIndex in 0..<max(limit, 1) {
             let page = try await load(url: url, config: config, timeout: timeout)
             rows.append(contentsOf: page.value)
-            guard let next = page.nextLink, let nextURL = config.requestURL(nextLink: next) else { break }
+            guard let next = page.nextLink else { break }
+            if pageIndex == max(limit, 1) - 1 {
+                if !allowTruncation { throw ResultsAPIError.pageLimitReached }
+                break
+            }
+            guard let nextURL = config.requestURL(nextLink: next) else {
+                throw ResultsAPIError.badConfiguration
+            }
             url = nextURL
             try Task.checkCancellation()
         }
@@ -228,12 +240,13 @@ struct ResultsAPI: ResultsProviding {
     /// Group result rows into the people who produced them.
     ///
     /// Grouping is on person, not on contact id: see `Athlete.contactIDs` for
-    /// why one person routinely owns two. Rows merge when the name, the
-    /// gender and the home city all match after normalisation, which is what
-    /// reunites "Lincoln, CALIFORNIA" with "Lincoln, CA". A row whose contact
-    /// carries no city keeps its own id as the key, so a missing city never
-    /// collapses strangers together.
+    /// why one person routinely owns two. Rows merge when the name, gender,
+    /// city and available region all match after normalisation, which reunites
+    /// "Lincoln, CALIFORNIA" with "Lincoln, CA" while keeping same-name
+    /// athletes in different states apart. A row whose contact carries no city
+    /// keeps its own id as the key, so a missing city never collapses strangers.
     static func collapseToAthletes(_ rows: [ODataResultRow]) -> [Athlete] {
+        let rows = deduplicatedRows(rows)
         var byKey: [String: Athlete] = [:]
         var latestYear: [String: Int] = [:]
         var order: [String] = []
@@ -282,6 +295,14 @@ struct ResultsAPI: ResultsProviding {
         }
     }
 
+    /// The proxy can repeat a row across page boundaries, especially while its
+    /// cache is warming. Keep the first copy so counts, leaderboards and field
+    /// sizes describe races rather than transport artefacts.
+    static func deduplicatedRows(_ rows: [ODataResultRow]) -> [ODataResultRow] {
+        var seen = Set<String>()
+        return rows.filter { seen.insert($0.result.id).inserted }
+    }
+
     /// The key two contact records have to share to be treated as one person.
     static func identityKey(for contact: ODataResultRow.Contact, fallback id: String) -> String {
         let city = normalizeForMatching(contact.address1_city)
@@ -293,7 +314,9 @@ struct ResultsAPI: ResultsProviding {
             : first + " " + last
         guard !name.trimmingCharacters(in: .whitespaces).isEmpty else { return "id:" + id }
         let gender = normalizeForMatching(contact.gendercode_formatted)
-        return [name, gender, city].joined(separator: "|")
+        let region = normalizeRegion(contact.address1_stateorprovince)
+        let country = normalizeCountry(contact.address1_country)
+        return [name, gender, city, region, country].joined(separator: "|")
     }
 
     /// Case, accents, punctuation and stray whitespace all vary between two
@@ -305,6 +328,33 @@ struct ResultsAPI: ResultsProviding {
             CharacterSet.alphanumerics.contains(scalar) ? Character(scalar) : " "
         }
         return String(cleaned).split(separator: " ").joined(separator: " ")
+    }
+
+    private static func normalizeRegion(_ value: String?) -> String {
+        let normalized = normalizeForMatching(value)
+        let names: [String: String] = [
+            "alabama": "al", "alaska": "ak", "arizona": "az", "arkansas": "ar",
+            "california": "ca", "colorado": "co", "connecticut": "ct", "delaware": "de",
+            "florida": "fl", "georgia": "ga", "hawaii": "hi", "idaho": "id",
+            "illinois": "il", "indiana": "in", "iowa": "ia", "kansas": "ks",
+            "kentucky": "ky", "louisiana": "la", "maine": "me", "maryland": "md",
+            "massachusetts": "ma", "michigan": "mi", "minnesota": "mn", "mississippi": "ms",
+            "missouri": "mo", "montana": "mt", "nebraska": "ne", "nevada": "nv",
+            "new hampshire": "nh", "new jersey": "nj", "new mexico": "nm", "new york": "ny",
+            "north carolina": "nc", "north dakota": "nd", "ohio": "oh", "oklahoma": "ok",
+            "oregon": "or", "pennsylvania": "pa", "rhode island": "ri", "south carolina": "sc",
+            "south dakota": "sd", "tennessee": "tn", "texas": "tx", "utah": "ut",
+            "vermont": "vt", "virginia": "va", "washington": "wa", "west virginia": "wv",
+            "wisconsin": "wi", "wyoming": "wy"
+        ]
+        return names[normalized] ?? normalized
+    }
+
+    private static func normalizeCountry(_ value: String?) -> String {
+        switch normalizeForMatching(value) {
+        case "us", "usa", "united states", "united states of america": return "us"
+        case let normalized: return normalized
+        }
     }
 }
 

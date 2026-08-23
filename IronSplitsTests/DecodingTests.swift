@@ -78,6 +78,37 @@ final class DecodingTests: XCTestCase {
         XCTAssertEqual(page.value[0].result.swim, 3498)
     }
 
+    func testBooleanColumnsAcceptStringsAndNumbers() throws {
+        let json = """
+        { "value": [
+          { "wtc_resultid": "a", "wtc_finisher": "true", "wtc_dnf": 1 },
+          { "wtc_resultid": "b", "wtc_finisher": "false", "wtc_dns": 0, "wtc_dq": "yes" }
+        ] }
+        """.data(using: .utf8)!
+
+        let rows = try JSONDecoder().decode(ODataPage.self, from: json).value
+        XCTAssertTrue(rows[0].result.isFinisher)
+        XCTAssertTrue(rows[0].result.didNotFinish)
+        XCTAssertFalse(rows[1].result.isFinisher)
+        XCTAssertTrue(rows[1].result.disqualified)
+    }
+
+    func testMissingResultIDIsStableAcrossDecodes() {
+        let json = """
+        {
+          "_wtc_eventid_value": "3bd630ca-4c2a-4775-87bd-b0d2c2764c53",
+          "wtc_ContactId": { "contactid": "a508fd19-3e5e-45d2-9a18-47215c7bcb40", "fullname": "Daniel Winek" },
+          "wtc_EventId": { "wtc_eventdate": "2025-09-07T00:00:00Z" },
+          "wtc_finishtime": 31487
+        }
+        """
+
+        let first = ODataResultRow.decode(json).result.id
+        let second = ODataResultRow.decode(json).result.id
+        XCTAssertEqual(first, second)
+        XCTAssertNotNil(UUID(uuidString: first))
+    }
+
     func testProxyErrorEnvelopeIsRecognised() throws {
         let json = #"{"error":"Invalid results URL"}"#.data(using: .utf8)!
         let envelope = try JSONDecoder().decode(ODataErrorEnvelope.self, from: json)

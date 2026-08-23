@@ -156,6 +156,25 @@ final class PattieModeUITests: XCTestCase {
         XCTAssertFalse(app.images["lock.fill"].exists)
     }
 
+    /// Switching from the episode library back to Ask Pattie must replace the
+    /// root content immediately, rather than leaving the library visible.
+    func testEpisodeLibraryCanSwitchBackToAskPattie() throws {
+        let app = launch(pattieMode: false)
+
+        XCTAssertTrue(claimPattie(in: app), "The Pattie tab needs a claimed athlete")
+        app.tabBars.buttons["Pattie"].tap()
+        XCTAssertTrue(app.buttons["All episodes"].waitForExistence(timeout: 15))
+        app.buttons["All episodes"].tap()
+        XCTAssertTrue(app.staticTexts["Mud In Shoes"].waitForExistence(timeout: 20))
+
+        let askButton = app.buttons["Ask Pattie"]
+        XCTAssertTrue(askButton.waitForExistence(timeout: 10))
+        XCTAssertTrue(askButton.isHittable)
+        askButton.tap()
+        XCTAssertTrue(app.staticTexts["WHAT ARE YOU TRAINING FOR?"].waitForExistence(timeout: 15),
+                      "Ask Pattie should replace the episode library after switching modes")
+    }
+
     private func waitForDisappearance(_ element: XCUIElement, timeout: TimeInterval) -> Bool {
         let gone = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"),
                                              object: element)

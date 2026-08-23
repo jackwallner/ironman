@@ -1,6 +1,6 @@
 Ogni gara che hai concluso, in un unico posto e ordinata nel modo in cui vuoi davvero capirla.
 
-Inserisci il tuo nome una volta. IM Iron Splits trova i risultati pubblicati e mostra i tempi di nuoto, transizioni, bici e corsa, il pettorale e le classifiche.
+Inserisci il tuo nome una volta. IM Tri Tracker trova i risultati pubblicati e mostra i tempi di nuoto, transizioni, bici e corsa, il pettorale e le classifiche.
 
 Scopri i tuoi record personali, confronta gare dello stesso tipo e capisci la posizione di ogni tempo nel gruppo. Race Book sblocca confronti ed esportazione PDF o immagine con un acquisto unico a vita, senza abbonamento né costi per esportazione.
 
@@ -9,4 +9,4 @@ Il nucleo resta gratuito: ricerca, storico completo, split, classifiche, note e 
 Privacy: https://jackwallner.github.io/ironman/privacy-policy.html
 Termini: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Iron Splits è indipendente e non è affiliata a organizzatori di gare o società di cronometraggio.
+IM Tri Tracker è indipendente e non è affiliata a organizzatori di gare o società di cronometraggio.

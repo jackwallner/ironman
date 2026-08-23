@@ -8,6 +8,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 METADATA = ROOT / "fastlane" / "metadata"
+PUBLIC_BRAND = "IM Tri Tracker"
+LEGACY_BRAND = "IM Iron Splits"
 
 LOCALES = [
     "ar-SA", "bn-BD", "ca", "cs", "da", "de-DE", "el", "en-AU", "en-CA",
@@ -25,7 +27,7 @@ URLS = {
 }
 
 ENGLISH = {
-    "name": "IM Iron Splits: Race Results",
+    "name": "IM Tri Tracker",
     "subtitle": "Your race splits, ranked",
     "keywords": "triathlon,race results,splits,swim,bike,run,bib,finish,personal best,race history,rankings",
     "description": """Every race you have finished, in one place, ranked the way you think about it.
@@ -899,6 +901,7 @@ def write_metadata(locale: str, values: dict[str, str]) -> None:
     directory.mkdir(parents=True, exist_ok=True)
     merged = {**values, **URLS}
     for key, value in merged.items():
+        value = value.replace(LEGACY_BRAND, PUBLIC_BRAND)
         if key == "keywords":
             words: list[str] = []
             length = 0

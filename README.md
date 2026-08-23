@@ -1,4 +1,4 @@
-# IM Iron Splits
+# IM Tri Tracker
 
 Your triathlon and running race results, found by name and ranked by split.
 
@@ -28,7 +28,7 @@ matches what was written down.
 ## Before it can ship
 
 - [x] App Store Connect app record for `com.jackwallner.ironman` (`6803727074`),
-      named **IM Iron Splits: Race Results**, with `AppStoreReviewLinks.appStoreID`
+      named **IM Tri Tracker: Race Results**, with `AppStoreReviewLinks.appStoreID`
       configured
 - [x] RevenueCat project and the three products are configured; the production
       public key is set in `IronSplitsSecrets.revenueCatKey`

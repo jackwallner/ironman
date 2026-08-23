@@ -85,7 +85,7 @@ platform :ios do
         demo_user: "N/A — no login, no account system",
         demo_password: "",
         notes: <<~NOTES
-          IM Iron Splits is a read-only viewer for published race results. There are
+          IM Tri Tracker is a read-only viewer for published race results. There are
           no accounts and no sign-in.
 
           Core flow:
@@ -94,22 +94,24 @@ platform :ios do
           3. Tap a match to claim it; the locker fills with that athlete's races
           4. Tap a race for splits, ranks, and field percentiles
           5. Bests tab ranks the athlete's races by swim, bike, run, or transitions
-          6. Resume tab exports the history as text or PDF
+          6. Resume tab previews the free history and opens Race Book for comparison/export
 
           To review without a name of your own, search "Daniel Winek" — a public
           result set with five full-distance finishes.
 
-          Iron Splits+ (IAP via RevenueCat): full history beyond the three most
-          recent races, split leaderboards, field percentiles, race notes, and
-          the resume export. Test with a Sandbox account.
+          The free core includes search, full history, splits, rankings and basic
+          race details. Race Book is a one-time lifetime purchase for comparison
+          and unlimited PDF/image export. There is no subscription or per-export
+          charge. Existing Iron Splits+ customers can restore prior access.
 
           Data: results come from the same public results service the events
           publish to, and are shown as published. The app is independent and
           claims no affiliation with any race organiser; race names appear only
           to identify the results they belong to.
 
-          Known: light mode only. No accounts, no social features, no user-
-          generated content shared between users.
+          Verified: light and dark mode, including accessibility text sizes.
+          No accounts, no social features, no user-generated content shared
+          between users.
         NOTES
       },
       submission_information: {

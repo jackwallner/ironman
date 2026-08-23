@@ -26,6 +26,7 @@ struct BestsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .triNavBar()
             .onAppear { syncKind() }
+            .onChange(of: locker.availableKinds) { _, _ in syncKind() }
         }
     }
 
@@ -79,20 +80,21 @@ struct BestsView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
-        .triTabBarClearance()
     }
 
     private var pickers: some View {
         VStack(spacing: TriSpace.x3) {
-            Picker("Leg", selection: $discipline) {
-                ForEach(Discipline.rankable) { leg in
-                    Text(leg.shortTitle).tag(leg)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: TriSpace.x2) {
+                    ForEach(Discipline.rankable) { leg in
+                        TriChip(title: leg.shortTitle, isSelected: discipline == leg) {
+                            discipline = leg
+                            Haptics.selection()
+                            pattie.fire(.bestsFiltered)
+                        }
+                    }
                 }
-            }
-            .pickerStyle(.segmented)
-            .onChange(of: discipline) { _, _ in
-                Haptics.selection()
-                pattie.fire(.bestsFiltered)
+                .padding(.vertical, TriSpace.x1)
             }
 
             if locker.availableKinds.count > 1 {
@@ -183,7 +185,8 @@ private struct StandingRow: View {
                 Text(standing.result.raceName)
                     .font(TriType.bodyBold)
                     .foregroundStyle(TriPalette.ink)
-                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .layoutPriority(1)
                 HStack(spacing: TriSpace.x2) {
                     Text(String(standing.result.year))
                         .font(TriType.small)
@@ -205,6 +208,7 @@ private struct StandingRow: View {
                 Text(TimeFormat.hms(standing.seconds))
                     .font(TriType.statMed)
                     .foregroundStyle(TriPalette.ink)
+                    .fixedSize(horizontal: true, vertical: false)
                 if standing.gapToBest > 0 {
                     Text(TimeFormat.delta(standing.gapToBest))
                         .font(TriType.small)

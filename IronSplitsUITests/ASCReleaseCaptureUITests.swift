@@ -59,7 +59,12 @@ final class ASCReleaseCaptureUITests: XCTestCase {
         let compare = app.buttons["Compare two races"]
         scrollToHittable(compare, in: app)
         XCTAssertTrue(compare.isHittable)
+        compare.tap()
+        XCTAssertTrue(app.navigationBars["Compare races"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts["TIME BY LEG"].waitForExistence(timeout: 15))
         capture(app, named: "race-book-compare")
+        app.navigationBars["Compare races"].buttons.element(boundBy: 0).tap()
+        XCTAssertTrue(app.navigationBars["Race Book"].waitForExistence(timeout: 15))
 
         let export = app.buttons["Build PDF and image"]
         scrollToHittable(export, in: app)

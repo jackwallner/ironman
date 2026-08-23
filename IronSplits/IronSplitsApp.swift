@@ -32,7 +32,7 @@ struct IronSplitsApp: App {
                         "pointers.mode",
                         "askpattie.guide.cached", "askpattie.guide.cachedAt",
                         "pattie.mode.enabled", "pattie.mode.seenLines",
-                        "settings.haptics.enabled"] {
+                        "settings.haptics.enabled", "settings.appearance"] {
                 UserDefaults.standard.removeObject(forKey: key)
             }
             // Pattie Mode is off by default, and tests opt in with
@@ -55,7 +55,7 @@ struct IronSplitsApp: App {
                 .environmentObject(settings)
                 .environmentObject(reviewCoordinator)
                 .environmentObject(pattie)
-                .preferredColorScheme(auditColorScheme)
+                .preferredColorScheme(auditColorScheme ?? settings.preferredColorScheme)
                 .task {
                     store.start()
                     // Warm the audio session off the main thread now, so

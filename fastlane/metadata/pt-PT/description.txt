@@ -1,6 +1,6 @@
 Todas as provas que terminaste, num só lugar e organizadas da forma como queres compreender o teu desempenho.
 
-Escreve o teu nome uma vez. O IM Iron Splits encontra os resultados publicados e mostra os parciais de natação, transições, bicicleta e corrida, o dorsal e as classificações.
+Escreve o teu nome uma vez. O IM Tri Tracker encontra os resultados publicados e mostra os parciais de natação, transições, bicicleta e corrida, o dorsal e as classificações.
 
 Consulta os teus melhores tempos, compara provas do mesmo tipo e percebe a posição de cada tempo no pelotão. O Race Book desbloqueia comparações e exportação para PDF ou imagem com uma compra única vitalícia, sem subscrição nem custo por exportação.
 
@@ -9,4 +9,4 @@ O essencial é gratuito: pesquisa, histórico completo, parciais, classificaçõ
 Privacidade: https://jackwallner.github.io/ironman/privacy-policy.html
 Termos: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-O IM Iron Splits é independente e não está ligado a organizadores de provas ou empresas de cronometragem.
+O IM Tri Tracker é independente e não está ligado a organizadores de provas ou empresas de cronometragem.

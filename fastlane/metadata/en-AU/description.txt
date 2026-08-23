@@ -1,6 +1,6 @@
 Every race you have finished, in one place, ranked the way you think about it.
 
-Type your name once. IM Iron Splits finds your published results and fills your locker with swim, T1, bike, T2 and run splits, bib numbers, age-group places and overall ranks.
+Type your name once. IM Tri Tracker finds your published results and fills your locker with swim, T1, bike, T2 and run splits, bib numbers, age-group places and overall ranks.
 
 YOUR SPLITS, RANKED
 See races ranked by swim, bike, run, transitions or finish time. Personal bests are marked on every leg, and full-distance and half-distance races stay in separate comparisons.
@@ -23,4 +23,4 @@ Search, claim your results and keep your complete history with full splits, lead
 Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
 Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Iron Splits is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.

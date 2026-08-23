@@ -1,6 +1,6 @@
 Vsaka tekma, ki si jo končal, na enem mestu in urejena tako, da razumeš svoj nastop.
 
-Vnesi ime enkrat. IM Iron Splits poišče objavljene rezultate in prikaže čase plavanja, menjav, kolesa in teka, štartno številko ter uvrstitve.
+Vnesi ime enkrat. IM Tri Tracker poišče objavljene rezultate in prikaže čase plavanja, menjav, kolesa in teka, štartno številko ter uvrstitve.
 
 Oglej si osebne rekorde, primerjaj tekme iste vrste in razumi mesto vsakega časa v skupini. Race Book odklene primerjave ter izvoz v PDF ali sliko z enkratnim doživljenjskim nakupom, brez naročnine in brez plačila za izvoz.
 
@@ -9,4 +9,4 @@ Osnova ostane brezplačna: iskanje, celotna zgodovina, delni časi, uvrstitve, o
 Zasebnost: https://jackwallner.github.io/ironman/privacy-policy.html
 Pogoji: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Iron Splits je neodvisna aplikacija brez povezave z organizatorji tekem ali merilci časa.
+IM Tri Tracker je neodvisna aplikacija brez povezave z organizatorji tekem ali merilci časa.

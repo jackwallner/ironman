@@ -1,6 +1,6 @@
 완주한 모든 레이스를 한곳에 모아, 기록을 이해하기 쉽게 정리합니다.
 
-이름을 한 번 입력하세요. IM Iron Splits가 공개된 결과를 찾아 수영, 트랜지션, 자전거, 달리기 구간 기록과 배번, 순위를 보여줍니다.
+이름을 한 번 입력하세요. IM Tri Tracker가 공개된 결과를 찾아 수영, 트랜지션, 자전거, 달리기 구간 기록과 배번, 순위를 보여줍니다.
 
 개인 최고 기록을 확인하고 같은 유형의 레이스를 비교하며 필드 안에서 각 기록의 위치를 파악하세요. Race Book은 한 번의 평생 구매로 비교와 PDF 또는 이미지 내보내기를 잠금 해제합니다. 구독과 내보내기별 요금은 없습니다.
 
@@ -9,4 +9,4 @@
 개인정보 보호: https://jackwallner.github.io/ironman/privacy-policy.html
 이용 약관: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Iron Splits는 독립 앱이며 레이스 주최자나 기록 측정 회사와 제휴하지 않습니다.
+IM Tri Tracker는 독립 앱이며 레이스 주최자나 기록 측정 회사와 제휴하지 않습니다.

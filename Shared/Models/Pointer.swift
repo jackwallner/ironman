@@ -65,6 +65,7 @@ actor PointerLibrary {
     private static let refreshInterval: TimeInterval = 60 * 60 * 12
 
     private var current: PointerCatalog?
+    private var lastErrorMessage: String?
 
     func catalog() -> PointerCatalog {
         if let current { return current }
@@ -76,11 +77,18 @@ actor PointerLibrary {
         return .empty
     }
 
+    func errorMessage() -> String? {
+        lastErrorMessage
+    }
+
     @discardableResult
     func refresh(force: Bool = false) async -> PointerCatalog {
         let defaults = UserDefaults.standard
         if !force, let last = defaults.object(forKey: Self.cacheDateKey) as? Date,
            Date.now.timeIntervalSince(last) < Self.refreshInterval {
+            if catalog().pointers.isEmpty {
+                lastErrorMessage = "The episode library couldn't be reached. Check your connection and try again."
+            }
             return catalog()
         }
         var request = URLRequest(url: Self.remoteURL, cachePolicy: .reloadIgnoringLocalCacheData)
@@ -89,9 +97,11 @@ actor PointerLibrary {
               let http = response as? HTTPURLResponse, 200..<300 ~= http.statusCode,
               let catalog = try? JSONDecoder().decode(PointerCatalog.self, from: data) else {
             defaults.set(Date.now, forKey: Self.cacheDateKey)
+            lastErrorMessage = "The episode library couldn't be reached. Check your connection and try again."
             return catalog()
         }
         current = catalog
+        lastErrorMessage = nil
         defaults.set(data, forKey: Self.cacheKey)
         defaults.set(Date.now, forKey: Self.cacheDateKey)
         return catalog

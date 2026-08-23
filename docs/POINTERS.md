@@ -36,9 +36,9 @@ a commit and a push. No App Store release, no review queue.
 - `linkURL` is the fallback for anything that is not a direct file (a YouTube
   watch page, for instance). The app hands it to the system browser instead of
   playing it. Set one or the other, not both.
-- `isFree` episodes play for everyone. Everything else opens the paywall. Two or
-  three free episodes is the usual shape: enough to show what the library is,
-  not enough to replace it.
++ `isFree` is retained for catalog compatibility. The current app makes the
+  entire Pointers library available to everyone; Race Book is the only paid
+  surface.
 
 ## Hosting the video files
 

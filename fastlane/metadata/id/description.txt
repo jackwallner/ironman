@@ -1,6 +1,6 @@
 Semua lomba yang kamu selesaikan, tersimpan di satu tempat dan disusun untuk membantu memahami performamu.
 
-Masukkan namamu sekali. IM Iron Splits menemukan hasil yang dipublikasikan dan menampilkan split renang, transisi, sepeda, dan lari, nomor dada, serta peringkat.
+Masukkan namamu sekali. IM Tri Tracker menemukan hasil yang dipublikasikan dan menampilkan split renang, transisi, sepeda, dan lari, nomor dada, serta peringkat.
 
 Lihat catatan waktu terbaik, bandingkan lomba sejenis, dan pahami posisi setiap waktu di antara peserta. Race Book membuka perbandingan serta ekspor PDF atau gambar dengan pembelian satu kali seumur hidup, tanpa langganan dan tanpa biaya per ekspor.
 
@@ -9,4 +9,4 @@ Fitur inti tetap gratis: pencarian, riwayat lengkap, split, peringkat, catatan, 
 Privasi: https://jackwallner.github.io/ironman/privacy-policy.html
 Ketentuan: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Iron Splits adalah aplikasi independen dan tidak berafiliasi dengan penyelenggara lomba atau perusahaan pencatat waktu.
+IM Tri Tracker adalah aplikasi independen dan tidak berafiliasi dengan penyelenggara lomba atau perusahaan pencatat waktu.

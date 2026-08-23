@@ -11,6 +11,7 @@ struct SettingsView: View {
     @State private var showingAthleteSearch = false
     @State private var showingAlternateSearch = false
     @State private var confirmingUnclaim = false
+    @State private var paywallTrigger: PaywallTrigger?
     @State private var cacheBytes: Int64 = 0
     @AppStorage("settings.haptics.enabled") private var hapticsEnabled = false
 
@@ -21,7 +22,7 @@ struct SettingsView: View {
             List {
                 Section("Athlete") {
                     if let athlete = locker.athlete {
-                        VStack(alignment: .leading, spacing: 2) {
+                        VStack(alignment: .leading, spacing: TriSpace.x1) {
                             Text(athlete.name)
                                 .font(TriType.bodyBold)
                             if !athlete.subtitle.isEmpty {
@@ -66,6 +67,20 @@ struct SettingsView: View {
                     .onChange(of: settings.units) { _, _ in pattie.react(.selection) }
                 }
 
+                Section("Appearance") {
+                    Picker("Appearance", selection: Binding(
+                        get: { settings.appearance },
+                        set: { settings.appearance = $0 }
+                    )) {
+                        ForEach(AppearancePreference.allCases) { appearance in
+                            Text(appearance.title).tag(appearance)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .accessibilityHint("Choose System to follow the device, or keep IM Tri Tracker in Light or Dark mode.")
+                    .onChange(of: settings.appearance) { _, _ in pattie.react(.selection) }
+                }
+
                 Section("Interaction") {
                     Toggle("Haptics", isOn: $hapticsEnabled)
                         .onChange(of: hapticsEnabled) { _, enabled in
@@ -76,16 +91,20 @@ struct SettingsView: View {
                         .foregroundStyle(TriPalette.inkTertiary)
                 }
 
-                Section("Iron Splits+") {
-                    Label("Everything is unlocked", systemImage: "checkmark.seal.fill")
-                        .foregroundStyle(TriPalette.positive)
-                    Text("Everything is currently available without a purchase. Restore purchases and subscription management remain for anyone who bought Iron Splits+ before this change.")
+                Section("Race Book") {
+                    Label(raceBookUnlocked ? "Race Book is unlocked" : "Unlock Race Book once",
+                          systemImage: raceBookUnlocked ? "checkmark.seal.fill" : "book.closed.fill")
+                        .foregroundStyle(raceBookUnlocked ? TriPalette.positive : TriPalette.sunrise)
+                    Text(raceBookUnlocked
+                         ? "Your comparison and unlimited export tools are ready."
+                         : "Your complete results, splits, rankings and race details are free. Race Book adds like-for-like comparisons and beautiful unlimited PDF or image exports for one lifetime purchase.")
                         .font(TriType.micro)
                         .foregroundStyle(TriPalette.inkTertiary)
-                    // Restore stays. Anyone who bought Iron Splits+ before the
-                    // gates came down still needs a way to reattach the receipt
-                    // to a new device, and hiding the button does not make the
-                    // purchase go away.
+                    if !raceBookUnlocked {
+                        Button("See Race Book") {
+                            paywallTrigger = .raceBookExport
+                        }
+                    }
                     Button("Restore purchases") {
                         Task { await store.restorePurchases() }
                     }
@@ -94,7 +113,9 @@ struct SettingsView: View {
                             .font(TriType.small)
                             .foregroundStyle(TriPalette.negative)
                     }
-                    Link("Manage subscription", destination: URL(string: "https://apps.apple.com/account/subscriptions")!)
+                    Text("Earlier Iron Splits+ customers can restore their existing access here.")
+                        .font(TriType.micro)
+                        .foregroundStyle(TriPalette.inkTertiary)
                 }
 
                 Section("Pattie Mode") {
@@ -142,16 +163,15 @@ struct SettingsView: View {
                 }
 
                 Section {
-                    Text("IM Iron Splits is an independent app. It is not affiliated with, endorsed by, or sponsored by any race organiser. Results are shown as published by each event's timer. IRONMAN\u{00AE} and 70.3\u{00AE} are registered trademarks of the World Triathlon Corporation, used here only to describe the races an athlete has entered.")
+                    Text("IM Tri Tracker is an independent app. It is not affiliated with, endorsed by, or sponsored by any race organiser. Results are shown as published by each event's timer. IRONMAN\u{00AE} and 70.3\u{00AE} are registered trademarks of the World Triathlon Corporation, used here only to describe the races an athlete has entered.")
                         .font(TriType.micro)
                         .foregroundStyle(TriPalette.inkTertiary)
                 }
 
                 #if DEBUG
                 Section("Debug") {
-                    LabeledContent("Everything unlocked",
-                                   value: ProGate.everythingUnlocked ? "Yes" : "No")
-                    Text("Flip `ProGate.everythingUnlocked` to put the paywall and the free window back. The gates are all still there and all still read that one flag.")
+                    LabeledContent("Race Book access", value: raceBookUnlocked ? "Yes" : "No")
+                    Text("The free core never hides results. The Race Book gate only protects comparison and export actions.")
                         .font(TriType.micro)
                         .foregroundStyle(TriPalette.inkTertiary)
                 }
@@ -166,10 +186,12 @@ struct SettingsView: View {
             .triNavBar()
             .scrollContentBackground(.hidden)
             .background(TriPalette.canvas)
-            .triTabBarClearance()
             .sheet(isPresented: $showingAthleteSearch) { AthleteSearchView() }
             .sheet(isPresented: $showingAlternateSearch) {
                 AthleteSearchView(addingToCurrentAthlete: true)
+            }
+            .sheet(item: $paywallTrigger) { trigger in
+                PaywallView(trigger: trigger)
             }
             .confirmationDialog("Remove your athlete?",
                                 isPresented: $confirmingUnclaim,
@@ -186,6 +208,10 @@ struct SettingsView: View {
         cacheBytes == 0
             ? "None"
             : ByteCountFormatter.string(fromByteCount: cacheBytes, countStyle: .file)
+    }
+
+    private var raceBookUnlocked: Bool {
+        ProGate.raceBookUnlocked(isPro: store.isPro)
     }
 
     private func refreshCacheSize() async {

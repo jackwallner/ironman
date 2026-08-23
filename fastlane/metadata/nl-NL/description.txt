@@ -1,6 +1,6 @@
 Elke race die je hebt voltooid op één plek, gerangschikt op de manier waarop je je prestatie echt wilt begrijpen.
 
-Vul je naam één keer in. IM Iron Splits vindt je gepubliceerde resultaten en toont zwem-, wissel-, fiets- en looptijden, startnummer en klasseringen.
+Vul je naam één keer in. IM Tri Tracker vindt je gepubliceerde resultaten en toont zwem-, wissel-, fiets- en looptijden, startnummer en klasseringen.
 
 Bekijk persoonlijke records, vergelijk races van hetzelfde type en begrijp waar elke tijd in het veld valt. Race Book ontgrendelt vergelijkingen en export naar PDF of afbeelding met een eenmalige aankoop voor altijd, zonder abonnement of kosten per export.
 
@@ -9,4 +9,4 @@ De basis blijft gratis: zoeken, volledige historie, tussentijden, ranglijsten, n
 Privacy: https://jackwallner.github.io/ironman/privacy-policy.html
 Voorwaarden: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Iron Splits is onafhankelijk en niet verbonden aan raceorganisatoren of tijdwaarnemingsbedrijven.
+IM Tri Tracker is onafhankelijk en niet verbonden aan raceorganisatoren of tijdwaarnemingsbedrijven.

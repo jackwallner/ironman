@@ -3,12 +3,15 @@ import SwiftUI
 /// The race resume: every start, in the shape race entries ask for.
 struct ResumeView: View {
     @EnvironmentObject private var locker: LockerStore
+    @EnvironmentObject private var store: StoreService
     @EnvironmentObject private var pattie: PattieMode
 
     @State private var selectedKinds: Set<RaceKind> = []
+    @State private var didInitializeKinds = false
     @State private var includeSplits = true
-    @State private var includeDNF = false
-    @State private var pdfURL: URL?
+    @State private var includeIncomplete = false
+    @State private var paywallTrigger: PaywallTrigger?
+    @State private var raceBookPresented = false
 
     var body: some View {
         NavigationStack {
@@ -23,9 +26,19 @@ struct ResumeView: View {
             .navigationBarTitleDisplayMode(.inline)
             .triNavBar()
             .onAppear {
-                if selectedKinds.isEmpty {
-                    selectedKinds = Set(locker.availableKinds)
-                }
+                syncKinds()
+            }
+            .onChange(of: locker.athlete?.id) { _, _ in
+                selectedKinds = []
+                didInitializeKinds = false
+                syncKinds()
+            }
+            .onChange(of: locker.availableKinds) { _, _ in syncKinds() }
+            .sheet(isPresented: $raceBookPresented) {
+                RaceBookView()
+            }
+            .sheet(item: $paywallTrigger) { trigger in
+                PaywallView(trigger: trigger)
             }
         }
     }
@@ -34,8 +47,8 @@ struct ResumeView: View {
     private var content: some View {
         if locker.results.isEmpty {
             TriPlaceholder(systemImage: "doc.text",
-                           title: "Nothing to export yet",
-                           message: "Your resume is built from the races in your locker.")
+                           title: "No races yet",
+                           message: "Your free history preview appears once your locker has results.")
         } else {
             list
         }
@@ -46,9 +59,9 @@ struct ResumeView: View {
     }
 
     private var options: ResumeBuilder.Options {
-        ResumeBuilder.Options(kinds: selectedKinds.isEmpty ? Set(RaceKind.allCases) : selectedKinds,
+        ResumeBuilder.Options(kinds: selectedKinds,
                               includeSplits: includeSplits,
-                              includeDNF: includeDNF)
+                              includeDNF: includeIncomplete)
     }
 
     private var list: some View {
@@ -64,39 +77,54 @@ struct ResumeView: View {
                     ))
                 }
                 Toggle("Include splits", isOn: $includeSplits)
-                Toggle("Include DNFs", isOn: $includeDNF)
+                Toggle("Include incomplete results", isOn: $includeIncomplete)
             } header: {
                 TriSectionHeader(title: "Include")
             }
             .listRowBackground(TriPalette.surface)
 
             Section {
-                if let athlete = locker.athlete {
-                    ShareLink(item: ResumeBuilder.plainText(athlete: athlete, results: locker.results, options: options)) {
-                        Label("Share as text", systemImage: "square.and.arrow.up")
-                    }
-                    .simultaneousGesture(TapGesture().onEnded { pattie.fire(.resumeExported) })
+                if rows.isEmpty {
+                    Text("Select at least one distance to open Race Book.")
+                        .font(TriType.small)
+                        .foregroundStyle(TriPalette.inkTertiary)
+                        .fixedSize(horizontal: false, vertical: true)
+                } else if raceBookUnlocked {
                     Button {
                         Haptics.tap()
-                        pdfURL = ResumeBuilder.pdf(athlete: athlete, results: locker.results, options: options)
-                        pattie.fire(.resumeExported)
+                        raceBookPresented = true
                     } label: {
-                        Label("Build PDF", systemImage: "doc.richtext")
+                        Label("Open Race Book", systemImage: "book.closed.fill")
                     }
-                    if let pdfURL {
-                        ShareLink(item: pdfURL) {
-                            Label("Share PDF", systemImage: "square.and.arrow.up")
-                        }
+                    .buttonStyle(.triPress)
+                } else {
+                    Button {
+                        paywallTrigger = .raceBookExport
+                    } label: {
+                        Label("Unlock Race Book exports", systemImage: "lock.fill")
                     }
+                    .buttonStyle(.triPress)
                 }
+                Text("Your complete history and preview stay free. Race Book adds like-for-like comparison and unlimited PDF or image exports for one lifetime purchase.")
+                    .font(TriType.micro)
+                    .foregroundStyle(TriPalette.inkTertiary)
+                    .fixedSize(horizontal: false, vertical: true)
             } header: {
-                TriSectionHeader(title: "Export", trailing: "\(rows.count) races")
+                TriSectionHeader(title: "Race Book", trailing: "\(rows.count) races")
             }
             .listRowBackground(TriPalette.surface)
 
             Section {
-                ForEach(rows) { result in
-                    ResumeRow(result: result)
+                if rows.isEmpty {
+                    Text("No races match these options. Select a distance or include incomplete results.")
+                        .font(TriType.small)
+                        .foregroundStyle(TriPalette.inkTertiary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(minHeight: TriGeo.tapTarget)
+                } else {
+                    ForEach(rows) { result in
+                        ResumeRow(result: result)
+                    }
                 }
             } header: {
                 TriSectionHeader(title: "Preview")
@@ -109,19 +137,28 @@ struct ResumeView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
-        .triTabBarClearance()
-        // Any change to what goes in invalidates the file that was built from
-        // the old settings, so drop it rather than sharing a stale PDF.
-        .onChange(of: options.kinds) { _, _ in pdfURL = nil }
         .onChange(of: includeSplits) { _, _ in
-            pdfURL = nil
             pattie.react(.selection)
         }
-        .onChange(of: includeDNF) { _, _ in
-            pdfURL = nil
+        .onChange(of: includeIncomplete) { _, _ in
             pattie.react(.selection)
         }
     }
+
+    private func syncKinds() {
+        let available = Set(locker.availableKinds)
+        guard !didInitializeKinds else {
+            selectedKinds.formIntersection(available)
+            return
+        }
+        selectedKinds = available
+        didInitializeKinds = true
+    }
+
+    private var raceBookUnlocked: Bool {
+        ProGate.raceBookUnlocked(isPro: store.isPro)
+    }
+
 }
 
 private struct ResumeRow: View {
@@ -129,14 +166,18 @@ private struct ResumeRow: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: TriSpace.x1) {
-            HStack {
+            HStack(alignment: .top, spacing: TriSpace.x2) {
                 Text(result.raceName)
                     .font(TriType.bodyBold)
                     .foregroundStyle(TriPalette.ink)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .layoutPriority(1)
                 Spacer()
-                Text(result.isComplete ? TimeFormat.hms(result.finish) : "DNF")
+                Text(result.isComplete ? TimeFormat.hms(result.finish) : (ResumeBuilder.statusLabel(for: result) ?? ""))
                     .font(TriType.statSmall)
                     .foregroundStyle(result.isComplete ? TriPalette.ink : TriPalette.negative)
+                    .fixedSize(horizontal: true, vertical: false)
             }
             HStack(spacing: TriSpace.x2) {
                 Text(dateText)
@@ -148,7 +189,7 @@ private struct ResumeRow: View {
             .font(TriType.small)
             .foregroundStyle(TriPalette.inkTertiary)
         }
-        .frame(minHeight: TriGeo.tapTarget - TriSpace.x2)
+        .frame(minHeight: TriGeo.tapTarget)
         .padding(.vertical, TriSpace.x1)
     }
 

@@ -34,6 +34,7 @@ struct PointersView: View {
                     PointerLibraryView()
                 }
             }
+            .navigationTitle("Pattie")
             .navigationBarTitleDisplayMode(.inline)
             .triNavBar()
             .toolbar {
@@ -76,27 +77,13 @@ private struct PointerModePicker: View {
     @Binding var selection: PointersView.Mode
 
     var body: some View {
-        HStack(spacing: TriSpace.x1) {
+        Picker("Pattie view", selection: $selection) {
             ForEach(PointersView.Mode.allCases) { option in
-                Button {
-                    selection = option
-                } label: {
-                    Text(option.rawValue)
-                        .font(TriType.smallBold)
-                        .foregroundStyle(selection == option ? .white : TriPalette.ink)
-                        .padding(.horizontal, TriSpace.x3)
-                        .frame(minHeight: TriSpace.x8)
-                        .background(selection == option ? TriPalette.deep : Color.clear,
-                                    in: Capsule())
-                }
-                .buttonStyle(.triPressSilent)
-                .accessibilityValue(selection == option ? "Selected" : "")
+                Text(option.rawValue).tag(option)
             }
         }
-        .padding(TriSpace.x1)
-        .background(TriPalette.surface, in: Capsule())
-        .overlay(Capsule().stroke(TriPalette.hairline, lineWidth: TriGeo.hairline))
-        .accessibilityElement(children: .contain)
+        .pickerStyle(.segmented)
+        .tint(TriPalette.deep)
         .accessibilityLabel("Pointer view")
     }
 }
@@ -109,6 +96,7 @@ struct PointerLibraryView: View {
     @State private var isLoading = true
     @State private var filter: Discipline?
     @State private var playing: Pointer?
+    @State private var loadError: String?
 
     @Environment(\.openURL) private var openURL
 
@@ -117,10 +105,7 @@ struct PointerLibraryView: View {
             .pattieMoment(.pointers, pattie)
             .sheet(item: $playing) { PointerPlayerSheet(pointer: $0) }
             .task {
-                catalog = await PointerLibrary.shared.catalog()
-                isLoading = catalog.pointers.isEmpty
-                catalog = await PointerLibrary.shared.refresh()
-                isLoading = false
+                await loadCatalog()
             }
     }
 
@@ -128,6 +113,13 @@ struct PointerLibraryView: View {
     private var content: some View {
         if isLoading && catalog.pointers.isEmpty {
             ProgressView().tint(TriPalette.deep)
+        } else if let loadError {
+            TriPlaceholder(systemImage: "wifi.exclamationmark",
+                           title: "Couldn't load episodes",
+                           message: loadError,
+                           actionTitle: "Try again") {
+                Task { await loadCatalog(force: true) }
+            }
         } else if catalog.pointers.isEmpty {
             TriPlaceholder(systemImage: "play.rectangle",
                            title: catalog.title,
@@ -178,8 +170,22 @@ struct PointerLibraryView: View {
                 }
             }
             .padding(TriGeo.padPage)
-            .padding(.bottom, TriGeo.tabBarClearance)
         }
+        .refreshable {
+            await loadCatalog(force: true)
+        }
+    }
+
+    private func loadCatalog(force: Bool = false) async {
+        loadError = nil
+        let cached = await PointerLibrary.shared.catalog()
+        catalog = cached
+        isLoading = cached.pointers.isEmpty
+        catalog = await PointerLibrary.shared.refresh(force: force)
+        if catalog.pointers.isEmpty {
+            loadError = await PointerLibrary.shared.errorMessage()
+        }
+        isLoading = false
     }
 
     private var disciplines: [Discipline] {
@@ -205,9 +211,10 @@ struct PointerLibraryView: View {
             playing = pointer
         }
     }
+
 }
 
-/// A larger, clean finish-line moment for Pattie's own profile.
+/// A clean, app-owned profile moment for Pattie's own results.
 struct PattieFeaturedHero: View {
     @EnvironmentObject private var locker: LockerStore
 
@@ -219,36 +226,35 @@ struct PattieFeaturedHero: View {
     var body: some View {
         if isPattieProfile {
             VStack(alignment: .leading, spacing: TriSpace.x2) {
-                ZStack(alignment: .bottomTrailing) {
-                    RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous)
-                        .fill(TriPalette.deep)
-
-                    Image("pattie-kona-finish")
+                HStack(spacing: TriSpace.x5) {
+                    Image("pattie-profile")
                         .resizable()
                         .scaledToFill()
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 220, alignment: .top)
-                        .clipped()
+                        .frame(width: TriSpace.x10 + TriSpace.x10 + TriSpace.x4,
+                               height: TriSpace.x10 + TriSpace.x10 + TriSpace.x4)
+                        .clipShape(Circle())
                         .overlay {
-                            LinearGradient(
-                                colors: [.clear, TriPalette.deep.opacity(0.5)],
-                                startPoint: .top,
-                                endPoint: .bottom
-                            )
+                            Circle()
+                                .stroke(TriPalette.inkOnDark.opacity(0.35), lineWidth: TriGeo.hairline)
                         }
-                        .accessibilityIdentifier("pattie-real-photo")
 
-                    Text("FINISHING STRONG")
-                        .font(TriType.micro)
-                        .kerning(1.1)
-                        .foregroundStyle(TriPalette.deep)
-                        .padding(.horizontal, TriSpace.x2)
-                        .padding(.vertical, TriSpace.x1)
-                        .background(TriPalette.sunrise, in: Capsule())
-                        .padding(TriSpace.x3)
+                    VStack(alignment: .leading, spacing: TriSpace.x2) {
+                        Text("PATTIE WALLNER")
+                            .font(TriType.micro)
+                            .kerning(1.1)
+                            .foregroundStyle(TriPalette.sunrise)
+                        Text("Small things save a whole day.")
+                            .font(TriType.cardTitle)
+                            .foregroundStyle(TriPalette.inkOnDark)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
+                .padding(TriSpace.x5)
+                .frame(maxWidth: .infinity, minHeight: TriSpace.x10 * 4, alignment: .leading)
+                .background(TriPalette.deep, in: RoundedRectangle(cornerRadius: TriGeo.radiusCard,
+                                                                    style: .continuous))
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel("Pattie Wallner, celebrating at the finish")
+                .accessibilityLabel("Pattie Wallner, sharing race stories and small fixes")
 
                 Text("Pattie's pointers")
                     .font(TriType.cardTitle)
@@ -292,13 +298,14 @@ private struct PointerRow: View {
                     .font(TriType.bodyBold)
                     .foregroundStyle(TriPalette.ink)
                     .multilineTextAlignment(.leading)
-                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .layoutPriority(1)
                 if let summary = pointer.summary {
                     Text(summary)
                         .font(TriType.small)
                         .foregroundStyle(TriPalette.inkTertiary)
                         .multilineTextAlignment(.leading)
-                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
 
@@ -308,11 +315,13 @@ private struct PointerRow: View {
                 Text(duration)
                     .font(TriType.statSmall)
                     .foregroundStyle(TriPalette.inkTertiary)
+                    .fixedSize(horizontal: true, vertical: false)
             }
         }
         .frame(minHeight: TriGeo.tapTarget + TriSpace.x4)
         .triCard(padding: TriSpace.x3)
         .contentShape(RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous))
+        .accessibilityHint("Opens episode")
         .task {
             isDownloaded = await PointerMediaCache.shared.cachedFile(for: pointer) != nil
         }
@@ -334,8 +343,8 @@ private struct PointerRow: View {
 
             Image(systemName: "play.fill")
                 .font(.system(size: 14, weight: .bold))
-                .foregroundStyle(.white)
-                .shadow(color: .black.opacity(0.5), radius: 3)
+                .foregroundStyle(TriPalette.inkOnDark)
+                .shadow(color: TriPalette.ink.opacity(0.5), radius: TriSpace.x1)
         }
         .frame(width: 76, height: 52)
         .accessibilityHidden(true)
@@ -363,7 +372,7 @@ struct PointerPlayerSheet: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.black.ignoresSafeArea()
+                TriPalette.mediaCanvas.ignoresSafeArea()
                 content
             }
             .navigationTitle(pointer.title)
@@ -375,7 +384,7 @@ struct PointerPlayerSheet: View {
                         pattie.react(.back)
                         dismiss()
                     }
-                        .foregroundStyle(.white)
+                        .foregroundStyle(TriPalette.inkOnDark)
                         .triTapTarget()
                 }
             }
@@ -407,11 +416,11 @@ struct PointerPlayerSheet: View {
                     .frame(maxWidth: 220)
                 Text(progress > 0 ? "Downloading \(Int(progress * 100))%" : "Starting the episode…")
                     .font(TriType.small)
-                    .foregroundStyle(.white.opacity(0.75))
+                    .foregroundStyle(TriPalette.inkOnDark.opacity(0.75))
                     .monospacedDigit()
                 Text("Saved after the first play, so it works offline next time.")
                     .font(TriType.micro)
-                    .foregroundStyle(.white.opacity(0.5))
+                    .foregroundStyle(TriPalette.inkOnDark.opacity(0.5))
                     .multilineTextAlignment(.center)
             }
             .padding(TriGeo.padPage)

@@ -1,6 +1,6 @@
 把你完成過的每場比賽集中在一個地方，並依照你真正關心的方式整理。
 
-只要輸入一次姓名。IM Iron Splits 會尋找已發佈的成績，顯示游泳、轉換、自行車和跑步分段、號碼布，以及組別和總排名。
+只要輸入一次姓名。IM Tri Tracker 會尋找已發佈的成績，顯示游泳、轉換、自行車和跑步分段、號碼布，以及組別和總排名。
 
 查看個人最佳，比較同類型比賽，了解每個時間在參賽者中的位置。Race Book 透過一次性終身購買解鎖比較，以及 PDF 或圖片匯出。沒有訂閱，也不會按匯出次數收費。
 
@@ -9,4 +9,4 @@
 隱私權政策: https://jackwallner.github.io/ironman/privacy-policy.html
 使用條款: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Iron Splits 是獨立應用程式，與任何比賽主辦方或計時公司沒有關聯。
+IM Tri Tracker 是獨立應用程式，與任何比賽主辦方或計時公司沒有關聯。
