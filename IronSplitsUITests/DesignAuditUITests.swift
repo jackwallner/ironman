@@ -84,7 +84,7 @@ final class DesignAuditUITests: XCTestCase {
         shoot(app, "04-race-detail")
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
-        for (tab, name) in [("Pattie", "05-ask-pattie")] {
+        for (tab, name) in [("Tips", "05-ask-pattie")] {
             app.tabBars.buttons[tab].tap()
             settle()
             shoot(app, name)
@@ -123,7 +123,7 @@ final class DesignAuditUITests: XCTestCase {
 
         // The episode library, and one level into Ask Pattie, which are the two
         // screens the tab switch does not reach on its own.
-        app.tabBars.buttons["Pattie"].tap()
+        app.tabBars.buttons["Tips"].tap()
         XCTAssertTrue(app.buttons["All episodes"].waitForExistence(timeout: 10),
                       "The Pattie tab must expose the episode library switch")
         app.buttons["All episodes"].tap()

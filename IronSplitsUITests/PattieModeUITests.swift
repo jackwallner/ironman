@@ -110,7 +110,7 @@ final class PattieModeUITests: XCTestCase {
         let app = launch(pattieMode: false)
 
         XCTAssertTrue(claimPattie(in: app), "The Pattie tab needs a claimed athlete")
-        app.tabBars.buttons["Pattie"].tap()
+        app.tabBars.buttons["Tips"].tap()
 
         XCTAssertTrue(app.staticTexts["WHAT ARE YOU TRAINING FOR?"].waitForExistence(timeout: 15),
                       "The Pattie tab should open on the goal question")
@@ -138,7 +138,7 @@ final class PattieModeUITests: XCTestCase {
         let app = launch(pattieMode: false)
 
         XCTAssertTrue(claimPattie(in: app), "The Pattie tab needs a claimed athlete")
-        app.tabBars.buttons["Pattie"].tap()
+        app.tabBars.buttons["Tips"].tap()
         XCTAssertTrue(app.buttons["All episodes"].waitForExistence(timeout: 15))
         XCTAssertTrue(app.staticTexts["Pattie's pointers"].waitForExistence(timeout: 10),
                       "Pattie's profile moment should be featured in her tab")
@@ -156,7 +156,7 @@ final class PattieModeUITests: XCTestCase {
         let app = launch(pattieMode: false)
 
         XCTAssertTrue(claimPattie(in: app), "The Pattie tab needs a claimed athlete")
-        app.tabBars.buttons["Pattie"].tap()
+        app.tabBars.buttons["Tips"].tap()
         XCTAssertTrue(app.buttons["All episodes"].waitForExistence(timeout: 15))
         app.buttons["All episodes"].tap()
         XCTAssertTrue(app.staticTexts["Mud In Shoes"].waitForExistence(timeout: 20))
