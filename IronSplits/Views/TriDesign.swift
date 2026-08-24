@@ -50,17 +50,17 @@ enum TriPalette {
     /// Deep open water. The app's structural colour: nav bars, the finish-time
     /// hero, selected chips. It lifts slightly in dark mode so a navy hero does
     /// not dissolve into a near-black canvas.
-    static let deep    = adaptive(light: (0.051, 0.149, 0.271), dark: (0.071, 0.161, 0.259))
+    static let deep    = adaptive(light: (0.020, 0.094, 0.208), dark: (0.028, 0.125, 0.278))
     /// Finish markers need a lighter dark-mode blue than the structural navy
     /// so the checkered flag remains legible on a dark card.
-    static let finish  = adaptive(light: (0.051, 0.149, 0.271), dark: (0.302, 0.545, 0.820))
-    /// Sunrise. The single accent, reserved for "your best" and for the one
-    /// primary action on a screen.
-    static let sunrise = adaptive(light: (0.910, 0.400, 0.086), dark: (1.000, 0.545, 0.239))
+    static let finish  = adaptive(light: (0.122, 0.396, 0.729), dark: (0.278, 0.627, 0.969))
+    /// The single accent, reserved for "your best" and for the one primary
+    /// action on a screen. It carries the runner red from the app icon.
+    static let sunrise = adaptive(light: (0.780, 0.200, 0.165), dark: (0.965, 0.365, 0.310))
 
     // MARK: Status
 
-    static let positive = adaptive(light: (0.129, 0.518, 0.290), dark: (0.302, 0.769, 0.475))
+    static let positive = adaptive(light: (0.224, 0.545, 0.145), dark: (0.467, 0.820, 0.235))
     static let negative = adaptive(light: (0.741, 0.161, 0.161), dark: (1.000, 0.412, 0.380))
 
     // MARK: Ramps
@@ -71,11 +71,11 @@ enum TriPalette {
     static func color(for discipline: Discipline) -> Color {
         switch discipline {
         case .swim:
-            return adaptive(light: (0.110, 0.510, 0.720), dark: (0.278, 0.651, 0.867))
+            return adaptive(light: (0.122, 0.396, 0.729), dark: (0.278, 0.627, 0.969))
         case .bike:
-            return adaptive(light: (0.169, 0.471, 0.310), dark: (0.322, 0.706, 0.471))
+            return adaptive(light: (0.361, 0.706, 0.145), dark: (0.510, 0.839, 0.235))
         case .run:
-            return adaptive(light: (0.851, 0.341, 0.129), dark: (0.976, 0.510, 0.282))
+            return adaptive(light: (0.780, 0.200, 0.165), dark: (0.965, 0.365, 0.310))
         case .t1, .t2, .transitions:
             return adaptive(light: (0.549, 0.573, 0.612), dark: (0.478, 0.518, 0.573))
         case .finish:
@@ -84,18 +84,18 @@ enum TriPalette {
     }
 
     private static let fastFill: ((Double, Double, Double), (Double, Double, Double)) =
-        ((0.851, 0.290, 0.098), (0.976, 0.451, 0.220))
+        ((0.780, 0.200, 0.165), (0.965, 0.365, 0.310))
     private static let midFill: ((Double, Double, Double), (Double, Double, Double)) =
         ((0.741, 0.753, 0.780), (0.267, 0.310, 0.365))
     private static let slowFill: ((Double, Double, Double), (Double, Double, Double)) =
-        ((0.169, 0.380, 0.659), (0.325, 0.545, 0.847))
+        ((0.122, 0.396, 0.729), (0.278, 0.627, 0.969))
 
     private static let fastText: ((Double, Double, Double), (Double, Double, Double)) =
-        ((0.722, 0.239, 0.071), (0.988, 0.545, 0.322))
+        ((0.620, 0.122, 0.098), (0.965, 0.365, 0.310))
     private static let midText: ((Double, Double, Double), (Double, Double, Double)) =
         ((0.267, 0.290, 0.333), (0.729, 0.769, 0.812))
     private static let slowText: ((Double, Double, Double), (Double, Double, Double)) =
-        ((0.118, 0.302, 0.600), (0.451, 0.651, 0.925))
+        ((0.086, 0.282, 0.600), (0.451, 0.651, 0.925))
 
     /// Fill colour for a percentile bar, 0 (slow) to 100 (fast).
     static func color(forPercentile p: Int) -> Color {

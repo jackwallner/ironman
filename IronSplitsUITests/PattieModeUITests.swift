@@ -46,10 +46,7 @@ final class PattieModeUITests: XCTestCase {
         dismissBubbleIfPresent(in: app)
 
         let show = app.buttons["Show me one now"]
-        if !show.waitForExistence(timeout: 3) {
-            app.swipeUp()
-        }
-        XCTAssertTrue(show.waitForExistence(timeout: 15))
+        XCTAssertTrue(reveal(show, in: app), "The Pattie Mode controls should be reachable in Settings")
         show.tap()
 
         let card = app.descendants(matching: .any).matching(
@@ -97,10 +94,7 @@ final class PattieModeUITests: XCTestCase {
         dismissBubbleIfPresent(in: app)
 
         let toggle = app.switches["Pattie Mode"]
-        if !toggle.waitForExistence(timeout: 3) {
-            app.swipeUp()
-        }
-        XCTAssertTrue(toggle.waitForExistence(timeout: 10))
+        XCTAssertTrue(reveal(toggle, in: app), "The Pattie Mode toggle should be reachable in Settings")
         toggle.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5)).tap()
 
         let card = app.descendants(matching: .any).matching(
@@ -189,6 +183,16 @@ final class PattieModeUITests: XCTestCase {
             card.tap()
             _ = waitForDisappearance(card, timeout: 10)
         }
+    }
+
+    private func reveal(_ element: XCUIElement,
+                        in app: XCUIApplication,
+                        maxSwipes: Int = 8) -> Bool {
+        for _ in 0...maxSwipes {
+            if element.waitForExistence(timeout: 1) { return true }
+            app.swipeUp()
+        }
+        return element.waitForExistence(timeout: 2)
     }
 
     @discardableResult

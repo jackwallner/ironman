@@ -33,6 +33,7 @@ struct RaceBookOptions: Sendable, Hashable, Equatable {
     var includePlacements: Bool
     var includeRaceNotes: Bool
     var includeIncomplete: Bool
+    var onePage: Bool
 
     init(kinds: Set<RaceKind> = RaceKind.supportedKinds,
          includeCareerSummary: Bool = true,
@@ -43,7 +44,8 @@ struct RaceBookOptions: Sendable, Hashable, Equatable {
          includeSplits: Bool = true,
          includePlacements: Bool = true,
          includeRaceNotes: Bool = true,
-         includeIncomplete: Bool = false) {
+         includeIncomplete: Bool = false,
+         onePage: Bool = false) {
         self.kinds = kinds
         self.includeCareerSummary = includeCareerSummary
         self.includePodiumHighlights = includePodiumHighlights
@@ -54,6 +56,7 @@ struct RaceBookOptions: Sendable, Hashable, Equatable {
         self.includePlacements = includePlacements
         self.includeRaceNotes = includeRaceNotes
         self.includeIncomplete = includeIncomplete
+        self.onePage = onePage
     }
 
     static let `default` = RaceBookOptions()
@@ -410,8 +413,8 @@ enum RaceBookBuilder {
         return safe.isEmpty ? "iron-splits" : safe
     }
 
-    private static let pdfDeep = UIColor(red: 0.051, green: 0.149, blue: 0.271, alpha: 1)
-    private static let pdfAccent = UIColor(red: 0.910, green: 0.400, blue: 0.086, alpha: 1)
+    private static let pdfDeep = UIColor(red: 0.020, green: 0.094, blue: 0.208, alpha: 1)
+    private static let pdfAccent = UIColor(red: 0.780, green: 0.200, blue: 0.165, alpha: 1)
     private static let pdfCanvas = UIColor(red: 0.949, green: 0.953, blue: 0.961, alpha: 1)
     private static let pdfInk = UIColor(red: 0.075, green: 0.098, blue: 0.129, alpha: 1)
     private static let pdfSecondary = UIColor(red: 0.259, green: 0.290, blue: 0.333, alpha: 1)
