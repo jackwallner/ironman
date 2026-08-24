@@ -91,7 +91,7 @@ final class LockerFlowUITests: XCTestCase {
         app.buttons["Done"].tap()
 
         // Pattie: Ask Pattie, then the episode library behind the same tab.
-        app.tabBars.buttons["Pattie"].tap()
+        app.tabBars.buttons["Tips"].tap()
         XCTAssertTrue(app.staticTexts["WHAT ARE YOU TRAINING FOR?"].waitForExistence(timeout: 10),
                       "The Pattie tab should open on the Ask Pattie tree")
         attachScreenshot(app, name: "6-ask-pattie")

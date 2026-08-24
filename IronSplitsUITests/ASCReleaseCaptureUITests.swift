@@ -63,7 +63,7 @@ final class ASCReleaseCaptureUITests: XCTestCase {
         XCTAssertTrue(export.isHittable)
         capture(app, named: "race-book-export")
 
-        app.tabBars.buttons["Pattie"].tap()
+        app.tabBars.buttons["Tips"].tap()
         XCTAssertTrue(app.staticTexts["WHAT ARE YOU TRAINING FOR?"].waitForExistence(timeout: 15))
         capture(app, named: "pattie")
 

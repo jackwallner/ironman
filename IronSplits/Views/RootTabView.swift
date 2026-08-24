@@ -20,7 +20,7 @@ struct RootTabView: View {
             switch self {
             case .locker: return "Locker"
             case .explore: return "Explore"
-            case .pattie: return "Pattie"
+            case .pattie: return "Tips"
             case .resume: return "Race Book"
             case .settings: return "Settings"
             }
@@ -81,7 +81,7 @@ struct RootTabView: View {
                 .tabItem { Label("Explore", systemImage: "person.2.fill") }
                 .tag(Tab.explore)
             PointersView()
-                .tabItem { Label("Pattie", systemImage: "play.rectangle.fill") }
+                .tabItem { Label("Tips", systemImage: "play.rectangle.fill") }
                 .tag(Tab.pattie)
             ResumeView()
                 .tabItem { Label("Race Book", systemImage: "book.closed.fill") }
