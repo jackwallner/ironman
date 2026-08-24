@@ -92,7 +92,7 @@ struct ReviewPromptSheet: View {
                     }
                     .foregroundStyle(TriPalette.inkOnDark)
                     .buttonStyle(.triPressSilent)
-                    .padding(.horizontal, TriSpace.x3)
+                    .padding(.horizontal, TriSpace.x4)
                     .triTapTarget()
                 }
             }

@@ -179,51 +179,81 @@ struct PattieCompanion: View {
     }
 
     private func giantTakeover(for line: PattieMode.Line) -> some View {
-        ZStack {
-            TriPalette.deep
-
-            VStack(spacing: TriSpace.x4) {
-                Text("PATTIE MODE")
-                    .font(TriType.sectionTitle)
-                    .foregroundStyle(TriPalette.sunrise)
-
+        GeometryReader { proxy in
+            ZStack {
                 Button(action: onDismiss) {
-                    ZStack(alignment: .bottom) {
-                        petImage
-                            .overlay(alignment: .topTrailing) {
-                                if let symbol = petState.accessorySymbol {
-                                    accessory(symbol)
-                                }
-                            }
-                    }
-                    .scaleEffect(5)
-                    .frame(width: Self.avatarFrameWidth * 5,
-                           height: Self.avatarFrameHeight * 5,
-                           alignment: .bottom)
+                    Image("pattie-finish-cutout")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: min(proxy.size.width * 0.78, TriSpace.x10 * 8.5),
+                               height: min(proxy.size.height * 0.78, TriSpace.x10 * 13.5))
+                        .shadow(color: TriShadow.floating(scheme).0,
+                                radius: TriShadow.floating(scheme).1,
+                                y: TriShadow.floating(scheme).2)
                 }
                 .buttonStyle(.triPressSilent)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+                .padding(.leading, TriSpace.x2)
+                .padding(.bottom, TriSpace.x2)
                 .accessibilityLabel("Pattie, celebrate")
 
-                Text(line.text)
-                    .font(TriType.pageTitle)
-                    .foregroundStyle(TriPalette.inkOnDark)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .minimumScaleFactor(0.7)
-                    .accessibilityIdentifier("pattie-giant-catchphrase")
+                VStack {
+                    HStack {
+                        Spacer(minLength: 0)
+                        VStack(alignment: .leading, spacing: TriSpace.x2) {
+                            HStack(alignment: .firstTextBaseline) {
+                                Text("PATTIE MODE")
+                                    .font(TriType.sectionTitle)
+                                    .foregroundStyle(TriPalette.sunrise)
+                                Spacer(minLength: TriSpace.x2)
+                                Button(action: onDismiss) {
+                                    Image(systemName: "xmark")
+                                        .font(TriType.micro)
+                                        .foregroundStyle(TriPalette.inkTertiary)
+                                        .frame(width: TriGeo.tapTarget, height: TriGeo.tapTarget)
+                                }
+                                .buttonStyle(.triPressSilent)
+                                .accessibilityLabel("Dismiss Pattie")
+                            }
 
-                Button("Keep moving", action: onDismiss)
-                    .font(TriType.bodyBold)
-                    .foregroundStyle(TriPalette.deep)
-                    .frame(minHeight: TriGeo.tapTarget)
-                    .padding(.horizontal, TriSpace.x6)
-                    .background(TriPalette.sunrise, in: Capsule())
-                    .buttonStyle(.triPressSilent)
+                            Text(line.text)
+                                .font(TriType.pageTitle)
+                                .foregroundStyle(TriPalette.ink)
+                                .multilineTextAlignment(.leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .minimumScaleFactor(0.7)
+                                .accessibilityIdentifier("pattie-giant-catchphrase")
+
+                            Button("Keep moving", action: onDismiss)
+                                .font(TriType.bodyBold)
+                                .foregroundStyle(TriPalette.inkOnDark)
+                                .frame(minHeight: TriGeo.tapTarget)
+                                .padding(.horizontal, TriSpace.x4)
+                                .background(TriPalette.sunrise, in: Capsule())
+                                .buttonStyle(.triPressSilent)
+                        }
+                        .padding(TriSpace.x4)
+                        .frame(maxWidth: min(proxy.size.width * 0.68, TriSpace.x10 * 7),
+                               alignment: .leading)
+                        .background(
+                            RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous)
+                                .fill(TriPalette.surface)
+                                .shadow(color: TriShadow.floating(scheme).0,
+                                        radius: TriShadow.floating(scheme).1,
+                                        y: TriShadow.floating(scheme).2)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous)
+                                .stroke(TriPalette.sunrise.opacity(0.55), lineWidth: TriGeo.hairline)
+                        )
+                    }
+                    .padding(.horizontal, TriSpace.x4)
+                    .padding(.top, TriSpace.x4)
+                    Spacer(minLength: 0)
+                }
             }
-            .padding(TriSpace.x6)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(TriPalette.deep)
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("pattie-giant-takeover")
         .accessibilityLabel("Pattie says: \(line.text)")
@@ -289,7 +319,6 @@ private struct PattieHostModifier: ViewModifier {
                 if pattie.current?.isGiantCatchphrase == true {
                     companion
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .ignoresSafeArea()
                         .zIndex(20)
                 } else {
                     companion

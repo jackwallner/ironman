@@ -384,7 +384,7 @@ struct PointerPlayerSheet: View {
                         dismiss()
                     }
                         .foregroundStyle(TriPalette.inkOnDark)
-                        .padding(.horizontal, TriSpace.x3)
+                        .padding(.horizontal, TriSpace.x4)
                         .triTapTarget()
                 }
             }

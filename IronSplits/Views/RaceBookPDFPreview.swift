@@ -23,7 +23,7 @@ struct RaceBookPDFPreview: View {
                             Text("Done")
                                 .font(TriType.bodyBold)
                                 .foregroundStyle(TriPalette.inkOnDark)
-                                .padding(.horizontal, TriSpace.x3)
+                                .padding(.horizontal, TriSpace.x4)
                                 .frame(minWidth: TriSpace.x10 + TriSpace.x8,
                                        minHeight: TriGeo.tapTarget)
                         }

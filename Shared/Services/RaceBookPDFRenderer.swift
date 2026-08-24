@@ -9,19 +9,19 @@ enum RaceBookPDFRenderer {
     private static let pageMargin: CGFloat = 40
 
     private enum Palette {
-        static let deep = UIColor(red: 0.051, green: 0.149, blue: 0.271, alpha: 1)
-        static let deepLift = UIColor(red: 0.086, green: 0.220, blue: 0.345, alpha: 1)
-        static let coral = UIColor(red: 0.910, green: 0.400, blue: 0.086, alpha: 1)
-        static let aqua = UIColor(red: 0.110, green: 0.510, blue: 0.720, alpha: 1)
-        static let green = UIColor(red: 0.169, green: 0.471, blue: 0.310, alpha: 1)
+        static let deep = UIColor(red: 0.020, green: 0.094, blue: 0.208, alpha: 1)
+        static let deepLift = UIColor(red: 0.055, green: 0.165, blue: 0.360, alpha: 1)
+        static let coral = UIColor(red: 0.780, green: 0.200, blue: 0.165, alpha: 1)
+        static let aqua = UIColor(red: 0.122, green: 0.396, blue: 0.729, alpha: 1)
+        static let green = UIColor(red: 0.361, green: 0.706, blue: 0.145, alpha: 1)
         static let canvas = UIColor(red: 0.949, green: 0.953, blue: 0.961, alpha: 1)
         static let card = UIColor.white
         static let ink = UIColor(red: 0.075, green: 0.098, blue: 0.129, alpha: 1)
         static let secondary = UIColor(red: 0.259, green: 0.290, blue: 0.333, alpha: 1)
         static let muted = UIColor(red: 0.439, green: 0.471, blue: 0.522, alpha: 1)
         static let line = UIColor(red: 0.827, green: 0.839, blue: 0.859, alpha: 1)
-        static let paleBlue = UIColor(red: 0.886, green: 0.933, blue: 0.973, alpha: 1)
-        static let paleCoral = UIColor(red: 0.992, green: 0.929, blue: 0.878, alpha: 1)
+        static let paleBlue = UIColor(red: 0.895, green: 0.932, blue: 0.988, alpha: 1)
+        static let paleCoral = UIColor(red: 0.988, green: 0.914, blue: 0.902, alpha: 1)
     }
 
     private final class Document {
@@ -126,7 +126,10 @@ enum RaceBookPDFRenderer {
             if tracking != 0 {
                 attributes[.kern] = tracking
             }
+            context.cgContext.saveGState()
+            context.cgContext.clip(to: rect)
             (value as NSString).draw(in: rect, withAttributes: attributes)
+            context.cgContext.restoreGState()
             return Self.textHeight(value, font: font, width: rect.width, lineSpacing: lineSpacing)
         }
 
@@ -168,26 +171,195 @@ enum RaceBookPDFRenderer {
         do {
             try renderer.writePDF(to: url) { context in
                 let document = Document(context: context, size: pageSize)
-                renderCover(document, athlete: athlete, results: scoped, options: options)
-
-                if options.includePersonalBests || options.includePodiumHighlights || options.includeProgression {
-                    renderHighlights(document,
-                                     athlete: athlete,
-                                     results: scoped,
-                                     options: options)
-                }
-
-                if options.includeRaceHistory {
-                    renderHistory(document,
+                if options.onePage {
+                    renderOnePage(document,
+                                  athlete: athlete,
                                   results: scoped,
-                                  notes: notes,
                                   options: options)
+                } else {
+                    renderCover(document, athlete: athlete, results: scoped, options: options)
+
+                    if options.includePersonalBests || options.includePodiumHighlights || options.includeProgression {
+                        renderHighlights(document,
+                                         athlete: athlete,
+                                         results: scoped,
+                                         options: options)
+                    }
+
+                    if options.includeRaceHistory {
+                        renderHistory(document,
+                                      results: scoped,
+                                      notes: notes,
+                                      options: options)
+                    }
                 }
             }
             return url
         } catch {
             return nil
         }
+    }
+
+    private static func renderOnePage(_ document: Document,
+                                      athlete: Athlete,
+                                      results: [RaceResult],
+                                      options: RaceBookOptions) {
+        document.beginPage()
+        let heroHeight: CGFloat = 164
+        document.fill(CGRect(x: 0, y: 0, width: pageSize.width, height: heroHeight), Palette.deep)
+        document.fill(CGRect(x: 0, y: 0, width: 12, height: heroHeight), Palette.coral)
+        document.text("IM TRI TRACKER  |  ONE-PAGE RACE BOOK",
+                      in: CGRect(x: pageMargin, y: 32, width: pageSize.width - pageMargin * 2, height: 14),
+                      font: .systemFont(ofSize: 8.5, weight: .bold),
+                      color: Palette.coral,
+                      tracking: 1)
+        document.text(athlete.name,
+                      in: CGRect(x: pageMargin, y: 58, width: pageSize.width - pageMargin * 2, height: 42),
+                      font: .systemFont(ofSize: 30, weight: .bold),
+                      color: .white,
+                      lineSpacing: 0)
+        if let location = athlete.location, !location.isEmpty {
+            document.text(location,
+                          in: CGRect(x: pageMargin, y: 108, width: pageSize.width - pageMargin * 2, height: 16),
+                          font: .systemFont(ofSize: 10, weight: .regular),
+                          color: UIColor.white.withAlphaComponent(0.72))
+        }
+
+        let summary = RaceAnalytics.summary(results)
+        var y: CGFloat = 184
+        if options.includeCareerSummary {
+            let statsRect = CGRect(x: pageMargin, y: y, width: pageSize.width - pageMargin * 2, height: 82)
+            document.card(statsRect, fill: Palette.card, stroke: Palette.card)
+            let statWidth = statsRect.width / 4
+            let statY = statsRect.minY + 14
+            drawStat(document, value: "\(summary.starts)", label: "STARTS", x: statsRect.minX, width: statWidth, y: statY)
+            drawStat(document, value: "\(summary.finishes)", label: "FINISHES", x: statsRect.minX + statWidth, width: statWidth, y: statY)
+            drawStat(document, value: "\(summary.podiums)", label: "PODIUMS", x: statsRect.minX + statWidth * 2, width: statWidth, y: statY, accent: true)
+            drawStat(document,
+                     value: "\(Int((summary.finishRate * 100).rounded()))%",
+                     label: "FINISH RATE",
+                     x: statsRect.minX + statWidth * 3,
+                     width: statWidth,
+                     y: statY)
+            y = statsRect.maxY + 22
+        }
+
+        if options.includePersonalBests {
+            let bests = RaceAnalytics.availableKinds(results).flatMap {
+                RaceBookAnalytics.bests(results, kind: $0).prefix(2)
+            }.prefix(4)
+            let rows = Array(bests)
+            let cardHeight = CGFloat(max(rows.count, 1)) * 24 + 36
+            let rect = CGRect(x: pageMargin, y: y, width: pageSize.width - pageMargin * 2, height: cardHeight)
+            document.card(rect, fill: Palette.paleBlue, stroke: Palette.paleBlue)
+            document.text("PERSONAL BESTS",
+                          in: CGRect(x: rect.minX + 18, y: rect.minY + 12, width: rect.width - 36, height: 14),
+                          font: .systemFont(ofSize: 8, weight: .bold),
+                          color: Palette.aqua,
+                          tracking: 0.8)
+            if rows.isEmpty {
+                document.text("No complete splits are available yet.",
+                              in: CGRect(x: rect.minX + 18, y: rect.minY + 30, width: rect.width - 36, height: 16),
+                              font: .systemFont(ofSize: 9, weight: .regular),
+                              color: Palette.secondary)
+            } else {
+                for (index, best) in rows.enumerated() {
+                    let rowY = rect.minY + 32 + CGFloat(index) * 24
+                    document.fill(CGRect(x: rect.minX + 18, y: rowY + 4, width: 7, height: 7), color(for: best.discipline))
+                    document.text("\(best.discipline.title)  ·  \(singleLine(best.result.raceName, limit: 42))",
+                                  in: CGRect(x: rect.minX + 32, y: rowY, width: rect.width - 172, height: 16),
+                                  font: .systemFont(ofSize: 8.5, weight: .regular),
+                                  color: Palette.secondary)
+                    document.text(TimeFormat.hms(best.seconds),
+                                  in: CGRect(x: rect.maxX - 128, y: rowY, width: 110, height: 16),
+                                  font: .monospacedDigitSystemFont(ofSize: 8.5, weight: .semibold),
+                                  color: Palette.deep,
+                                  alignment: .right,
+                                  lineSpacing: 0)
+                }
+            }
+            y = rect.maxY + 14
+        }
+
+        if options.includePodiumHighlights {
+            let podiums = results.filter { $0.isComplete && ($0.finishRankGroup ?? .max) <= 3 }.prefix(2)
+            let rows = Array(podiums)
+            let cardHeight = CGFloat(max(rows.count, 1)) * 24 + 36
+            let rect = CGRect(x: pageMargin, y: y, width: pageSize.width - pageMargin * 2, height: cardHeight)
+            document.card(rect, fill: Palette.paleCoral, stroke: Palette.paleCoral)
+            document.text("PODIUM MOMENTS",
+                          in: CGRect(x: rect.minX + 18, y: rect.minY + 12, width: rect.width - 36, height: 14),
+                          font: .systemFont(ofSize: 8, weight: .bold),
+                          color: Palette.coral,
+                          tracking: 0.8)
+            if rows.isEmpty {
+                document.text("No podium finishes recorded yet.",
+                              in: CGRect(x: rect.minX + 18, y: rect.minY + 30, width: rect.width - 36, height: 16),
+                              font: .systemFont(ofSize: 9, weight: .regular),
+                              color: Palette.secondary)
+            } else {
+                for (index, result) in rows.enumerated() {
+                    let rowY = rect.minY + 32 + CGFloat(index) * 24
+                    document.text("#\(result.finishRankGroup ?? 0)  \(singleLine(result.raceName, limit: 44))",
+                                  in: CGRect(x: rect.minX + 18, y: rowY, width: rect.width - 174, height: 16),
+                                  font: .systemFont(ofSize: 8.5, weight: .regular),
+                                  color: Palette.secondary)
+                    document.text(dateText(result),
+                                  in: CGRect(x: rect.maxX - 140, y: rowY, width: 122, height: 16),
+                                  font: .systemFont(ofSize: 8, weight: .regular),
+                                  color: Palette.muted,
+                                  alignment: .right)
+                }
+            }
+            y = rect.maxY + 14
+        }
+
+        if options.includeRaceHistory {
+            let rows = Array(results.prefix(5))
+            let cardHeight = CGFloat(max(rows.count, 1)) * 26 + 36
+            let rect = CGRect(x: pageMargin, y: y, width: pageSize.width - pageMargin * 2, height: cardHeight)
+            document.card(rect, fill: Palette.card)
+            document.text("RECENT RACE HISTORY",
+                          in: CGRect(x: rect.minX + 18, y: rect.minY + 12, width: rect.width - 36, height: 14),
+                          font: .systemFont(ofSize: 8, weight: .bold),
+                          color: Palette.coral,
+                          tracking: 0.8)
+            if rows.isEmpty {
+                document.text("No races match these choices.",
+                              in: CGRect(x: rect.minX + 18, y: rect.minY + 30, width: rect.width - 36, height: 16),
+                              font: .systemFont(ofSize: 9, weight: .regular),
+                              color: Palette.muted)
+            } else {
+                for (index, result) in rows.enumerated() {
+                    let rowY = rect.minY + 32 + CGFloat(index) * 26
+                    document.text(dateText(result),
+                                  in: CGRect(x: rect.minX + 18, y: rowY, width: 76, height: 16),
+                                  font: .systemFont(ofSize: 7.5, weight: .bold),
+                                  color: Palette.coral)
+                    document.text(singleLine(result.raceName, limit: 44),
+                                  in: CGRect(x: rect.minX + 100, y: rowY, width: rect.width - 226, height: 16),
+                                  font: .systemFont(ofSize: 8.5, weight: .semibold),
+                                  color: Palette.ink)
+                    let status = result.isComplete
+                        ? TimeFormat.hms(result.finish)
+                        : (ResumeBuilder.statusLabel(for: result) ?? "Incomplete")
+                    document.text(status,
+                                  in: CGRect(x: rect.maxX - 110, y: rowY, width: 92, height: 16),
+                                  font: .monospacedDigitSystemFont(ofSize: 8, weight: .semibold),
+                                  color: result.isComplete ? Palette.deep : Palette.coral,
+                                  alignment: .right,
+                                  lineSpacing: 0)
+                }
+            }
+            if results.count > rows.count {
+                document.text("+\(results.count - rows.count) more races in the full report",
+                              in: CGRect(x: rect.minX + 18, y: rect.maxY - 18, width: rect.width - 36, height: 12),
+                              font: .systemFont(ofSize: 7.5, weight: .regular),
+                              color: Palette.muted,
+                              alignment: .right)
+            }
+        }
+        document.endPage()
     }
 
     private static func renderCover(_ document: Document,
@@ -625,7 +797,8 @@ enum RaceBookPDFRenderer {
                                           note: RaceNote?,
                                           options: RaceBookOptions) -> CGFloat {
         let nameFont = UIFont.systemFont(ofSize: 12.5, weight: .semibold)
-        let nameHeight = max(18, Document.textHeight(result.raceName, font: nameFont, width: 300, lineSpacing: 1))
+        let nameWidth = pageSize.width - pageMargin * 2 - 200
+        let nameHeight = max(18, Document.textHeight(result.raceName, font: nameFont, width: nameWidth, lineSpacing: 1))
         var height: CGFloat = 20 + nameHeight + 14
         if result.isComplete, options.includeSplits {
             height += 32
@@ -636,7 +809,7 @@ enum RaceBookPDFRenderer {
                                                width: pageSize.width - pageMargin * 2 - 52,
                                                lineSpacing: 1.5) + 8
         }
-        return max(86, height + 18)
+        return max(86, height + 30)
     }
 
     private static func drawHistoryCard(_ document: Document,
@@ -660,9 +833,10 @@ enum RaceBookPDFRenderer {
                       tracking: 0.5)
 
         let nameFont = UIFont.systemFont(ofSize: 12.5, weight: .semibold)
-        let nameHeight = max(18, Document.textHeight(result.raceName, font: nameFont, width: 300, lineSpacing: 1))
+        let nameWidth = rect.width - 200
+        let nameHeight = max(18, Document.textHeight(result.raceName, font: nameFont, width: nameWidth, lineSpacing: 1))
         document.text(result.raceName,
-                      in: CGRect(x: rect.minX + 18, y: rect.minY + 34, width: 300, height: nameHeight),
+                      in: CGRect(x: rect.minX + 18, y: rect.minY + 34, width: nameWidth, height: nameHeight),
                       font: nameFont,
                       color: Palette.ink,
                       lineSpacing: 1)
@@ -760,6 +934,15 @@ enum RaceBookPDFRenderer {
 
     private static func dateText(_ result: RaceResult) -> String {
         result.eventDate.map(RaceDate.medium) ?? (result.year > 0 ? String(result.year) : "Undated")
+    }
+
+    private static func singleLine(_ value: String, limit: Int) -> String {
+        let normalized = value.replacingOccurrences(of: "\\n", with: " ")
+            .split(whereSeparator: { $0.isWhitespace })
+            .joined(separator: " ")
+        guard normalized.count > limit else { return normalized }
+        let end = normalized.index(normalized.startIndex, offsetBy: max(limit - 1, 1))
+        return String(normalized[..<end]) + "…"
     }
 
     private static func color(for discipline: Discipline) -> UIColor {

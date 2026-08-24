@@ -155,6 +155,33 @@ final class RaceBookTests: XCTestCase {
                              "The shareable image should contain the full history, not a fixed cover")
     }
 
+    func testOnePagePDFProducesSinglePageSummary() throws {
+        let athlete = Athlete(id: "athlete", name: "Test Athlete")
+        let results = (0..<6).map { index in
+            Self.result(id: "one-page-\(index)",
+                        date: "\(2020 + index)-09-07T00:00:00Z",
+                        bikeDistance: 180,
+                        swim: 3_600 - index,
+                        bike: 18_000 - index,
+                        run: 14_400 - index,
+                        finish: 36_000 - index,
+                        raceName: "One Page Race \(index)")
+        }
+        let options = RaceBookOptions(onePage: true)
+        XCTAssertTrue(options.onePage)
+
+        let pdfURL = try XCTUnwrap(RaceBookBuilder.pdf(athlete: athlete,
+                                                       results: results,
+                                                       notes: [:],
+                                                       options: options))
+        defer { try? FileManager.default.removeItem(at: pdfURL) }
+
+        let document = try XCTUnwrap(PDFDocument(url: pdfURL))
+        XCTAssertEqual(document.pageCount, 1)
+        let text = try XCTUnwrap(document.page(at: 0)?.string)
+        XCTAssertTrue(text.contains("One Page Race"))
+    }
+
     func testExportOptionsKeepTheRaceBookFocused() {
         let athlete = Athlete(id: "athlete", name: "Test Athlete")
         let result = Self.result(id: "race",

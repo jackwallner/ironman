@@ -58,6 +58,10 @@ struct RaceBookView: View {
             syncKind()
             syncExportOptions()
         }
+        .onChange(of: exportOptions) { _, _ in
+            exports = nil
+            exportError = nil
+        }
         .sheet(item: $paywallTrigger) { trigger in
             PaywallView(trigger: trigger)
         }
@@ -187,6 +191,10 @@ struct RaceBookView: View {
                              isOn: $exportOptions.includeRaceNotes)
                 optionToggle("Incomplete results", detail: "Include DNF, DNS and DQ entries",
                              isOn: $exportOptions.includeIncomplete)
+                Divider()
+                    .background(TriPalette.divider)
+                optionToggle("One-page PDF", detail: "A condensed summary for quick sharing",
+                             isOn: $exportOptions.onePage)
             }
 
             if locker.availableKinds.count > 1 {
@@ -352,7 +360,7 @@ struct RaceBookView: View {
     private var exportCard: some View {
         VStack(alignment: .leading, spacing: TriSpace.x3) {
             TriSectionHeader(title: "Build your Race Book")
-            Text("Build a polished PDF and a tall shareable image from the choices below. Everything is generated on this phone.")
+            Text("Build a polished full report or one-page PDF, plus a tall shareable image. Everything is generated on this phone.")
                 .font(TriType.body)
                 .foregroundStyle(TriPalette.inkSecondary)
                 .fixedSize(horizontal: false, vertical: true)

@@ -60,7 +60,7 @@ struct AthleteSearchView: View {
                     ToolbarItem(placement: .cancellationAction) {
                         Button("Cancel") { dismiss() }
                             .foregroundStyle(TriPalette.inkOnDark)
-                            .padding(.horizontal, TriSpace.x3)
+                            .padding(.horizontal, TriSpace.x4)
                             .triTapTarget()
                     }
                 }
