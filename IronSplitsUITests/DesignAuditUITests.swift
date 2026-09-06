@@ -110,7 +110,12 @@ final class DesignAuditUITests: XCTestCase {
 
         app.tabBars.buttons["Settings"].tap()
         XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 10))
-        XCTAssertTrue(app.buttons["System"].waitForExistence(timeout: 10),
+        // Appearance sits below About, Athlete and Units, so it needs a scroll.
+        let appearancePicker = app.buttons["System"]
+        for _ in 0..<8 where !appearancePicker.isHittable {
+            app.swipeUp()
+        }
+        XCTAssertTrue(appearancePicker.waitForExistence(timeout: 10),
                       "Settings must expose the appearance picker")
         XCTAssertTrue(app.buttons["Light"].exists)
         XCTAssertTrue(app.buttons["Dark"].exists)

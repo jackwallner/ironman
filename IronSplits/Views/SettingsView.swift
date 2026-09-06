@@ -128,7 +128,7 @@ struct SettingsView: View {
                             .font(TriType.small)
                             .foregroundStyle(TriPalette.negative)
                     }
-                    Text("Earlier Iron Splits+ customers can restore their existing access here.")
+                    Text("Already bought Race Book? Restore it here on a new device or after reinstalling.")
                         .font(TriType.micro)
                         .foregroundStyle(TriPalette.inkTertiary)
                 }
