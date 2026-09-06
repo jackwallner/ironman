@@ -99,7 +99,12 @@ final class LockerFlowUITests: XCTestCase {
         // Settings
         app.tabBars.buttons["Settings"].tap()
         XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 10))
-        XCTAssertTrue(app.buttons["System"].waitForExistence(timeout: 10))
+        // Appearance sits below About, Athlete and Units, so it needs a scroll.
+        let appearancePicker = app.buttons["System"]
+        for _ in 0..<8 where !appearancePicker.isHittable {
+            app.swipeUp()
+        }
+        XCTAssertTrue(appearancePicker.waitForExistence(timeout: 10))
         XCTAssertTrue(app.buttons["Light"].exists)
         XCTAssertTrue(app.buttons["Dark"].exists)
         app.buttons["Dark"].tap()
@@ -164,8 +169,12 @@ final class LockerFlowUITests: XCTestCase {
         XCTAssertTrue(app.navigationBars["Race Book"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["THINGS TO INCLUDE"].waitForExistence(timeout: 10),
                       "Race Book should expose its configuration without a locked placeholder")
-        let exportButton = app.buttons["Unlock Race Book exports"]
-        XCTAssertTrue(exportButton.waitForExistence(timeout: 10))
+        let exportButton = app.buttons["Unlock to export"]
+        for _ in 0..<8 where !exportButton.isHittable {
+            app.swipeUp()
+        }
+        XCTAssertTrue(exportButton.waitForExistence(timeout: 10),
+                      "Without a purchase the export action must read as locked")
         exportButton.tap()
         XCTAssertTrue(app.staticTexts["Share your Race Book"].waitForExistence(timeout: 15),
                       "Export should open the Race Book paywall")

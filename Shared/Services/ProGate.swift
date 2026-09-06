@@ -9,13 +9,12 @@ import Foundation
 /// screen from quietly putting a lock on the athlete's own data.
 enum ProGate {
 
-    /// Temporary switch for TestFlight and App Review builds. Remove the
-    /// RACE_BOOK_TEST_UNLOCK build condition before enabling paid access.
-    #if RACE_BOOK_TEST_UNLOCK
-    static let everythingUnlocked = true
-    #else
+    /// Never true in a shipped build. A build that unlocks paid features
+    /// without an In-App Purchase reads to App Review as content sold outside
+    /// the store (Guideline 2.1(b), 1.0 build 13). If a build ever needs the
+    /// Race Book open without buying it, use `IRONSPLITS_FORCE_PRO=1` on the
+    /// Debug scheme, which cannot reach Release.
     static let everythingUnlocked = false
-    #endif
 
     /// Whether the Race Book can be opened for paid actions.
     static func raceBookUnlocked(isPro: Bool) -> Bool {

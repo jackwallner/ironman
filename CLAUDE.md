@@ -87,19 +87,29 @@ Ranking is always scoped to one `RaceKind`. A 70.3 bike split always beats a
 full-distance one, so a combined "best bike" list is just a list of every half
 the athlete has done.
 
-## Free vs Pro: currently nothing is gated
-`ProGate.everythingUnlocked` is `true`, and it is the **single** switch. Every
-gate in the app reads it (`StoreService.isPro` returns true while it is set, and
-`apply(customerInfo:)` refuses to close a door it opened). No screen draws a lock
-and `PaywallView` is not presented from anywhere.
+## Free vs Pro: only Race Book is gated
+`ProGate` is the **single** switch and `ProGate.everythingUnlocked` is `false`.
+The complete locker, splits, rankings, field context, notes and race details
+are free for everyone; the one paid boundary is Race Book, meaning
+like-for-like race comparison and unlimited PDF/image export. Gate any new
+feature through `ProGate`, never through a fresh entitlement check.
 
-Nothing was deleted, so flipping the flag restores the whole thing: `LockedRow`,
-the three-race free window (over the whole history, not per filter, see
-`LockerView.visibleResults`), and the paywall triggers. If you add a new
-feature, gate it through `ProGate`, never through a fresh entitlement check.
+**Never ship a build with the paid boundary open.** 1.0 build 13 archived with
+a `RACE_BOOK_TEST_UNLOCK` compile condition in the Release config, so App
+Review saw "Race Book is unlocked" next to Restore purchases and an IAP that
+had never been submitted, and rejected it under Guideline 2.1(b) on
+2026-09-06. Both the condition and the `#if` in `ProGate` are gone. To open the
+gate for local work, use `IRONSPLITS_FORCE_PRO=1` on the Debug scheme, which
+cannot reach Release.
 
-Restore Purchases stays visible regardless: people who already bought Iron
-Splits+ still need to reattach a receipt on a new device.
+The one paid product is `com.jackwallner.ironman.pro`, a non-consumable
+lifetime unlock. `…pro.yearly` / `…pro.monthly` exist only as identifiers
+`StoreService` still recognises on a receipt; they have never existed in App
+Store Connect and are not sold. Say nothing in user-facing or reviewer-facing
+copy about "existing Iron Splits+ customers": the app has never shipped, so a
+prior purchase reads to App Review as content sold outside the App Store.
+Restore Purchases still stays visible, because a buyer needs it on a new
+device.
 
 ## App-specific notes
 - **Pointers content is not in the app.** The catalog is fetched from
