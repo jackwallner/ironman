@@ -216,7 +216,7 @@ a {
 .pattie-feature-screen img {
   display: block;
   width: 100%;
-  aspect-ratio: 660 / 1434;
+  height: auto;
 }
 .pattie-gallery {
   padding: 80px 0;
