@@ -112,31 +112,7 @@ Restore Purchases still stays visible, because a buyer needs it on a new
 device.
 
 ## App-specific notes
-- **Pointers content is not in the app.** The catalog is fetched from
-  `docs/pointers.json`; `docs/POINTERS.md` documents the schema and hosting.
-- **The episodes cannot be streamed from where they are hosted, and this is not
-  a bug in the player.** A GitHub release asset is served as
-  `application/octet-stream` with `Content-Disposition: attachment`, after a
-  redirect to a signed URL with no file extension in its path. `AVURLAsset`
-  needs either the MIME type or the extension and that response gives it
-  neither, so `VideoPlayer` showed a black rectangle. `PointerMediaCache`
-  downloads to a local `.mp4` first, which also makes replays instant and works
-  offline. If the media ever moves to a host that sends `video/mp4`, streaming
-  would work again and the cache could go.
-- **The hosted episode files are 426x240.** They will look soft full-screen on a
-  phone. Re-encoding from higher-resolution originals (which are not in this
-  repo) is worth doing before any App Store screenshot features the player.
-- **Ask Pattie is a deterministic tree, not a chat.** `docs/ask-pattie.json`
-  holds goals, topics and answers; the app bundles a copy as the offline
-  fallback and hot-loads the hosted one. It costs nothing per question, can only
-  surface advice Pattie actually gave on camera, and works with no signal.
-  `scripts/build-ask-pattie.py` regenerates it and **refuses to publish a tree
-  with a dead end**, so run it rather than hand-editing the JSON.
-- **Pattie's voice clips are cut from her own episodes** by
-  `scripts/cut-pattie-voice.py`, using Whisper word timestamps snapped to the
-  nearest real silence. There are 56 in `IronSplits/Resources/PattieVoice/`:
-  18 sign-offs, 19 situation hooks, 19 solutions. Nothing is synthesised, and
-  nothing should be.
+- **Pointers, Ask Pattie and Pattie's voice clips are hosted or generated content.** Regenerate `docs/ask-pattie.json` with `scripts/build-ask-pattie.py` rather than hand-editing it, and nothing of Pattie's voice is ever synthesised. Details (media hosting, why episodes are cached rather than streamed, clip cutting) are in `.claude/rules/pointers-and-pattie.md`, which loads when you read a matching file; AGENTS.md readers should open it directly.
 - Review funnel trigger: opening a race detail (`RaceDetailView.task`). The ASC
   record is `6803727074`, and `AppStoreReviewLinks` is configured so Settings
   can show the native rating entry.
@@ -153,6 +129,3 @@ device.
 ---
 Shared iOS conventions (build, simulator, release/TestFlight, ASC key, signing, review funnel, gotchas):
 always-loaded global CLAUDE.md + the `ios-dev` skill.
-
-## Subagent delegation
-Follow the global CLAUDE.md subagent rules: ask Jack for the model before spawning, spawn at most one at a time unless Jack explicitly approves more, and never allow a subagent to spawn another subagent.
