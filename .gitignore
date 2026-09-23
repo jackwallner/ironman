@@ -15,3 +15,6 @@ fastlane/metadata.bak.*
 scripts/.asc-state.json
 backend/.venv/
 __pycache__/
+
+# App Review contact phone stays local (never in a public repo)
+fastlane/metadata*/review_information/phone_number.txt
