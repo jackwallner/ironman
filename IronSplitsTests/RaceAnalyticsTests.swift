@@ -133,6 +133,25 @@ final class RaceAnalyticsTests: XCTestCase {
         XCTAssertEqual(last?.percentile, 0)
     }
 
+    #if DEBUG
+    func testScreenshotFixtureRanksMatchItsSyntheticField() {
+        let athlete = DebugScreenshotFixtures.results.first { $0.id == "demo-full-2025" }!
+        let field = DebugScreenshotFixtures.field
+        let division = field.filter { $0.ageGroup == athlete.ageGroup }
+
+        for discipline in [Discipline.swim, .bike, .run, .finish] {
+            let overall = RaceAnalytics.placement(of: athlete, discipline: discipline, inField: field)
+            let ageGroup = RaceAnalytics.placement(of: athlete, discipline: discipline, inField: division)
+            XCTAssertEqual(athlete.overallRank(for: discipline), overall?.rank, "Overall \(discipline)")
+            XCTAssertEqual(athlete.divisionRank(for: discipline), ageGroup?.rank, "Age group \(discipline)")
+            XCTAssertEqual(ageGroup?.fieldSize, 11, "Age group field size for \(discipline)")
+        }
+
+        XCTAssertEqual(athlete.finishRankGender,
+                       RaceAnalytics.placement(of: athlete, discipline: .finish, inField: field)?.rank)
+    }
+    #endif
+
     func testPlacementIsNilForAFieldOfOne() {
         let solo = result(id: "solo")
         XCTAssertNil(RaceAnalytics.placement(of: solo, discipline: .bike, inField: [solo]))

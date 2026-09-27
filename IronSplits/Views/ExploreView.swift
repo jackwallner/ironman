@@ -9,7 +9,7 @@ struct ExploreView: View {
     @EnvironmentObject private var pattie: PattieMode
     @State private var showingSearch = false
     @State private var selectedAthlete: Athlete?
-    @State private var recentAthletes: [Athlete] = ExploreRecents.load()
+    @State private var recentAthletes: [Athlete] = Self.initialRecentAthletes()
 
     var body: some View {
         NavigationStack {
@@ -39,6 +39,15 @@ struct ExploreView: View {
             }
         }
         .pattieMoment(.searching, pattie)
+    }
+
+    private static func initialRecentAthletes() -> [Athlete] {
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-SeedScreenshotData") {
+            return [DebugScreenshotFixtures.athlete]
+        }
+        #endif
+        return ExploreRecents.load()
     }
 
     private var hero: some View {
@@ -360,6 +369,14 @@ private struct ExploreAthleteView: View {
         guard state == .idle || retry else { return }
         guard state != .loading else { return }
         state = .loading
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-SeedScreenshotData") {
+            results = DebugScreenshotFixtures.results
+            syncKind()
+            state = .loaded
+            return
+        }
+        #endif
         do {
             let loaded = try await api.results(forContactIDs: athlete.contactIDs)
             guard !Task.isCancelled else {

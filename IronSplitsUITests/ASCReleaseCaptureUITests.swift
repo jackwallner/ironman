@@ -24,12 +24,33 @@ final class ASCReleaseCaptureUITests: XCTestCase {
 
         app.buttons["Rankings"].tap()
         XCTAssertTrue(app.staticTexts["FINISH RANKINGS"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["2025 · Full"].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.staticTexts["2,025 · Full"].exists)
         capture(app, named: "rankings")
 
         let firstRace = app.staticTexts["Riverbend Triathlon"].firstMatch
         XCTAssertTrue(firstRace.waitForExistence(timeout: 15))
         firstRace.tap()
         XCTAssertTrue(app.staticTexts["SPLITS"].waitForExistence(timeout: 20))
+        let fieldHeading = app.staticTexts["AGAINST THE FIELD"]
+        XCTAssertTrue(fieldHeading.waitForExistence(timeout: 15))
+        let firstFieldPlacement = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "label CONTAINS '8 of 11 finishers'"))
+            .firstMatch
+        XCTAssertTrue(firstFieldPlacement.waitForExistence(timeout: 10))
+        if !fieldHeading.isHittable {
+            let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.78))
+            let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.68))
+            start.press(forDuration: 0.1, thenDragTo: end)
+        }
+        if !firstFieldPlacement.isHittable {
+            let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.78))
+            let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.73))
+            start.press(forDuration: 0.1, thenDragTo: end)
+        }
+        XCTAssertTrue(app.staticTexts["SPLITS"].isHittable)
+        XCTAssertTrue(fieldHeading.isHittable)
+        XCTAssertTrue(firstFieldPlacement.isHittable)
         capture(app, named: "race-detail")
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
@@ -39,8 +60,12 @@ final class ASCReleaseCaptureUITests: XCTestCase {
         capture(app, named: "race-book")
 
         app.tabBars.buttons["Explore"].tap()
-        XCTAssertTrue(app.navigationBars["Explore"].waitForExistence(timeout: 15))
-        XCTAssertTrue(app.buttons["Find a racer"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["RECENTLY EXPLORED"].waitForExistence(timeout: 15))
+        let recentAthlete = app.staticTexts["Alex Runner"].firstMatch
+        XCTAssertTrue(recentAthlete.waitForExistence(timeout: 10))
+        recentAthlete.tap()
+        XCTAssertTrue(app.staticTexts["RACE HISTORY"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts["Riverbend Triathlon"].firstMatch.exists)
         capture(app, named: "explore")
 
         app.tabBars.buttons["Tips"].tap()

@@ -2,6 +2,25 @@ import Foundation
 
 #if DEBUG
 enum DebugScreenshotFixtures {
+    private struct Ranks {
+        let swimOverall: Int
+        let swimGroup: Int
+        let bikeOverall: Int
+        let bikeGroup: Int
+        let runOverall: Int
+        let runGroup: Int
+        let finishOverall: Int
+        let finishGender: Int
+        let finishGroup: Int
+
+        static let riverbend2025 = Ranks(
+            swimOverall: 8, swimGroup: 8,
+            bikeOverall: 15, bikeGroup: 11,
+            runOverall: 12, runGroup: 11,
+            finishOverall: 13, finishGender: 13, finishGroup: 11
+        )
+    }
+
     static let athlete = Athlete(
         id: "screenshot-athlete",
         name: "Alex Runner",
@@ -24,7 +43,8 @@ enum DebugScreenshotFixtures {
         finish(id: "demo-full-2024", year: 2024, race: "Riverbend Triathlon", month: 9, day: 8,
                swim: 3_650, t1: 300, bike: 18_900, t2: 210, run: 14_400),
         finish(id: "demo-full-2025", year: 2025, race: "Riverbend Triathlon", month: 9, day: 7,
-               swim: 3_590, t1: 285, bike: 18_500, t2: 200, run: 14_100, eventID: eventID),
+               swim: 3_590, t1: 282, bike: 18_500, t2: 200, run: 14_100,
+               eventID: eventID, ranks: .riverbend2025),
         finish(id: "demo-half-2022", year: 2022, race: "Cascade Half Triathlon", month: 6, day: 19,
                swim: 1_780, t1: 180, bike: 9_800, t2: 140, run: 7_400,
                bikeKm: 90.1, runKm: 21.1, swimKm: 1.9),
@@ -77,7 +97,19 @@ enum DebugScreenshotFixtures {
                                eventID: String? = nil,
                                athleteName: String = "Alex Runner",
                                ageGroup: String = "M40-44",
-                               bib: Int = 1_087) -> RaceResult {
+                               bib: Int = 1_087,
+                               ranks: Ranks? = nil) -> RaceResult {
+        let ranks = ranks ?? Ranks(
+            swimOverall: 180 + bib % 120,
+            swimGroup: 9 + bib % 6,
+            bikeOverall: 120 + bib % 90,
+            bikeGroup: 4 + bib % 5,
+            runOverall: 240 + bib % 140,
+            runGroup: 7 + bib % 8,
+            finishOverall: 200 + bib % 120,
+            finishGender: 150 + bib % 100,
+            finishGroup: 6 + bib % 9
+        )
         let date = Calendar(identifier: .gregorian).date(from: DateComponents(year: year, month: month, day: day))
         let finish = swim + t1 + bike + t2 + run
         return RaceResult(
@@ -100,15 +132,15 @@ enum DebugScreenshotFixtures {
             swimDistanceKm: swimKm,
             bikeDistanceKm: bikeKm,
             runDistanceKm: runKm,
-            swimRankOverall: 180 + bib % 120,
-            bikeRankOverall: 120 + bib % 90,
-            runRankOverall: 240 + bib % 140,
-            finishRankOverall: 200 + bib % 120,
-            finishRankGender: 150 + bib % 100,
-            finishRankGroup: 6 + bib % 9,
-            swimRankGroup: 9 + bib % 6,
-            bikeRankGroup: 4 + bib % 5,
-            runRankGroup: 7 + bib % 8,
+            swimRankOverall: ranks.swimOverall,
+            bikeRankOverall: ranks.bikeOverall,
+            runRankOverall: ranks.runOverall,
+            finishRankOverall: ranks.finishOverall,
+            finishRankGender: ranks.finishGender,
+            finishRankGroup: ranks.finishGroup,
+            swimRankGroup: ranks.swimGroup,
+            bikeRankGroup: ranks.bikeGroup,
+            runRankGroup: ranks.runGroup,
             isFinisher: true,
             didNotFinish: false,
             didNotStart: false,

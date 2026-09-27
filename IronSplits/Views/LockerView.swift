@@ -6,6 +6,7 @@ struct LockerView: View {
     @EnvironmentObject private var notes: RaceNotesStore
     @EnvironmentObject private var pattie: PattieMode
     @EnvironmentObject private var settings: AppSettings
+    @Environment(\.colorScheme) private var colorScheme
 
     @State private var showingAthleteSearch = false
     @State private var showingAddRegistration = false
@@ -35,7 +36,7 @@ struct LockerView: View {
                     } label: {
                         Text("Change")
                             .font(TriType.smallBold)
-                            .foregroundStyle(TriPalette.inkOnDark)
+                            .foregroundStyle(changeActionForeground)
                             .padding(.horizontal, TriSpace.x3)
                             .frame(minWidth: TriGeo.tapTarget, minHeight: TriGeo.tapTarget)
                     }
@@ -224,7 +225,15 @@ struct LockerView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
-        .searchable(text: $raceSearch, prompt: "Search races")
+        .tint(TriPalette.ink)
+        .searchable(text: $raceSearch,
+                    prompt: Text("Search races").foregroundColor(TriPalette.inkSecondary))
+    }
+
+    private var changeActionForeground: Color {
+        // iOS 26 groups toolbar actions on a light glass capsule in light mode.
+        if #available(iOS 26.0, *), colorScheme == .light { return TriPalette.deep }
+        return TriPalette.inkOnDark
     }
 
     private var kindPicker: some View {
@@ -419,7 +428,7 @@ private struct SplitStandingRow: View {
                     .font(TriType.cardTitle)
                     .foregroundStyle(TriPalette.ink)
                     .fixedSize(horizontal: false, vertical: true)
-                Text("\(standing.result.year) · \(standing.result.kind.title)")
+                Text(String(standing.result.year) + " · " + standing.result.kind.title)
                     .font(TriType.small)
                     .foregroundStyle(TriPalette.inkTertiary)
             }
