@@ -121,11 +121,18 @@ struct LockerView: View {
     private var list: some View {
         List {
             Section {
+                raceSearchField
+                    .listRowInsets(EdgeInsets(top: TriSpace.x2, leading: TriGeo.padPage,
+                                              bottom: TriSpace.x2, trailing: TriGeo.padPage))
+                    .listRowBackground(TriPalette.canvas)
+                    .listRowSeparator(.hidden)
+
                 LockerHeader(athlete: locker.athlete,
                              results: locker.results,
                              lastRefreshed: locker.lastRefreshed)
                     .listRowInsets(EdgeInsets())
-                    .listRowBackground(Color.clear)
+                    .listRowBackground(TriPalette.canvas)
+                    .listRowSeparator(.hidden)
             }
 
             if let warning = locker.refreshWarning {
@@ -225,9 +232,40 @@ struct LockerView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
-        .tint(TriPalette.ink)
-        .searchable(text: $raceSearch,
-                    prompt: Text("Search races").foregroundColor(TriPalette.inkSecondary))
+    }
+
+    private var raceSearchField: some View {
+        HStack(spacing: TriSpace.x2) {
+            Image(systemName: "magnifyingglass")
+                .font(TriType.body)
+                .foregroundStyle(TriPalette.inkSecondary)
+
+            TextField("Search races", text: $raceSearch,
+                      prompt: Text("Search races").foregroundColor(TriPalette.inkSecondary))
+                .font(TriType.field)
+                .foregroundStyle(TriPalette.ink)
+                .tint(TriPalette.sunrise)
+                .lineLimit(1)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .submitLabel(.search)
+
+            if !raceSearch.isEmpty {
+                Button {
+                    raceSearch = ""
+                    Haptics.tap()
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(TriPalette.inkTertiary)
+                        .frame(minWidth: TriGeo.tapTarget, minHeight: TriGeo.tapTarget)
+                }
+                .buttonStyle(.triPressSilent)
+                .accessibilityLabel("Clear race search")
+            }
+        }
+        .padding(.horizontal, TriSpace.x3)
+        .frame(maxWidth: .infinity, minHeight: TriGeo.tapTarget, alignment: .leading)
+        .background(TriPalette.surfaceAlt, in: Capsule())
     }
 
     private var changeActionForeground: Color {

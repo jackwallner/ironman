@@ -20,6 +20,7 @@ final class ASCReleaseCaptureUITests: XCTestCase {
         let locker = app.navigationBars["Locker"]
         XCTAssertTrue(locker.waitForExistence(timeout: 20))
         XCTAssertTrue(app.staticTexts["FINISHES"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.textFields["Search races"].exists)
         capture(app, named: "locker")
 
         app.buttons["Rankings"].tap()
@@ -76,6 +77,23 @@ final class ASCReleaseCaptureUITests: XCTestCase {
         app.tabBars.buttons["Settings"].tap()
         XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 15))
         capture(app, named: "settings")
+    }
+
+    func testLockerRaceSearchFiltersAndClears() throws {
+        let app = XCUIApplication()
+        app.launchArguments = ["-UITest", "-ResetLocker", "-SeedScreenshotData", "-AuditLight"]
+        app.launch()
+
+        let raceSearch = app.textFields["Search races"]
+        XCTAssertTrue(raceSearch.waitForExistence(timeout: 20))
+        raceSearch.tap()
+        raceSearch.typeText("Coastline")
+
+        XCTAssertTrue(app.staticTexts["Coastline Triathlon"].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.staticTexts["Riverbend Triathlon"].exists)
+
+        app.buttons["Clear race search"].tap()
+        XCTAssertTrue(app.staticTexts["Riverbend Triathlon"].firstMatch.waitForExistence(timeout: 10))
     }
 
     private func capture(_ app: XCUIApplication, named name: String) {
