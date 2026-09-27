@@ -112,7 +112,7 @@ Restore Purchases still stays visible, because a buyer needs it on a new
 device.
 
 ## App-specific notes
-- **Pointers, Ask Pattie and Pattie's voice clips are hosted or generated content.** Regenerate `docs/ask-pattie.json` with `scripts/build-ask-pattie.py` rather than hand-editing it, and nothing of Pattie's voice is ever synthesised. Details (media hosting, why episodes are cached rather than streamed, clip cutting) are in `.claude/rules/pointers-and-pattie.md`, which loads when you read a matching file; AGENTS.md readers should open it directly.
+- **Pointers, Ask Pattie and Pattie's voice clips are hosted or generated content.** Regenerate `docs/ask-pattie.json` with `scripts/build-ask-pattie.py` rather than hand-editing it, and nothing of Pattie's voice is ever synthesised. Details (media hosting, why episodes are cached rather than streamed, clip cutting) are in `.claude/rules/pointers-and-pattie.md`, which loads when you read a matching file; Codex and other agents should open it directly.
 - Review funnel trigger: opening a race detail (`RaceDetailView.task`). The ASC
   record is `6803727074`, and `AppStoreReviewLinks` is configured so Settings
   can show the native rating entry.
@@ -128,4 +128,4 @@ device.
 
 ---
 Shared iOS conventions (build, simulator, release/TestFlight, ASC key, signing, review funnel, gotchas):
-always-loaded global CLAUDE.md + the `ios-dev` skill.
+the global agent rules + the `ios-dev` skill.

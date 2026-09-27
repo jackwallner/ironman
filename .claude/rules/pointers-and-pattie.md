@@ -24,7 +24,7 @@ paths:
 
 # IM Iron Splits: Pointers, Ask Pattie and Pattie's voice
 
-Moved verbatim from CLAUDE.md. Loads when a matching file is read; update it here.
+Moved verbatim from AGENTS.md. Loads when a matching file is read; update it here.
 
 - **Pointers content is not in the app.** The catalog is fetched from
   `docs/pointers.json`; `docs/POINTERS.md` documents the schema and hosting.
