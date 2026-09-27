@@ -46,7 +46,7 @@
   "capture": {
     "mode": "command",
     "lease": "ironsplits",
-    "project_root": "~/ironman",
+    "project_root": ".",
     "command": [
       "bash",
       "scripts/capture-asc-screenshots.sh",
@@ -160,18 +160,18 @@
           }
         },
         {
-          "filename": "04-track-progress-across-seasons.png",
-          "header": "Track progress across seasons",
+          "filename": "04-see-your-career-at-a-glance.png",
+          "header": "See your career at a glance",
           "story_role": "support",
-          "story_focus": "progress across seasons",
+          "story_focus": "your career at a glance",
           "pitch": {
-            "benefit": "See career totals, personal bests and race-by-race times without paying.",
+            "benefit": "See career totals, race counts and personal bests without paying.",
             "problem": "Progress is difficult to read from finish times scattered across years and venues.",
             "advantage": "Race Book provides a free career overview and lets athletes inspect repeat events separately.",
-            "header_problem": "a long, scattered history",
-            "header_advantage": "a clear career view",
+            "header_problem": "career details scattered across years",
+            "header_advantage": "a clear career snapshot",
             "search_terms": ["triathlon personal bests", "race progression"],
-            "proof": "The literal Race Book preview shows career totals, split bests and the progression list from fictional results."
+            "proof": "The literal Race Book preview shows career totals, the year range and visible personal bests from fictional results."
           },
           "source": "asc-capture/race-book/race-book.png",
           "source_evidence": "asc-capture/race-book/race-book.png",
@@ -204,7 +204,7 @@
               "triathlon results lookup",
               "athlete race history"
             ],
-            "proof": "The literal Explore screen shows a separate search entry point that does not claim another athlete."
+            "proof": "The literal Explore profile shows a fictional athlete's full and half-distance history while the Locker remains separate."
           },
           "source": "asc-capture/race-book/explore.png",
           "source_evidence": "asc-capture/race-book/explore.png",

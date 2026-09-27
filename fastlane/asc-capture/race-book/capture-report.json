@@ -1,33 +1,31 @@
 {
   "status": "ok",
-  "manifest": "/Users/jackwallner/ironman/fastlane/asc-screenshots.json",
-  "app": "iron-splits",
+  "manifest": "fastlane/asc-screenshots.json",
+  "app": "im-iron-splits",
   "mode": "command",
-  "lease": "ironsplits-asc",
-  "output": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book",
+  "lease": "ironsplits",
+  "output": "fastlane/asc-capture/race-book",
   "proof_only": false,
   "checkout_options": [],
   "lease_checked_in": true,
   "screenshots": [
-    "bests.png",
+    "explore.png",
     "locker.png",
     "pattie.png",
-    "race-book-compare.png",
-    "race-book-export.png",
     "race-book.png",
     "race-detail.png",
-    "settings.png"
+    "rankings.png"
   ],
   "screenshot_records": [
     {
-      "name": "bests.png",
-      "path": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/bests.png",
+      "name": "explore.png",
+      "path": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/explore.png",
       "size": [
         1206,
         2622
       ],
       "mode": "RGB",
-      "sha256": "6fc7588d4763827c62293c65319ee1fdae2deea4a6303b9a7368e055ae936284"
+      "sha256": "0208ebd0606b49a22fd610313d23232151b1d790eabf9d510f77af88c01af427"
     },
     {
       "name": "locker.png",
@@ -37,7 +35,7 @@
         2622
       ],
       "mode": "RGB",
-      "sha256": "ecacb0af45e3e3f88088ef47f5423283f2eee1f60ed92674fbbafefb7ea3c561"
+      "sha256": "dfacd0841128cd2e08135440138692092fa4b3c856d13456242dbc61acf88342"
     },
     {
       "name": "pattie.png",
@@ -47,27 +45,7 @@
         2622
       ],
       "mode": "RGB",
-      "sha256": "37ac940a0a0eff2f8bb51b692df306c5de9af75f76582e5949239d3ac874b925"
-    },
-    {
-      "name": "race-book-compare.png",
-      "path": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-compare.png",
-      "size": [
-        1206,
-        2622
-      ],
-      "mode": "RGB",
-      "sha256": "d6ad434b0c3f05c9a5242a3070144daba80d5241e18b7905ca134670a5cef2b4"
-    },
-    {
-      "name": "race-book-export.png",
-      "path": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/race-book-export.png",
-      "size": [
-        1206,
-        2622
-      ],
-      "mode": "RGB",
-      "sha256": "022dccf6ebf9c78b00cc5cc6bef8608a3f594f695916885a2b839b9d9fc1e551"
+      "sha256": "5cfd2ad7a8dcee870470fb876d882ae8c561c2b802710ce849f23b940b04196c"
     },
     {
       "name": "race-book.png",
@@ -77,7 +55,7 @@
         2622
       ],
       "mode": "RGB",
-      "sha256": "899b3da502fa02ed0e461530dc9da50b8a2fc5e2671fd14d49ad63241a7f63ae"
+      "sha256": "ad9618e1e13b7abb60323b8798a0976259a227ea456dd3e9a8c2a64c051e43a9"
     },
     {
       "name": "race-detail.png",
@@ -87,37 +65,35 @@
         2622
       ],
       "mode": "RGB",
-      "sha256": "6d9bc80c527ab4d930e15ed8765b63f77ae13376af43da1a21006bd85b14936a"
+      "sha256": "01cdab0e27c501917441eb0ba381e8fe6b898855a06ac5576ae833b4842189c2"
     },
     {
-      "name": "settings.png",
-      "path": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/settings.png",
+      "name": "rankings.png",
+      "path": "/Users/jackwallner/ironman/fastlane/asc-capture/race-book/rankings.png",
       "size": [
         1206,
         2622
       ],
       "mode": "RGB",
-      "sha256": "f9300cf4b12abfb6a9f87832119c47b258251cea8acf29d05e80092dce27adb0"
+      "sha256": "a1442ed45b2fc475c19ec5e9954641e7a9a3402d3a4feea9225da44446d83d88"
     }
   ],
   "flows": [
     {
       "id": "repo-command",
       "screenshots": [
-        "bests.png",
+        "explore.png",
         "locker.png",
         "pattie.png",
-        "race-book-compare.png",
-        "race-book-export.png",
         "race-book.png",
         "race-detail.png",
-        "settings.png"
+        "rankings.png"
       ]
     }
   ],
   "app_repo": {
-    "path": "~/ironman",
-    "git_commit": "5326b1bea66fc3a36cb39244f6726bcc173683f3"
+    "path": ".",
+    "git_commit": "d8e6847fc06934e24754036aac84168432ee4920"
   },
   "device": {
     "udid": "2C7A80C1-1228-411A-B9AD-A7DEED683F79",
