@@ -296,9 +296,9 @@ struct ResultsAPI: ResultsProviding {
     /// Grouping is on person, not on contact id: see `Athlete.contactIDs` for
     /// why one person routinely owns two. Rows merge when the name, gender,
     /// city and available region all match after normalisation, which reunites
-    /// "Lincoln, CALIFORNIA" with "Lincoln, CA" while keeping same-name
-    /// athletes in different states apart. A row whose contact carries no city
-    /// keeps its own id as the key, so a missing city never collapses strangers.
+    /// "Lincoln, US-CA" with "Lincoln, CA" while keeping same-name athletes in
+    /// different states apart. A row whose contact carries no city keeps its
+    /// own id as the key, so a missing city never collapses strangers.
     static func collapseToAthletes(_ rows: [ODataResultRow]) -> [Athlete] {
         let rows = deduplicatedRows(rows)
         var byKey: [String: Athlete] = [:]

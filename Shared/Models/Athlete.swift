@@ -13,9 +13,9 @@ struct Athlete: Identifiable, Codable, Hashable, Sendable {
     ///
     /// Timing registration mints a fresh contact record whenever the details
     /// the athlete typed don't match an existing one, so a career routinely
-    /// arrives split across two ids: Pattie Wallner's 22 races sit under one
-    /// contact spelled "Lincoln, CALIFORNIA" and her most recent race under
-    /// another spelled "Lincoln, US-CA". Grouping on the id alone showed her
+    /// arrives split across two ids: Pattie Wallner's older races sit under one
+    /// contact spelled "Lincoln, US-CA" and her most recent race under another
+    /// spelled "Lincoln, CA". Grouping on the id alone showed her
     /// twice in search and gave her a locker missing whichever half she didn't
     /// tap. `collapseToAthletes` normalizes the region and merges them; the
     /// locker carries both contact ids so it can fetch the whole career.
