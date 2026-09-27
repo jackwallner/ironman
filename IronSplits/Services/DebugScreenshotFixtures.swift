@@ -41,7 +41,7 @@ enum DebugScreenshotFixtures {
         gender: "Female",
         latestAgeGroup: "F35-39",
         knownRaceCount: exploreResults.count,
-        latestRaceName: "Canyon Ridge Triathlon",
+        latestRaceName: "Sierra Crest Triathlon",
         latestRaceYear: 2025
     )
 
@@ -82,12 +82,12 @@ enum DebugScreenshotFixtures {
                swim: 3_820, t1: 325, bike: 20_100, t2: 230, run: 16_400,
                eventID: "explore-event-full-2024", athleteName: "Riley Example",
                ageGroup: "F35-39", bib: 405, athleteID: "explore-screenshot-athlete"),
-        finish(id: "explore-half-2024", year: 2024, race: "Willow Bend Triathlon", month: 6, day: 16,
+        finish(id: "explore-half-2024", year: 2024, race: "Pine Creek Half Triathlon", month: 6, day: 16,
                swim: 1_850, t1: 175, bike: 9_800, t2: 135, run: 7_850,
                bikeKm: 90.1, runKm: 21.1, swimKm: 1.9,
                eventID: "explore-event-half-2024", athleteName: "Riley Example",
                ageGroup: "F35-39", bib: 421, athleteID: "explore-screenshot-athlete"),
-        finish(id: "explore-full-2025", year: 2025, race: "Canyon Ridge Triathlon", month: 9, day: 7,
+        finish(id: "explore-full-2025", year: 2025, race: "Sierra Crest Triathlon", month: 9, day: 7,
                swim: 3_710, t1: 310, bike: 19_450, t2: 220, run: 15_600,
                eventID: "explore-event-full-2025", athleteName: "Riley Example",
                ageGroup: "F35-39", bib: 398, athleteID: "explore-screenshot-athlete"),

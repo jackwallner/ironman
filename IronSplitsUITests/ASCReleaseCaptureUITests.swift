@@ -66,7 +66,7 @@ final class ASCReleaseCaptureUITests: XCTestCase {
         XCTAssertTrue(recentAthlete.waitForExistence(timeout: 10))
         recentAthlete.tap()
         XCTAssertTrue(app.staticTexts["RACE HISTORY"].waitForExistence(timeout: 15))
-        XCTAssertTrue(app.staticTexts["Canyon Ridge Triathlon"].firstMatch.exists)
+        XCTAssertTrue(app.staticTexts["Sierra Crest Triathlon"].firstMatch.exists)
         capture(app, named: "explore")
 
         app.tabBars.buttons["Locker"].tap()

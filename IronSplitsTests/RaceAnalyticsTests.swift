@@ -160,6 +160,7 @@ final class RaceAnalyticsTests: XCTestCase {
 
         XCTAssertNotEqual(explored.id, locker.id)
         XCTAssertNotEqual(explored.name, locker.name)
+        XCTAssertEqual(exploredRaces.count, DebugScreenshotFixtures.exploreResults.count)
         XCTAssertTrue(lockerRaces.isDisjoint(with: exploredRaces))
         XCTAssertTrue(DebugScreenshotFixtures.exploreResults.allSatisfy {
             $0.athleteID == explored.id && $0.athleteName == explored.name
