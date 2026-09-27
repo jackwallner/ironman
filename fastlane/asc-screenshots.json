@@ -160,10 +160,10 @@
           }
         },
         {
-          "filename": "04-follow-your-best-times-across-seasons.png",
-          "header": "Follow your best times across seasons",
+          "filename": "04-track-progress-across-seasons.png",
+          "header": "Track progress across seasons",
           "story_role": "support",
-          "story_focus": "best times across seasons",
+          "story_focus": "progress across seasons",
           "pitch": {
             "benefit": "See career totals, personal bests and race-by-race times without paying.",
             "problem": "Progress is difficult to read from finish times scattered across years and venues.",

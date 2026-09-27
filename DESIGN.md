@@ -81,6 +81,8 @@ Rules:
 - The percentile *text* ramp is separate from the *fill* ramp on purpose: the
   fill passes through a mid neutral at the 50th percentile, which is right for a
   bar and unreadable as type.
+- Status bar content stays light because every app navigation bar uses `deep`,
+  including in the light appearance.
 
 ## 4. Radius: one for surfaces, one for what sits inside them
 

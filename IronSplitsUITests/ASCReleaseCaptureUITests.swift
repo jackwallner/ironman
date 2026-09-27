@@ -45,7 +45,7 @@ final class ASCReleaseCaptureUITests: XCTestCase {
 
         app.tabBars.buttons["Tips"].tap()
         XCTAssertTrue(app.navigationBars["Tips"].waitForExistence(timeout: 15))
-        XCTAssertTrue(app.buttons["Want Pattie along for the ride?"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Want Pattie along for the ride?"].waitForExistence(timeout: 10))
         capture(app, named: "pattie")
 
         app.tabBars.buttons["Settings"].tap()
