@@ -150,6 +150,23 @@ final class RaceAnalyticsTests: XCTestCase {
         XCTAssertEqual(athlete.finishRankGender,
                        RaceAnalytics.placement(of: athlete, discipline: .finish, inField: field)?.rank)
     }
+
+    func testExploreScreenshotUsesAnotherFictionalAthleteAndHistory() {
+        let locker = DebugScreenshotFixtures.athlete
+        let explored = DebugScreenshotFixtures.exploreAthlete
+        let lockerRaces = Set(DebugScreenshotFixtures.results.map(\.raceName))
+        let exploredRaces = Set(DebugScreenshotFixtures.exploreResults.map(\.raceName))
+        let summary = RaceAnalytics.summary(DebugScreenshotFixtures.exploreResults)
+
+        XCTAssertNotEqual(explored.id, locker.id)
+        XCTAssertNotEqual(explored.name, locker.name)
+        XCTAssertTrue(lockerRaces.isDisjoint(with: exploredRaces))
+        XCTAssertTrue(DebugScreenshotFixtures.exploreResults.allSatisfy {
+            $0.athleteID == explored.id && $0.athleteName == explored.name
+        })
+        XCTAssertEqual(summary.fullDistance, 3)
+        XCTAssertEqual(summary.halfDistance, 3)
+    }
     #endif
 
     func testPlacementIsNilForAFieldOfOne() {

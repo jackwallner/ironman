@@ -44,7 +44,7 @@ struct ExploreView: View {
     private static func initialRecentAthletes() -> [Athlete] {
         #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("-SeedScreenshotData") {
-            return [DebugScreenshotFixtures.athlete]
+            return [DebugScreenshotFixtures.exploreAthlete]
         }
         #endif
         return ExploreRecents.load()
@@ -371,7 +371,7 @@ private struct ExploreAthleteView: View {
         state = .loading
         #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("-SeedScreenshotData") {
-            results = DebugScreenshotFixtures.results
+            results = DebugScreenshotFixtures.exploreResults
             syncKind()
             state = .loaded
             return

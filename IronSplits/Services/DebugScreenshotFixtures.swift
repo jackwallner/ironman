@@ -33,6 +33,18 @@ enum DebugScreenshotFixtures {
         latestRaceYear: 2025
     )
 
+    static let exploreAthlete = Athlete(
+        id: "explore-screenshot-athlete",
+        name: "Riley Example",
+        city: "Bend",
+        stateOrProvince: "OR",
+        gender: "Female",
+        latestAgeGroup: "F35-39",
+        knownRaceCount: exploreResults.count,
+        latestRaceName: "Canyon Ridge Triathlon",
+        latestRaceYear: 2025
+    )
+
     static let eventID = "screenshot-event-riverbend-2025"
 
     static let results: [RaceResult] = [
@@ -54,6 +66,36 @@ enum DebugScreenshotFixtures {
         finish(id: "demo-half-2025", year: 2025, race: "Lakeside Half Triathlon", month: 5, day: 25,
                swim: 1_690, t1: 160, bike: 9_280, t2: 125, run: 7_100,
                bikeKm: 90.1, runKm: 21.1, swimKm: 1.9),
+    ]
+
+    static let exploreResults: [RaceResult] = [
+        finish(id: "explore-full-2022", year: 2022, race: "High Desert Triathlon", month: 9, day: 11,
+               swim: 4_050, t1: 350, bike: 21_200, t2: 250, run: 17_600,
+               eventID: "explore-event-full-2022", athleteName: "Riley Example",
+               ageGroup: "F35-39", bib: 412, athleteID: "explore-screenshot-athlete"),
+        finish(id: "explore-half-2023", year: 2023, race: "Willow Bend Triathlon", month: 6, day: 18,
+               swim: 1_930, t1: 185, bike: 10_150, t2: 145, run: 8_200,
+               bikeKm: 90.1, runKm: 21.1, swimKm: 1.9,
+               eventID: "explore-event-half-2023", athleteName: "Riley Example",
+               ageGroup: "F35-39", bib: 428, athleteID: "explore-screenshot-athlete"),
+        finish(id: "explore-full-2024", year: 2024, race: "Canyon Ridge Triathlon", month: 9, day: 8,
+               swim: 3_820, t1: 325, bike: 20_100, t2: 230, run: 16_400,
+               eventID: "explore-event-full-2024", athleteName: "Riley Example",
+               ageGroup: "F35-39", bib: 405, athleteID: "explore-screenshot-athlete"),
+        finish(id: "explore-half-2024", year: 2024, race: "Willow Bend Triathlon", month: 6, day: 16,
+               swim: 1_850, t1: 175, bike: 9_800, t2: 135, run: 7_850,
+               bikeKm: 90.1, runKm: 21.1, swimKm: 1.9,
+               eventID: "explore-event-half-2024", athleteName: "Riley Example",
+               ageGroup: "F35-39", bib: 421, athleteID: "explore-screenshot-athlete"),
+        finish(id: "explore-full-2025", year: 2025, race: "Canyon Ridge Triathlon", month: 9, day: 7,
+               swim: 3_710, t1: 310, bike: 19_450, t2: 220, run: 15_600,
+               eventID: "explore-event-full-2025", athleteName: "Riley Example",
+               ageGroup: "F35-39", bib: 398, athleteID: "explore-screenshot-athlete"),
+        finish(id: "explore-half-2025", year: 2025, race: "North Shore Triathlon", month: 5, day: 25,
+               swim: 1_790, t1: 170, bike: 9_500, t2: 130, run: 7_550,
+               bikeKm: 90.1, runKm: 21.1, swimKm: 1.9,
+               eventID: "explore-event-half-2025", athleteName: "Riley Example",
+               ageGroup: "F35-39", bib: 390, athleteID: "explore-screenshot-athlete"),
     ]
 
     static let field: [RaceResult] = {
@@ -98,7 +140,8 @@ enum DebugScreenshotFixtures {
                                athleteName: String = "Alex Runner",
                                ageGroup: String = "M40-44",
                                bib: Int = 1_087,
-                               ranks: Ranks? = nil) -> RaceResult {
+                               ranks: Ranks? = nil,
+                               athleteID: String = "screenshot-athlete") -> RaceResult {
         let ranks = ranks ?? Ranks(
             swimOverall: 180 + bib % 120,
             swimGroup: 9 + bib % 6,
@@ -118,7 +161,7 @@ enum DebugScreenshotFixtures {
             eventName: "\(year) \(race)",
             eventDate: date,
             externalEventName: nil,
-            athleteID: "screenshot-athlete",
+            athleteID: athleteID,
             athleteName: athleteName,
             bib: bib,
             ageGroup: ageGroup,
