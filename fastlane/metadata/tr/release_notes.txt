@@ -1,1 +1,1 @@
-Yayımlanmış sonuçlarını bul ve her ara zamanı tek yerde gör.
+Split rankings return in Locker. Search, race details and Race Book are clearer, with safer exports and stronger accessibility.

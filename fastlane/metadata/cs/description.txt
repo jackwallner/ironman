@@ -1,12 +1,28 @@
-Každý dokončený závod na jednom místě, seřazený podle toho, co vás skutečně zajímá.
+Published full and half-distance triathlon results, ranked by split and kept in one place.
 
-Zadejte jméno jednou. IM Tri Tracker najde zveřejněné výsledky a zobrazí mezičasy plavání, depa, kola a běhu, startovní číslo i pořadí v kategorii a celkově.
+Search the name you registered with. IM Iron Splits finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
 
-Prohlédněte si osobní rekordy, porovnávejte závody stejného typu a zjistěte své místo v poli. Race Book odemyká porovnání a export do PDF nebo obrázku jednorázovým doživotním nákupem, bez předplatného a bez poplatku za export.
+SPLIT RANKINGS
+Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
 
-Základ zůstává zdarma: hledání, celá historie, mezičasy, pořadí, poznámky a knihovna Pointers.
+WHERE YOU LANDED
+See each split against the finishers from that event, with field size and percentile beside the rank.
 
-Zásady ochrany soukromí: https://jackwallner.github.io/ironman/privacy-policy.html
-Podmínky použití: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+RACE BOOK
+Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
 
-IM Tri Tracker je nezávislá aplikace bez spojení s pořadateli závodů nebo časomírou.
+RACE NOTES
+Keep conditions, nutrition and gear attached to the result that produced them.
+
+TIPS FROM PATTIE
+Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+
+FREE CORE
+Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+
+Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
+Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
+IM Iron Splits is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+
+Rozhraní aplikace je k dispozici pouze v angličtině.

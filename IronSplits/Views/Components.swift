@@ -37,7 +37,7 @@ struct SplitBar: View {
 
     private var accessibilityText: String {
         RaceAnalytics.legShares(result)
-            .map { "\($0.discipline.title) \(TimeFormat.hms($0.seconds))" }
+            .map { "\($0.discipline.title) \(TimeFormat.spoken($0.seconds))" }
             .joined(separator: ", ")
     }
 }
@@ -100,7 +100,7 @@ struct RaceRow: View {
                 if !personalBestLegs.isEmpty {
                     HStack(spacing: TriSpace.x1) {
                         ForEach(Discipline.rankable.filter { personalBestLegs.contains($0) }) { leg in
-                            TriBadge(text: "PB \(leg.shortTitle)", color: TriPalette.sunrise, filled: true)
+                    TriBadge(text: "PB \(leg.shortTitle)", color: TriPalette.sunrise, filled: true)
                         }
                     }
                 }
@@ -108,6 +108,25 @@ struct RaceRow: View {
         }
         .frame(minHeight: TriGeo.tapTarget)
         .padding(.vertical, TriSpace.x1)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityLabel)
+    }
+
+    private var accessibilityLabel: String {
+        let finish = result.isComplete
+            ? TimeFormat.spoken(result.finish)
+            : (result.disqualified ? "Disqualified" : result.didNotStart ? "Did not start" : "Did not finish")
+        let date = result.eventDate.map(RaceDate.medium) ?? (result.year > 0 ? String(result.year) : "Undated")
+        var parts = [result.raceName, date, finish]
+        if let ageGroup = result.ageGroup, let rank = result.finishRankGroup {
+            parts.append("\(Ordinal.text(rank) ?? String(rank)) in \(ageGroup)")
+        }
+        if !personalBestLegs.isEmpty {
+            let labels = Discipline.rankable.filter { personalBestLegs.contains($0) }.map(\.title)
+            parts.append("Personal best: \(labels.joined(separator: ", "))")
+        }
+        if hasNote { parts.append("Has race notes") }
+        return parts.joined(separator: ", ")
     }
 
     private var metadataRow: some View {
@@ -223,7 +242,7 @@ struct LockedRow: View {
                 Spacer(minLength: TriSpace.x2)
                 Text(cta)
                     .font(TriType.smallBold)
-                    .foregroundStyle(TriPalette.inkOnDark)
+                    .foregroundStyle(TriPalette.inkOnSunrise)
                     .padding(.horizontal, TriSpace.x3)
                     .padding(.vertical, TriSpace.x1)
                     .background(TriPalette.sunrise, in: Capsule())
@@ -300,5 +319,7 @@ struct StatTile: View {
                 .allowsTightening(true)
         }
         .frame(minWidth: TriSpace.x10 + TriSpace.x8)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(caption), \(value)")
     }
 }

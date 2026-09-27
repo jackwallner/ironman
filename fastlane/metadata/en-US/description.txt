@@ -1,26 +1,26 @@
-Every race you have finished, in one place, ranked the way you think about it.
+Published full and half-distance triathlon results, ranked by split and kept in one place.
 
-Type your name once. IM Tri Tracker finds your published results and fills your locker with swim, T1, bike, T2 and run splits, bib numbers, age-group places and overall ranks.
+Search the name you registered with. IM Iron Splits finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
 
-YOUR SPLITS, RANKED
-See races ranked by swim, bike, run, transitions or finish time. Personal bests are marked on every leg, and full-distance and half-distance races stay in separate comparisons.
+SPLIT RANKINGS
+Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
 
 WHERE YOU LANDED
-See each split against the field that raced it, with the field size and percentile beside the rank.
+See each split against the finishers from that event, with field size and percentile beside the rank.
 
 RACE BOOK
-Preview your personal bests and progression by distance. Unlock like-for-like comparisons, time gained or lost by leg, and a polished history you can export as a PDF or image. Race Book is a one-time lifetime purchase with no subscription and no per-export charge.
+Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
 
 RACE NOTES
 Keep conditions, nutrition and gear attached to the result that produced them.
 
-TRI POINTERS
-Browse a coaching clip library organized by race leg.
+TIPS FROM PATTIE
+Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
 
 FREE CORE
-Search, claim your results and keep your complete history with full splits, leaderboards, percentiles, notes, race details and the full Pointers library. Your results are never hidden behind a purchase.
+Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
 
 Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
 Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Iron Splits is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.

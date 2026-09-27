@@ -30,6 +30,9 @@ struct AthleteSearchView: View {
     @State private var phase: Phase = .idle
     @State private var errorMessage: String?
     @State private var claiming: Athlete?
+    @State private var pendingClaim: Athlete?
+    @State private var hasUnsupportedResults = false
+    @State private var resultsWereTruncated = false
     @State private var searchTask: Task<Void, Never>?
     @State private var searchGeneration = 0
     @State private var lastSearchTerm: String?
@@ -42,6 +45,7 @@ struct AthleteSearchView: View {
         /// The `contains` scan, after the quick pass came back empty.
         case deep
         case done
+        case stopped
     }
 
     private let api = ResultsAPI()
@@ -55,7 +59,7 @@ struct AthleteSearchView: View {
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .triNavBar()
-            .toolbar {
+        .toolbar {
                 if !isOnboarding {
                     ToolbarItem(placement: .cancellationAction) {
                         Button("Cancel") { dismiss() }
@@ -65,6 +69,15 @@ struct AthleteSearchView: View {
                     }
                 }
             }
+        }
+        .alert("Replace the athlete in your Locker?", isPresented: Binding(
+            get: { pendingClaim != nil },
+            set: { if !$0 { pendingClaim = nil } }
+        ), presenting: pendingClaim) { athlete in
+            Button("Replace", role: .destructive) { performClaim(athlete) }
+            Button("Cancel", role: .cancel) { pendingClaim = nil }
+        } message: { athlete in
+            Text("Replace \(locker.athlete?.name ?? "your current athlete") with \(athlete.name)? Your saved race notes stay on this phone.")
         }
         .pattieMoment(.searching, pattie)
         .task {
@@ -80,7 +93,7 @@ struct AthleteSearchView: View {
     private var content: some View {
         VStack(spacing: 0) {
             searchField
-            if isSearching && matches.isEmpty {
+            if isSearching {
                 Spacer()
                 searchingState
                 Spacer()
@@ -94,7 +107,14 @@ struct AthleteSearchView: View {
 
     @ViewBuilder
     private var results: some View {
-        if let errorMessage {
+        if phase == .stopped {
+            Spacer()
+            TriPlaceholder(systemImage: "pause.circle",
+                           title: "Search stopped",
+                           message: "Your name is still here. Search again when you're ready.",
+                           actionTitle: "Search again") { runSearch() }
+            Spacer()
+        } else if let errorMessage {
             Spacer()
             TriPlaceholder(systemImage: "wifi.exclamationmark",
                            title: "Couldn't search",
@@ -102,11 +122,7 @@ struct AthleteSearchView: View {
                            actionTitle: "Try again") { runSearch() }
             Spacer()
         } else if matches.isEmpty && phase == .done {
-            Spacer()
-            TriPlaceholder(systemImage: "magnifyingglass",
-                           title: "No athletes found",
-                           message: "Try the name exactly as it appeared on your race entry. Results are listed under the name you registered with, which is often a full legal first name.")
-            Spacer()
+            noResultsState
         } else if matches.isEmpty {
             ScrollView {
                 introBlurb
@@ -125,9 +141,51 @@ struct AthleteSearchView: View {
                 .listRowInsets(EdgeInsets(top: TriSpace.x2, leading: TriGeo.padPage,
                                           bottom: TriSpace.x2, trailing: TriGeo.padPage))
             }
+            .safeAreaInset(edge: .top, spacing: 0) {
+                if resultsWereTruncated {
+                    Text("Many racers share this name. Add a city or state after a comma, for example John Smith, Madison.")
+                        .font(TriType.small)
+                        .foregroundStyle(TriPalette.inkSecondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, TriGeo.padPage)
+                        .padding(.vertical, TriSpace.x3)
+                        .background(TriPalette.surfaceAlt)
+                }
+            }
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
+            .disabled(claiming != nil)
         }
+    }
+
+    private var noResultsState: some View {
+        VStack(spacing: TriSpace.x3) {
+            Spacer()
+            TriPlaceholder(systemImage: "magnifyingglass",
+                           title: hasUnsupportedResults ? "No supported races found" : "No athletes found",
+                           message: noResultsMessage,
+                           actionTitle: "Try another name") {
+                phase = .idle
+                fieldFocused = true
+            }
+            if hasUnsupportedResults {
+                Link("About supported results", destination: IronSplitsLegal.supportURL)
+                    .font(TriType.smallBold)
+                    .foregroundStyle(TriPalette.sunrise)
+                    .frame(minHeight: TriGeo.tapTarget)
+            }
+            Spacer()
+        }
+    }
+
+    private var noResultsMessage: String {
+        if hasUnsupportedResults {
+            return "We found published results for this name, but none were full or half-distance triathlons. Try another registration if you raced under a different name."
+        }
+        if resultsWereTruncated {
+            return "There are many matches for this name. Add a city or state after a comma, such as John Smith, Madison, to narrow the search."
+        }
+        return "Search published full and half-distance triathlon results. Try your full registered first name, surname first, or add a city after a comma."
     }
 
     private var searchingState: some View {
@@ -136,13 +194,18 @@ struct AthleteSearchView: View {
             // The deep pass is the slow one, and saying so is the difference
             // between "it's working" and "it's broken".
             Text(phase == .deep
-                 ? "No exact match. Searching the whole index, which takes a moment…"
-                 : "Searching…")
+                 ? "No quick match yet. This broader search can take around 30 seconds. Your name stays here."
+                 : "Searching published results…")
                 .font(TriType.small)
                 .foregroundStyle(TriPalette.inkTertiary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.horizontal, TriSpace.x8)
+            Button("Stop search") { stopSearch() }
+                .font(TriType.smallBold)
+                .foregroundStyle(TriPalette.sunrise)
+                .frame(minHeight: TriGeo.tapTarget)
+                .buttonStyle(.triPressSilent)
         }
     }
 
@@ -164,9 +227,22 @@ struct AthleteSearchView: View {
                 .textInputAutocapitalization(.words)
                 .autocorrectionDisabled()
                 .textContentType(.name)
-                .submitLabel(.search)
-                .focused($fieldFocused)
-                .onSubmit { runSearch() }
+            .submitLabel(.search)
+            .focused($fieldFocused)
+            .onSubmit { runSearch() }
+            .onChange(of: query) { _, newValue in
+                searchTask?.cancel()
+                searchGeneration &+= 1
+                matches = []
+                errorMessage = nil
+                hasUnsupportedResults = false
+                resultsWereTruncated = false
+                lastSearchTerm = nil
+                phase = .idle
+                if newValue.trimmingCharacters(in: .whitespacesAndNewlines).count < 2 {
+                    fieldFocused = true
+                }
+            }
 
             if !query.isEmpty {
                 Button {
@@ -204,7 +280,7 @@ struct AthleteSearchView: View {
         .task(id: query) {
             searchTask?.cancel()
             let term = query.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard term.count >= 3 else {
+            guard term.count >= 2 else {
                 matches = []
                 phase = .idle
                 errorMessage = nil
@@ -219,7 +295,7 @@ struct AthleteSearchView: View {
     }
 
     private var introBlurb: some View {
-        VStack(spacing: TriSpace.x4) {
+            VStack(spacing: TriSpace.x4) {
             Image(systemName: "figure.open.water.swim")
                 .font(.system(size: 44, weight: .regular))
                 .foregroundStyle(TriPalette.inkSecondary)
@@ -232,6 +308,15 @@ struct AthleteSearchView: View {
                 .foregroundStyle(TriPalette.inkTertiary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
+            Text("Name searches go to the event results service. No account is created, and race notes stay on this phone.")
+                .font(TriType.micro)
+                .foregroundStyle(TriPalette.inkTertiary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+            Link("Privacy details", destination: IronSplitsLegal.privacyURL)
+                .font(TriType.smallBold)
+                .foregroundStyle(TriPalette.sunrise)
+                .frame(minHeight: TriGeo.tapTarget)
         }
         .padding(.horizontal, TriSpace.x8)
     }
@@ -255,26 +340,47 @@ struct AthleteSearchView: View {
         let generation = searchGeneration
         lastSearchTerm = term
         errorMessage = nil
+        matches = []
+        hasUnsupportedResults = false
+        resultsWereTruncated = false
         pattie.react(.search)
         phase = .quick
         searchTask = Task { @MainActor in
             do {
-                var found = try await api.searchAthletes(matching: term, depth: .prefix)
-                if found.isEmpty {
+                var response = try await api.searchAthletes(matching: term, depth: .prefix)
+                if response.athletes.isEmpty && !response.hasOnlyUnsupportedResults {
                     guard !Task.isCancelled, isCurrentSearch(term, generation: generation) else { return }
                     phase = .deep
-                    found = try await api.searchAthletes(matching: term, depth: .substring)
+                    let deepResponse = try await api.searchAthletes(matching: term, depth: .substring)
+                    response = AthleteSearchResponse(
+                        athletes: deepResponse.athletes,
+                        hasUnsupportedResults: deepResponse.hasUnsupportedResults || response.hasUnsupportedResults,
+                        wasTruncated: deepResponse.wasTruncated || response.wasTruncated
+                    )
                 }
                 guard !Task.isCancelled, isCurrentSearch(term, generation: generation) else { return }
-                matches = found
+                matches = response.athletes
+                hasUnsupportedResults = response.hasOnlyUnsupportedResults
+                resultsWereTruncated = response.wasTruncated
                 phase = .done
-                if !found.isEmpty { Haptics.success() }
+                if !response.athletes.isEmpty { Haptics.success() }
             } catch {
                 guard !isTaskCancellation(error), isCurrentSearch(term, generation: generation) else { return }
-                errorMessage = error.localizedDescription
+                errorMessage = ResultsAPI.userFacingMessage(for: error)
                 phase = .done
             }
         }
+    }
+
+    private func stopSearch() {
+        searchTask?.cancel()
+        searchGeneration &+= 1
+        matches = []
+        hasUnsupportedResults = false
+        resultsWereTruncated = false
+        errorMessage = nil
+        lastSearchTerm = nil
+        phase = .stopped
     }
 
     private func isCurrentSearch(_ term: String, generation: Int) -> Bool {
@@ -283,6 +389,17 @@ struct AthleteSearchView: View {
     }
 
     private func claim(_ athlete: Athlete) {
+        guard claiming == nil else { return }
+        if onSelect == nil, !addingToCurrentAthlete, locker.athlete != nil {
+            pendingClaim = athlete
+            return
+        }
+        performClaim(athlete)
+    }
+
+    private func performClaim(_ athlete: Athlete) {
+        guard claiming == nil else { return }
+        pendingClaim = nil
         Haptics.tap(.medium)
         claiming = athlete
         if let onSelect {
@@ -318,7 +435,7 @@ struct AthleteSearchView: View {
         if onSelect != nil {
             return "Search the official results feed, then open a racer’s career without changing the athlete in your Locker."
         }
-        return "Every race you have finished is already published under the name you registered with. Find yourself once and your locker fills in: bibs, splits, division places and all."
+        return "Find published full and half-distance triathlon results under the name you registered with. Try your full legal first name, surname first, or add a city after a comma to narrow common names."
     }
 }
 

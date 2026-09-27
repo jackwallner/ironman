@@ -1,12 +1,28 @@
-ನೀವು ಪೂರ್ಣಗೊಳಿಸಿದ ಪ್ರತಿಯೊಂದು ರೇಸ್ ಒಂದೇ ಸ್ಥಳದಲ್ಲಿ, ನಿಮ್ಮ ಪ್ರದರ್ಶನವನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳಲು ಸರಿಯಾದ ಕ್ರಮದಲ್ಲಿ.
+Published full and half-distance triathlon results, ranked by split and kept in one place.
 
-ನಿಮ್ಮ ಹೆಸರನ್ನು ಒಮ್ಮೆ ನಮೂದಿಸಿ. IM Tri Tracker ಪ್ರಕಟಿತ ಫಲಿತಾಂಶಗಳನ್ನು ಹುಡುಕಿ ಈಜು, ಟ್ರಾನ್ಸಿಷನ್, ಬೈಕ್ ಮತ್ತು ಓಟದ ಸ್ಪ್ಲಿಟ್‌ಗಳು, ಬಿಬ್ ಸಂಖ್ಯೆ ಮತ್ತು ಶ್ರೇಣಿಗಳನ್ನು ತೋರಿಸುತ್ತದೆ.
+Search the name you registered with. IM Iron Splits finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
 
-ವೈಯಕ್ತಿಕ ಅತ್ಯುತ್ತಮಗಳನ್ನು ನೋಡಿ ಮತ್ತು ಒಂದೇ ರೀತಿಯ ರೇಸ್‌ಗಳನ್ನು ಹೋಲಿಸಿ. Race Book ಒಂದು ಬಾರಿ ಜೀವಮಾನ ಖರೀದಿಯಿಂದ ಹೋಲಿಕೆ ಮತ್ತು PDF ಅಥವಾ ಚಿತ್ರ ರಫ್ತು ತೆರೆಯುತ್ತದೆ, ಚಂದಾದಾರಿಕೆ ಅಥವಾ ಪ್ರತಿ ರಫ್ತಿಗೆ ಶುಲ್ಕವಿಲ್ಲ.
+SPLIT RANKINGS
+Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
 
-ಮೂಲ ಸೌಲಭ್ಯಗಳು ಉಚಿತ: ಹುಡುಕಾಟ, ಸಂಪೂರ್ಣ ಇತಿಹಾಸ, ಸ್ಪ್ಲಿಟ್‌ಗಳು, ಶ್ರೇಣಿಗಳು, ಟಿಪ್ಪಣಿಗಳು ಮತ್ತು Pointers ಲೈಬ್ರರಿ.
+WHERE YOU LANDED
+See each split against the finishers from that event, with field size and percentile beside the rank.
 
-ಗೌಪ್ಯತೆ: https://jackwallner.github.io/ironman/privacy-policy.html
-ಬಳಕೆಯ ನಿಯಮಗಳು: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+RACE BOOK
+Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
 
-IM Tri Tracker ಸ್ವತಂತ್ರ ಅಪ್ಲಿಕೇಶನ್ ಆಗಿದ್ದು ಯಾವುದೇ ರೇಸ್ ಆಯೋಜಕ ಅಥವಾ ಟೈಮಿಂಗ್ ಕಂಪನಿಯೊಂದಿಗೆ ಸಂಬಂಧ ಹೊಂದಿಲ್ಲ.
+RACE NOTES
+Keep conditions, nutrition and gear attached to the result that produced them.
+
+TIPS FROM PATTIE
+Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+
+FREE CORE
+Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+
+Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
+Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
+IM Iron Splits is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+
+ಆ್ಯಪ್‌ನ ಇಂಟರ್ಫೇಸ್ ಪ್ರಸ್ತುತ ಇಂಗ್ಲಿಷ್‌ನಲ್ಲಿ ಮಾತ್ರ ಲಭ್ಯವಿದೆ.

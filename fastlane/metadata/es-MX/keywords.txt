@@ -1,1 +1,1 @@
-triatlón,resultados,carreras,parciales,natación,bici,correr,dorsal,tiempo final,mejor marca
+triatlón,resultados,carreras,parciales,natación,bici,correr,dorsal,tiempo final,mejor marca,splits

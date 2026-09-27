@@ -1,1 +1,1 @@
-Encontra os teus resultados publicados e consulta cada parcial num só lugar.
+Split rankings return in Locker. Search, race details and Race Book are clearer, with safer exports and stronger accessibility.

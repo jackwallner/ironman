@@ -1,12 +1,28 @@
-Tamamladığın her yarış tek yerde ve performansını anlamanı kolaylaştıracak şekilde sıralanır.
+Published full and half-distance triathlon results, ranked by split and kept in one place.
 
-Adını bir kez yaz. IM Tri Tracker yayımlanmış sonuçlarını bulur; yüzme, geçiş, bisiklet ve koşu sürelerini, göğüs numaranı ve derecelerini gösterir.
+Search the name you registered with. IM Iron Splits finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
 
-Kişisel en iyilerini gör, aynı tür yarışları karşılaştır ve her sürenin yarış alanındaki yerini anla. Race Book, tek seferlik ömür boyu satın alımla karşılaştırma ve PDF veya görsel dışa aktarmayı açar; abonelik ya da dışa aktarma başına ücret yoktur.
+SPLIT RANKINGS
+Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
 
-Temel özellikler ücretsizdir: arama, tam geçmiş, ara zamanlar, sıralamalar, notlar ve Pointers kitaplığı.
+WHERE YOU LANDED
+See each split against the finishers from that event, with field size and percentile beside the rank.
 
-Gizlilik: https://jackwallner.github.io/ironman/privacy-policy.html
-Koşullar: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+RACE BOOK
+Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
 
-IM Tri Tracker bağımsızdır, yarış organizatörleri veya zamanlama şirketleriyle bağlantılı değildir.
+RACE NOTES
+Keep conditions, nutrition and gear attached to the result that produced them.
+
+TIPS FROM PATTIE
+Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+
+FREE CORE
+Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+
+Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
+Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
+IM Iron Splits is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+
+Uygulama arayüzü şu anda yalnızca İngilizce olarak sunulmaktadır.

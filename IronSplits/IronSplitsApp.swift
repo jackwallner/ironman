@@ -67,10 +67,6 @@ struct IronSplitsApp: App {
                 .preferredColorScheme(auditColorScheme ?? settings.preferredColorScheme)
                 .task {
                     store.start()
-                    // Warm the audio session off the main thread now, so
-                    // Pattie's first line does not pay for it inside the first
-                    // frame the app draws.
-                    PattieVoice.prepareSession()
                     await FeedConfigLoader.shared.refreshIfStale()
                 }
         }

@@ -1,1 +1,1 @@
-triathlon,hasil lomba,split,renang,sepeda,lari,nomor dada,waktu finis,terbaik,riwayat lomba
+triathlon,hasil lomba,split,renang,sepeda,lari,nomor dada,waktu finis,terbaik,riwayat lomba,splits

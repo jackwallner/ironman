@@ -3,7 +3,7 @@ import SwiftUI
 
 /// The Pattie tab: her guided answers, and the full episode library.
 ///
-/// Two ways into the same twenty clips. Ask Pattie routes you to the right one
+/// Two ways into the same filmed-pointer catalog. Ask Pattie routes you to the right one
 /// in three taps; the library is for browsing when you already know what you're
 /// after. They share the catalog and the player.
 struct PointersView: View {
@@ -29,12 +29,21 @@ struct PointersView: View {
                 TriPalette.canvas.ignoresSafeArea()
                 switch mode {
                 case .ask:
-                    AskPattieGoalList(model: ask, path: $path)
+                    VStack(spacing: 0) {
+                        if !pattie.isEnabled {
+                            PattieModeInviteCard {
+                                pattie.isEnabled = true
+                            }
+                            .padding(.horizontal, TriGeo.padPage)
+                            .padding(.top, TriSpace.x3)
+                        }
+                        AskPattieGoalList(model: ask, path: $path)
+                    }
                 case .library:
                     PointerLibraryView()
                 }
             }
-            .navigationTitle("Pattie")
+            .navigationTitle("Tips")
             .navigationBarTitleDisplayMode(.inline)
             .triNavBar()
             .toolbar {
@@ -77,14 +86,14 @@ private struct PointerModePicker: View {
     @Binding var selection: PointersView.Mode
 
     var body: some View {
-        Picker("Pattie view", selection: $selection) {
+        Picker("Tips", selection: $selection) {
             ForEach(PointersView.Mode.allCases) { option in
                 Text(option.rawValue).tag(option)
             }
         }
         .pickerStyle(.segmented)
         .tint(TriPalette.deep)
-        .accessibilityLabel("Pointer view")
+        .accessibilityLabel("Tips")
     }
 }
 
@@ -256,7 +265,7 @@ struct PattieFeaturedHero: View {
             Text("Pattie's pointers")
                 .font(TriType.cardTitle)
                 .foregroundStyle(TriPalette.ink)
-            Text("The athlete behind the voice, the race stories, and the little things that save a whole day.")
+            Text("Pattie has finished 16 full-distance triathlons. Her race-day pointers come from years of experience.")
                 .font(TriType.small)
                 .foregroundStyle(TriPalette.inkSecondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -266,6 +275,44 @@ struct PattieFeaturedHero: View {
 
     private var heroImageHeight: CGFloat {
         TriSpace.x10 * 4 + TriSpace.x4
+    }
+}
+
+private struct PattieModeInviteCard: View {
+    let onEnable: () -> Void
+
+    var body: some View {
+        Button(action: onEnable) {
+            HStack(spacing: TriSpace.x3) {
+                Image(systemName: "bubble.left.and.bubble.right.fill")
+                    .font(TriType.bodyBold)
+                    .foregroundStyle(TriPalette.sunrise)
+                    .frame(width: TriSpace.x8)
+                VStack(alignment: .leading, spacing: TriSpace.x1) {
+                    Text("Want Pattie along for the ride?")
+                        .font(TriType.bodyBold)
+                        .foregroundStyle(TriPalette.ink)
+                    Text("Turn on her optional tips and race-day reactions.")
+                        .font(TriType.small)
+                        .foregroundStyle(TriPalette.inkSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .layoutPriority(1)
+                Spacer(minLength: TriSpace.x2)
+                Image(systemName: "chevron.right")
+                    .font(TriType.smallBold)
+                    .foregroundStyle(TriPalette.inkTertiary)
+            }
+            .frame(maxWidth: .infinity, minHeight: TriGeo.tapTarget)
+            .padding(TriSpace.x3)
+            .background(TriPalette.surface, in: RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous)
+                    .stroke(TriPalette.hairline, lineWidth: TriGeo.hairline)
+            }
+        }
+        .buttonStyle(.triPress)
+        .accessibilityHint("Pattie Mode is optional and can be turned off in Settings")
     }
 }
 
@@ -311,8 +358,9 @@ private struct PointerRow: View {
 
             Spacer(minLength: TriSpace.x2)
 
-            if let duration = pointer.durationText {
-                Text(duration)
+            let metadata = [pointer.durationText, pointer.fileSizeText].compactMap { $0 }
+            if !metadata.isEmpty {
+                Text(metadata.joined(separator: " · "))
                     .font(TriType.statSmall)
                     .foregroundStyle(TriPalette.inkTertiary)
                     .fixedSize(horizontal: true, vertical: false)

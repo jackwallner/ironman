@@ -57,6 +57,9 @@ final class LockerFlowUITests: XCTestCase {
         app.tabBars.buttons["Race Book"].tap()
         XCTAssertTrue(app.navigationBars["Race Book"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["PERSONAL BESTS"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["Customize export"].waitForExistence(timeout: 10))
+        app.buttons["Customize export"].tap()
+        XCTAssertEqual(app.buttons["Customize export"].value as? String, "Expanded")
         XCTAssertTrue(app.staticTexts["THINGS TO INCLUDE"].waitForExistence(timeout: 10))
         XCTAssertFalse(app.staticTexts["PODI-UMS"].exists)
         attachScreenshot(app, name: "4-race-book")
@@ -87,11 +90,16 @@ final class LockerFlowUITests: XCTestCase {
         XCTAssertTrue(app.buttons["Share image"].waitForExistence(timeout: 15))
         XCTAssertTrue(app.buttons["View PDF"].waitForExistence(timeout: 15))
         app.buttons["View PDF"].tap()
-        XCTAssertTrue(app.navigationBars["Race Book PDF"].waitForExistence(timeout: 15))
+        let pdfNavigationBar = app.navigationBars["Race Book PDF"]
+        XCTAssertTrue(pdfNavigationBar.waitForExistence(timeout: 15))
         app.buttons["Done"].tap()
+        XCTAssertTrue(waitForDisappearance(pdfNavigationBar, timeout: 10),
+                      "Done should return to Race Book before switching tabs")
 
         // Pattie: Ask Pattie, then the episode library behind the same tab.
-        app.tabBars.buttons["Tips"].tap()
+        let tipsTab = app.tabBars.buttons["Tips"]
+        XCTAssertTrue(tipsTab.isHittable, "The tab bar should be available after closing the PDF")
+        tipsTab.tap()
         XCTAssertTrue(app.staticTexts["WHAT ARE YOU TRAINING FOR?"].waitForExistence(timeout: 10),
                       "The Pattie tab should open on the Ask Pattie tree")
         attachScreenshot(app, name: "6-ask-pattie")
@@ -167,8 +175,10 @@ final class LockerFlowUITests: XCTestCase {
 
         app.tabBars.buttons["Race Book"].tap()
         XCTAssertTrue(app.navigationBars["Race Book"].waitForExistence(timeout: 10))
-        XCTAssertTrue(app.staticTexts["THINGS TO INCLUDE"].waitForExistence(timeout: 10),
-                      "Race Book should expose its configuration without a locked placeholder")
+        XCTAssertTrue(app.staticTexts["CAREER AT A GLANCE"].waitForExistence(timeout: 10),
+                      "A free user should see career insights before the paid actions")
+        XCTAssertFalse(app.staticTexts["THINGS TO INCLUDE"].exists,
+                       "Export configuration should stay collapsed for a free user")
         let exportButton = app.buttons["Unlock to export"]
         for _ in 0..<8 where !exportButton.isHittable {
             app.swipeUp()
@@ -197,11 +207,11 @@ final class LockerFlowUITests: XCTestCase {
         XCTAssertTrue(reviewButton.isHittable, "About actions should remain reachable after scrolling at accessibility text size")
         reviewButton.tap()
 
-        XCTAssertTrue(app.navigationBars["Enjoying IM Tri Tracker?"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.navigationBars["Enjoying IM Iron Splits?"].waitForExistence(timeout: 10))
         app.buttons["Not really"].tap()
         XCTAssertTrue(app.navigationBars["Help us improve"].waitForExistence(timeout: 10))
-        XCTAssertTrue(app.staticTexts["What would make IM Tri Tracker work better for you?"].exists)
-        let sendButton = app.buttons["Send feedback"]
+        XCTAssertTrue(app.staticTexts["What would make IM Iron Splits work better for you?"].exists)
+        let sendButton = app.buttons["Continue in email"]
         if !sendButton.isHittable {
             app.swipeUp()
         }
@@ -237,5 +247,11 @@ final class LockerFlowUITests: XCTestCase {
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
+    }
+
+    private func waitForDisappearance(_ element: XCUIElement, timeout: TimeInterval) -> Bool {
+        let gone = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"),
+                                             object: element)
+        return XCTWaiter.wait(for: [gone], timeout: timeout) == .completed
     }
 }

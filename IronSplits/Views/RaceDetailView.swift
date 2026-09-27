@@ -4,6 +4,8 @@ import SwiftUI
 /// the athlete's own notes.
 struct RaceDetailView: View {
     let result: RaceResult
+    var contextResults: [RaceResult]? = nil
+    var isReadOnly = false
 
     @EnvironmentObject private var locker: LockerStore
     @EnvironmentObject private var notes: RaceNotesStore
@@ -12,10 +14,23 @@ struct RaceDetailView: View {
 
     @State private var field: [RaceResult] = []
     @State private var fieldState: FieldState = .idle
+    @State private var fieldScope: FieldScope = .division
     @State private var editingNote = false
 
     private enum FieldState: Equatable {
-        case idle, loading, loaded, failed
+        case idle, loading, loaded, failed, unavailable
+    }
+
+    private enum FieldScope: String, CaseIterable {
+        case division, gender, overall
+
+        var title: String {
+            switch self {
+            case .division: "Division"
+            case .gender: "Gender"
+            case .overall: "Overall"
+            }
+        }
     }
 
     private let api = ResultsAPI()
@@ -26,19 +41,13 @@ struct RaceDetailView: View {
                 hero
                 splitsCard
                 fieldCard
-                notesCard
+                if !isReadOnly { notesCard }
             }
         }
         .background(TriPalette.canvas)
-        .navigationTitle(String(result.year))
+        .navigationTitle(result.raceName)
         .navigationBarTitleDisplayMode(.inline)
         .triNavBar()
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                TriBackButton()
-            }
-        }
         .sheet(isPresented: $editingNote) {
             RaceNoteEditor(note: notes.note(for: result.id), raceName: result.raceName) { updated in
                 notes.save(updated)
@@ -47,8 +56,12 @@ struct RaceDetailView: View {
             }
         }
         .task {
-            ReviewPromptTracker.recordPositiveMoment()
-            pattie.fire(pattieMoment)
+            if ReviewPromptTracker.isPositiveMoment(result: result,
+                                                    isReadOnly: isReadOnly,
+                                                    within: careerResults) {
+                ReviewPromptTracker.recordPositiveMoment(identifier: result.id)
+            }
+            if !isReadOnly { pattie.fire(pattieMoment) }
             guard result.isComplete else { return }
             await loadField()
         }
@@ -62,7 +75,7 @@ struct RaceDetailView: View {
             return .worldChampionship
         }
         let isPB = Discipline.rankable.contains {
-            RaceAnalytics.isPersonalBest(result, discipline: $0, within: locker.results)
+            RaceAnalytics.isPersonalBest(result, discipline: $0, within: careerResults)
         }
         return isPB ? .personalBest : .raceOpened
     }
@@ -96,11 +109,21 @@ struct RaceDetailView: View {
             }
 
             if result.isComplete {
-                HStack(spacing: 0) {
-                    StatTile(value: Ordinal.text(result.finishRankGroup) ?? "--", caption: "Division", tint: TriPalette.inkOnDark)
-                    StatTile(value: Ordinal.text(result.finishRankGender) ?? "--", caption: "Gender", tint: TriPalette.inkOnDark)
-                    StatTile(value: Ordinal.text(result.finishRankOverall) ?? "--", caption: "Overall", tint: TriPalette.inkOnDark)
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: 0) {
+                        StatTile(value: Ordinal.text(result.finishRankGroup) ?? "--", caption: "Division", tint: TriPalette.inkOnDark)
+                        StatTile(value: Ordinal.text(result.finishRankGender) ?? "--", caption: "Gender", tint: TriPalette.inkOnDark)
+                        StatTile(value: Ordinal.text(result.finishRankOverall) ?? "--", caption: "Overall", tint: TriPalette.inkOnDark)
+                    }
+                    VStack(spacing: TriSpace.x2) {
+                        HStack(spacing: TriSpace.x2) {
+                            StatTile(value: Ordinal.text(result.finishRankGroup) ?? "--", caption: "Division", tint: TriPalette.inkOnDark)
+                            StatTile(value: Ordinal.text(result.finishRankGender) ?? "--", caption: "Gender", tint: TriPalette.inkOnDark)
+                        }
+                        StatTile(value: Ordinal.text(result.finishRankOverall) ?? "--", caption: "Overall", tint: TriPalette.inkOnDark)
+                    }
                 }
+                .frame(maxWidth: .infinity)
                 .padding(.top, TriSpace.x1)
             }
         }
@@ -142,7 +165,8 @@ struct RaceDetailView: View {
                                               units: settings.units),
                         overallRank: result.overallRank(for: leg),
                         divisionRank: result.divisionRank(for: leg),
-                        isPersonalBest: RaceAnalytics.isPersonalBest(result, discipline: leg, within: locker.results)
+                        isPersonalBest: Discipline.rankable.contains(leg)
+                            && RaceAnalytics.isPersonalBest(result, discipline: leg, within: careerResults)
                     )
                     if leg != .run { Divider().background(TriPalette.divider) }
                 }
@@ -159,7 +183,7 @@ struct RaceDetailView: View {
         if result.isComplete {
             VStack(alignment: .leading, spacing: TriSpace.x3) {
                 TriSectionHeader(title: "Against the field",
-                                 trailing: fieldState == .loaded ? "\(field.filter(\.isComplete).count) finishers" : nil)
+                                 trailing: fieldState == .loaded ? "\(scopedField.filter(\.isComplete).count) finishers" : nil)
 
                 switch fieldState {
                 case .idle, .loading:
@@ -177,11 +201,35 @@ struct RaceDetailView: View {
                     .font(TriType.small)
                     .foregroundStyle(TriPalette.sunrise)
                     .frame(minHeight: TriGeo.tapTarget, alignment: .leading)
+                case .unavailable:
+                    Text("Field results aren't available for this race. Your published splits are still shown above.")
+                        .font(TriType.small)
+                        .foregroundStyle(TriPalette.inkSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 case .loaded:
-                    VStack(spacing: TriSpace.x3) {
-                        ForEach(Discipline.rankable) { leg in
-                            if let placement = RaceAnalytics.placement(of: result, discipline: leg, inField: field) {
-                                PlacementRow(placement: placement)
+                    VStack(alignment: .leading, spacing: TriSpace.x3) {
+                        if availableFieldScopes.count > 1 {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: TriSpace.x2) {
+                                    ForEach(availableFieldScopes, id: \.self) { scope in
+                                        TriChip(title: scope.title, isSelected: fieldScope == scope) {
+                                            fieldScope = scope
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if fieldPlacements.isEmpty {
+                            Text(emptyFieldMessage)
+                                .font(TriType.small)
+                                .foregroundStyle(TriPalette.inkSecondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(minHeight: TriGeo.tapTarget, alignment: .leading)
+                        } else {
+                            VStack(spacing: TriSpace.x3) {
+                                ForEach(fieldPlacements, id: \.discipline) { placement in
+                                    PlacementRow(placement: placement)
+                                }
                             }
                         }
                     }
@@ -193,16 +241,62 @@ struct RaceDetailView: View {
     }
 
     private func loadField() async {
-        guard fieldState != .loaded, !result.eventID.isEmpty else { return }
+        guard fieldState != .loaded, fieldState != .unavailable else { return }
+        guard !result.eventID.isEmpty else {
+            fieldState = .unavailable
+            return
+        }
+        if let cached = RaceFieldCache.results(for: result.eventID) {
+            field = cached
+            fieldScope = availableFieldScopes.first ?? .overall
+            fieldState = .loaded
+            return
+        }
         fieldState = .loading
         do {
-            field = try await api.results(forEventID: result.eventID)
+            let loaded = try await api.results(forEventID: result.eventID)
+            guard !Task.isCancelled else { return }
+            field = loaded
+            fieldScope = availableFieldScopes.first ?? .overall
+            RaceFieldCache.store(loaded, for: result.eventID)
             fieldState = .loaded
         } catch {
-            guard !isTaskCancellation(error) else { return }
+            guard !isTaskCancellation(error), !Task.isCancelled else { return }
             fieldState = .failed
         }
     }
+
+    private var availableFieldScopes: [FieldScope] {
+        guard let ageGroup = result.ageGroup else { return [.overall] }
+        let prefix = ageGroup.uppercased().first
+        if prefix == "M" || prefix == "F" { return [.division, .gender, .overall] }
+        return [.division, .overall]
+    }
+
+    private var scopedField: [RaceResult] {
+        switch fieldScope {
+        case .division:
+            guard let ageGroup = result.ageGroup else { return field }
+            return field.filter { $0.ageGroup?.caseInsensitiveCompare(ageGroup) == .orderedSame }
+        case .gender:
+            guard let prefix = result.ageGroup?.uppercased().first, prefix == "M" || prefix == "F" else { return field }
+            return field.filter { $0.ageGroup?.uppercased().hasPrefix(String(prefix)) == true }
+        case .overall:
+            return field
+        }
+    }
+
+    private var fieldPlacements: [FieldPlacement] {
+        Discipline.rankable.compactMap { RaceAnalytics.placement(of: result, discipline: $0, inField: scopedField) }
+    }
+
+    private var emptyFieldMessage: String {
+        fieldScope == .overall
+            ? "There isn't enough comparable field data for these splits."
+            : "No comparable finishers were found in this \(fieldScope.title.lowercased()). Try Overall."
+    }
+
+    private var careerResults: [RaceResult] { contextResults ?? locker.results }
 
     // MARK: - Notes
 
@@ -312,6 +406,16 @@ private struct SplitRow: View {
             }
         }
         .padding(.vertical, TriSpace.x3)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityLabel)
+    }
+
+    private var accessibilityLabel: String {
+        var parts = [discipline.title, TimeFormat.spoken(seconds)]
+        if let divisionRank { parts.append("\(Ordinal.text(divisionRank) ?? String(divisionRank)) in division") }
+        else if let overallRank { parts.append("\(Ordinal.text(overallRank) ?? String(overallRank)) overall") }
+        if isPersonalBest { parts.append("Personal best") }
+        return parts.joined(separator: ", ")
     }
 }
 
@@ -337,6 +441,8 @@ private struct PlacementRow: View {
             }
             PercentileBar(percentile: placement.percentile)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(placement.discipline.title), \(placement.percentile) percent, \(placement.rank) of \(placement.fieldSize) finishers")
     }
 }
 
@@ -347,12 +453,24 @@ struct RaceNoteEditor: View {
     let onSave: (RaceNote) -> Void
 
     @Environment(\.dismiss) private var dismiss
+    @State private var showingDiscardConfirmation = false
+    @State private var showingDeleteConfirmation = false
+    private let initialNote: RaceNote
+
+    private var isDirty: Bool { note != initialNote }
+
+    init(note: RaceNote, raceName: String, onSave: @escaping (RaceNote) -> Void) {
+        self.initialNote = note
+        self.raceName = raceName
+        self.onSave = onSave
+        _note = State(initialValue: note)
+    }
 
     var body: some View {
         NavigationStack {
             Form {
                 Section("Conditions") {
-                    TextField("Water 68°F, 15mph crosswind on the out leg", text: $note.conditions, axis: .vertical)
+                    TextField("Heat, wind, water and course conditions", text: $note.conditions, axis: .vertical)
                 }
                 Section("Nutrition") {
                     TextField("What you took, and when", text: $note.nutrition, axis: .vertical)
@@ -364,13 +482,21 @@ struct RaceNoteEditor: View {
                     TextField("How it went", text: $note.notes, axis: .vertical)
                         .lineLimit(4...10)
                 }
+                if !initialNote.isEmpty {
+                    Section {
+                        Button("Delete this race note", role: .destructive) {
+                            showingDeleteConfirmation = true
+                        }
+                    }
+                }
             }
             .navigationTitle(raceName)
             .navigationBarTitleDisplayMode(.inline)
             .triNavBar()
+            .interactiveDismissDisabled(isDirty)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button("Cancel") { requestDismiss() }
                         .foregroundStyle(TriPalette.inkOnDark)
                         .padding(.horizontal, TriSpace.x4)
                         .triTapTarget()
@@ -385,6 +511,48 @@ struct RaceNoteEditor: View {
                     .fontWeight(.semibold)
                 }
             }
+            .confirmationDialog("Discard unsaved note changes?",
+                                isPresented: $showingDiscardConfirmation,
+                                titleVisibility: .visible) {
+                Button("Discard changes", role: .destructive) { dismiss() }
+                Button("Keep editing", role: .cancel) {}
+            }
+            .confirmationDialog("Delete this race note?",
+                                isPresented: $showingDeleteConfirmation,
+                                titleVisibility: .visible) {
+                Button("Delete note", role: .destructive) {
+                    onSave(RaceNote(resultID: initialNote.resultID))
+                    dismiss()
+                }
+                Button("Keep note", role: .cancel) {}
+            }
+        }
+    }
+
+    private func requestDismiss() {
+        guard isDirty else {
+            dismiss()
+            return
+        }
+        showingDiscardConfirmation = true
+    }
+}
+
+@MainActor
+enum RaceFieldCache {
+    private static var entries: [String: [RaceResult]] = [:]
+    private static var order: [String] = []
+
+    static func results(for eventID: String) -> [RaceResult]? {
+        entries[eventID]
+    }
+
+    static func store(_ results: [RaceResult], for eventID: String) {
+        entries[eventID] = results
+        order.removeAll { $0 == eventID }
+        order.append(eventID)
+        while order.count > 4 {
+            entries.removeValue(forKey: order.removeFirst())
         }
     }
 }

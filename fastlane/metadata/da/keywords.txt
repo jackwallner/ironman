@@ -1,1 +1,1 @@
-triatlon,løbsresultater,split,svømning,cykling,løb,startnummer,sluttid,personlig rekord,løbshistorik
+triatlon,løbsresultater,split,svømning,cykling,løb,startnummer,sluttid,personlig rekord,triathlon

@@ -1,7 +1,7 @@
 # IM Iron Splits: Project Guide
 
-Your triathlon and running race results, pulled from the official timing feed by
-name, ranked by split. XcodeGen project/scheme: `IronSplits`, sim lease owner
+Published full and half-distance triathlon results, pulled from the supported
+timing feed by name and ranked by split. XcodeGen project/scheme: `IronSplits`, sim lease owner
 `ironsplits`. Repo dir stays `~/ironman` (the GitHub Pages URL that
 `FeedConfig` hot-reloads from lives there), but the app is **IM Iron Splits**
 and is never called IRONMAN: that is a registered trademark of the World
@@ -24,7 +24,10 @@ radius in a view.
 - Swift 6 / SwiftUI (strict concurrency), iOS 17+
 - XcodeGen (`project.yml`). Targets: `IronSplits`, `IronSplitsTests`, `IronSplitsUITests`
 - RevenueCat, entitlement `pro` (display entitlement `Iron Splits+`)
-- No backend, no accounts, no user data leaves the phone
+- No developer-owned results backend or accounts. Name searches and public
+  contact/event IDs go to the timing service. Locker data, notes and recent
+  Explore profiles remain local. RevenueCat receives purchase data and limited
+  purchase-screen counts tied to an anonymous app user ID.
 
 ## Targets / bundle IDs
 - `IronSplits`: `com.jackwallner.ironman`
@@ -42,10 +45,14 @@ GET https://labs-v2.competitor.com/api/results-proxy?url=<encoded upstream>&page
 ```
 
 It accepts arbitrary `$filter`, which is what makes the whole app possible: one
-query on `wtc_ContactId/contactid` returns an athlete's entire career (IRONMAN,
-70.3, Rock 'n' Roll marathons, trail races) with swim/T1/bike/T2/run/finish in
+query on `wtc_ContactId/contactid` returns an athlete's career (full- and
+half-distance triathlons, running and trail races) with swim/T1/bike/T2/run/finish in
 seconds, overall and division ranks per leg, bib, age group, and DNF/DNS/DQ
 flags, back to 2002.
+
+The proxy can return other sports too, but the product displays full- and
+half-distance triathlon results only. Search copy and App Store metadata must
+state that limit.
 
 Four things that have already cost time:
 
@@ -53,8 +60,9 @@ Four things that have already cost time:
   The same two-word name written with `startswith()` comes back in about one and
   a half. That single operator was the whole "app is really slow to load"
   complaint, since search is the onboarding screen. `SearchDepth.prefix` is the
-  default and runs on every keystroke; `.substring` is the `contains` fallback
-  and only runs after the prefix pass returns nothing, with the UI saying so.
+  default and runs after a short typing pause; `.substring` is the `contains`
+  fallback and only runs after the prefix pass returns nothing, with the UI
+  explaining the longer wait and offering Stop.
   Do not switch the default back.
 
 - **`$expand` replaces the server's default expansion, it does not add to it.**
@@ -79,9 +87,9 @@ moves, publish a new `api-config.json`, do not ship an app update.**
   (hotfix channel), `LockerStore` (claimed athlete + on-disk cache), `RaceAnalytics`
   (every derived number), `ProGate`, `RaceNotesStore`, `ResumeBuilder`, `StoreService`,
   `PattieMode`, `PattieVoice`, `PointerMediaCache`
-- `IronSplits/Views/`: five tabs: Locker, Bests, Pattie, Resume, Settings.
-  The Pattie tab holds both `AskPattieView` and `PointerLibraryView` behind a
-  nav-bar segmented control, which is what keeps the tab bar at five.
+- `IronSplits/Views/`: five tabs: Locker, Explore, Tips, Race Book, Settings.
+  Locker switches between races and distance-scoped split rankings. Tips holds
+  Ask Pattie and the episode library behind a nav-bar segmented control.
 
 Ranking is always scoped to one `RaceKind`. A 70.3 bike split always beats a
 full-distance one, so a combined "best bike" list is just a list of every half

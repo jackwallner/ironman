@@ -111,12 +111,6 @@ struct AskPattieTopicList: View {
         .navigationTitle(goal?.title ?? "Ask Pattie")
         .navigationBarTitleDisplayMode(.inline)
         .triNavBar()
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                TriBackButton()
-            }
-        }
     }
 }
 
@@ -143,12 +137,6 @@ struct AskPattieAnswerList: View {
         .navigationTitle(model.guide.topic(topicID)?.title ?? "Pointers")
         .navigationBarTitleDisplayMode(.inline)
         .triNavBar()
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                TriBackButton()
-            }
-        }
         .task { pattie.fire(.askAnswered, petState: .forTopicID(topicID)) }
         .onDisappear {
             // Replace the answer clip with a useful back-navigation reaction.
@@ -235,7 +223,7 @@ struct AskPattieAnswerCard: View {
                     Label(isSpeaking ? "Stop" : "Hear it from Pattie",
                           systemImage: isSpeaking ? "stop.fill" : "play.fill")
                         .font(TriType.smallBold)
-                        .foregroundStyle(TriPalette.inkOnDark)
+                        .foregroundStyle(TriPalette.inkOnSunrise)
                         .padding(.horizontal, TriSpace.x4)
                         .frame(minHeight: TriGeo.tapTarget)
                         .background(TriPalette.sunrise, in: Capsule())

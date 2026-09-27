@@ -1,12 +1,28 @@
-把你完成過的每場比賽集中在一個地方，並依照你真正關心的方式整理。
+Published full and half-distance triathlon results, ranked by split and kept in one place.
 
-只要輸入一次姓名。IM Tri Tracker 會尋找已發佈的成績，顯示游泳、轉換、自行車和跑步分段、號碼布，以及組別和總排名。
+Search the name you registered with. IM Iron Splits finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
 
-查看個人最佳，比較同類型比賽，了解每個時間在參賽者中的位置。Race Book 透過一次性終身購買解鎖比較，以及 PDF 或圖片匯出。沒有訂閱，也不會按匯出次數收費。
+SPLIT RANKINGS
+Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
 
-核心功能免費提供：搜尋、完整歷史、分段、排名、筆記和 Pointers 內容庫。
+WHERE YOU LANDED
+See each split against the finishers from that event, with field size and percentile beside the rank.
 
-隱私權政策: https://jackwallner.github.io/ironman/privacy-policy.html
-使用條款: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+RACE BOOK
+Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
 
-IM Tri Tracker 是獨立應用程式，與任何比賽主辦方或計時公司沒有關聯。
+RACE NOTES
+Keep conditions, nutrition and gear attached to the result that produced them.
+
+TIPS FROM PATTIE
+Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+
+FREE CORE
+Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+
+Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
+Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
+IM Iron Splits is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+
+App 介面目前僅提供英文版本。

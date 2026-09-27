@@ -1,1 +1,1 @@
-اعثر على نتائجك المنشورة وشاهد كل زمن وأفضل أداء في مكان واحد.
+Split rankings return in Locker. Search, race details and Race Book are clearer, with safer exports and stronger accessibility.

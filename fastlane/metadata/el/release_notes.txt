@@ -1,1 +1,1 @@
-Βρες τα δημοσιευμένα αποτελέσματά σου και δες κάθε split σε ένα μέρος.
+Split rankings return in Locker. Search, race details and Race Book are clearer, with safer exports and stronger accessibility.

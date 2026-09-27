@@ -1,1 +1,1 @@
-ค้นหาผลการแข่งขันที่เผยแพร่แล้ว และดูทุกสปลิตในที่เดียว
+Split rankings return in Locker. Search, race details and Race Book are clearer, with safer exports and stronger accessibility.

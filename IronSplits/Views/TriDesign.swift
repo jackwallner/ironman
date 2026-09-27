@@ -37,10 +37,13 @@ enum TriPalette {
 
     static let ink          = adaptive(light: (0.075, 0.098, 0.129), dark: (0.949, 0.961, 0.973))
     static let inkSecondary = adaptive(light: (0.259, 0.290, 0.333), dark: (0.678, 0.722, 0.769))
-    static let inkTertiary  = adaptive(light: (0.439, 0.471, 0.522), dark: (0.482, 0.529, 0.588))
+    static let inkTertiary  = adaptive(light: (0.380, 0.410, 0.460), dark: (0.482, 0.529, 0.588))
     static let shadow       = adaptive(light: (0.000, 0.000, 0.000), dark: (0.000, 0.000, 0.000))
     /// Type that sits on `deep`, which is dark in both schemes.
     static let inkOnDark    = adaptive(light: (1.000, 1.000, 1.000), dark: (1.000, 1.000, 1.000))
+    /// Foreground for the accent fill: white in light mode, dark ink on the
+    /// brighter accent used in dark mode.
+    static let inkOnSunrise = adaptive(light: (1.000, 1.000, 1.000), dark: (0.075, 0.098, 0.129))
     /// Deliberately black media stage, resolved through the same token path as
     /// every other full-screen surface.
     static let mediaCanvas  = adaptive(light: (0.000, 0.000, 0.000), dark: (0.000, 0.000, 0.000))
@@ -60,7 +63,7 @@ enum TriPalette {
 
     // MARK: Status
 
-    static let positive = adaptive(light: (0.224, 0.545, 0.145), dark: (0.467, 0.820, 0.235))
+    static let positive = adaptive(light: (0.160, 0.440, 0.170), dark: (0.467, 0.820, 0.235))
     static let negative = adaptive(light: (0.741, 0.161, 0.161), dark: (1.000, 0.412, 0.380))
 
     // MARK: Ramps
@@ -165,10 +168,10 @@ enum TriType {
     static let smallBold     = Font.system(.footnote, design: .default).weight(.semibold)
     static let micro         = Font.system(.caption2, design: .default).weight(.semibold)
 
-    static let statHero      = Font.system(.largeTitle, design: .monospaced).weight(.bold).monospacedDigit()
-    static let statLarge     = Font.system(.title2, design: .monospaced).weight(.bold).monospacedDigit()
-    static let statMed       = Font.system(.body, design: .monospaced).weight(.semibold).monospacedDigit()
-    static let statSmall     = Font.system(.footnote, design: .monospaced).weight(.semibold).monospacedDigit()
+    static let statHero      = Font.system(.largeTitle, design: .default).weight(.bold).monospacedDigit()
+    static let statLarge     = Font.system(.title2, design: .default).weight(.bold).monospacedDigit()
+    static let statMed       = Font.system(.body, design: .default).weight(.semibold).monospacedDigit()
+    static let statSmall     = Font.system(.footnote, design: .default).weight(.semibold).monospacedDigit()
 }
 
 // MARK: - Space
@@ -199,7 +202,6 @@ enum TriGeo {
     static let padCard: CGFloat = TriSpace.x4
     static let padPage: CGFloat = TriSpace.x4
     static let padSection: CGFloat = TriSpace.x6
-    static let tabBarClearance: CGFloat = TriSpace.x10 + TriSpace.x10 + TriSpace.x4
 
     /// Apple's floor for anything a thumb has to hit.
     static let tapTarget: CGFloat = 44
@@ -231,7 +233,7 @@ enum Haptics {
     private static let enabledKey = "settings.haptics.enabled"
 
     @MainActor private static var isEnabled: Bool {
-        UserDefaults.standard.object(forKey: enabledKey) as? Bool ?? false
+        UserDefaults.standard.object(forKey: enabledKey) as? Bool ?? true
     }
 
     @MainActor static func selection() {
@@ -403,7 +405,7 @@ struct TriBadge: View {
         Text(text.uppercased())
             .font(TriType.micro)
             .kerning(0.5)
-            .foregroundStyle(filled ? TriPalette.inkOnDark : color)
+            .foregroundStyle(filled ? TriPalette.inkOnSunrise : color)
             .padding(.horizontal, TriSpace.x2)
             .padding(.vertical, TriSpace.x1)
             .background(filled ? color : color.opacity(0.14))
@@ -466,7 +468,7 @@ struct TriPrimaryButton: View {
                 Text(title)
                     .font(TriType.bodyBold)
             }
-            .foregroundStyle(TriPalette.inkOnDark)
+            .foregroundStyle(TriPalette.inkOnSunrise)
             .frame(maxWidth: .infinity, minHeight: TriGeo.tapTarget + TriSpace.x1)
             .padding(.vertical, TriSpace.x2)
             .background(TriPalette.sunrise)

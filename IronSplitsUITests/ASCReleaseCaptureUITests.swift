@@ -14,29 +14,19 @@ final class ASCReleaseCaptureUITests: XCTestCase {
 
     func testCaptureRaceBookScreenshots() throws {
         let app = XCUIApplication()
-        app.launchArguments = ["-UITest", "-ResetLocker", "-AuditLight"]
-        app.launchEnvironment["FORCE_PRO"] = "1"
+        app.launchArguments = ["-UITest", "-ResetLocker", "-SeedScreenshotData", "-AuditLight"]
         app.launch()
-
-        let field = app.textFields["Your name as you registered"]
-        XCTAssertTrue(field.waitForExistence(timeout: 20))
-        field.tap()
-        field.typeText("Daniel Winek")
-
-        let match = app.staticTexts["Daniel Winek"]
-        if !match.waitForExistence(timeout: 35) {
-            field.typeText(" ")
-            field.typeText(XCUIKeyboardKey.delete.rawValue)
-        }
-        XCTAssertTrue(match.waitForExistence(timeout: 35))
-        match.tap()
 
         let locker = app.navigationBars["Locker"]
         XCTAssertTrue(locker.waitForExistence(timeout: 20))
         XCTAssertTrue(app.staticTexts["FINISHES"].waitForExistence(timeout: 15))
         capture(app, named: "locker")
 
-        let firstRace = app.staticTexts["IRONMAN Wisconsin"]
+        app.buttons["Rankings"].tap()
+        XCTAssertTrue(app.staticTexts["FINISH RANKINGS"].waitForExistence(timeout: 10))
+        capture(app, named: "rankings")
+
+        let firstRace = app.staticTexts["Riverbend Triathlon"].firstMatch
         XCTAssertTrue(firstRace.waitForExistence(timeout: 15))
         firstRace.tap()
         XCTAssertTrue(app.staticTexts["SPLITS"].waitForExistence(timeout: 20))
@@ -48,23 +38,14 @@ final class ASCReleaseCaptureUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["PERSONAL BESTS"].waitForExistence(timeout: 15))
         capture(app, named: "race-book")
 
-        let compare = app.buttons["Compare two races"]
-        scrollToHittable(compare, in: app)
-        XCTAssertTrue(compare.isHittable)
-        compare.tap()
-        XCTAssertTrue(app.navigationBars["Compare races"].waitForExistence(timeout: 15))
-        XCTAssertTrue(app.staticTexts["TIME BY LEG"].waitForExistence(timeout: 15))
-        capture(app, named: "race-book-compare")
-        app.navigationBars["Compare races"].buttons.element(boundBy: 0).tap()
-        XCTAssertTrue(app.navigationBars["Race Book"].waitForExistence(timeout: 15))
-
-        let export = app.buttons["Build PDF and image"]
-        scrollToHittable(export, in: app)
-        XCTAssertTrue(export.isHittable)
-        capture(app, named: "race-book-export")
+        app.tabBars.buttons["Explore"].tap()
+        XCTAssertTrue(app.navigationBars["Explore"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.buttons["Find a racer"].waitForExistence(timeout: 10))
+        capture(app, named: "explore")
 
         app.tabBars.buttons["Tips"].tap()
-        XCTAssertTrue(app.staticTexts["WHAT ARE YOU TRAINING FOR?"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.navigationBars["Tips"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.buttons["Want Pattie along for the ride?"].waitForExistence(timeout: 10))
         capture(app, named: "pattie")
 
         app.tabBars.buttons["Settings"].tap()
@@ -72,15 +53,9 @@ final class ASCReleaseCaptureUITests: XCTestCase {
         capture(app, named: "settings")
     }
 
-    private func scrollToHittable(_ element: XCUIElement, in app: XCUIApplication) {
-        for _ in 0..<8 where !element.isHittable {
-            app.swipeUp()
-        }
-    }
-
     private func capture(_ app: XCUIApplication, named name: String) {
         let attachment = XCTAttachment(screenshot: app.screenshot())
-        attachment.name = "\(name).png"
+        attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
     }

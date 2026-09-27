@@ -10,12 +10,16 @@ struct RaceBookView: View {
     @EnvironmentObject private var notes: RaceNotesStore
     @EnvironmentObject private var store: StoreService
     @EnvironmentObject private var pattie: PattieMode
+    @EnvironmentObject private var settings: AppSettings
     @Environment(\.dismiss) private var dismiss
 
     var showsDoneButton = false
 
     @State private var selectedKind: RaceKind?
+    @State private var isCustomizingExport = false
     @State private var selectedDiscipline: Discipline = .finish
+    @State private var progressionRaceName: String?
+    @State private var showsAllProgression = false
     @State private var exportOptions = RaceBookOptions()
     @State private var didInitializeExportOptions = false
     @State private var paywallTrigger: PaywallTrigger?
@@ -59,8 +63,13 @@ struct RaceBookView: View {
             syncExportOptions()
         }
         .onChange(of: exportOptions) { _, _ in
-            exports = nil
-            exportError = nil
+            invalidateExports()
+        }
+        .onChange(of: locker.results) { _, _ in
+            invalidateExports()
+        }
+        .onChange(of: notes.notes) { _, _ in
+            invalidateExports()
         }
         .sheet(item: $paywallTrigger) { trigger in
             PaywallView(trigger: trigger)
@@ -80,22 +89,47 @@ struct RaceBookView: View {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: TriSpace.x6) {
                     introCard
-                    exportCard
-                    includeCard
                     careerCard
                     kindFilter
                     personalBestsCard
                     progressionCard
+                    compareCard
+                    exportCard
+                    if raceBookUnlocked {
+                        Button {
+                            Haptics.selection()
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                isCustomizingExport.toggle()
+                            }
+                        } label: {
+                            HStack {
+                                Text("Customize export")
+                                    .font(TriType.bodyBold)
+                                    .foregroundStyle(TriPalette.ink)
+                                Spacer()
+                                Image(systemName: isCustomizingExport ? "chevron.up" : "chevron.down")
+                                    .font(TriType.smallBold)
+                                    .foregroundStyle(TriPalette.inkSecondary)
+                            }
+                            .frame(maxWidth: .infinity, minHeight: TriGeo.tapTarget, alignment: .leading)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.triPressSilent)
+                        .accessibilityValue(isCustomizingExport ? "Expanded" : "Collapsed")
+                        if isCustomizingExport {
+                            includeCard
+                                .transition(.opacity.combined(with: .move(edge: .top)))
+                        }
+                    }
                     Text("Official times are shown as published by the event timer. Race notes stay on this phone and are included only when you choose to export.")
                         .font(TriType.micro)
                         .foregroundStyle(TriPalette.inkTertiary)
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.horizontal, TriSpace.x1)
-                    compareCard
                 }
                 .padding(.horizontal, TriGeo.padPage)
                 .padding(.top, TriSpace.x4)
-                .padding(.bottom, TriGeo.tabBarClearance)
+                .padding(.bottom, TriSpace.x4)
             }
         }
     }
@@ -187,7 +221,7 @@ struct RaceBookView: View {
                              isOn: $exportOptions.includeSplits)
                 optionToggle("Placements", detail: "Bib, age group and overall rank",
                              isOn: $exportOptions.includePlacements)
-                optionToggle("Race-day notes", detail: "Conditions, nutrition, gear and notes",
+                optionToggle("Race-day notes", detail: "Optional in the PDF; never added to the share image",
                              isOn: $exportOptions.includeRaceNotes)
                 optionToggle("Incomplete results", detail: "Include DNF, DNS and DQ entries",
                              isOn: $exportOptions.includeIncomplete)
@@ -247,9 +281,11 @@ struct RaceBookView: View {
                             TriChip(title: kind.longTitle,
                                     isSelected: activeKind == kind) {
                                 selectedKind = kind
+                                settings.preferredKind = kind
                                 selectedDiscipline = .finish
-                                exports = nil
-                                exportError = nil
+                                progressionRaceName = nil
+                                showsAllProgression = false
+                                invalidateExports()
                                 pattie.react(.filter)
                             }
                         }
@@ -270,7 +306,12 @@ struct RaceBookView: View {
                     .fixedSize(horizontal: false, vertical: true)
             } else {
                 ForEach(personalBests) { best in
-                    RaceBookBestRow(best: best)
+                    NavigationLink {
+                        RaceDetailView(result: best.result)
+                    } label: {
+                        RaceBookBestRow(best: best)
+                    }
+                    .buttonStyle(.triPress)
                 }
             }
         }
@@ -292,26 +333,59 @@ struct RaceBookView: View {
                 }
                 .padding(.vertical, TriSpace.x1)
             }
-
-            if let first = progression.first, let latest = progression.last,
-               first.result.id != latest.result.id {
-                let change = latest.seconds - first.seconds
-                ViewThatFits(in: .horizontal) {
-                    HStack(alignment: .top, spacing: TriSpace.x3) {
-                        progressionPoint(title: "First", point: first)
-                        progressionArrow(change: change)
-                        progressionPoint(title: "Latest", point: latest)
+            if !repeatedCourseNames.isEmpty {
+                Menu {
+                    Button("All courses") { progressionRaceName = nil }
+                    ForEach(repeatedCourseNames, id: \.self) { name in
+                        Button(name) { progressionRaceName = name }
                     }
-                    VStack(alignment: .leading, spacing: TriSpace.x3) {
-                        progressionPoint(title: "First", point: first)
-                        progressionArrow(change: change)
-                        progressionPoint(title: "Latest", point: latest)
+                } label: {
+                    Label(progressionRaceName ?? "All courses", systemImage: "line.3.horizontal.decrease")
+                        .font(TriType.smallBold)
+                        .foregroundStyle(TriPalette.sunrise)
+                        .frame(minHeight: TriGeo.tapTarget, alignment: .leading)
+                }
+                .buttonStyle(.triPressSilent)
+                .accessibilityLabel("Progression race filter")
+            }
+            if progressionPoints.count > 1 {
+                Text(progressionRaceName == nil
+                     ? (repeatedCourseNames.isEmpty
+                        ? "Courses vary. A like-for-like event comparison will appear after another finish at the same race."
+                        : "Courses vary. Choose a repeat event above for a like-for-like view.")
+                     : "Same event, oldest to newest.")
+                    .font(TriType.micro)
+                    .foregroundStyle(TriPalette.inkTertiary)
+                    .fixedSize(horizontal: false, vertical: true)
+                ForEach(visibleProgressionPoints) { point in
+                    HStack(spacing: TriSpace.x3) {
+                        Text(point.result.year > 0 ? String(point.result.year) : "--")
+                            .font(TriType.statSmall)
+                            .foregroundStyle(TriPalette.inkSecondary)
+                            .frame(minWidth: TriSpace.x10, alignment: .leading)
+                        Text(point.result.raceName)
+                            .font(TriType.small)
+                            .foregroundStyle(TriPalette.ink)
+                            .lineLimit(2)
+                            .fixedSize(horizontal: false, vertical: true)
+                        Spacer(minLength: TriSpace.x2)
+                        Text(TimeFormat.hms(point.seconds))
+                            .font(TriType.statMed)
+                            .foregroundStyle(TriPalette.ink)
+                    }
+                    .frame(minHeight: TriGeo.tapTarget)
+                    if point.id != visibleProgressionPoints.last?.id {
+                        Divider().background(TriPalette.divider)
                     }
                 }
-                Text(changeText(change))
+                if progressionPoints.count > 4 {
+                    Button(showsAllProgression ? "Show fewer races" : "Show all \(progressionPoints.count) races") {
+                        showsAllProgression.toggle()
+                    }
                     .font(TriType.smallBold)
-                    .foregroundStyle(changeColor(change))
-                    .frame(maxWidth: .infinity, alignment: .center)
+                    .foregroundStyle(TriPalette.sunrise)
+                    .frame(minHeight: TriGeo.tapTarget, alignment: .leading)
+                }
             } else {
                 Text("Add another complete race at this distance to see progression over time.")
                     .font(TriType.small)
@@ -464,6 +538,21 @@ struct RaceBookView: View {
                                              kind: activeKind)
     }
 
+    private var repeatedCourseNames: [String] {
+        let counts = Dictionary(grouping: progression, by: { $0.result.raceName })
+        return counts.keys.filter { (counts[$0]?.count ?? 0) > 1 }.sorted()
+    }
+
+    private var progressionPoints: [RaceBookProgressionPoint] {
+        guard let progressionRaceName else { return progression }
+        return progression.filter { $0.result.raceName == progressionRaceName }
+    }
+
+    private var visibleProgressionPoints: [RaceBookProgressionPoint] {
+        if showsAllProgression || progressionRaceName != nil { return progressionPoints }
+        return Array(progressionPoints.suffix(4))
+    }
+
     private func progressionPoint(title: String, point: RaceBookProgressionPoint) -> some View {
         VStack(alignment: .leading, spacing: TriSpace.x1) {
             Text(title.uppercased())
@@ -494,6 +583,7 @@ struct RaceBookView: View {
     private func buildExports() {
         guard !isBuildingExports, let athlete = locker.athlete else { return }
         Haptics.tap(.medium)
+        removeExportFiles(exports)
         isBuildingExports = true
         exports = nil
         exportGeneration &+= 1
@@ -533,7 +623,8 @@ struct RaceBookView: View {
             return
         }
         if let selectedKind, available.contains(selectedKind) { return }
-        selectedKind = available.first
+        selectedKind = settings.preferredKind.flatMap { available.contains($0) ? $0 : nil } ?? available.first
+        settings.preferredKind = selectedKind
     }
 
     private func syncExportOptions() {
@@ -558,8 +649,21 @@ struct RaceBookView: View {
             exportOptions.kinds.insert(kind)
         }
         pattie.react(.selection)
+        invalidateExports()
+    }
+
+    private func invalidateExports() {
+        exportGeneration &+= 1
+        isBuildingExports = false
+        removeExportFiles(exports)
         exports = nil
         exportError = nil
+    }
+
+    private func removeExportFiles(_ exports: RaceBookExports?) {
+        for url in [exports?.pdf, exports?.image].compactMap({ $0 }) {
+            try? FileManager.default.removeItem(at: url)
+        }
     }
 
     private func yearsText(_ years: ClosedRange<Int>?) -> String {
@@ -609,7 +713,7 @@ private struct RaceBookBestRow: View {
         .frame(minHeight: TriGeo.tapTarget)
         .padding(.vertical, TriSpace.x1)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Personal best, \(best.discipline.title), \(TimeFormat.hms(best.seconds)), \(best.result.raceName)")
+        .accessibilityLabel("Personal best, \(best.discipline.title), \(TimeFormat.spoken(best.seconds)), \(best.result.raceName)")
     }
 
     private var wideRow: some View {
@@ -719,7 +823,7 @@ struct RaceCompareView: View {
             TriPalette.canvas.ignoresSafeArea()
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: TriSpace.x6) {
-                    Text("Choose two finishes at the same distance. Negative changes mean the comparison race was faster on that leg.")
+                    Text("Choose two finishes at the same distance. Each leg reads from the earlier race to the later race.")
                         .font(TriType.body)
                         .foregroundStyle(TriPalette.inkSecondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -727,8 +831,8 @@ struct RaceCompareView: View {
                     if availableKinds.count > 1 {
                         kindPicker
                     }
-                    selector(title: "Baseline race", selectedID: $baselineID)
-                    selector(title: "Comparison race", selectedID: $comparisonID)
+                    selector(title: "Earlier race", selectedID: $baselineID)
+                    selector(title: "Later race", selectedID: $comparisonID)
                     comparisonCard
                 }
                 .padding(.horizontal, TriGeo.padPage)
@@ -763,8 +867,15 @@ struct RaceCompareView: View {
     }
 
     private var deltas: [RaceBookLegDelta] {
-        guard let baseline, let comparison else { return [] }
-        return RaceBookAnalytics.deltas(earlier: baseline, later: comparison)
+        guard let pair = chronologicalPair else { return [] }
+        return RaceBookAnalytics.deltas(earlier: pair.earlier, later: pair.later)
+    }
+
+    private var chronologicalPair: (earlier: RaceResult, later: RaceResult)? {
+        guard let baseline, let comparison else { return nil }
+        let baselineDate = baseline.eventDate ?? Calendar(identifier: .gregorian).date(from: DateComponents(year: baseline.year)) ?? .distantPast
+        let comparisonDate = comparison.eventDate ?? Calendar(identifier: .gregorian).date(from: DateComponents(year: comparison.year)) ?? .distantPast
+        return baselineDate <= comparisonDate ? (baseline, comparison) : (comparison, baseline)
     }
 
     private var kindPicker: some View {
@@ -790,7 +901,7 @@ struct RaceCompareView: View {
             Menu {
                 ForEach(races) { race in
                     Button {
-                        selectedID.wrappedValue = race.id
+                        selectRace(race.id, into: selectedID)
                         pattie.react(.selection)
                     } label: {
                         Text(raceLabel(race))
@@ -820,7 +931,8 @@ struct RaceCompareView: View {
         if let baseline, let comparison {
             VStack(alignment: .leading, spacing: TriSpace.x3) {
                 TriSectionHeader(title: "Time by leg")
-                Text("\(baseline.raceName) to \(comparison.raceName)")
+                let pair = chronologicalPair
+                Text("\(pair?.earlier.raceName ?? baseline.raceName) to \(pair?.later.raceName ?? comparison.raceName)")
                     .font(TriType.small)
                     .foregroundStyle(TriPalette.inkTertiary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -872,6 +984,19 @@ struct RaceCompareView: View {
         let date = result.eventDate.map(RaceDate.medium) ?? (result.year > 0 ? String(result.year) : "Undated")
         return "\(date), \(result.raceName)"
     }
+
+    private func selectRace(_ id: String, into binding: Binding<String?>) {
+        binding.wrappedValue = id
+        guard let baselineID, let comparisonID,
+              let baseline = races.first(where: { $0.id == baselineID }),
+              let comparison = races.first(where: { $0.id == comparisonID }) else { return }
+        let baselineDate = baseline.eventDate ?? Calendar(identifier: .gregorian).date(from: DateComponents(year: baseline.year)) ?? .distantPast
+        let comparisonDate = comparison.eventDate ?? Calendar(identifier: .gregorian).date(from: DateComponents(year: comparison.year)) ?? .distantPast
+        if baselineDate > comparisonDate {
+            self.baselineID = comparisonID
+            self.comparisonID = baselineID
+        }
+    }
 }
 
 private struct RaceBookDeltaRow: View {
@@ -894,7 +1019,7 @@ private struct RaceBookDeltaRow: View {
             }
             Spacer(minLength: TriSpace.x2)
             VStack(alignment: .trailing, spacing: TriSpace.x1) {
-                Text(TimeFormat.delta(delta.change))
+                Text(changeDescription)
                     .font(TriType.statSmall)
                     .foregroundStyle(deltaColor)
                 Text(delta.change == 0 ? "No change" : (delta.improved ? "Faster" : "Slower"))
@@ -905,7 +1030,12 @@ private struct RaceBookDeltaRow: View {
         .frame(minHeight: TriGeo.tapTarget)
         .padding(.vertical, TriSpace.x1)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(delta.discipline.title), \(TimeFormat.delta(delta.change)), \(delta.change < 0 ? "faster" : delta.change > 0 ? "slower" : "no change")")
+        .accessibilityLabel("\(delta.discipline.title), \(changeDescription)")
+    }
+
+    private var changeDescription: String {
+        guard delta.change != 0 else { return "No change" }
+        return "\(TimeFormat.hms(abs(delta.change))) \(delta.improved ? "faster" : "slower")"
     }
 
     private var deltaColor: Color {

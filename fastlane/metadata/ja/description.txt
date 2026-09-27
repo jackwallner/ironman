@@ -1,12 +1,28 @@
-完走したすべてのレースを、パフォーマンスを理解しやすい形でまとめます。
+Published full and half-distance triathlon results, ranked by split and kept in one place.
 
-名前を一度入力するだけ。IM Tri Tracker が公開結果を見つけ、スイム、トランジション、バイク、ランの区間タイム、ゼッケン、順位を表示します。
+Search the name you registered with. IM Iron Splits finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
 
-自己ベストを確認し、同じ種類のレースを比較し、フィールドの中で各タイムがどこにあるかを把握できます。Race Book は一度の買い切りで比較と PDF または画像への書き出しを解放します。サブスクリプションも書き出しごとの料金もありません。
+SPLIT RANKINGS
+Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
 
-検索、全履歴、区間、順位、メモ、Pointers ライブラリは無料です。
+WHERE YOU LANDED
+See each split against the finishers from that event, with field size and percentile beside the rank.
 
-プライバシー: https://jackwallner.github.io/ironman/privacy-policy.html
-利用規約: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+RACE BOOK
+Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
 
-IM Tri Tracker は独立したアプリで、レース主催者や計時会社とは関係ありません。
+RACE NOTES
+Keep conditions, nutrition and gear attached to the result that produced them.
+
+TIPS FROM PATTIE
+Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+
+FREE CORE
+Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+
+Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
+Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
+IM Iron Splits is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+
+アプリのインターフェイスは現在、英語のみでご利用いただけます。

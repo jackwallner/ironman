@@ -6,7 +6,6 @@ struct RootTabView: View {
     @EnvironmentObject private var settings: AppSettings
     @EnvironmentObject private var reviewCoordinator: ReviewPromptCoordinator
     @EnvironmentObject private var pattie: PattieMode
-    @Environment(\.colorScheme) private var colorScheme
 
     @State private var reviewSheet: ReviewPromptSheet.Step?
     @State private var pendingRequestReview = false
@@ -15,26 +14,6 @@ struct RootTabView: View {
 
     private enum Tab: CaseIterable, Hashable {
         case locker, explore, pattie, resume, settings
-
-        var title: String {
-            switch self {
-            case .locker: return "Locker"
-            case .explore: return "Explore"
-            case .pattie: return "Tips"
-            case .resume: return "Race Book"
-            case .settings: return "Settings"
-            }
-        }
-
-        var symbol: String {
-            switch self {
-            case .locker: return "tray.full.fill"
-            case .explore: return "person.2.fill"
-            case .pattie: return "play.rectangle.fill"
-            case .resume: return "book.closed.fill"
-            case .settings: return "gearshape.fill"
-            }
-        }
     }
 
     var body: some View {
@@ -65,7 +44,7 @@ struct RootTabView: View {
             reviewSheet = presentation == .feedbackOnly ? .feedback : .enjoyment
             reviewCoordinator.clear()
         }
-        .sheet(item: $reviewSheet) { step in
+        .sheet(item: $reviewSheet, onDismiss: requestReviewIfNeeded) { step in
             ReviewPromptSheet(initialStep: step) { outcome in
                 handle(outcome)
             }
@@ -91,61 +70,13 @@ struct RootTabView: View {
                 .tag(Tab.settings)
         }
         .tint(TriPalette.sunrise)
-        .toolbar(.hidden, for: .tabBar)
         .background(TriPalette.canvas.ignoresSafeArea())
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            tabBar
-        }
+        .toolbarBackground(.visible, for: .tabBar)
         .onChange(of: selectedTab) { _, _ in
             Haptics.selection()
             pattie.react(.tab)
         }
         .task { await locker.refresh() }
-    }
-
-    private var tabBar: some View {
-        HStack(spacing: TriSpace.x1) {
-            ForEach(Tab.allCases, id: \.self) { tab in
-                Button {
-                    selectedTab = tab
-                } label: {
-                    VStack(spacing: TriSpace.x1) {
-                        Image(systemName: tab.symbol)
-                            .font(.system(size: 22, weight: .semibold))
-                        Text(tab.title)
-                            .font(TriType.small)
-                            .fontWeight(.semibold)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.8)
-                            .dynamicTypeSize(.xSmall ... .large)
-                    }
-                    .foregroundStyle(tab == selectedTab ? TriPalette.sunrise : TriPalette.ink)
-                    .frame(maxWidth: .infinity, minHeight: 64)
-                    .background {
-                        if tab == selectedTab {
-                            Capsule()
-                                .fill(TriPalette.surfaceSunk)
-                        }
-                    }
-                }
-                .buttonStyle(.triPressSilent)
-                .accessibilityLabel(tab.title)
-                .accessibilityAddTraits(tab == selectedTab ? [.isSelected] : [])
-            }
-        }
-        .padding(TriSpace.x1)
-        .background(TriPalette.surface, in: Capsule())
-        .overlay {
-            Capsule()
-                .stroke(TriPalette.hairline, lineWidth: TriGeo.hairline)
-        }
-        .shadow(color: TriShadow.card(colorScheme).0,
-                radius: TriShadow.card(colorScheme).1,
-                y: TriShadow.card(colorScheme).2)
-        .padding(.horizontal, TriSpace.x4)
-        .padding(.top, TriSpace.x2)
-        .padding(.bottom, TriSpace.x2)
-        .background(TriPalette.canvas)
     }
 
     private func presentReviewPromptIfEligible() {
@@ -159,17 +90,20 @@ struct RootTabView: View {
         switch outcome {
         case .notNow:
             ReviewPromptTracker.markShown()
-        case .feedbackSubmitted:
-            ReviewPromptTracker.markFeedbackSubmitted()
+        case .feedbackDraftOpened:
+            ReviewPromptTracker.markFeedbackDraftOpened()
         case .openedWriteReview:
             ReviewPromptTracker.markOpenedWriteReview()
-        case .enjoyedMaybeLater:
+        case .enjoyed:
             // Apple's native prompt is rate-limited and often shows nothing, so
             // this uses the short cooldown rather than the full one.
             ReviewPromptTracker.markSoftDeferred()
             pendingRequestReview = true
         }
         reviewSheet = nil
+    }
+
+    private func requestReviewIfNeeded() {
         if pendingRequestReview {
             pendingRequestReview = false
             requestReview()
@@ -181,8 +115,7 @@ extension ReviewPromptSheet.Step: Identifiable {
     public var id: Int {
         switch self {
         case .enjoyment: return 0
-        case .reviewPitch: return 1
-        case .feedback: return 2
+        case .feedback: return 1
         }
     }
 }

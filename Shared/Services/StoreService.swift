@@ -31,6 +31,7 @@ enum IronSplitsLegal {
     /// Apple's standard EULA, required on the paywall unless a custom one is hosted.
     static let termsURL = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
     static let privacyURL = URL(string: "https://jackwallner.github.io/ironman/privacy-policy.html")!
+    static let supportURL = URL(string: "https://jackwallner.github.io/ironman/support.html")!
 }
 
 /// Session-scoped cap so the same contextual paywall can't be re-presented
@@ -278,6 +279,7 @@ final class StoreService: NSObject, ObservableObject {
     @Published private(set) var purchaseInFlight: Bool = false
     @Published private(set) var isLoadingProducts: Bool = false
     @Published private(set) var lastError: String?
+    @Published private(set) var restoreError: String?
 
     /// Per-product intro-offer eligibility. Populated with `fetchProducts` so
     /// trial copy only appears for users StoreKit will actually grant a trial.
@@ -469,18 +471,18 @@ final class StoreService: NSObject, ObservableObject {
     }
 
     func restorePurchases() async {
+        restoreError = nil
         guard configureIfNeeded() else {
-            lastError = StoreServiceError.purchasesUnavailableInSimulator.localizedDescription
+            restoreError = StoreServiceError.purchasesUnavailableInSimulator.localizedDescription
             return
         }
-        lastError = nil
         do {
             let info = try await Purchases.shared.restorePurchases()
             apply(customerInfo: info)
-            lastError = isPro ? nil : "No Race Book purchase was found for this Apple ID."
+            restoreError = isPro ? nil : "No Race Book purchase was found for this Apple ID."
         } catch {
             logger.error("Restore failed: \(String(describing: error), privacy: .public)")
-            lastError = "Couldn't restore purchases. Try again."
+            restoreError = "Couldn't restore purchases. Try again."
         }
     }
 

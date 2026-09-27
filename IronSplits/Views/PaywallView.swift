@@ -29,9 +29,9 @@ enum PaywallTrigger: Identifiable, Hashable {
         case .raceBookCompare:
             return "See exactly where one like-for-like race gained or lost time against another."
         case .raceBookExport:
-            return "Create a polished race-history PDF or image with splits, podiums, notes and career stats."
+            return "Create a polished race-history PDF or image with official splits, career stats and optional notes."
         case .upgrade:
-            return "Compare like-for-like races and create unlimited polished exports with one lifetime purchase."
+            return "Compare like-for-like races and create unlimited PDF or image exports with one lifetime purchase."
         }
     }
 
@@ -48,9 +48,7 @@ enum PaywallTrigger: Identifiable, Hashable {
     /// intentionally absent because it is free for everyone.
     private static let proFeatures: [(icon: String, title: String)] = [
         ("arrow.left.arrow.right", "Compare like-for-like races leg by leg"),
-        ("chart.xyaxis.line", "Career personal-best and progression timeline"),
-        ("doc.richtext", "Beautiful race-history PDF and image exports"),
-        ("note.text", "Unlimited exports with notes, podiums and splits")
+        ("doc.richtext", "Unlimited PDF and image exports, with optional race notes")
     ]
 
     var features: [(icon: String, title: String)] {
@@ -61,6 +59,7 @@ enum PaywallTrigger: Identifiable, Hashable {
 /// Native Race Book paywall. Purchases flow through `StoreService.purchase`
 /// → `Purchases.shared.purchase` so RevenueCat records transactions unchanged.
 struct PaywallView: View {
+    @EnvironmentObject private var locker: LockerStore
     @EnvironmentObject private var store: StoreService
     @Environment(\.dismiss) private var dismiss
 
@@ -146,6 +145,7 @@ struct PaywallView: View {
 
                 VStack(spacing: TriSpace.x4) {
                     featureList
+                    productPreview
                     trustRow
                     planCards
                     purchaseSection
@@ -155,7 +155,6 @@ struct PaywallView: View {
                 .padding(.bottom, TriSpace.x5)
             }
         }
-        .ignoresSafeArea(edges: .top)
     }
 
     // Bold navy hero: the entry-point icon over a faint percentile-bar motif,
@@ -229,6 +228,55 @@ struct PaywallView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
+    private var productPreview: some View {
+        let results = locker.results
+        let summary = RaceAnalytics.summary(results)
+        let kind = locker.availableKinds.first
+        let bests = RaceAnalytics.personalBests(results, kind: kind)
+        return VStack(alignment: .leading, spacing: TriSpace.x3) {
+            HStack(alignment: .top, spacing: TriSpace.x3) {
+                VStack(alignment: .leading, spacing: TriSpace.x1) {
+                    Text("RACE BOOK PREVIEW")
+                        .font(TriType.micro)
+                        .tracking(0.8)
+                        .foregroundStyle(TriPalette.sunrise)
+                    Text(locker.athlete?.name ?? "Your race career")
+                        .font(TriType.cardTitle)
+                        .foregroundStyle(TriPalette.ink)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                Spacer(minLength: TriSpace.x2)
+                Text("\(summary.finishes) finishes")
+                    .font(TriType.smallBold)
+                    .foregroundStyle(TriPalette.inkSecondary)
+            }
+            if bests.isEmpty {
+                Text("A personal career summary, split bests and race comparisons in one shareable book.")
+                    .font(TriType.small)
+                    .foregroundStyle(TriPalette.inkSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else {
+                ForEach(Array(bests.prefix(3))) { best in
+                    HStack(spacing: TriSpace.x2) {
+                        Image(systemName: best.discipline.symbol)
+                            .foregroundStyle(TriPalette.color(for: best.discipline))
+                            .frame(width: TriSpace.x6)
+                        Text(best.discipline.title)
+                            .font(TriType.small)
+                            .foregroundStyle(TriPalette.inkSecondary)
+                        Spacer(minLength: TriSpace.x2)
+                        Text(TimeFormat.hms(best.seconds))
+                            .font(TriType.statSmall)
+                            .foregroundStyle(TriPalette.ink)
+                    }
+                }
+            }
+        }
+        .triCard(padding: TriSpace.x3)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Race Book preview for \(locker.athlete?.name ?? "your career"), \(summary.finishes) finishes and personal bests")
+    }
+
     // Reassurance + real credibility: these are the official timing
     // results, not times anyone typed in. No fabricated ratings or user
     // counts.
@@ -271,31 +319,32 @@ struct PaywallView: View {
     }
 
     private var planCards: some View {
-        VStack(spacing: TriSpace.x2) {
-            ForEach(store.planOptions) { option in
-                PaywallPlanCard(
-                    option: option,
-                    isSelected: selectedPlan?.id == option.id,
-                    isMostPopular: false,
-                    savingsPercent: nil,
-                    monthlyAnchorLabel: nil
-                ) {
-                    selectedPlan = option
+        VStack(alignment: .leading, spacing: TriSpace.x1) {
+            if let selectedPlan {
+                HStack {
+                    Text("One-time lifetime purchase")
+                        .font(TriType.bodyBold)
+                        .foregroundStyle(TriPalette.ink)
+                    Spacer(minLength: TriSpace.x2)
+                    Text(selectedPlan.priceLabel)
+                        .font(TriType.statMed)
+                        .foregroundStyle(TriPalette.ink)
                 }
+                .frame(minHeight: TriGeo.tapTarget)
             }
         }
     }
 
     private var purchaseSection: some View {
         VStack(spacing: TriSpace.x3) {
-            Button(action: startPurchase) {
+                Button(action: startPurchase) {
                 ZStack {
                     Text(ctaTitle)
                         .font(TriType.bodyBold)
-                        .foregroundStyle(TriPalette.inkOnDark)
+                        .foregroundStyle(TriPalette.inkOnSunrise)
                         .opacity(isPurchasing ? 0 : 1)
                     if isPurchasing {
-                        ProgressView().tint(TriPalette.inkOnDark)
+                        ProgressView().tint(TriPalette.inkOnSunrise)
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -351,10 +400,12 @@ struct PaywallView: View {
             HStack {
                 Spacer()
                 Button { dismissOnce() } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 28))
-                        .foregroundStyle(TriPalette.inkOnDark, TriPalette.ink.opacity(0.28))
+                    Image(systemName: "xmark")
+                        .font(TriType.smallBold)
+                        .foregroundStyle(TriPalette.inkSecondary)
                         .frame(width: TriGeo.tapTarget, height: TriGeo.tapTarget)
+                        .background(TriPalette.surface, in: Circle())
+                        .overlay(Circle().stroke(TriPalette.hairline, lineWidth: TriGeo.hairline))
                 }
                 .buttonStyle(.triPressSilent)
                 .accessibilityLabel("Close")
@@ -372,7 +423,7 @@ struct PaywallView: View {
         // behind this card, and the button says so rather than failing on tap.
         if !plan.isPurchasable { return "Preview only" }
         #endif
-        if plan.kind == .lifetime { return "Unlock Race Book" }
+        if plan.kind == .lifetime { return store.directCTALabel(for: trigger) }
         return "Continue"
     }
 
@@ -420,7 +471,7 @@ struct PaywallView: View {
                     // no error occurred, tell the user instead of going silent.
                     restoreMessage = "Purchase pending approval. Race Book unlocks automatically once it's approved."
                 case .cancelled:
-                    errorMessage = "Purchase cancelled. Tap again to continue."
+                    errorMessage = nil
                 }
             } catch {
                 errorMessage = store.lastError ?? "Couldn't complete the purchase. Please try again."
@@ -436,7 +487,7 @@ struct PaywallView: View {
             defer { isRestoring = false }
             await store.restorePurchases()
             if !store.isPro {
-                restoreMessage = store.lastError ?? "No Race Book purchase was found for this Apple ID."
+                restoreMessage = store.restoreError ?? "No Race Book purchase was found for this Apple ID."
             }
         }
     }
@@ -570,7 +621,7 @@ private struct PaywallPlanCard: View {
             Text("SAVE \(savingsPercent)%")
                 .font(TriType.micro)
                 .tracking(0.4)
-                .foregroundStyle(TriPalette.inkOnDark)
+                .foregroundStyle(TriPalette.inkOnSunrise)
                 .padding(.horizontal, TriSpace.x2)
                 .padding(.vertical, TriSpace.x1)
                 .background(TriPalette.sunrise, in: Capsule())

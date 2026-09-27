@@ -3,6 +3,7 @@ import StoreKit
 
 struct SettingsView: View {
     @EnvironmentObject private var locker: LockerStore
+    @EnvironmentObject private var notes: RaceNotesStore
     @EnvironmentObject private var store: StoreService
     @EnvironmentObject private var pattie: PattieMode
     @EnvironmentObject private var settings: AppSettings
@@ -13,28 +14,13 @@ struct SettingsView: View {
     @State private var confirmingUnclaim = false
     @State private var paywallTrigger: PaywallTrigger?
     @State private var cacheBytes: Int64 = 0
-    @AppStorage("settings.haptics.enabled") private var hapticsEnabled = false
+    @AppStorage("settings.haptics.enabled") private var hapticsEnabled = true
 
     @Environment(\.openURL) private var openURL
 
     var body: some View {
         NavigationStack {
             List {
-                Section("About") {
-                    if AppStoreReviewLinks.isConfigured {
-                        Button("Rate or send feedback") {
-                            reviewCoordinator.requestEnjoymentPrompt()
-                        }
-                    } else {
-                        Button("Send feedback") {
-                            reviewCoordinator.requestFeedback()
-                        }
-                    }
-                    Link("Privacy policy", destination: IronSplitsLegal.privacyURL)
-                    Link("Terms of use", destination: IronSplitsLegal.termsURL)
-                    LabeledContent("Version", value: versionText)
-                }
-
                 Section("Athlete") {
                     if let athlete = locker.athlete {
                         VStack(alignment: .leading, spacing: TriSpace.x1) {
@@ -82,6 +68,23 @@ struct SettingsView: View {
                     .onChange(of: settings.units) { _, _ in pattie.react(.selection) }
                 }
 
+                Section("Race notes") {
+                    if let exportText = exportableNotes {
+                        ShareLink(item: exportText,
+                                  subject: Text("IM Iron Splits race notes")) {
+                            Label("Export my race notes", systemImage: "square.and.arrow.up")
+                        }
+                        .frame(minHeight: TriGeo.tapTarget)
+                        Text("Creates a text copy you can save or share. Notes stay on this phone unless you choose a destination.")
+                            .font(TriType.micro)
+                            .foregroundStyle(TriPalette.inkTertiary)
+                    } else {
+                        Text("Notes you add to race details will appear here for export.")
+                            .font(TriType.small)
+                            .foregroundStyle(TriPalette.inkTertiary)
+                    }
+                }
+
                 Section("Appearance") {
                     Picker("Appearance", selection: Binding(
                         get: { settings.appearance },
@@ -92,7 +95,7 @@ struct SettingsView: View {
                         }
                     }
                     .pickerStyle(.segmented)
-                    .accessibilityHint("Choose System to follow the device, or keep IM Tri Tracker in Light or Dark mode.")
+                    .accessibilityHint("Choose System to follow the device, or keep IM Iron Splits in Light or Dark mode.")
                     .onChange(of: settings.appearance) { _, _ in pattie.react(.selection) }
                 }
 
@@ -101,7 +104,7 @@ struct SettingsView: View {
                         .onChange(of: hapticsEnabled) { _, enabled in
                             if enabled { Haptics.selection() }
                         }
-                    Text("Turn on subtle taps and selection feedback throughout the app. It is off by default.")
+                    Text("Subtle taps and selection feedback throughout the app.")
                         .font(TriType.micro)
                         .foregroundStyle(TriPalette.inkTertiary)
                 }
@@ -123,14 +126,16 @@ struct SettingsView: View {
                     Button("Restore purchases") {
                         Task { await store.restorePurchases() }
                     }
-                    if let error = store.lastError {
+                    if let error = store.restoreError {
                         Text(error)
                             .font(TriType.small)
                             .foregroundStyle(TriPalette.negative)
                     }
-                    Text("Already bought Race Book? Restore it here on a new device or after reinstalling.")
-                        .font(TriType.micro)
-                        .foregroundStyle(TriPalette.inkTertiary)
+                    if !raceBookUnlocked {
+                        Text("Restore a purchase on a new device or after reinstalling.")
+                            .font(TriType.micro)
+                            .foregroundStyle(TriPalette.inkTertiary)
+                    }
                 }
 
                 Section("Pattie Mode") {
@@ -163,9 +168,25 @@ struct SettingsView: View {
                 }
 
                 Section {
-                    Text("IM Tri Tracker is an independent app. It is not affiliated with, endorsed by, or sponsored by any race organiser. Results are shown as published by each event's timer. IRONMAN\u{00AE} and 70.3\u{00AE} are registered trademarks of the World Triathlon Corporation, used here only to describe the races an athlete has entered.")
+                    Text("IM Iron Splits is an independent app. It is not affiliated with, endorsed by, or sponsored by any race organiser. Results are shown as published by each event's timer. IRONMAN\u{00AE} and 70.3\u{00AE} are registered trademarks of the World Triathlon Corporation, used here only to describe the races an athlete has entered.")
                         .font(TriType.micro)
                         .foregroundStyle(TriPalette.inkTertiary)
+                }
+
+                Section("About") {
+                    if AppStoreReviewLinks.isConfigured {
+                        Button("Rate or send feedback") {
+                            reviewCoordinator.requestEnjoymentPrompt()
+                        }
+                        Link("Write a review on the App Store", destination: AppStoreReviewLinks.writeReviewURL)
+                    } else {
+                        Button("Send feedback") {
+                            reviewCoordinator.requestFeedback()
+                        }
+                    }
+                    Link("Privacy policy", destination: IronSplitsLegal.privacyURL)
+                    Link("Terms of use", destination: IronSplitsLegal.termsURL)
+                    LabeledContent("Version", value: versionText)
                 }
 
                 #if DEBUG
@@ -212,6 +233,29 @@ struct SettingsView: View {
 
     private var raceBookUnlocked: Bool {
         ProGate.raceBookUnlocked(isPro: store.isPro)
+    }
+
+    private var exportableNotes: String? {
+        let records = locker.results.compactMap { result -> (RaceResult, RaceNote)? in
+            guard let note = notes.notes[result.id], !note.isEmpty else { return nil }
+            return (result, note)
+        }
+        guard !records.isEmpty else { return nil }
+        var lines = ["IM Iron Splits race notes", ""]
+        for (result, note) in records {
+            lines.append("\(dateText(result)) · \(result.raceName)")
+            for (label, value) in [("Conditions", note.conditions), ("Nutrition", note.nutrition),
+                                   ("Gear", note.gear), ("Notes", note.notes)] {
+                let text = value.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !text.isEmpty { lines.append("\(label): \(text)") }
+            }
+            lines.append("")
+        }
+        return lines.joined(separator: "\n")
+    }
+
+    private func dateText(_ result: RaceResult) -> String {
+        result.eventDate.map(RaceDate.medium) ?? (result.year > 0 ? String(result.year) : "Undated")
     }
 
     private func refreshCacheSize() async {

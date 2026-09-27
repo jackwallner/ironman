@@ -27,6 +27,15 @@ enum TimeFormat {
         let total = Int(seconds.rounded())
         return String(format: "%d:%02d", total / 60, total % 60)
     }
+
+    static func spoken(_ seconds: Int?) -> String {
+        guard let seconds, seconds > 0 else { return "No time" }
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute, .second]
+        formatter.unitsStyle = .full
+        formatter.zeroFormattingBehavior = [.dropLeading, .dropTrailing]
+        return formatter.string(from: TimeInterval(seconds)) ?? hms(seconds)
+    }
 }
 
 enum UnitPreference: String, CaseIterable, Codable, Sendable {
@@ -47,6 +56,7 @@ enum UnitPreference: String, CaseIterable, Codable, Sendable {
 
 enum PaceFormat {
     static let metersPerMile = 1609.344
+    private static let metersPerYard = 0.9144
 
     /// Pace or speed for one leg, in the idiom each sport actually uses:
     /// time per 100 m in the water, distance per hour on the bike, time per
@@ -58,8 +68,10 @@ enum PaceFormat {
         guard let seconds, seconds > 0, let distanceKm, distanceKm > 0.01 else { return nil }
         switch discipline {
         case .swim:
-            let hundreds = distanceKm * 10
-            return TimeFormat.mmss(Double(seconds) / hundreds) + " /100m"
+            let distancePerHundred = units == .metric
+                ? distanceKm * 10
+                : distanceKm * 1000 / Self.metersPerYard / 100
+            return TimeFormat.mmss(Double(seconds) / distancePerHundred) + (units == .metric ? " /100m" : " /100yd")
         case .bike:
             let hours = Double(seconds) / 3600
             let distance = units == .metric ? distanceKm : distanceKm * 1000 / metersPerMile

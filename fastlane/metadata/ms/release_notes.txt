@@ -1,1 +1,1 @@
-Cari keputusan perlumbaan anda dan lihat setiap split di satu tempat.
+Split rankings return in Locker. Search, race details and Race Book are clearer, with safer exports and stronger accessibility.

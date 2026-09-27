@@ -27,6 +27,7 @@ final class LockerStore: ObservableObject {
     /// Invalidates an older network response when the user claims another
     /// athlete, adds a contact, or starts a newer refresh.
     private var refreshGeneration = 0
+    private var refreshingContactIDs: [String]?
 
     init(api: ResultsProviding = ResultsAPI(), storage: LockerStorage = .init()) {
         self.api = api
@@ -37,6 +38,14 @@ final class LockerStore: ObservableObject {
         // restored Settings sheet can sit over the onboarding screen.
         if ProcessInfo.processInfo.arguments.contains("-ResetLocker") {
             storage.clear()
+            if ProcessInfo.processInfo.arguments.contains("-SeedScreenshotData") {
+                athlete = DebugScreenshotFixtures.athlete
+                results = DebugScreenshotFixtures.results
+                lastRefreshed = .now
+                state = .loaded
+                DebugScreenshotFixtures.seedFieldCache()
+                return
+            }
             return
         }
         #endif
@@ -106,9 +115,14 @@ final class LockerStore: ObservableObject {
     func refresh(force: Bool = false) async {
         guard let athlete else { return }
         if !force, let lastRefreshed, Date.now.timeIntervalSince(lastRefreshed) < 60 * 30 { return }
+        let contactIDs = athlete.contactIDs
+        guard refreshingContactIDs != contactIDs else { return }
+        refreshingContactIDs = contactIDs
+        defer {
+            if refreshingContactIDs == contactIDs { refreshingContactIDs = nil }
+        }
         refreshGeneration &+= 1
         let generation = refreshGeneration
-        let contactIDs = athlete.contactIDs
         refreshWarning = nil
         if results.isEmpty { state = .loading }
         // Deliberately not awaited. `FeedConfigLoader.config()` already answers
@@ -136,9 +150,13 @@ final class LockerStore: ObservableObject {
                 refreshWarning = apiError.localizedDescription
             }
             if results.isEmpty {
-                state = .failed(error.localizedDescription)
+                state = .failed(ResultsAPI.userFacingMessage(for: error))
             } else {
                 state = .loaded
+                if force {
+                    let updated = lastRefreshed?.formatted(.relative(presentation: .named)) ?? "earlier"
+                    refreshWarning = "Couldn't update. Showing results last refreshed \(updated)."
+                }
             }
         }
     }

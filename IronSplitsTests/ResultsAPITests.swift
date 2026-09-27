@@ -4,6 +4,18 @@ import XCTest
 
 final class ResultsAPITests: XCTestCase {
 
+    func testTruncatedUnsupportedMatchesDoNotClaimNoSupportedRacesExist() {
+        let truncated = AthleteSearchResponse(athletes: [],
+                                              hasUnsupportedResults: true,
+                                              wasTruncated: true)
+        let complete = AthleteSearchResponse(athletes: [],
+                                             hasUnsupportedResults: true,
+                                             wasTruncated: false)
+
+        XCTAssertFalse(truncated.hasOnlyUnsupportedResults)
+        XCTAssertTrue(complete.hasOnlyUnsupportedResults)
+    }
+
     func testPattieAudioSessionUsesAudibleMixedPlayback() async {
         let activated = await PattieVoice.activateSession()
 
@@ -243,6 +255,24 @@ extension ResultsAPITests {
                                       date: "2025-04-26T00:00:00Z")
         ]
         XCTAssertEqual(ResultsAPI.collapseToAthletes(rows).count, 2)
+    }
+
+    func testCountryPrefixInRegionDoesNotSplitOnePerson() {
+        let rows = [
+            ODataResultRow.contactRow(id: "1", first: "Pattie", last: "Wallner",
+                                      contact: Self.contactA, city: "Lincoln", state: "US-CA",
+                                      gender: "Female", event: "2025 IRONMAN Texas",
+                                      date: "2025-04-26T00:00:00Z"),
+            ODataResultRow.contactRow(id: "2", first: "Pattie", last: "Wallner",
+                                      contact: Self.contactB, city: "Lincoln", state: "CA",
+                                      gender: "Female", event: "2026 IRONMAN 70.3 Northern California",
+                                      date: "2026-08-16T00:00:00Z"),
+        ]
+
+        let athletes = ResultsAPI.collapseToAthletes(rows)
+        XCTAssertEqual(athletes.count, 1)
+        XCTAssertEqual(athletes[0].knownRaceCount, 2)
+        XCTAssertEqual(Set(athletes[0].contactIDs), [Self.contactA, Self.contactB])
     }
 
     func testContactWithNoCityNeverMergesWithAnother() {

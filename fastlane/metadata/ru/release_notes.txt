@@ -1,1 +1,1 @@
-Найдите опубликованные результаты и смотрите каждый сплит в одном месте.
+Split rankings return in Locker. Search, race details and Race Book are clearer, with safer exports and stronger accessibility.

@@ -5,6 +5,14 @@ set -euo pipefail
 UDID="${1:?missing simulator UDID}"
 OUTPUT="${2:?missing output directory}"
 mkdir -p "$OUTPUT"
+find "$OUTPUT" -maxdepth 1 -type f -name '*.png' -delete
+agent-sim boot ironsplits >/dev/null
+xcrun simctl status_bar "$UDID" override \
+  --time "9:41" \
+  --batteryState charged \
+  --batteryLevel 100 \
+  --cellularBars 4 \
+  --wifiBars 3
 
 TEMP_ROOT="$(mktemp -d /tmp/iron-splits-asc.XXXXXX)"
 RESULT_BUNDLE="$TEMP_ROOT/capture.xcresult"
@@ -14,6 +22,8 @@ xcodebuild test \
   -project IronSplits.xcodeproj \
   -scheme IronSplits \
   -destination "id=$UDID" \
+  -parallel-testing-enabled NO \
+  -collect-test-diagnostics never \
   -resultBundlePath "$RESULT_BUNDLE" \
   -only-testing:IronSplitsUITests/ASCReleaseCaptureUITests \
   -quiet
@@ -35,13 +45,11 @@ manifest = json.loads((attachments / "manifest.json").read_text(encoding="utf-8"
 records = manifest[0]["attachments"]
 names = (
     "locker.png",
+    "rankings.png",
     "race-detail.png",
-    "bests.png",
     "race-book.png",
-    "race-book-compare.png",
-    "race-book-export.png",
+    "explore.png",
     "pattie.png",
-    "settings.png",
 )
 
 for name in names:

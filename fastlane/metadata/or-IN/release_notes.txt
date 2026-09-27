@@ -1,1 +1,1 @@
-ଆପଣଙ୍କ ପ୍ରକାଶିତ ରେସ ଫଳ ଖୋଜନ୍ତୁ ଏବଂ ପ୍ରତ୍ୟେକ ସ୍ପ୍ଲିଟ୍ ଏକ ସ୍ଥାନରେ ଦେଖନ୍ତୁ।
+Split rankings return in Locker. Search, race details and Race Book are clearer, with safer exports and stronger accessibility.

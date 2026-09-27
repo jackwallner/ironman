@@ -155,6 +155,7 @@ final class PattieMode: ObservableObject {
     private var firedAt: [Moment: Date] = [:]
     private var firedActions: [Action: Date] = [:]
     private var lastFired: Date?
+    private var lastAutomaticReactionAt: Date?
     private var pointerPlaybackActive = false
     private let voice = PattieVoice.shared
     private let seenKey = "pattie.mode.seenLines"
@@ -162,10 +163,10 @@ final class PattieMode: ObservableObject {
     private let lastModeTipIDKey = "pattie.mode.lastTipID"
     private let tipSlotKey = "pattie.mode.tipSlot"
     private let catchphraseIndexKey = "pattie.mode.catchphraseIndex"
-    /// Long enough that two taps in a row cannot both summon her, short enough
-    /// that moving through three screens still gets more than one line out of
-    /// her.
+    /// At most one automatic reaction per minute keeps a rapid browse quiet;
+    /// contextual race moments use their own cooldowns.
     private let quietPeriod: TimeInterval = 0.9
+    private let automaticReactionInterval: TimeInterval = 75
 
     init() {
         let storedIsEnabled = UserDefaults.standard.object(forKey: "pattie.mode.enabled") as? Bool ?? false
@@ -202,6 +203,8 @@ final class PattieMode: ObservableObject {
     /// before another reaction can appear.
     func react(_ action: Action, petState: PattiePetState? = nil) {
         guard isEnabled, !pointerPlaybackActive, !voice.isSpeaking else { return }
+        if let lastAutomaticReactionAt,
+           Date.now.timeIntervalSince(lastAutomaticReactionAt) < automaticReactionInterval { return }
         if let last = firedActions[action], Date.now.timeIntervalSince(last) < action.cooldown {
             return
         }
@@ -209,6 +212,7 @@ final class PattieMode: ObservableObject {
             if let lastFired, Date.now.timeIntervalSince(lastFired) < quietPeriod { return }
         }
         guard let line = pick(for: action) else { return }
+        lastAutomaticReactionAt = .now
         present(line, petState: petState)
     }
 
@@ -218,7 +222,7 @@ final class PattieMode: ObservableObject {
     func demo() {
         guard !pointerPlaybackActive else { return }
         guard let line = Self.deck.first(where: { $0.action == .tap }) else { return }
-        present(line, respectingBudget: false)
+        present(line, respectingBudget: false, audioMode: .playback)
     }
 
     /// Silence the companion before an in-app pointer video starts. The video
@@ -235,7 +239,8 @@ final class PattieMode: ObservableObject {
 
     private func present(_ line: Line,
                          respectingBudget: Bool = true,
-                         petState: PattiePetState? = nil) {
+                         petState: PattiePetState? = nil,
+                         audioMode: PattieAudioMode = .companion) {
         guard !pointerPlaybackActive, !voice.isSpeaking else { return }
         var line = line
         line.petState = petState ?? line.defaultPetState
@@ -245,7 +250,8 @@ final class PattieMode: ObservableObject {
         // as started and the next tip waits for the rest of the pool. Every
         // fourth slot is deliberately not added to that pool, it is a short
         // catchphrase celebration instead.
-        if let presentation = nextModePresentation() {
+        if line.moment == .action, line.action != nil,
+           let presentation = nextModePresentation() {
             switch presentation {
             case .tip(let tip):
                 line.text = tip.text
@@ -269,7 +275,12 @@ final class PattieMode: ObservableObject {
             current = line
         }
         Haptics.tap(.soft)
-        voice.playIfQuiet(line.voice)
+        switch audioMode {
+        case .companion:
+            voice.playCompanionIfQuiet(line.voice)
+        case .playback:
+            voice.playIfQuiet(line.voice)
+        }
     }
 
     func replayVoice() {

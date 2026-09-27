@@ -9,6 +9,7 @@ extension Notification.Name {
 enum ReviewPromptOutcome: String, Sendable {
     case openedWriteReview
     case submittedFeedback
+    case feedbackDraftOpened
 }
 
 /// Persists launch counts, positive moments, and review-prompt eligibility.
@@ -21,10 +22,20 @@ enum ReviewPromptTracker {
     private static let lastShownKey = "reviewPrompt.lastShownDate"
     private static let outcomeKey = "reviewPrompt.outcome"
     private static let positiveMomentCountKey = "reviewPrompt.positiveMomentCount"
+    private static let positiveMomentIDsKey = "reviewPrompt.positiveMomentIDs"
     private static let pendingPositiveMomentKey = "reviewPrompt.pendingPositiveMoment"
     private static let softDeferKey = "reviewPrompt.softDefer"
     private static let distinctDaysKey = "reviewPrompt.distinctUseDays"
     private static let lastUseDayKey = "reviewPrompt.lastUseDay"
+
+    static func isPositiveMoment(result: RaceResult,
+                                 isReadOnly: Bool,
+                                 within results: [RaceResult]) -> Bool {
+        guard !isReadOnly, result.isComplete else { return false }
+        return Discipline.rankable.contains {
+            RaceAnalytics.isPersonalBest(result, discipline: $0, within: results)
+        }
+    }
 
     // Enjoyment pre-filter keeps unhappy users off the public Store; thresholds
     // match the Vitals portfolio standard for passive prompts.
@@ -126,7 +137,13 @@ enum ReviewPromptTracker {
         appLaunchCount += 1
     }
 
-    static func recordPositiveMoment() {
+    static func recordPositiveMoment(identifier: String? = nil) {
+        if let identifier {
+            var identifiers = defaults.stringArray(forKey: positiveMomentIDsKey) ?? []
+            guard !identifiers.contains(identifier) else { return }
+            identifiers.append(identifier)
+            defaults.set(Array(identifiers.suffix(100)), forKey: positiveMomentIDsKey)
+        }
         positiveMomentCount += 1
         hasPendingPositiveMoment = true
         NotificationCenter.default.post(name: .ironSplitsPositiveMomentForReview, object: nil)
@@ -199,6 +216,11 @@ enum ReviewPromptTracker {
 
     static func markFeedbackSubmitted() {
         outcome = .submittedFeedback
+        markShown()
+    }
+
+    static func markFeedbackDraftOpened() {
+        outcome = .feedbackDraftOpened
         markShown()
     }
 }

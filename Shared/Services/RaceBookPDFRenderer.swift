@@ -5,7 +5,12 @@ import UIKit
 /// Every block measures its own text before drawing, and history cards are
 /// paginated as whole units so a long race name or note cannot be clipped.
 enum RaceBookPDFRenderer {
-    private static let pageSize = CGSize(width: 612, height: 792)
+    private static var pageSize: CGSize {
+        let region = Locale.current.region?.identifier.uppercased()
+        return region == "US" || region == "CA"
+            ? CGSize(width: 612, height: 792)
+            : CGSize(width: 595, height: 842)
+    }
     private static let pageMargin: CGFloat = 40
 
     private enum Palette {
@@ -66,7 +71,7 @@ enum RaceBookPDFRenderer {
                  to: CGPoint(x: size.width - Self.margin, y: size.height - 38),
                  color: Palette.line,
                  width: 0.7)
-            text("IM TRI TRACKER  |  OFFICIAL RESULTS, PRIVATE NOTES",
+            text("IM IRON SPLITS  |  OFFICIAL RESULTS, PRIVATE NOTES",
                  in: CGRect(x: Self.margin, y: size.height - 30, width: 420, height: 12),
                  font: .systemFont(ofSize: 7.5, weight: .semibold),
                  color: Palette.muted,
@@ -164,7 +169,7 @@ enum RaceBookPDFRenderer {
         format.documentInfo = [
             kCGPDFContextTitle as String: "Race Book - \(athlete.name)",
             kCGPDFContextAuthor as String: athlete.name,
-            kCGPDFContextCreator as String: "IM Tri Tracker"
+            kCGPDFContextCreator as String: "IM Iron Splits"
         ]
         let renderer = UIGraphicsPDFRenderer(bounds: CGRect(origin: .zero, size: pageSize), format: format)
 
@@ -208,7 +213,7 @@ enum RaceBookPDFRenderer {
         let heroHeight: CGFloat = 164
         document.fill(CGRect(x: 0, y: 0, width: pageSize.width, height: heroHeight), Palette.deep)
         document.fill(CGRect(x: 0, y: 0, width: 12, height: heroHeight), Palette.coral)
-        document.text("IM TRI TRACKER  |  ONE-PAGE RACE BOOK",
+        document.text("IM IRON SPLITS  |  ONE-PAGE RACE BOOK",
                       in: CGRect(x: pageMargin, y: 32, width: pageSize.width - pageMargin * 2, height: 14),
                       font: .systemFont(ofSize: 8.5, weight: .bold),
                       color: Palette.coral,
@@ -230,17 +235,11 @@ enum RaceBookPDFRenderer {
         if options.includeCareerSummary {
             let statsRect = CGRect(x: pageMargin, y: y, width: pageSize.width - pageMargin * 2, height: 82)
             document.card(statsRect, fill: Palette.card, stroke: Palette.card)
-            let statWidth = statsRect.width / 4
+            let statWidth = statsRect.width / 3
             let statY = statsRect.minY + 14
             drawStat(document, value: "\(summary.starts)", label: "STARTS", x: statsRect.minX, width: statWidth, y: statY)
             drawStat(document, value: "\(summary.finishes)", label: "FINISHES", x: statsRect.minX + statWidth, width: statWidth, y: statY)
             drawStat(document, value: "\(summary.podiums)", label: "PODIUMS", x: statsRect.minX + statWidth * 2, width: statWidth, y: statY, accent: true)
-            drawStat(document,
-                     value: "\(Int((summary.finishRate * 100).rounded()))%",
-                     label: "FINISH RATE",
-                     x: statsRect.minX + statWidth * 3,
-                     width: statWidth,
-                     y: statY)
             y = statsRect.maxY + 22
         }
 
@@ -375,7 +374,7 @@ enum RaceBookPDFRenderer {
         document.context.cgContext.fillEllipse(in: CGRect(x: 492, y: 24, width: 110, height: 110))
         document.context.cgContext.setAlpha(1)
 
-        document.text("IM TRI TRACKER  |  RACE BOOK",
+        document.text("IM IRON SPLITS  |  RACE BOOK",
                       in: CGRect(x: pageMargin, y: 42, width: 400, height: 16),
                       font: .systemFont(ofSize: 9, weight: .bold),
                       color: Palette.coral,
@@ -385,25 +384,31 @@ enum RaceBookPDFRenderer {
                       font: .systemFont(ofSize: 15, weight: .semibold),
                       color: UIColor.white.withAlphaComponent(0.75))
 
-        let nameFont = UIFont.systemFont(ofSize: 34, weight: .bold)
-        let nameHeight = Document.textHeight(athlete.name,
-                                             font: nameFont,
-                                             width: 410,
-                                             lineSpacing: 0)
+        var nameFontSize: CGFloat = 34
+        var nameFont = UIFont.systemFont(ofSize: nameFontSize, weight: .bold)
+        var nameHeight = Document.textHeight(athlete.name, font: nameFont, width: 410, lineSpacing: 0)
+        while nameHeight > 78, nameFontSize > 22 {
+            nameFontSize -= 2
+            nameFont = UIFont.systemFont(ofSize: nameFontSize, weight: .bold)
+            nameHeight = Document.textHeight(athlete.name, font: nameFont, width: 410, lineSpacing: 0)
+        }
         document.text(athlete.name,
                       in: CGRect(x: pageMargin, y: 108, width: 410, height: nameHeight),
                       font: nameFont,
                       color: .white,
                       lineSpacing: 0)
         if let location = athlete.location, !location.isEmpty {
-            document.text(location,
-                          in: CGRect(x: pageMargin, y: 108 + nameHeight + 12, width: 390, height: 18),
+                document.text(singleLine(location, limit: 45),
+                          in: CGRect(x: pageMargin, y: 108 + nameHeight + 8, width: 390, height: 18),
                           font: .systemFont(ofSize: 11, weight: .regular),
                           color: UIColor.white.withAlphaComponent(0.72))
         }
         if let years = RaceAnalytics.summary(results).years {
-            document.text("RACING \(years.lowerBound) TO \(years.upperBound)",
-                          in: CGRect(x: pageMargin, y: 226, width: 300, height: 16),
+            let locationBottom = athlete.location == nil ? 0 : 108 + nameHeight + 30
+            document.text(years.lowerBound == years.upperBound
+                          ? "RACING SINCE \(years.lowerBound)"
+                          : "RACING \(years.lowerBound) TO \(years.upperBound)",
+                          in: CGRect(x: pageMargin, y: max(226, locationBottom), width: 300, height: 16),
                           font: .systemFont(ofSize: 8.5, weight: .bold),
                           color: UIColor.white.withAlphaComponent(0.66),
                           tracking: 1)
@@ -416,21 +421,17 @@ enum RaceBookPDFRenderer {
 
         let summary = RaceAnalytics.summary(results)
         if options.includeCareerSummary {
-            let statsRect = CGRect(x: pageMargin, y: 244, width: pageSize.width - pageMargin * 2, height: 116)
+            let statsTop: CGFloat = max(244, 108 + nameHeight + (athlete.location == nil ? 0 : 38) + 30)
+            let statsRect = CGRect(x: pageMargin, y: statsTop, width: pageSize.width - pageMargin * 2, height: 116)
             document.card(statsRect, fill: Palette.card, stroke: Palette.card)
-            let statWidth = statsRect.width / 4
-            drawStat(document, value: "\(summary.starts)", label: "STARTS", x: statsRect.minX, width: statWidth, y: 267)
-            drawStat(document, value: "\(summary.finishes)", label: "FINISHES", x: statsRect.minX + statWidth, width: statWidth, y: 267)
-            drawStat(document, value: "\(summary.podiums)", label: "PODIUMS", x: statsRect.minX + statWidth * 2, width: statWidth, y: 267, accent: true)
-            drawStat(document,
-                     value: "\(Int((summary.finishRate * 100).rounded()))%",
-                     label: "FINISH RATE",
-                     x: statsRect.minX + statWidth * 3,
-                     width: statWidth,
-                     y: 267)
+            let statWidth = statsRect.width / 3
+            let statY = statsRect.minY + 23
+            drawStat(document, value: "\(summary.starts)", label: "STARTS", x: statsRect.minX, width: statWidth, y: statY)
+            drawStat(document, value: "\(summary.finishes)", label: "FINISHES", x: statsRect.minX + statWidth, width: statWidth, y: statY)
+            drawStat(document, value: "\(summary.podiums)", label: "PODIUMS", x: statsRect.minX + statWidth * 2, width: statWidth, y: statY, accent: true)
         }
 
-        var y: CGFloat = 398
+        var y: CGFloat = options.includeCareerSummary ? 398 + max(0, (max(244, 108 + nameHeight + (athlete.location == nil ? 0 : 38) + 30) - 244)) : 398
         document.text("THE DISTANCE STORY",
                       in: CGRect(x: pageMargin, y: y, width: 300, height: 16),
                       font: .systemFont(ofSize: 9, weight: .bold),

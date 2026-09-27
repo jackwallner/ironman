@@ -1,1 +1,1 @@
-מצא את התוצאות שפורסמו וראה כל פיצול במקום אחד.
+Split rankings return in Locker. Search, race details and Race Book are clearer, with safer exports and stronger accessibility.

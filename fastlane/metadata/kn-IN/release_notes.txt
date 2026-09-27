@@ -1,1 +1,1 @@
-ನಿಮ್ಮ ಪ್ರಕಟಿತ ರೇಸ್ ಫಲಿತಾಂಶಗಳನ್ನು ಹುಡುಕಿ ಮತ್ತು ಪ್ರತಿಯೊಂದು ಸ್ಪ್ಲಿಟ್ ಅನ್ನು ಒಂದೇ ಸ್ಥಳದಲ್ಲಿ ನೋಡಿ.
+Split rankings return in Locker. Search, race details and Race Book are clearer, with safer exports and stronger accessibility.

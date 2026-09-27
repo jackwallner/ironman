@@ -46,6 +46,7 @@ actor PointerMediaCache {
                                                                      create: true) else { return nil }
         let directory = applicationSupport.appendingPathComponent("PointerMedia", isDirectory: true)
         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        Self.excludeFromBackup(directory)
         return directory
     }
 
@@ -100,6 +101,7 @@ actor PointerMediaCache {
             // leave a truncated file that looks cached and plays as garbage.
             try? FileManager.default.removeItem(at: destination)
             try FileManager.default.moveItem(at: temporary, to: destination)
+            Self.excludeFromBackup(destination)
             progress?(1.0)
             return destination
         }
@@ -111,6 +113,13 @@ actor PointerMediaCache {
     /// from one place, whatever context the download task finished on.
     private func clearInFlight(_ id: String) {
         inFlight[id] = nil
+    }
+
+    private nonisolated static func excludeFromBackup(_ url: URL) {
+        var values = URLResourceValues()
+        values.isExcludedFromBackup = true
+        var mutableURL = url
+        try? mutableURL.setResourceValues(values)
     }
 
     /// Total bytes held on disk, for the Settings row that offers to clear it.

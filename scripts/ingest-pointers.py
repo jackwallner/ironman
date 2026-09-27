@@ -179,6 +179,8 @@ def main() -> None:
         if not entry.get("discipline"):
             entry["discipline"] = discipline_from(clip.stem)
         entry["durationSeconds"] = seconds
+        if not args.dry_run:
+            entry["fileSizeBytes"] = video.stat().st_size
         if args.base_url:
             base = args.base_url.rstrip("/")
             entry["videoURL"] = f"{base}/{video_name}"

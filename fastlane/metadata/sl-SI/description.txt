@@ -1,12 +1,28 @@
-Vsaka tekma, ki si jo končal, na enem mestu in urejena tako, da razumeš svoj nastop.
+Published full and half-distance triathlon results, ranked by split and kept in one place.
 
-Vnesi ime enkrat. IM Tri Tracker poišče objavljene rezultate in prikaže čase plavanja, menjav, kolesa in teka, štartno številko ter uvrstitve.
+Search the name you registered with. IM Iron Splits finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
 
-Oglej si osebne rekorde, primerjaj tekme iste vrste in razumi mesto vsakega časa v skupini. Race Book odklene primerjave ter izvoz v PDF ali sliko z enkratnim doživljenjskim nakupom, brez naročnine in brez plačila za izvoz.
+SPLIT RANKINGS
+Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
 
-Osnova ostane brezplačna: iskanje, celotna zgodovina, delni časi, uvrstitve, opombe in knjižnica Pointers.
+WHERE YOU LANDED
+See each split against the finishers from that event, with field size and percentile beside the rank.
 
-Zasebnost: https://jackwallner.github.io/ironman/privacy-policy.html
-Pogoji: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+RACE BOOK
+Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
 
-IM Tri Tracker je neodvisna aplikacija brez povezave z organizatorji tekem ali merilci časa.
+RACE NOTES
+Keep conditions, nutrition and gear attached to the result that produced them.
+
+TIPS FROM PATTIE
+Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+
+FREE CORE
+Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+
+Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
+Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
+IM Iron Splits is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+
+Vmesnik aplikacije je trenutno na voljo samo v angleščini.

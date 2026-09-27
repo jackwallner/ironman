@@ -1,12 +1,28 @@
-আপনার শেষ করা প্রতিটি রেস এক জায়গায়, আপনার প্রয়োজনের মতো সাজানো।
+Published full and half-distance triathlon results, ranked by split and kept in one place.
 
-একবার নাম লিখুন। IM Tri Tracker প্রকাশিত ফলাফল খুঁজে সাঁতার, ট্রানজিশন, বাইক ও দৌড়ের স্প্লিট, বিব নম্বর এবং বিভাগ ও সামগ্রিক র‍্যাঙ্ক দেখায়।
+Search the name you registered with. IM Iron Splits finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
 
-ব্যক্তিগত সেরা দেখুন, একই ধরনের রেস তুলনা করুন এবং মাঠের মধ্যে প্রতিটি সময়ের অবস্থান বুঝুন। Race Book একবারের আজীবন কেনাকাটায় তুলনা ও PDF বা ছবি এক্সপোর্ট দেয়, কোনো সাবস্ক্রিপশন বা প্রতি এক্সপোর্টে চার্জ নেই।
+SPLIT RANKINGS
+Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
 
-বেসিক সুবিধা বিনামূল্যে থাকে: সার্চ, সম্পূর্ণ রেস ইতিহাস, স্প্লিট, র‍্যাঙ্ক, নোট এবং Pointers লাইব্রেরি।
+WHERE YOU LANDED
+See each split against the finishers from that event, with field size and percentile beside the rank.
 
-গোপনীয়তা: https://jackwallner.github.io/ironman/privacy-policy.html
-ব্যবহারের শর্ত: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+RACE BOOK
+Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
 
-IM Tri Tracker স্বাধীন অ্যাপ, কোনো রেস আয়োজক বা টাইমিং কোম্পানির সঙ্গে যুক্ত নয়।
+RACE NOTES
+Keep conditions, nutrition and gear attached to the result that produced them.
+
+TIPS FROM PATTIE
+Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+
+FREE CORE
+Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+
+Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
+Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
+IM Iron Splits is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+
+অ্যাপের ইন্টারফেস বর্তমানে শুধু ইংরেজিতে উপলভ্য।

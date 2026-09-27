@@ -1,1 +1,1 @@
-Find dine offentliggjorte resultater og se alle split-tider samlet.
+Split rankings return in Locker. Search, race details and Race Book are clearer, with safer exports and stronger accessibility.

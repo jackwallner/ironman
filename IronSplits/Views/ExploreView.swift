@@ -9,7 +9,7 @@ struct ExploreView: View {
     @EnvironmentObject private var pattie: PattieMode
     @State private var showingSearch = false
     @State private var selectedAthlete: Athlete?
-    @State private var recentAthletes: [Athlete] = []
+    @State private var recentAthletes: [Athlete] = ExploreRecents.load()
 
     var body: some View {
         NavigationStack {
@@ -25,7 +25,7 @@ struct ExploreView: View {
                     }
                     .padding(.horizontal, TriGeo.padPage)
                     .padding(.top, TriSpace.x4)
-                    .padding(.bottom, TriGeo.tabBarClearance)
+                    .padding(.bottom, TriSpace.x4)
                 }
             }
             .navigationTitle("Explore")
@@ -124,8 +124,24 @@ struct ExploreView: View {
         recentAthletes.removeAll { $0.id == athlete.id }
         recentAthletes.insert(athlete, at: 0)
         recentAthletes = Array(recentAthletes.prefix(3))
+        ExploreRecents.save(recentAthletes)
         selectedAthlete = athlete
         pattie.react(.selection)
+    }
+}
+
+private enum ExploreRecents {
+    private static let key = "explore.recentAthletes"
+
+    static func load() -> [Athlete] {
+        guard let data = UserDefaults.standard.data(forKey: key),
+              let athletes = try? JSONDecoder().decode([Athlete].self, from: data) else { return [] }
+        return Array(athletes.prefix(3))
+    }
+
+    static func save(_ athletes: [Athlete]) {
+        guard let data = try? JSONEncoder().encode(Array(athletes.prefix(3))) else { return }
+        UserDefaults.standard.set(data, forKey: key)
     }
 }
 
@@ -192,7 +208,7 @@ private struct ExploreAthleteView: View {
                                        title: "Couldn't load this history",
                                        message: message,
                                        actionTitle: "Try again") {
-                            load()
+                            Task { await load(retry: true) }
                         }
                     } else if results.isEmpty && state == .loading {
                         loadingView
@@ -213,8 +229,9 @@ private struct ExploreAthleteView: View {
         .navigationTitle(athlete.name)
         .navigationBarTitleDisplayMode(.inline)
         .triNavBar()
-        .task { load() }
-        .onChange(of: results) { _, _ in syncKind() }
+        .task {
+            if state == .idle { await load() }
+        }
     }
 
     private var profileHeader: some View {
@@ -229,16 +246,38 @@ private struct ExploreAthleteView: View {
                     .font(TriType.small)
                     .foregroundStyle(TriPalette.inkOnDark.opacity(0.7))
             }
-            HStack(spacing: TriSpace.x6) {
-                StatTile(value: "\(summary.finishes)", caption: "Finishes", tint: TriPalette.inkOnDark)
-                StatTile(value: "\(summary.fullDistance)", caption: "Full", tint: TriPalette.inkOnDark)
-                StatTile(value: "\(summary.halfDistance)", caption: "Half", tint: TriPalette.inkOnDark)
-                if summary.podiums > 0 {
-                    StatTile(value: "\(summary.podiums)", caption: "Podiums", tint: TriPalette.sunrise)
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: TriSpace.x6) {
+                    StatTile(value: "\(summary.finishes)", caption: "Finishes", tint: TriPalette.inkOnDark)
+                    if summary.fullDistance > 0 {
+                        StatTile(value: "\(summary.fullDistance)", caption: "Full", tint: TriPalette.inkOnDark)
+                    }
+                    if summary.halfDistance > 0 {
+                        StatTile(value: "\(summary.halfDistance)", caption: "Half", tint: TriPalette.inkOnDark)
+                    }
+                    if summary.podiums > 0 {
+                        StatTile(value: "\(summary.podiums)", caption: "Podiums", tint: TriPalette.sunrise)
+                    }
+                }
+                VStack(spacing: TriSpace.x3) {
+                    HStack(spacing: TriSpace.x6) {
+                        StatTile(value: "\(summary.finishes)", caption: "Finishes", tint: TriPalette.inkOnDark)
+                        if summary.fullDistance > 0 {
+                            StatTile(value: "\(summary.fullDistance)", caption: "Full", tint: TriPalette.inkOnDark)
+                        }
+                    }
+                    HStack(spacing: TriSpace.x6) {
+                        if summary.halfDistance > 0 {
+                            StatTile(value: "\(summary.halfDistance)", caption: "Half", tint: TriPalette.inkOnDark)
+                        }
+                        if summary.podiums > 0 {
+                            StatTile(value: "\(summary.podiums)", caption: "Podiums", tint: TriPalette.sunrise)
+                        }
+                    }
                 }
             }
             if let years = summary.years {
-                Text("Racing since \(years.lowerBound)")
+                Text("Racing since " + String(years.lowerBound))
                     .font(TriType.micro)
                     .foregroundStyle(TriPalette.inkOnDark.opacity(0.62))
             }
@@ -269,13 +308,18 @@ private struct ExploreAthleteView: View {
         VStack(alignment: .leading, spacing: TriSpace.x3) {
             TriSectionHeader(title: "Race history", trailing: activeKind?.longTitle)
             ForEach(visibleResults) { result in
-                RaceRow(result: result)
-                    .padding(TriSpace.x3)
-                    .background(TriPalette.surface, in: RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous))
-                    .overlay {
-                        RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous)
-                            .stroke(TriPalette.hairline, lineWidth: TriGeo.hairline)
-                    }
+                NavigationLink {
+                    RaceDetailView(result: result, contextResults: results, isReadOnly: true)
+                } label: {
+                    RaceRow(result: result)
+                        .padding(TriSpace.x3)
+                        .background(TriPalette.surface, in: RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous)
+                                .stroke(TriPalette.hairline, lineWidth: TriGeo.hairline)
+                        }
+                }
+                .buttonStyle(.triPress)
             }
             SplitLegend()
                 .padding(.top, TriSpace.x1)
@@ -312,17 +356,25 @@ private struct ExploreAthleteView: View {
         }
     }
 
-    private func load() {
+    private func load(retry: Bool = false) async {
+        guard state == .idle || retry else { return }
         guard state != .loading else { return }
         state = .loading
-        Task {
-            do {
-                results = try await api.results(forContactIDs: athlete.contactIDs)
-                state = .loaded
-            } catch {
-                guard !isTaskCancellation(error) else { return }
-                state = .failed(error.localizedDescription)
+        do {
+            let loaded = try await api.results(forContactIDs: athlete.contactIDs)
+            guard !Task.isCancelled else {
+                state = .idle
+                return
             }
+            results = loaded
+            syncKind()
+            state = .loaded
+        } catch {
+            guard !isTaskCancellation(error), !Task.isCancelled else {
+                state = .idle
+                return
+            }
+            state = .failed(ResultsAPI.userFacingMessage(for: error))
         }
     }
 }

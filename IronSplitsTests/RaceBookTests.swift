@@ -88,9 +88,11 @@ final class RaceBookTests: XCTestCase {
                             conditions: "Hot and windy",
                             nutrition: "Carried more sodium",
                             notes: "Hold the line on the run")
+        let options = RaceBookOptions(includeRaceNotes: true)
         let text = RaceBookBuilder.plainText(athlete: athlete,
                                              results: [result],
-                                             notes: [result.id: note])
+                                             notes: [result.id: note],
+                                             options: options)
 
         XCTAssertTrue(text.contains("RACE BOOK: TEST ATHLETE"))
         XCTAssertTrue(text.contains("1 finishes, 1 podiums"))
@@ -99,8 +101,8 @@ final class RaceBookTests: XCTestCase {
         XCTAssertTrue(text.contains("Splits: Swim"))
         XCTAssertTrue(text.contains("Notes: Hold the line on the run"))
 
-        let pdf = RaceBookBuilder.pdf(athlete: athlete, results: [result], notes: [result.id: note])
-        let image = RaceBookBuilder.image(athlete: athlete, results: [result], notes: [result.id: note])
+        let pdf = RaceBookBuilder.pdf(athlete: athlete, results: [result], notes: [result.id: note], options: options)
+        let image = RaceBookBuilder.image(athlete: athlete, results: [result], notes: [result.id: note], options: options)
         let pdfURL = try XCTUnwrap(pdf)
         let imageURL = try XCTUnwrap(image)
         XCTAssertGreaterThan(try Data(contentsOf: pdfURL).count, 500)
@@ -128,13 +130,16 @@ final class RaceBookTests: XCTestCase {
         let note = RaceNote(resultID: lastResult.id,
                             conditions: "Warm, windy, and humid",
                             notes: longNote)
+        let options = RaceBookOptions(includeRaceNotes: true)
 
         let pdfURL = try XCTUnwrap(RaceBookBuilder.pdf(athlete: athlete,
                                                        results: results,
-                                                       notes: [lastResult.id: note]))
+                                                       notes: [lastResult.id: note],
+                                                       options: options))
         let imageURL = try XCTUnwrap(RaceBookBuilder.image(athlete: athlete,
                                                            results: results,
-                                                           notes: [lastResult.id: note]))
+                                                           notes: [lastResult.id: note],
+                                                           options: options))
         defer {
             try? FileManager.default.removeItem(at: pdfURL)
             try? FileManager.default.removeItem(at: imageURL)
@@ -149,10 +154,41 @@ final class RaceBookTests: XCTestCase {
         XCTAssertTrue(extractedText.contains("A detailed race-day note"))
 
         let image = try XCTUnwrap(UIImage(contentsOfFile: imageURL.path))
-        XCTAssertGreaterThanOrEqual(image.size.width, 1170,
-                                    "The shareable image should keep a high-resolution canvas")
-        XCTAssertGreaterThan(image.size.height, 1500,
-                             "The shareable image should contain the full history, not a fixed cover")
+        XCTAssertEqual(image.size, CGSize(width: 1080, height: 1920),
+                       "The shareable image should use a fixed, social-friendly canvas")
+    }
+
+    func testPrivateNotesStayOutOfDefaultExportAndImage() throws {
+        let athlete = Athlete(id: "athlete", name: "Test Athlete")
+        let result = Self.result(id: "private-note",
+                                 date: "2025-09-07T00:00:00Z",
+                                 bikeDistance: 180,
+                                 swim: 3_600,
+                                 bike: 18_000,
+                                 run: 14_400,
+                                 finish: 36_000)
+        let privateText = "Water was rough. Keep this private."
+        let note = RaceNote(resultID: result.id, conditions: privateText)
+
+        let text = RaceBookBuilder.plainText(athlete: athlete,
+                                             results: [result],
+                                             notes: [result.id: note])
+        XCTAssertFalse(text.contains(privateText))
+
+        let pdfURL = try XCTUnwrap(RaceBookBuilder.pdf(athlete: athlete,
+                                                       results: [result],
+                                                       notes: [result.id: note]))
+        defer { try? FileManager.default.removeItem(at: pdfURL) }
+        let pdf = try XCTUnwrap(PDFDocument(url: pdfURL))
+        XCTAssertFalse((0..<pdf.pageCount).compactMap { pdf.page(at: $0)?.string }.joined().contains(privateText))
+
+        let imageURL = try XCTUnwrap(RaceBookBuilder.image(athlete: athlete,
+                                                           results: [result],
+                                                           notes: [result.id: note],
+                                                           options: RaceBookOptions(includeRaceNotes: true)))
+        defer { try? FileManager.default.removeItem(at: imageURL) }
+        let image = try XCTUnwrap(UIImage(contentsOfFile: imageURL.path))
+        XCTAssertEqual(image.size, CGSize(width: 1080, height: 1920))
     }
 
     func testOnePagePDFProducesSinglePageSummary() throws {
@@ -220,6 +256,8 @@ final class RaceBookTests: XCTestCase {
         XCTAssertFalse(RaceKind.otherTriathlon.isSupported)
         XCTAssertFalse(RaceKind.unknown.isSupported)
         XCTAssertEqual(RaceBookOptions().kinds, RaceKind.supportedKinds)
+        XCTAssertFalse(RaceBookOptions().includeRaceNotes,
+                       "Private race notes must be excluded unless the athlete opts in")
         XCTAssertEqual(ResumeBuilder.Options.default.kinds, RaceKind.supportedKinds)
     }
 
@@ -236,6 +274,46 @@ final class RaceBookTests: XCTestCase {
         XCTAssertEqual(ProGate.visibleResults([result], isPro: false), [result])
         XCTAssertEqual(ProGate.lockedCount([result], isPro: false), 0)
         XCTAssertFalse(ProGate.isLocked(result, in: [result], isPro: false))
+    }
+
+    @MainActor
+    func testReviewMomentRequiresAnOwnedPersonalBest() {
+        let earlier = Self.result(id: "review-earlier",
+                                  date: "2023-09-10T00:00:00Z",
+                                  bikeDistance: 180,
+                                  swim: 3_900,
+                                  bike: 18_000,
+                                  run: 15_000,
+                                  finish: 39_000)
+        let personalBest = Self.result(id: "review-pb",
+                                       date: "2025-09-07T00:00:00Z",
+                                       bikeDistance: 180,
+                                       swim: 3_700,
+                                       bike: 17_800,
+                                       run: 14_700,
+                                       finish: 37_000)
+        let didNotFinish = Self.result(id: "review-dnf",
+                                       date: "2026-06-01T00:00:00Z",
+                                       bikeDistance: 180,
+                                       swim: 3_700,
+                                       bike: 17_800,
+                                       run: nil,
+                                       finish: nil,
+                                       finisher: false,
+                                       dnf: true)
+
+        XCTAssertFalse(ReviewPromptTracker.isPositiveMoment(result: earlier,
+                                                             isReadOnly: false,
+                                                             within: [earlier, personalBest]))
+        XCTAssertTrue(ReviewPromptTracker.isPositiveMoment(result: personalBest,
+                                                            isReadOnly: false,
+                                                            within: [earlier, personalBest]))
+        XCTAssertFalse(ReviewPromptTracker.isPositiveMoment(result: personalBest,
+                                                             isReadOnly: true,
+                                                             within: [earlier, personalBest]))
+        XCTAssertFalse(ReviewPromptTracker.isPositiveMoment(result: didNotFinish,
+                                                             isReadOnly: false,
+                                                             within: [earlier, didNotFinish]))
     }
 
     func testAppearancePreferencesMapToSystemLightAndDark() {

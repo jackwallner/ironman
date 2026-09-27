@@ -1,1 +1,1 @@
-Najděte své zveřejněné výsledky a prohlédněte si každý mezičas na jednom místě.
+Split rankings return in Locker. Search, race details and Race Book are clearer, with safer exports and stronger accessibility.

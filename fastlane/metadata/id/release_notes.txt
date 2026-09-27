@@ -1,1 +1,1 @@
-Temukan hasil lomba yang dipublikasikan dan lihat semua split di satu tempat.
+Split rankings return in Locker. Search, race details and Race Book are clearer, with safer exports and stronger accessibility.

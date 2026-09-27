@@ -2,6 +2,11 @@ import AVFoundation
 import Foundation
 import os
 
+enum PattieAudioMode: Sendable {
+    case companion
+    case playback
+}
+
 /// Plays Pattie's bundled voice clips, and tells the UI when she is talking.
 ///
 /// One player for the whole app. Pattie's companion and the Ask Pattie answers
@@ -31,31 +36,13 @@ final class PattieVoice: NSObject, ObservableObject {
         return nowPlaying == name
     }
 
-    /// Prepare the audio session off the main thread.
-    ///
-    /// `setCategory` and `setActive` both talk to the media daemon and both can
-    /// block for hundreds of milliseconds. Calling them on the main thread is
-    /// what "AVAudioSession Hang Risk" in the console is warning about, and
-    /// Pattie's first line can land within a second of launch, so on the main
-    /// thread it lands inside the first frame the app ever draws.
-    ///
-    /// Playback uses `.mixWithOthers` so she never stops the podcast somebody
-    /// is training to. Unlike `.ambient`, `.playback` remains audible when the
-    /// hardware Silent switch is on, which also lets episode video share this
-    /// session.
-    nonisolated static func prepareSession() {
-        sessionQueue.async {
-            _ = configureSession()
-        }
-    }
-
     /// Activate the session and wait for the media daemon before starting a
     /// player. This closes the race where `AVAudioPlayer.play()` or
     /// `AVPlayer.play()` ran before the session finished activating.
-    nonisolated static func activateSession() async -> Bool {
+    nonisolated static func activateSession(mode: PattieAudioMode = .playback) async -> Bool {
         await withCheckedContinuation { continuation in
             sessionQueue.async {
-                continuation.resume(returning: configureSession())
+                continuation.resume(returning: configureSession(mode: mode))
             }
         }
     }
@@ -66,10 +53,15 @@ final class PattieVoice: NSObject, ObservableObject {
         category: "PattieAudioSession"
     )
 
-    private nonisolated static func configureSession() -> Bool {
+    private nonisolated static func configureSession(mode: PattieAudioMode) -> Bool {
         do {
             let session = AVAudioSession.sharedInstance()
-            try session.setCategory(.playback, options: [.mixWithOthers])
+            switch mode {
+            case .companion:
+                try session.setCategory(.ambient)
+            case .playback:
+                try session.setCategory(.playback, options: [.mixWithOthers])
+            }
             try session.setActive(true)
             return true
         } catch {
@@ -81,6 +73,15 @@ final class PattieVoice: NSObject, ObservableObject {
     /// Play a bundled clip. A nil name is a silent line and is not an error.
     @discardableResult
     func play(_ name: String?) -> Bool {
+        play(name, mode: .playback)
+    }
+
+    @discardableResult
+    func playCompanion(_ name: String?) -> Bool {
+        play(name, mode: .companion)
+    }
+
+    private func play(_ name: String?, mode: PattieAudioMode) -> Bool {
         guard let name, let url = Bundle.main.url(forResource: name, withExtension: "m4a") else {
             if let name { logger.debug("missing clip \(name, privacy: .public)") }
             return false
@@ -96,7 +97,7 @@ final class PattieVoice: NSObject, ObservableObject {
 
             Task { @MainActor [weak self] in
                 guard let self else { return }
-                guard await Self.activateSession() else {
+                guard await Self.activateSession(mode: mode) else {
                     guard self.player === newPlayer else { return }
                     self.stop()
                     return
@@ -118,6 +119,12 @@ final class PattieVoice: NSObject, ObservableObject {
     func playIfQuiet(_ name: String?) -> Bool {
         guard !isSpeaking else { return false }
         return play(name)
+    }
+
+    @discardableResult
+    func playCompanionIfQuiet(_ name: String?) -> Bool {
+        guard !isSpeaking else { return false }
+        return playCompanion(name)
     }
 
     /// Toggle: tapping the clip that is playing stops it.

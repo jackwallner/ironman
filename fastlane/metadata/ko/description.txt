@@ -1,12 +1,28 @@
-완주한 모든 레이스를 한곳에 모아, 기록을 이해하기 쉽게 정리합니다.
+Published full and half-distance triathlon results, ranked by split and kept in one place.
 
-이름을 한 번 입력하세요. IM Tri Tracker가 공개된 결과를 찾아 수영, 트랜지션, 자전거, 달리기 구간 기록과 배번, 순위를 보여줍니다.
+Search the name you registered with. IM Iron Splits finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
 
-개인 최고 기록을 확인하고 같은 유형의 레이스를 비교하며 필드 안에서 각 기록의 위치를 파악하세요. Race Book은 한 번의 평생 구매로 비교와 PDF 또는 이미지 내보내기를 잠금 해제합니다. 구독과 내보내기별 요금은 없습니다.
+SPLIT RANKINGS
+Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
 
-검색, 전체 기록, 구간, 순위, 메모, Pointers 라이브러리는 무료입니다.
+WHERE YOU LANDED
+See each split against the finishers from that event, with field size and percentile beside the rank.
 
-개인정보 보호: https://jackwallner.github.io/ironman/privacy-policy.html
-이용 약관: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+RACE BOOK
+Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
 
-IM Tri Tracker는 독립 앱이며 레이스 주최자나 기록 측정 회사와 제휴하지 않습니다.
+RACE NOTES
+Keep conditions, nutrition and gear attached to the result that produced them.
+
+TIPS FROM PATTIE
+Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+
+FREE CORE
+Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+
+Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
+Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
+IM Iron Splits is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+
+앱 인터페이스는 현재 영어로만 제공됩니다.

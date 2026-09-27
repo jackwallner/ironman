@@ -12,7 +12,7 @@ import asc_lib
 
 
 BUNDLE_ID = "com.jackwallner.ironman"
-PUBLIC_NAME = "IM Tri Tracker"
+PUBLIC_NAME = "IM Iron Splits"
 RETIRED_SCREENSHOT = "08-keep-your-race-record-private.png"
 
 

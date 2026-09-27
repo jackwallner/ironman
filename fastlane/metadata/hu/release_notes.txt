@@ -1,1 +1,1 @@
-Találd meg közzétett eredményeidet, és nézd meg minden részidődet egy helyen.
+Split rankings return in Locker. Search, race details and Race Book are clearer, with safer exports and stronger accessibility.

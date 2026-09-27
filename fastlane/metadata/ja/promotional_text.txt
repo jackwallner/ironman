@@ -1,1 +1,1 @@
-名前を一度入力して、公開された結果とすべての区間タイムをまとめます。
+Search your registered name for full and half-distance triathlon results, split rankings and field context.

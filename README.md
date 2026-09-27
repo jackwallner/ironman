@@ -1,11 +1,11 @@
-# IM Tri Tracker
+# IM Iron Splits
 
-Your triathlon and running race results, found by name and ranked by split.
+Published full and half-distance triathlon results, found by registered name
+and ranked by split within each distance.
 
-Type your name once. Every race you have finished loads with full swim/T1/bike/T2/run
-splits, bib numbers, and age-group and overall places, going back to your first
-start, then gets ranked the way athletes actually think about it: which race
-held your fastest bike, and how far off it you are now.
+The Locker keeps every supported result, split, bib and place free. Explore
+opens another athlete's published history without changing your own. Race Book
+adds like-for-like comparison and unlimited export with one lifetime purchase.
 
 iOS 17+, SwiftUI, Swift 6. See `CLAUDE.md` for the architecture and the feed's
 sharp edges, `backend/README.md` for the command-line tools and why there is no
@@ -28,7 +28,7 @@ matches what was written down.
 ## Before it can ship
 
 - [x] App Store Connect app record for `com.jackwallner.ironman` (`6803727074`),
-      named **IM Tri Tracker: Race Results**, with `AppStoreReviewLinks.appStoreID`
+      titled **IM Iron Splits: Race Results**, with `AppStoreReviewLinks.appStoreID`
       configured
 - [x] RevenueCat project and the three products are configured; the production
       public key is set in `IronSplitsSecrets.revenueCatKey`

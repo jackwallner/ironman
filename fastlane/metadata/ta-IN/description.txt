@@ -1,12 +1,28 @@
-நீங்கள் முடித்த ஒவ்வொரு ரேஸும் ஒரே இடத்தில், உங்கள் செயல்திறனைப் புரிந்துகொள்ள எளிதாக.
+Published full and half-distance triathlon results, ranked by split and kept in one place.
 
-உங்கள் பெயரை ஒருமுறை உள்ளிடுங்கள். IM Tri Tracker வெளியிடப்பட்ட முடிவுகளைத் தேடி நீச்சல், டிரான்சிஷன், சைக்கிள் மற்றும் ஓட்ட ஸ்ப்ளிட்கள், பிப் எண் மற்றும் தரவரிசைகளை காட்டுகிறது.
+Search the name you registered with. IM Iron Splits finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
 
-தனிப்பட்ட சிறந்த நேரங்களைப் பார்த்து, ஒரே வகை ரேஸ்களை ஒப்பிடுங்கள். Race Book ஒருமுறை வாங்கும் வாழ்நாள் அணுகலுடன் ஒப்பீடு மற்றும் PDF அல்லது பட ஏற்றுமதியைத் திறக்கிறது, சந்தா அல்லது ஒவ்வொரு ஏற்றுமதிக்கும் கட்டணம் இல்லை.
+SPLIT RANKINGS
+Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
 
-முக்கிய அம்சங்கள் இலவசம்: தேடல், முழு வரலாறு, ஸ்ப்ளிட்கள், தரவரிசைகள், குறிப்புகள் மற்றும் Pointers நூலகம்.
+WHERE YOU LANDED
+See each split against the finishers from that event, with field size and percentile beside the rank.
 
-தனியுரிமை: https://jackwallner.github.io/ironman/privacy-policy.html
-பயன்பாட்டு விதிமுறைகள்: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+RACE BOOK
+Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
 
-IM Tri Tracker ஒரு சுயாதீன செயலி; எந்த ரேஸ் அமைப்பாளர் அல்லது நேரக் கணிப்பு நிறுவனத்துடனும் இணைக்கப்படவில்லை.
+RACE NOTES
+Keep conditions, nutrition and gear attached to the result that produced them.
+
+TIPS FROM PATTIE
+Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+
+FREE CORE
+Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+
+Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
+Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
+IM Iron Splits is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+
+செயலியின் இடைமுகம் தற்போது ஆங்கிலத்தில் மட்டுமே கிடைக்கும்.

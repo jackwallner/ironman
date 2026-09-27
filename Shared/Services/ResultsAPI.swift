@@ -22,15 +22,32 @@ enum ResultsAPIError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .badConfiguration:
-            return "Couldn't build the results request."
+            return "The results search could not be prepared. Please try again."
         case .badResponse(let code):
-            return "The results service returned an error (\(code))."
+            _ = code
+            return "The results site is having trouble. Please try again shortly."
         case .upstreamRejected(let message):
-            return message
+            _ = message
+            return "The results site could not complete that search. Please try again."
         case .pageLimitReached:
-            return "The results feed returned more pages than expected. Some races may be missing, so refresh and try again."
+            return "Some older results may be missing. Try refreshing again later."
         }
     }
+}
+
+struct AthleteSearchResponse: Sendable {
+    var athletes: [Athlete]
+    var hasUnsupportedResults: Bool
+    var wasTruncated: Bool
+
+    var hasOnlyUnsupportedResults: Bool {
+        hasUnsupportedResults && !wasTruncated
+    }
+}
+
+private struct ResultsFetch: Sendable {
+    var rows: [ODataResultRow]
+    var wasTruncated: Bool
 }
 
 /// How hard a name search is allowed to work.
@@ -49,7 +66,7 @@ enum SearchDepth: Sendable {
 
 protocol ResultsProviding: Sendable {
     /// Athletes whose name matches `query`, collapsed from matching rows.
-    func searchAthletes(matching query: String, depth: SearchDepth) async throws -> [Athlete]
+    func searchAthletes(matching query: String, depth: SearchDepth) async throws -> AthleteSearchResponse
     /// Every result belonging to one athlete, newest race first.
     func results(forAthleteID athleteID: String) async throws -> [RaceResult]
     /// The same, for an athlete the feed has split across several contact ids.
@@ -75,16 +92,22 @@ struct ResultsAPI: ResultsProviding {
     /// anybody sees, so the prefix pass is what runs on every keystroke and the
     /// scan only happens when the caller asks for it, after the fast pass came
     /// back empty. See `AthleteSearchView.runSearch()` for the two-phase UI.
-    func searchAthletes(matching query: String, depth: SearchDepth = .prefix) async throws -> [Athlete] {
+    func searchAthletes(matching query: String, depth: SearchDepth = .prefix) async throws -> AthleteSearchResponse {
         let term = query.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard term.count >= 2 else { return [] }
-        let rows = try await fetch(filter: Self.nameFilter(for: term, depth: depth),
-                                   orderBy: nil,
-                                   pageLimit: 2,
-                                   pageSize: 250,
-                                   timeout: depth == .prefix ? 20 : 60,
-                                   allowTruncation: true)
-        return Self.collapseToAthletes(rows)
+        guard term.count >= 2 else {
+            return AthleteSearchResponse(athletes: [], hasUnsupportedResults: false, wasTruncated: false)
+        }
+        let fetched = try await fetch(filter: Self.nameFilter(for: term, depth: depth),
+                                      orderBy: "wtc_EventId/wtc_eventdate desc",
+                                      pageLimit: 2,
+                                      pageSize: 250,
+                                      timeout: depth == .prefix ? 20 : 60,
+                                      allowTruncation: true)
+        let athletes = Self.collapseToAthletes(fetched.rows)
+        let hasUnsupportedResults = athletes.isEmpty && fetched.rows.contains { !$0.result.kind.isSupported }
+        return AthleteSearchResponse(athletes: athletes,
+                                     hasUnsupportedResults: hasUnsupportedResults,
+                                     wasTruncated: fetched.wasTruncated)
     }
 
     func results(forAthleteID athleteID: String) async throws -> [RaceResult] {
@@ -102,9 +125,9 @@ struct ResultsAPI: ResultsProviding {
         let ids = Array(NSOrderedSet(array: contactIDs)).compactMap { $0 as? String }
         guard !ids.isEmpty, ids.allSatisfy(Self.isGUID) else { throw ResultsAPIError.badConfiguration }
         let clause = ids.map { "wtc_ContactId/contactid eq \($0)" }.joined(separator: " or ")
-        let rows = try await fetch(filter: ids.count == 1 ? clause : "(\(clause))",
-                                   orderBy: "wtc_EventId/wtc_eventdate desc")
-        return Self.deduplicatedRows(rows)
+        let fetched = try await fetch(filter: ids.count == 1 ? clause : "(\(clause))",
+                                      orderBy: "wtc_EventId/wtc_eventdate desc")
+        return Self.deduplicatedRows(fetched.rows)
             .map(\.result)
             .filter(\.kind.isSupported)
             .sortedByDateDescending()
@@ -112,9 +135,9 @@ struct ResultsAPI: ResultsProviding {
 
     func results(forEventID eventID: String) async throws -> [RaceResult] {
         guard Self.isGUID(eventID) else { throw ResultsAPIError.badConfiguration }
-        let rows = try await fetch(filter: "_wtc_eventid_value eq \(eventID) and wtc_AgeGroupId/wtc_agegroupname ne 'ODIV'",
-                                   orderBy: "wtc_finishrankoverall")
-        return Self.deduplicatedRows(rows)
+        let fetched = try await fetch(filter: "_wtc_eventid_value eq \(eventID) and wtc_AgeGroupId/wtc_agegroupname ne 'ODIV'",
+                                      orderBy: "wtc_finishrankoverall")
+        return Self.deduplicatedRows(fetched.rows)
             .map(\.result)
             .filter(\.kind.isSupported)
     }
@@ -127,7 +150,7 @@ struct ResultsAPI: ResultsProviding {
                        pageLimit: Int? = nil,
                        pageSize: Int? = nil,
                        timeout: TimeInterval = 25,
-                       allowTruncation: Bool = false) async throws -> [ODataResultRow] {
+                       allowTruncation: Bool = false) async throws -> ResultsFetch {
         let config = await FeedConfigLoader.shared.config()
         var query = "$filter=" + Self.encodeODataValue(filter)
         query += "&$expand=" + Self.encodeODataValue(Self.expandClause)
@@ -139,6 +162,7 @@ struct ResultsAPI: ResultsProviding {
         }
 
         var rows: [ODataResultRow] = []
+        var wasTruncated = false
         let limit = min(pageLimit ?? config.maxPages, config.maxPages)
         for pageIndex in 0..<max(limit, 1) {
             let page = try await load(url: url, config: config, timeout: timeout)
@@ -146,6 +170,7 @@ struct ResultsAPI: ResultsProviding {
             guard let next = page.nextLink else { break }
             if pageIndex == max(limit, 1) - 1 {
                 if !allowTruncation { throw ResultsAPIError.pageLimitReached }
+                wasTruncated = true
                 break
             }
             guard let nextURL = config.requestURL(nextLink: next) else {
@@ -154,7 +179,7 @@ struct ResultsAPI: ResultsProviding {
             url = nextURL
             try Task.checkCancellation()
         }
-        return rows
+        return ResultsFetch(rows: rows, wasTruncated: wasTruncated)
     }
 
     private func load(url: URL, config: FeedConfig, timeout: TimeInterval) async throws -> ODataPage {
@@ -227,7 +252,9 @@ struct ResultsAPI: ResultsProviding {
     /// orderings work and lets a partial name still land.
     static func nameFilter(for term: String, depth: SearchDepth = .prefix) -> String {
         let op = depth == .prefix ? "startswith" : "contains"
-        let words = term.split(whereSeparator: { $0 == " " || $0 == "," })
+        let components = term.split(separator: ",", maxSplits: 1, omittingEmptySubsequences: false)
+        let name = components.first.map(String.init) ?? term
+        let words = name.split(whereSeparator: { $0.isWhitespace })
             .map { escapeODataLiteral(String($0)) }
             .filter { !$0.isEmpty }
             .prefix(3)
@@ -235,7 +262,29 @@ struct ResultsAPI: ResultsProviding {
         let clauses = words.map { word -> String in
             "(\(op)(wtc_ContactId/firstname,'\(word)') or \(op)(wtc_ContactId/lastname,'\(word)'))"
         }
-        return clauses.joined(separator: " and ")
+        var filter = clauses.joined(separator: " and ")
+        if components.count > 1 {
+            let location = escapeODataLiteral(String(components[1]).trimmingCharacters(in: .whitespacesAndNewlines))
+            if !location.isEmpty {
+                filter += " and (startswith(wtc_ContactId/address1_city,'\(location)') or startswith(wtc_ContactId/address1_stateorprovince,'\(location)'))"
+            }
+        }
+        return filter
+    }
+
+    static func userFacingMessage(for error: Error) -> String {
+        if let error = error as? ResultsAPIError {
+            return error.localizedDescription
+        }
+        if let error = error as? URLError {
+            switch error.code {
+            case .notConnectedToInternet, .networkConnectionLost, .cannotConnectToHost, .cannotFindHost, .timedOut:
+                return "The results site is unavailable right now. Please check your connection and try again."
+            default:
+                return "Couldn't reach the results site. Please try again."
+            }
+        }
+        return "Couldn't reach the results site. Please try again."
     }
 
     static func isGUID(_ value: String) -> Bool {
@@ -296,6 +345,9 @@ struct ResultsAPI: ResultsProviding {
             }
         }
         return order.compactMap { byKey[$0] }.sorted {
+            if $0.latestRaceYear != $1.latestRaceYear {
+                return ($0.latestRaceYear ?? 0) > ($1.latestRaceYear ?? 0)
+            }
             if $0.knownRaceCount != $1.knownRaceCount { return $0.knownRaceCount > $1.knownRaceCount }
             return $0.name < $1.name
         }
@@ -337,7 +389,13 @@ struct ResultsAPI: ResultsProviding {
     }
 
     private static func normalizeRegion(_ value: String?) -> String {
-        let normalized = normalizeForMatching(value)
+        var normalized = normalizeForMatching(value)
+        for prefix in ["united states of america", "united states", "usa", "us"] {
+            let prefixWithSpace = prefix + " "
+            guard normalized.hasPrefix(prefixWithSpace) else { continue }
+            normalized = String(normalized.dropFirst(prefixWithSpace.count))
+            break
+        }
         let names: [String: String] = [
             "alabama": "al", "alaska": "ak", "arizona": "az", "arkansas": "ar",
             "california": "ca", "colorado": "co", "connecticut": "ct", "delaware": "de",

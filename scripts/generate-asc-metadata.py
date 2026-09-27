@@ -8,8 +8,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 METADATA = ROOT / "fastlane" / "metadata"
-PUBLIC_BRAND = "IM Tri Tracker"
-LEGACY_BRAND = "IM Iron Splits"
+PUBLIC_BRAND = "IM Iron Splits"
+LEGACY_BRAND = "IM Tri Tracker"
 
 LOCALES = [
     "ar-SA", "bn-BD", "ca", "cs", "da", "de-DE", "el", "en-AU", "en-CA",
@@ -27,37 +27,37 @@ URLS = {
 }
 
 ENGLISH = {
-    "name": "IM Tri Tracker",
+    "name": "IM Iron Splits: Race Results",
     "subtitle": "Your race splits, ranked",
-    "keywords": "triathlon,race results,splits,swim,bike,run,bib,finish,personal best,race history,rankings",
-    "description": """Every race you have finished, in one place, ranked the way you think about it.
+    "keywords": "triathlon,race results,splits,swim,bike,run,bib,finish,personal best,race history,rankings,race book",
+    "description": """Published full and half-distance triathlon results, ranked by split and kept in one place.
 
-Type your name once. IM Tri Tracker finds your published results and fills your locker with swim, T1, bike, T2 and run splits, bib numbers, age-group places and overall ranks.
+Search the name you registered with. IM Iron Splits finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
 
-YOUR SPLITS, RANKED
-See races ranked by swim, bike, run, transitions or finish time. Personal bests are marked on every leg, and full-distance and half-distance races stay in separate comparisons.
+SPLIT RANKINGS
+Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
 
 WHERE YOU LANDED
-See each split against the field that raced it, with the field size and percentile beside the rank.
+See each split against the finishers from that event, with field size and percentile beside the rank.
 
 RACE BOOK
-Preview your personal bests and progression by distance. Unlock like-for-like comparisons, time gained or lost by leg, and a polished history you can export as a PDF or image. Race Book is a one-time lifetime purchase with no subscription and no per-export charge.
+Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
 
 RACE NOTES
 Keep conditions, nutrition and gear attached to the result that produced them.
 
-TRI POINTERS
-Browse a coaching clip library organized by race leg.
+TIPS FROM PATTIE
+Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
 
 FREE CORE
-Search, claim your results and keep your complete history with full splits, leaderboards, percentiles, notes, race details and the full Pointers library. Your results are never hidden behind a purchase.
+Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
 
 Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
 Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.""",
-    "promotional_text": "Type your name once. Every published result loads with full splits, bib numbers and division places.",
-    "release_notes": "Find yourself in published race results, then see every split and personal best in one place.",
+IM Iron Splits is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.""",
+    "promotional_text": "Search your registered name for full and half-distance triathlon results, split rankings and field context.",
+    "release_notes": "Split rankings return in Locker. Search, race details and Race Book are clearer, with safer exports and stronger accessibility.",
 }
 
 
@@ -895,22 +895,94 @@ LOCALE_TO_LANGUAGE = {
     "zh-Hans": "zh-Hans", "zh-Hant": "zh-Hant",
 }
 
+ENGLISH_ONLY_COPY = {
+    "ar": "واجهة التطبيق متاحة باللغة الإنجليزية فقط.",
+    "bn": "অ্যাপের ইন্টারফেস বর্তমানে শুধু ইংরেজিতে উপলভ্য।",
+    "ca": "La interfície de l'aplicació només està disponible en anglès.",
+    "cs": "Rozhraní aplikace je k dispozici pouze v angličtině.",
+    "da": "Appens brugerflade er kun tilgængelig på engelsk.",
+    "de": "Die App-Oberfläche ist derzeit nur auf Englisch verfügbar.",
+    "el": "Το περιβάλλον της εφαρμογής είναι διαθέσιμο μόνο στα αγγλικά.",
+    "es": "La interfaz de la app solo está disponible en inglés.",
+    "fi": "Sovelluksen käyttöliittymä on saatavilla vain englanniksi.",
+    "fr": "L'interface de l'app est actuellement disponible uniquement en anglais.",
+    "gu": "એપનું ઇન્ટરફેસ હાલમાં માત્ર અંગ્રેજીમાં ઉપલબ્ધ છે.",
+    "he": "ממשק האפליקציה זמין כרגע באנגלית בלבד.",
+    "hi": "ऐप का इंटरफ़ेस अभी केवल अंग्रेज़ी में उपलब्ध है।",
+    "hr": "Sučelje aplikacije trenutačno je dostupno samo na engleskom.",
+    "hu": "Az alkalmazás kezelőfelülete jelenleg csak angolul érhető el.",
+    "id": "Antarmuka aplikasi saat ini hanya tersedia dalam bahasa Inggris.",
+    "it": "L'interfaccia dell'app è attualmente disponibile solo in inglese.",
+    "ja": "アプリのインターフェイスは現在、英語のみでご利用いただけます。",
+    "kn": "ಆ್ಯಪ್‌ನ ಇಂಟರ್ಫೇಸ್ ಪ್ರಸ್ತುತ ಇಂಗ್ಲಿಷ್‌ನಲ್ಲಿ ಮಾತ್ರ ಲಭ್ಯವಿದೆ.",
+    "ko": "앱 인터페이스는 현재 영어로만 제공됩니다.",
+    "ml": "ആപ്പിന്റെ ഇന്റർഫേസ് നിലവിൽ ഇംഗ്ലീഷിൽ മാത്രം ലഭ്യമാണ്.",
+    "mr": "अॅपचा इंटरफेस सध्या फक्त इंग्रजीमध्ये उपलब्ध आहे.",
+    "ms": "Antara muka aplikasi buat masa ini hanya tersedia dalam bahasa Inggeris.",
+    "nl": "De appinterface is momenteel alleen beschikbaar in het Engels.",
+    "no": "Appens grensesnitt er for øyeblikket bare tilgjengelig på engelsk.",
+    "or": "ଆପ୍‌ର ଇଣ୍ଟରଫେସ୍ ବର୍ତ୍ତମାନ କେବଳ ଇଂରାଜୀରେ ଉପଲବ୍ଧ।",
+    "pa": "ਐਪ ਦਾ ਇੰਟਰਫੇਸ ਇਸ ਵੇਲੇ ਸਿਰਫ਼ ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਉਪਲਬਧ ਹੈ।",
+    "pl": "Interfejs aplikacji jest obecnie dostępny tylko w języku angielskim.",
+    "pt": "A interface da aplicação está disponível apenas em inglês.",
+    "ro": "Interfața aplicației este disponibilă momentan doar în engleză.",
+    "ru": "Интерфейс приложения сейчас доступен только на английском языке.",
+    "sk": "Rozhranie aplikácie je momentálne dostupné iba v angličtine.",
+    "sl": "Vmesnik aplikacije je trenutno na voljo samo v angleščini.",
+    "sv": "Appens gränssnitt är för närvarande bara tillgängligt på engelska.",
+    "ta": "செயலியின் இடைமுகம் தற்போது ஆங்கிலத்தில் மட்டுமே கிடைக்கும்.",
+    "te": "యాప్ ఇంటర్‌ఫేస్ ప్రస్తుతం ఇంగ్లీష్‌లో మాత్రమే అందుబాటులో ఉంది.",
+    "th": "ขณะนี้อินเทอร์เฟซของแอปมีให้บริการเป็นภาษาอังกฤษเท่านั้น",
+    "tr": "Uygulama arayüzü şu anda yalnızca İngilizce olarak sunulmaktadır.",
+    "uk": "Інтерфейс застосунку наразі доступний лише англійською мовою.",
+    "ur": "ایپ کا انٹرفیس فی الحال صرف انگریزی میں دستیاب ہے۔",
+    "vi": "Giao diện ứng dụng hiện chỉ có bằng tiếng Anh.",
+    "zh-Hans": "应用界面目前仅提供英文版本。",
+    "zh-Hant": "App 介面目前僅提供英文版本。",
+}
+
 
 def write_metadata(locale: str, values: dict[str, str]) -> None:
     directory = METADATA / locale
     directory.mkdir(parents=True, exist_ok=True)
+    language = LOCALE_TO_LANGUAGE[locale]
+    if language != "en":
+        # The product UI is English-only. Keep localized titles and keywords,
+        # but use the same precise, supported-results description in every
+        # storefront so translated copy cannot imply broader race coverage.
+        values = {
+            **values,
+            "description": ENGLISH["description"],
+            "promotional_text": ENGLISH["promotional_text"],
+        }
     merged = {**values, **URLS}
     for key, value in merged.items():
         value = value.replace(LEGACY_BRAND, PUBLIC_BRAND)
+        if key == "description" and language != "en":
+            value = f"{value.rstrip()}\n\n{ENGLISH_ONLY_COPY[language]}"
+        if key == "release_notes" and language != "en":
+            value = ENGLISH["release_notes"]
         if key == "keywords":
             words: list[str] = []
             length = 0
             for word in value.split(","):
                 candidate = word if not words else f",{word}"
-                if length + len(candidate) > 100:
+                candidate_bytes = len(candidate.encode("utf-8"))
+                if length + candidate_bytes > 100:
                     break
                 words.append(word)
-                length += len(candidate)
+                length += candidate_bytes
+            for word in ("triathlon", "race results", "race book", "splits"):
+                if length >= 94:
+                    break
+                if any(existing.casefold() == word.casefold() for existing in words):
+                    continue
+                candidate = f",{word}" if words else word
+                candidate_bytes = len(candidate.encode("utf-8"))
+                if length + candidate_bytes > 100:
+                    continue
+                words.append(word)
+                length += candidate_bytes
             value = ",".join(words)
         (directory / f"{key}.txt").write_text(value.strip() + "\n", encoding="utf-8")
 

@@ -20,12 +20,18 @@ struct Pointer: Identifiable, Codable, Hashable, Sendable {
     var linkURL: String?
     var thumbnailURL: String?
     var durationSeconds: Int?
+    var fileSizeBytes: Int64?
     /// Free episodes are the sample; the rest sit behind Pro.
     var isFree: Bool = false
 
     var durationText: String? {
         guard let durationSeconds, durationSeconds > 0 else { return nil }
         return TimeFormat.hms(durationSeconds)
+    }
+
+    var fileSizeText: String? {
+        guard let fileSizeBytes, fileSizeBytes > 0 else { return nil }
+        return ByteCountFormatter.string(fromByteCount: fileSizeBytes, countStyle: .file)
     }
 
     var playableURL: URL? {

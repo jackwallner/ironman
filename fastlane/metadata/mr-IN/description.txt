@@ -1,12 +1,28 @@
-तुम्ही पूर्ण केलेली प्रत्येक रेस एकाच ठिकाणी, तुमची कामगिरी समजून घेण्यासाठी योग्य क्रमात.
+Published full and half-distance triathlon results, ranked by split and kept in one place.
 
-तुमचे नाव एकदा लिहा. IM Tri Tracker प्रकाशित निकाल शोधून पोहणे, ट्रान्झिशन, बाईक आणि रन स्प्लिट्स, बिब नंबर आणि क्रमांक दाखवते.
+Search the name you registered with. IM Iron Splits finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
 
-वैयक्तिक सर्वोत्तम वेळा पहा आणि समान प्रकारच्या रेसची तुलना करा. Race Book एकदाच केलेल्या आजीवन खरेदीने तुलना आणि PDF किंवा इमेज एक्सपोर्ट उघडते, सबस्क्रिप्शन किंवा प्रत्येक एक्सपोर्टचे शुल्क नाही.
+SPLIT RANKINGS
+Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
 
-मुख्य सुविधा मोफत आहेत: शोध, पूर्ण इतिहास, स्प्लिट्स, क्रमांक, नोंदी आणि Pointers लायब्ररी.
+WHERE YOU LANDED
+See each split against the finishers from that event, with field size and percentile beside the rank.
 
-गोपनीयता: https://jackwallner.github.io/ironman/privacy-policy.html
-वापराच्या अटी: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+RACE BOOK
+Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
 
-IM Tri Tracker स्वतंत्र अॅप आहे आणि कोणत्याही रेस आयोजक किंवा टाइमिंग कंपनीशी संबंधित नाही.
+RACE NOTES
+Keep conditions, nutrition and gear attached to the result that produced them.
+
+TIPS FROM PATTIE
+Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+
+FREE CORE
+Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+
+Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
+Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+
+IM Iron Splits is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+
+अॅपचा इंटरफेस सध्या फक्त इंग्रजीमध्ये उपलब्ध आहे.

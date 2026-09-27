@@ -1,4 +1,13 @@
+require "json"
+require "tempfile"
+
 opt_out_usage
+
+ASC_VALID_LANGUAGES = %w[
+  ar-SA ca cs da de-DE el en-AU en-CA en-GB en-US es-ES es-MX fi fr-CA fr-FR
+  he hi hr hu id it ja ko ms nl-NL no pl pt-BR pt-PT ro ru sk sv th tr uk vi
+  zh-Hans zh-Hant
+].freeze
 
 default_platform(:ios)
 
@@ -12,17 +21,34 @@ platform :ios do
     )
 
     sh("rm -rf /tmp/asc-live && mkdir -p /tmp/asc-live")
+    metadata_path = "/tmp/asc-live/metadata"
+    screenshots_path = "/tmp/asc-live/screenshots"
+    download_arguments = [
+      "--api_key_path",
+      nil,
+      "--app_identifier",
+      "com.jackwallner.ironman",
+      "--app_version",
+      "1.1.0",
+      "--languages",
+      ASC_VALID_LANGUAGES.join(","),
+      "--ignore_language_directory_validation",
+      "true",
+      "--force",
+      "true",
+    ]
 
-    deliver(
-      api_key: api_key,
-      run_precheck_before_submit: false,
-      metadata_path: "/tmp/asc-live/metadata",
-      screenshots_path: "/tmp/asc-live/screenshots",
-      skip_binary_upload: true,
-      skip_screenshots: false,
-      skip_metadata: false,
-      force: true
-    )
+    Tempfile.create(["asc-api-key", ".json"]) do |key_file|
+      key_file.chmod(0o600)
+      key_file.write(JSON.generate(api_key))
+      key_file.flush
+      download_arguments[1] = key_file.path
+      sh("fastlane", "deliver", "download_metadata", *download_arguments,
+         "--metadata_path", metadata_path,
+         "--screenshots_path", screenshots_path)
+      sh("fastlane", "deliver", "download_screenshots", *download_arguments,
+         "--screenshots_path", screenshots_path)
+    end
   end
 
   desc "Fill whats_new + promotional_text on deprecated locales that ASC still requires"
@@ -67,6 +93,7 @@ platform :ios do
     deliver(
       api_key: api_key,
       app_version: version,
+      languages: ASC_VALID_LANGUAGES,
       skip_app_version_update: true,
       force: true,
       ignore_language_directory_validation: true,
@@ -86,33 +113,40 @@ platform :ios do
         demo_user: "N/A, no login or account system",
         demo_password: "",
         notes: <<~NOTES
-          IM Tri Tracker is a read-only viewer for published race results. There are
-          no accounts and no sign-in.
+          IM Iron Splits is a read-only viewer for published full and half-distance
+          triathlon results. There are no accounts or sign-in.
 
           Core flow:
-          1. Launch: the first screen asks for the athlete's name
-          2. Type a name. The app searches published results and lists matches.
-          3. Tap a match to claim it. The locker fills with that athlete's races.
-          4. Tap a race for splits, ranks, and field percentiles.
-          5. Bests tab ranks the athlete's races by swim, bike, run, or transitions.
-          6. Resume tab previews the free history and opens Race Book for comparison and export.
+          1. Launch to Athlete Search. Search "Daniel Winek" and select the
+             public result set.
+          2. After claiming, the Locker shows published results. Switch between Races and
+             Rankings; rankings keep full and half distance separate.
+          3. Open a race for official splits, division and overall places, and
+             field context.
+          4. Explore searches another athlete without changing the Locker.
+          5. Race Book shows free career totals, personal bests and progression.
+             Compare and export actions open the in-app purchase sheet.
+          6. Settings contains Restore Purchases.
 
-          To review without a name of your own, search "Daniel Winek", a public
-          result set with five full-distance finishes.
+          Search supports full registered names. Common names can be narrowed
+          with a city or state after a comma. The broad fallback explains its
+          longer wait and can be stopped.
 
-          The free core includes search, full history, splits, rankings and basic
-          race details. Race Book is a one-time lifetime purchase for comparison
-          and unlimited PDF/image export. There is no subscription or per-export
-          charge. Existing Iron Splits+ customers can restore prior access.
+          Search, complete supported history, rankings, personal bests,
+          progression, field context, notes and race details are free. Race Book
+          is a one-time lifetime purchase for like-for-like comparison and
+          unlimited PDF/image export. There is no subscription or per-export
+          charge.
 
-          Data: results come from the public results service used by the events and
-          are shown as published. The app is independent and claims no affiliation
-          with any race organiser. Race names appear only to identify the results
-          they belong to.
+          Data: name searches and public contact/event identifiers are sent to
+          the timing service to request results. Race notes stay on the device.
+          RevenueCat processes purchase and restore details and limited
+          purchase-screen counts tied to an anonymous app user ID. It receives
+          no names, race results or notes.
 
-          Verified: light and dark mode, including accessibility text sizes.
-          No accounts, no social features, no user-generated content shared
-          between users.
+          The app is independent and is not affiliated with or endorsed by any
+          race organiser or timing company. Screenshots use fictional sample
+          results; the in-app search flow can use the public sample profile above.
         NOTES
       },
       submission_information: {
