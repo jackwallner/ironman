@@ -93,7 +93,7 @@ platform :ios do
     deliver(
       api_key: api_key,
       app_version: version,
-      languages: ASC_VALID_LANGUAGES,
+      languages: ASC_VALID_LANGUAGES.dup,
       skip_app_version_update: true,
       force: true,
       ignore_language_directory_validation: true,
