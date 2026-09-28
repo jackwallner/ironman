@@ -37,7 +37,7 @@ A search sends the name you enter to the third-party timing service that returns
 IM Iron Splits is independent. It is not affiliated with, endorsed by, or sponsored by any race organizer or timing company. Results are shown as published by each event timer.
 
 Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://jackwallner.github.io/ironman/terms/
+Terms of Use: https://jackwallner.github.io/ironman/terms.html
 Support: https://jackwallner.github.io/ironman/support.html
 
 ## App content

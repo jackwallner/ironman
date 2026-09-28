@@ -48,7 +48,7 @@ import com.jackwallner.ironsplits.model.RaceResult
 import java.io.File
 
 private const val PRIVACY_URL = "https://jackwallner.github.io/ironman/privacy-policy.html"
-private const val TERMS_URL = "https://jackwallner.github.io/ironman/terms/"
+private const val TERMS_URL = "https://jackwallner.github.io/ironman/terms.html"
 
 @Composable
 fun RaceBookScreen(state: AppUiState, viewModel: IronSplitsViewModel) {
