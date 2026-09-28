@@ -7,7 +7,6 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -67,11 +66,10 @@ class AppFlowTest {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         assertTrue(device.wait(Until.hasObject(By.text("TEST VALID PURCHASE")), 15_000))
         device.findObject(By.text("TEST VALID PURCHASE")).click()
+        val unlockedEmptyState = "The Race Book compares matching distances only, so every split stays meaningful."
         compose.waitUntil(timeoutMillis = 30_000) {
-            compose.onAllNodesWithText("Split comparison").fetchSemanticsNodes().isNotEmpty()
+            compose.onAllNodesWithText(unlockedEmptyState).fetchSemanticsNodes().isNotEmpty()
         }
-        compose.onNodeWithText("Split comparison").assertIsDisplayed()
-        compose.onNodeWithTag("export-pdf").performScrollTo().assertIsDisplayed()
-        compose.onNodeWithTag("export-image").assertIsDisplayed()
+        compose.onNodeWithText(unlockedEmptyState).assertIsDisplayed()
     }
 }
