@@ -28,7 +28,7 @@ targets:
         PRODUCT_NAME: "IM Iron Splits"
         PRODUCT_MODULE_NAME: IM_Iron_Splits
         MARKETING_VERSION: "1.1.0"
-        CURRENT_PROJECT_VERSION: "28"
+        CURRENT_PROJECT_VERSION: "29"
         GENERATE_INFOPLIST_FILE: NO
         INFOPLIST_FILE: IronSplits/Info.plist
         TARGETED_DEVICE_FAMILY: "1"
