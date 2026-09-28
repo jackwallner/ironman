@@ -36,6 +36,8 @@ A search sends the name you enter to the third-party timing service that returns
 
 IM Iron Splits is independent. It is not affiliated with, endorsed by, or sponsored by any race organizer or timing company. Results are shown as published by each event timer.
 
+IM Iron Splits is for general race and fitness information only. It is not a medical device and does not diagnose, treat, cure, or prevent any medical condition.
+
 Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
 Terms of Use: https://jackwallner.github.io/ironman/terms.html
 Support: https://jackwallner.github.io/ironman/support.html
@@ -47,8 +49,8 @@ Support: https://jackwallner.github.io/ironman/support.html
 - Target audience: Adults 18 and older only. Restrict users Google has determined to be minors.
 - App access: No account or special reviewer access is needed. Most features are free; Race Book unlocks after a Google Play test purchase.
 - User data: The app sends searched names and public result identifiers to the timing service. RevenueCat processes Google Play purchase and entitlement data with an anonymous app user ID. Local athlete data, recent profiles, and notes are not uploaded by the app.
-- Account deletion: No developer account system exists. Local data is removed by clearing the Locker or uninstalling the app.
-- Health declarations: No medical advice, health diagnosis, or treatment claims
+- Account deletion: No developer account system exists. Local data is removed by clearing the Locker or uninstalling the app. Contact Support to request deletion of an anonymous RevenueCat customer record.
+- Health apps declaration: Activity and fitness only. No medical-device features, diagnosis, or treatment claims.
 
 ## Phone screenshots
 

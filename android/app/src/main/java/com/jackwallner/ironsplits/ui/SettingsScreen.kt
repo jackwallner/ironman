@@ -52,6 +52,10 @@ fun SettingsScreen(state: AppUiState, viewModel: IronSplitsViewModel) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Text("Results are shown as published by each event timer.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(
+                "For general race and fitness information only. IM Iron Splits is not a medical device and does not diagnose, treat, cure, or prevent any medical condition.",
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
             Text("Version ${com.jackwallner.ironsplits.BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.labelMedium)
         }
         ContentCard {
