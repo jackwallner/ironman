@@ -36,7 +36,7 @@ lists the on-device checks still worth doing.
    `AskPattieTopicList` and `AskPattieAnswerList` use `.navigationBarBackButtonHidden(true)` with
    a custom `TriBackButton`. SwiftUI disables the interactive pop gesture when you do that, and
    nothing in the codebase turns it back on (no `interactivePopGestureRecognizer` handling).
-   `AskPattieView.swift` even has a comment claiming "the edge swipe works". DESIGN.md §7
+   `AskPattieView.swift` even has a comment claiming "the edge swipe works". ../design/DESIGN.md §7
    requires back-swipe.
 4. **P0: Race notes are included in the shareable image by default.** `RaceBookOptions`
    defaults `includeRaceNotes = true`, and the "tall shareable image" meant for social or
@@ -63,7 +63,7 @@ lists the on-device checks still worth doing.
    applies grouping, so US locales render "2,015". The Locker header avoids this with
    `String(...)`.
 10. **P1: Haptics are off by default.** `Haptics.isEnabled` defaults to `false`, and Settings
-    says "It is off by default". DESIGN.md §6 says "Haptics on anything that means something" and
+    says "It is off by default". ../design/DESIGN.md §6 says "Haptics on anything that means something" and
     "A polished-looking interface that does not answer the thumb reads as broken." Every
     `.triPress` and `TriChip` in the app is silent for anyone who never opens Settings.
 
@@ -363,7 +363,7 @@ hero. The paywall hero is currently a decorative bar motif.
 cause no customer-visible bug, but they make the next paywall change slower and riskier.
 
 ### 6.6 Content under the close button (P2)
-`content` uses `.ignoresSafeArea(edges: .top)` on the `ScrollView` itself (DESIGN.md: for
+`content` uses `.ignoresSafeArea(edges: .top)` on the `ScrollView` itself (../design/DESIGN.md: for
 backgrounds only). When scrolled, feature text passes under the status bar and the close button,
 whose `inkOnDark` glyph then sits on a light surface.
 
@@ -662,7 +662,7 @@ for text.
 - `StatTile`s in the headers read the value and caption separately. Combine them.
 
 ### 13.4 Numbers in SF Mono (P2)
-The `stat*` styles use `design: .monospaced` (SF Mono) as well as `.monospacedDigit()`. DESIGN.md
+The `stat*` styles use `design: .monospaced` (SF Mono) as well as `.monospacedDigit()`. ../design/DESIGN.md
 §1 says SF Pro with monospaced digits. SF Mono makes every time in the app look like terminal
 output, which is exactly the "vibe coded" tell to avoid. `.monospacedDigit()` on SF Pro already
 stops columns from jumping. Drop `design: .monospaced`.

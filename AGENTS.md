@@ -12,7 +12,7 @@ relitigate it. Never add a WTC logo, M-DOT, `140.6`/`70.3` as branding, or any
 claim of affiliation, and keep the not-affiliated disclaimer in Settings.
 
 ## Design system
-`DESIGN.md` is the design contract for this repo: tokens, the 4pt spacing scale,
+`project-docs/design/DESIGN.md` is the design contract for this repo: tokens, the 4pt spacing scale,
 the two radii, haptics, 44pt tap targets, and the light/dark rule. **Read it
 before any UI change and follow it.** Every colour resolves through
 `adaptive(light:dark:)` in `TriDesign.swift` because SwiftUI's `colorScheme`

@@ -1070,7 +1070,7 @@ several operational sections are stale:
 - The review-funnel guidance is broadly directionally correct but should name
   the current positive-moment bug and deduplication requirement.
 
-`DESIGN.md` is titled `IM Iron Splits: design system`, which is acceptable as an
+`../design/DESIGN.md` is titled `IM Iron Splits: design system`, which is acceptable as an
 internal historical file only if its public-brand status is explicit. `README.md`
 also contains stale pre-ship checkboxes about GitHub Pages and pointer media
 that are already represented by current `docs` assets and runtime code.
@@ -1168,7 +1168,7 @@ rg -n "RACE_BOOK_TEST_UNLOCK|PRODUCT_NAME|PRODUCT_BUNDLE_IDENTIFIER|6803727074|c
   project.yml IronSplits.xcodeproj IronSplits scripts fastlane
 
 rg -n "IM Iron Splits|Iron Splits\+|Ironman App Pro|IM Tri Tracker" \
-  CLAUDE.md README.md DESIGN.md IronSplits scripts fastlane docs
+  CLAUDE.md README.md ../design/DESIGN.md IronSplits scripts fastlane docs
 
 git diff --check
 ```

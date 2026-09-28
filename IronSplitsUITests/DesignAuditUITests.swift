@@ -10,7 +10,7 @@ import XCTest
 ///
 /// It is a screenshot harness, not an assertion suite: it claims one athlete,
 /// walks every screen, and leaves the attachments on the result bundle for the
-/// twenty-minute audit in `DESIGN.md`. The handful of assertions it does make
+/// twenty-minute audit in `project-docs/design/DESIGN.md`. The handful of assertions it does make
 /// are only there to fail loudly if a screen never rendered, so an empty
 /// screenshot is not mistaken for a clean one.
 ///
