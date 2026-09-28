@@ -22,7 +22,7 @@ paths:
   - "IronSplits/Views/SettingsView.swift"
 ---
 
-# IM Iron Splits: Pointers, Ask Pattie and Pattie's voice
+# IM Tri Tracker: Pointers, Ask Pattie and Pattie's voice
 
 Moved verbatim from AGENTS.md. Loads when a matching file is read; update it here.
 

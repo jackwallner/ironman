@@ -1,4 +1,4 @@
-# IM Iron Splits
+# IM Tri Tracker
 
 Published full and half-distance triathlon results, found by registered name
 and ranked by split within each distance.
@@ -44,7 +44,7 @@ matches what was written down.
 ## Before it can ship
 
 - [x] App Store Connect app record for `com.jackwallner.ironman` (`6803727074`),
-      titled **IM Iron Splits: Race Results**, with `AppStoreReviewLinks.appStoreID`
+      titled **IM Tri Tracker**, with `AppStoreReviewLinks.appStoreID`
       configured
 - [x] RevenueCat project and the three products are configured; the production
       public key is set in `IronSplitsSecrets.revenueCatKey`

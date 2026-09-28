@@ -71,7 +71,7 @@ struct SettingsView: View {
                 Section("Race notes") {
                     if let exportText = exportableNotes {
                         ShareLink(item: exportText,
-                                  subject: Text("IM Iron Splits race notes")) {
+                                  subject: Text("IM Tri Tracker race notes")) {
                             Label("Export my race notes", systemImage: "square.and.arrow.up")
                         }
                         .frame(minHeight: TriGeo.tapTarget)
@@ -95,7 +95,7 @@ struct SettingsView: View {
                         }
                     }
                     .pickerStyle(.segmented)
-                    .accessibilityHint("Choose System to follow the device, or keep IM Iron Splits in Light or Dark mode.")
+                    .accessibilityHint("Choose System to follow the device, or keep IM Tri Tracker in Light or Dark mode.")
                     .onChange(of: settings.appearance) { _, _ in pattie.react(.selection) }
                 }
 
@@ -168,7 +168,7 @@ struct SettingsView: View {
                 }
 
                 Section {
-                    Text("IM Iron Splits is an independent app. It is not affiliated with, endorsed by, or sponsored by any race organiser. Results are shown as published by each event's timer. IRONMAN\u{00AE} and 70.3\u{00AE} are registered trademarks of the World Triathlon Corporation, used here only to describe the races an athlete has entered.")
+                    Text("IM Tri Tracker is an independent app. It is not affiliated with, endorsed by, or sponsored by any race organiser. Results are shown as published by each event's timer. IRONMAN\u{00AE} and 70.3\u{00AE} are registered trademarks of the World Triathlon Corporation, used here only to describe the races an athlete has entered.")
                         .font(TriType.micro)
                         .foregroundStyle(TriPalette.inkTertiary)
                 }
@@ -241,7 +241,7 @@ struct SettingsView: View {
             return (result, note)
         }
         guard !records.isEmpty else { return nil }
-        var lines = ["IM Iron Splits race notes", ""]
+        var lines = ["IM Tri Tracker race notes", ""]
         for (result, note) in records {
             lines.append("\(dateText(result)) · \(result.raceName)")
             for (label, value) in [("Conditions", note.conditions), ("Nutrition", note.nutrition),

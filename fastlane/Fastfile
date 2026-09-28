@@ -113,7 +113,7 @@ platform :ios do
         demo_user: "N/A, no login or account system",
         demo_password: "",
         notes: <<~NOTES
-          IM Iron Splits is a read-only viewer for published full and half-distance
+          IM Tri Tracker is a read-only viewer for published full and half-distance
           triathlon results. There are no accounts or sign-in.
 
           Core flow:

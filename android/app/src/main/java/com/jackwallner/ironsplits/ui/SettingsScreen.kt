@@ -33,7 +33,7 @@ fun SettingsScreen(state: AppUiState, viewModel: IronSplitsViewModel) {
         ScreenTitle("Settings", "Your data and purchase options.")
         ContentCard {
             SectionHeading("Your data")
-            Text("Your claimed athlete, recent Explore profiles, and race notes are stored on this device. IM Iron Splits has no account system.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text("Your claimed athlete, recent Explore profiles, and race notes are stored on this device. IM Tri Tracker has no account system.", color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text("A name search and public athlete or event IDs are sent to the timing service to retrieve published results.", color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         ContentCard {
@@ -46,14 +46,14 @@ fun SettingsScreen(state: AppUiState, viewModel: IronSplitsViewModel) {
             state.restoreMessage?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
         }
         ContentCard {
-            SectionHeading("About IM Iron Splits")
+            SectionHeading("About IM Tri Tracker")
             Text(
-                "IM Iron Splits is an independent results app. It is not affiliated with, endorsed by, or sponsored by any race organizer or timing company.",
+                "IM Tri Tracker is an independent results app. It is not affiliated with, endorsed by, or sponsored by any race organizer or timing company.",
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Text("Results are shown as published by each event timer.", color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(
-                "For general race and fitness information only. IM Iron Splits is not a medical device and does not diagnose, treat, cure, or prevent any medical condition.",
+                "For general race and fitness information only. IM Tri Tracker is not a medical device and does not diagnose, treat, cure, or prevent any medical condition.",
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Text("Version ${com.jackwallner.ironsplits.BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.labelMedium)

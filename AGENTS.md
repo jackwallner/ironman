@@ -1,15 +1,13 @@
-# IM Iron Splits: Project Guide
+# IM Tri Tracker: Project Guide
 
 Published full and half-distance triathlon results, pulled from the supported
 timing feed by name and ranked by split. XcodeGen project/scheme: `IronSplits`, sim lease owner
 `ironsplits`. Repo dir stays `~/ironman` (the GitHub Pages URL that
-`FeedConfig` hot-reloads from lives there), but the app is **IM Iron Splits**
-and is never called IRONMAN: that is a registered trademark of the World
-Triathlon Corporation. Jack chose the current name on 2026-08-20 over a flagged
-objection that an IRON- lead morpheme in the same goods class carries real
-App Review 5.2.1 and takedown risk. That call is his and is settled: do not
-relitigate it. Never add a WTC logo, M-DOT, `140.6`/`70.3` as branding, or any
-claim of affiliation, and keep the not-affiliated disclaimer in Settings.
+`FeedConfig` hot-reloads from lives there), and the product brand is **IM Tri
+Tracker**. Never rename the app or replace this brand. Do not call the app
+IRONMAN, a registered trademark of the World Triathlon Corporation. Never add a
+WTC logo, M-DOT, `140.6`/`70.3` as branding, or any claim of affiliation, and
+keep the not-affiliated disclaimer in Settings.
 
 ## Design system
 `project-docs/design/DESIGN.md` is the design contract for this repo: tokens, the 4pt spacing scale,

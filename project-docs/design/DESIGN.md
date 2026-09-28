@@ -1,4 +1,4 @@
-# IM Iron Splits: design system
+# IM Tri Tracker: design system
 
 One file, and the rule for every UI change in this repo: **follow it, or change
 it here first.** Anything hardcoded in a view that this file names as a token is

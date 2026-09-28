@@ -4,12 +4,12 @@ paths:
   - "scripts/sync-android-assets.py"
 ---
 
-# IM Iron Splits Android rules
+# IM Tri Tracker Android rules
 
 ## Product and data
 
 - Native Android code is in `android/`. Play application ID is
-  `com.jackwallner.ironman`; display name is `IM Iron Splits`.
+  `com.jackwallner.ironman`; display name is `IM Tri Tracker`.
 - Show published full- and half-distance triathlon results only. Preserve the
   fast `startswith()` name query, explicit slower `contains()` fallback, full
   OData expansion, loose numeric decoding, zero-as-missing split handling, and

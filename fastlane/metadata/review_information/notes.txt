@@ -1,17 +1,34 @@
-IM Iron Splits is a read-only viewer for published full and half-distance triathlon results. There are no accounts or sign-in.
+IM Tri Tracker is a read-only viewer for published full and half-distance
+triathlon results. There are no accounts or sign-in.
 
-HOW TO REVIEW
-1. Launch to Athlete Search. Search "Daniel Winek" and select the public result set.
-2. After claiming, the Locker shows published results. Switch between Races and Rankings; rankings keep full and half distance separate.
-3. Open a race for official splits, division and overall places, and field context.
+Core flow:
+1. Launch to Athlete Search. Search "Daniel Winek" and select the
+   public result set.
+2. After claiming, the Locker shows published results. Switch between Races and
+   Rankings; rankings keep full and half distance separate.
+3. Open a race for official splits, division and overall places, and
+   field context.
 4. Explore searches another athlete without changing the Locker.
-5. Race Book shows free career totals, personal bests and progression. Compare and export actions open the in-app purchase sheet.
+5. Race Book shows free career totals, personal bests and progression.
+   Compare and export actions open the in-app purchase sheet.
 6. Settings contains Restore Purchases.
 
-Search supports full registered names. Common names can be narrowed with a city or state after a comma. The broader fallback explains its longer wait and can be stopped.
+Search supports full registered names. Common names can be narrowed
+with a city or state after a comma. The broad fallback explains its
+longer wait and can be stopped.
 
-Search, complete supported history, rankings, personal bests, progression, field context, notes and race details are free. Race Book is a one-time non-consumable purchase for like-for-like comparison and unlimited PDF or image export. There is no subscription or per-export charge. Nothing is sold outside the App Store.
+Search, complete supported history, rankings, personal bests,
+progression, field context, notes and race details are free. Race Book
+is a one-time lifetime purchase for like-for-like comparison and
+unlimited PDF/image export. There is no subscription or per-export
+charge.
 
-Name searches and public contact/event identifiers are sent to the timing service to request published results. Race notes stay on the device. RevenueCat processes purchase and restore details and limited purchase-screen counts tied to an anonymous app user ID. RevenueCat does not receive names, race results or race notes.
+Data: name searches and public contact/event identifiers are sent to
+the timing service to request results. Race notes stay on the device.
+RevenueCat processes purchase and restore details and limited
+purchase-screen counts tied to an anonymous app user ID. It receives
+no names, race results or notes.
 
-IM Iron Splits is independent and is not affiliated with or endorsed by any race organiser or timing company. Screenshots use fictional sample results; the in-app search flow can use the public sample profile above.
+The app is independent and is not affiliated with or endorsed by any
+race organiser or timing company. Screenshots use fictional sample
+results; the in-app search flow can use the public sample profile above.

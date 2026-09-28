@@ -11,4 +11,4 @@ Developer notes and historical audits for this repository. The published site re
 
 ## Design
 
-- [DESIGN.md](design/DESIGN.md): IM Iron Splits: design system
+- [DESIGN.md](design/DESIGN.md): IM Tri Tracker: design system

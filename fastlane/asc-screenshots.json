@@ -1,6 +1,6 @@
 {
   "app": "im-iron-splits",
-  "display_name": "IM Iron Splits",
+  "display_name": "IM Tri Tracker",
   "capture_report": "asc-capture/race-book/capture-report.json",
   "target": "iphone_69",
   "copy_contract": "single-header-benefit-story-v3",
@@ -9,7 +9,7 @@
     "audience": "age-group triathletes who want to understand performances across seasons",
     "problem": "Official event pages show one race at a time, making it difficult to compare splits across a career or within one distance.",
     "advantage": "A registered-name search gathers published full and half-distance triathlon results into a local Locker with separate split rankings, field context, free career insight and optional tips.",
-    "competitive_context": "Event timing pages are authoritative but are organized around a single event. Training platforms generally depend on workouts or manual data; IM Iron Splits organizes published race results without an account.",
+    "competitive_context": "Event timing pages are authoritative but are organized around a single event. Training platforms generally depend on workouts or manual data; IM Tri Tracker organizes published race results without an account.",
     "search_intent": [
       "triathlon race results",
       "race splits",

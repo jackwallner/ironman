@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "IM Iron Splits"
+rootProject.name = "IM Tri Tracker"
 include(":app")

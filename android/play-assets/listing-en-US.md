@@ -1,6 +1,6 @@
 # Google Play store listing, en-US
 
-**App name:** IM Iron Splits
+**App name:** IM Tri Tracker
 
 **Short description:** Published triathlon results, split rankings, and race-day pointers.
 
@@ -8,7 +8,7 @@
 
 See your published race results, split by split.
 
-IM Iron Splits finds published full-distance and half-distance triathlon results by the name used at registration. Keep your supported history in one on-device Locker, or Explore another athlete's published results.
+IM Tri Tracker finds published full-distance and half-distance triathlon results by the name used at registration. Keep your supported history in one on-device Locker, or Explore another athlete's published results.
 
 SEE YOUR SPLITS
 Swim, T1, bike, T2, run, and finish times, with bibs, age groups, and published ranks when available.
@@ -34,9 +34,9 @@ Searching, your supported history, splits, rankings, field context, race details
 DATA AND INDEPENDENCE
 A search sends the name you enter to the third-party timing service that returns published results. Your Locker, race notes, and recent Explore profiles stay on this device. Read the Privacy Policy for details.
 
-IM Iron Splits is independent. It is not affiliated with, endorsed by, or sponsored by any race organizer or timing company. Results are shown as published by each event timer.
+IM Tri Tracker is independent. It is not affiliated with, endorsed by, or sponsored by any race organizer or timing company. Results are shown as published by each event timer.
 
-IM Iron Splits is for general race and fitness information only. It is not a medical device and does not diagnose, treat, cure, or prevent any medical condition.
+IM Tri Tracker is for general race and fitness information only. It is not a medical device and does not diagnose, treat, cure, or prevent any medical condition.
 
 Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
 Terms of Use: https://jackwallner.github.io/ironman/terms.html

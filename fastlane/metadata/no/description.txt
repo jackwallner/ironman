@@ -1,6 +1,6 @@
 Published full and half-distance triathlon results, ranked by split and kept in one place.
 
-Search the name you registered with. IM Iron Splits finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
 
 SPLIT RANKINGS
 Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
@@ -23,6 +23,6 @@ Search, claim your supported history and keep full splits, rankings, percentiles
 Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
 Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Iron Splits is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
 
 Appens grensesnitt er for øyeblikket bare tilgjengelig på engelsk.

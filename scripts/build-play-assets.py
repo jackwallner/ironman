@@ -42,7 +42,7 @@ def build() -> None:
     for offset, color in ((0, (25, 62, 91)), (1, (20, 55, 83)), (2, (18, 49, 76))):
         draw.arc((630 + offset * 9, 10 + offset * 9, 1000, 378 + offset * 9), 198, 319, fill=color, width=2)
 
-    draw.text((64, 50), "IM IRON SPLITS", fill=SURFACE, font=font("Arial Bold.ttf", 25))
+    draw.text((64, 50), "IM TRI TRACKER", fill=SURFACE, font=font("Arial Bold.ttf", 25))
     draw.text((64, 115), "Your race.", fill=SURFACE, font=font("Arial Bold.ttf", 67))
     draw.text((64, 191), "Every split.", fill=SURFACE, font=font("Arial Bold.ttf", 67))
     draw.text(

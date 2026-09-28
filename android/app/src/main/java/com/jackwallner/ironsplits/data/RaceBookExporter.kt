@@ -47,7 +47,7 @@ class RaceBookExporter(context: Context) {
         val muted = Paint(paint).apply { color = Color.rgb(80, 98, 116); textSize = 11f }
         val divider = Paint(paint).apply { color = Color.rgb(212, 221, 229); strokeWidth = 1f }
 
-        canvas.drawText("IM IRON SPLITS", 42f, 56f, muted)
+        canvas.drawText("IM TRI TRACKER", 42f, 56f, muted)
         canvas.drawText("Race Book", 42f, 91f, heading)
         canvas.drawText(athleteName.take(56), 42f, 121f, body)
         val kind = first.kind.fullLabel
@@ -82,7 +82,7 @@ class RaceBookExporter(context: Context) {
         canvas.drawText("Finish change", 42f, y, title)
         canvas.drawText(if (delta < 0) "${formatTime(-delta)} faster" else "${formatTime(delta)} slower", 290f, y, body)
         y += 44f
-        canvas.drawText("Published results. IM Iron Splits is independent and unaffiliated with race organizers or timing companies.", 42f, y, muted)
+        canvas.drawText("Published results. IM Tri Tracker is independent and unaffiliated with race organizers or timing companies.", 42f, y, muted)
         canvas.restore()
     }
 

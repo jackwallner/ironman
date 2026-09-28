@@ -290,7 +290,7 @@ private fun LockerDashboard(state: AppUiState, viewModel: IronSplitsViewModel) {
         }
         item {
             Text(
-                "Results are shown as published by each event timer. IM Iron Splits is independent and is not affiliated with or endorsed by race organizers or timing companies.",
+                "Results are shown as published by each event timer. IM Tri Tracker is independent and is not affiliated with or endorsed by race organizers or timing companies.",
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

@@ -71,7 +71,7 @@ enum RaceBookPDFRenderer {
                  to: CGPoint(x: size.width - Self.margin, y: size.height - 38),
                  color: Palette.line,
                  width: 0.7)
-            text("IM IRON SPLITS  |  OFFICIAL RESULTS, PRIVATE NOTES",
+            text("IM TRI TRACKER  |  OFFICIAL RESULTS, PRIVATE NOTES",
                  in: CGRect(x: Self.margin, y: size.height - 30, width: 420, height: 12),
                  font: .systemFont(ofSize: 7.5, weight: .semibold),
                  color: Palette.muted,
@@ -169,7 +169,7 @@ enum RaceBookPDFRenderer {
         format.documentInfo = [
             kCGPDFContextTitle as String: "Race Book - \(athlete.name)",
             kCGPDFContextAuthor as String: athlete.name,
-            kCGPDFContextCreator as String: "IM Iron Splits"
+            kCGPDFContextCreator as String: "IM Tri Tracker"
         ]
         let renderer = UIGraphicsPDFRenderer(bounds: CGRect(origin: .zero, size: pageSize), format: format)
 
@@ -213,7 +213,7 @@ enum RaceBookPDFRenderer {
         let heroHeight: CGFloat = 164
         document.fill(CGRect(x: 0, y: 0, width: pageSize.width, height: heroHeight), Palette.deep)
         document.fill(CGRect(x: 0, y: 0, width: 12, height: heroHeight), Palette.coral)
-        document.text("IM IRON SPLITS  |  ONE-PAGE RACE BOOK",
+        document.text("IM TRI TRACKER  |  ONE-PAGE RACE BOOK",
                       in: CGRect(x: pageMargin, y: 32, width: pageSize.width - pageMargin * 2, height: 14),
                       font: .systemFont(ofSize: 8.5, weight: .bold),
                       color: Palette.coral,
@@ -374,7 +374,7 @@ enum RaceBookPDFRenderer {
         document.context.cgContext.fillEllipse(in: CGRect(x: 492, y: 24, width: 110, height: 110))
         document.context.cgContext.setAlpha(1)
 
-        document.text("IM IRON SPLITS  |  RACE BOOK",
+        document.text("IM TRI TRACKER  |  RACE BOOK",
                       in: CGRect(x: pageMargin, y: 42, width: 400, height: 16),
                       font: .systemFont(ofSize: 9, weight: .bold),
                       color: Palette.coral,

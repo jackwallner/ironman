@@ -107,7 +107,7 @@ struct ReviewPromptSheet: View {
 
     private var navigationTitle: String {
         switch step {
-        case .enjoyment: "Enjoying IM Iron Splits?"
+        case .enjoyment: "Enjoying IM Tri Tracker?"
         case .feedback: "Help us improve"
         }
     }
@@ -124,7 +124,7 @@ struct ReviewPromptSheet: View {
             }
             .padding(.top, TriSpace.x2)
 
-            Text("If IM Iron Splits is keeping your race history straight, a quick rating on the App Store makes a real difference.")
+            Text("If IM Tri Tracker is keeping your race history straight, a quick rating on the App Store makes a real difference.")
                 .font(TriType.body)
                 .foregroundStyle(TriPalette.inkSecondary)
                 .multilineTextAlignment(.center)
@@ -153,7 +153,7 @@ struct ReviewPromptSheet: View {
 
     private var feedbackContent: some View {
         VStack(alignment: .leading, spacing: TriSpace.x4) {
-            Text("What would make IM Iron Splits work better for you?")
+            Text("What would make IM Tri Tracker work better for you?")
                 .font(TriType.body)
                 .foregroundStyle(TriPalette.inkSecondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -250,7 +250,7 @@ struct ReviewPromptSheet: View {
         components.scheme = "mailto"
         components.path = "jackwallner+tri@gmail.com"
         components.queryItems = [
-            URLQueryItem(name: "subject", value: "IM Iron Splits feedback"),
+            URLQueryItem(name: "subject", value: "IM Tri Tracker feedback"),
             URLQueryItem(name: "body", value: body),
         ]
         return components.url

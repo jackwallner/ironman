@@ -207,10 +207,10 @@ final class LockerFlowUITests: XCTestCase {
         XCTAssertTrue(reviewButton.isHittable, "About actions should remain reachable after scrolling at accessibility text size")
         reviewButton.tap()
 
-        XCTAssertTrue(app.navigationBars["Enjoying IM Iron Splits?"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.navigationBars["Enjoying IM Tri Tracker?"].waitForExistence(timeout: 10))
         app.buttons["Not really"].tap()
         XCTAssertTrue(app.navigationBars["Help us improve"].waitForExistence(timeout: 10))
-        XCTAssertTrue(app.staticTexts["What would make IM Iron Splits work better for you?"].exists)
+        XCTAssertTrue(app.staticTexts["What would make IM Tri Tracker work better for you?"].exists)
         let sendButton = app.buttons["Continue in email"]
         if !sendButton.isHittable {
             app.swipeUp()
