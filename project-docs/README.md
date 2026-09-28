@@ -4,11 +4,11 @@ Developer notes and historical audits for this repository. The published site re
 
 ## Audits
 
-- [aso827.md](audits/aso827.md)
-- [audit823.md](audits/audit823.md)
-- [caudit926.md](audits/caudit926.md)
-- [laudit926.md](audits/laudit926.md)
+- [aso827.md](audits/aso827.md): IM Tri Tracker ASO Audit
+- [audit823.md](audits/audit823.md): IM Tri Tracker / IM Iron Splits audit823
+- [caudit926.md](audits/caudit926.md): Customer experience audit, 2026-09-26
+- [laudit926.md](audits/laudit926.md): IM Iron Splits customer experience audit
 
 ## Design
 
-- [DESIGN.md](design/DESIGN.md)
+- [DESIGN.md](design/DESIGN.md): IM Iron Splits: design system
