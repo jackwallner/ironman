@@ -14,7 +14,7 @@ struct RaceDetailView: View {
 
     @State private var field: [RaceResult] = []
     @State private var fieldState: FieldState = .idle
-    @State private var fieldScope: FieldScope = .division
+    @State private var fieldScope: FieldScope = .overall
     @State private var editingNote = false
 
     private enum FieldState: Equatable {
@@ -248,7 +248,6 @@ struct RaceDetailView: View {
         }
         if let cached = RaceFieldCache.results(for: result.eventID) {
             field = cached
-            fieldScope = availableFieldScopes.first ?? .overall
             fieldState = .loaded
             return
         }
@@ -257,7 +256,6 @@ struct RaceDetailView: View {
             let loaded = try await api.results(forEventID: result.eventID)
             guard !Task.isCancelled else { return }
             field = loaded
-            fieldScope = availableFieldScopes.first ?? .overall
             RaceFieldCache.store(loaded, for: result.eventID)
             fieldState = .loaded
         } catch {
