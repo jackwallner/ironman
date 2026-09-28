@@ -7,9 +7,10 @@ The Locker keeps every supported result, split, bib and place free. Explore
 opens another athlete's published history without changing your own. Race Book
 adds like-for-like comparison and unlimited export with one lifetime purchase.
 
-iOS 17+, SwiftUI, Swift 6. See `CLAUDE.md` for the architecture and the feed's
-sharp edges, `backend/README.md` for the command-line tools and why there is no
-server, and `docs/POINTERS.md` for publishing the coaching-clip library.
+iOS 17+, SwiftUI, Swift 6, plus a native Kotlin Android app. See `AGENTS.md` for
+the architecture and the feed's sharp edges, `backend/README.md` for the
+command-line tools and why there is no server, and `docs/POINTERS.md` for the
+coaching-clip library.
 
 ## Build
 
@@ -20,6 +21,21 @@ xcodebuild -project IronSplits.xcodeproj -scheme IronSplits -destination "id=$UD
 xcodebuild test -project IronSplits.xcodeproj -scheme IronSplits -destination "id=$UDID"
 agent-sim checkin ironsplits
 ```
+
+## Android build and tests
+
+The Android project targets API 36 and uses a Google Play emulator image for
+connected UI tests:
+
+```bash
+cd android
+./gradlew testDebugUnitTest
+./gradlew connectedDebugAndroidTest
+./gradlew bundleRelease
+```
+
+Play signing and RevenueCat keys live in ignored local configuration, never in
+the repository. Read `.claude/rules/android.md` before a Google Play release.
 
 The UI tests hit the live results feed on purpose. The claim flow is a search
 against someone else's service, and a mock would only prove the mock still
