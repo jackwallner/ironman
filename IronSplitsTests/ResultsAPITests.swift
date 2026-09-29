@@ -105,6 +105,11 @@ final class ResultsAPITests: XCTestCase {
     func testNextLinkMustRemainOnTheUpstreamResultsHost() {
         XCTAssertNotNil(FeedConfig.bundled.requestURL(
             nextLink: "https://api.competitor.com/web/results?$skiptoken=abc"))
+        // What the live feed actually returns as its nextLink.
+        XCTAssertNotNil(FeedConfig.bundled.requestURL(
+            nextLink: "https://api.competitor.com/web/wtc_results?$skiptoken=abc"))
+        XCTAssertNil(FeedConfig.bundled.requestURL(
+            nextLink: "https://api.competitor.com/web/other?$skiptoken=abc"))
         XCTAssertNil(FeedConfig.bundled.requestURL(
             nextLink: "https://example.com/web/results?$skiptoken=abc"))
         XCTAssertNil(FeedConfig.bundled.requestURL(

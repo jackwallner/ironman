@@ -1,1 +1,1 @@
-Split rankings return in Locker. Search, race details and Race Book are clearer, with safer exports and stronger accessibility.
+修复了大型赛事成绩和结果较多的姓名搜索无法加载的问题。

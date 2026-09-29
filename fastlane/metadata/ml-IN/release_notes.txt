@@ -1,1 +1,1 @@
-Split rankings return in Locker. Search, race details and Race Book are clearer, with safer exports and stronger accessibility.
+വലിയ റേസുകളുടെ ഫലങ്ങളും കൂടുതൽ ഫലങ്ങളുള്ള പേര് തിരയലുകളും ഇപ്പോൾ ശരിയായി ലോഡ് ചെയ്യുന്നു.

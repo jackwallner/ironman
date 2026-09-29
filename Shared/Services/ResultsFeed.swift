@@ -62,6 +62,11 @@ struct FeedConfig: Codable, Sendable, Equatable {
         return components.url
     }
 
+    /// The upstream pages through its own entity-set name, so every
+    /// `@odata.nextLink` for a `/web/results` query points at `/web/wtc_results`.
+    /// Accepting only the path we sent failed every field over one page.
+    static let nextLinkPaths: Set<String> = ["/web/results", "/web/wtc_results"]
+
     /// A `@odata.nextLink` is already an absolute upstream URL; it still has to
     /// go back through the proxy to be signed.
     func requestURL(nextLink: String) -> URL? {
@@ -70,7 +75,7 @@ struct FeedConfig: Codable, Sendable, Equatable {
               nextURL.scheme?.lowercased() == "https",
               nextURL.host?.lowercased() == "api.competitor.com",
               nextURL.port == nil || nextURL.port == 443,
-              nextURL.path == "/web/results" else { return nil }
+              Self.nextLinkPaths.contains(nextURL.path) else { return nil }
         guard var components = URLComponents(string: proxyURL) else { return nil }
         components.queryItems = [
             URLQueryItem(name: proxyURLParameter, value: nextLink),
