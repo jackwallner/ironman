@@ -35,6 +35,27 @@ paths:
   files are downloaded before local playback. Voice files are Pattie's original
   recorded clips. Never synthesise her voice.
 
+## Architecture (a screen-for-screen port of iOS)
+
+- Match the iOS app: same screens, copy, tokens and flows. When iOS changes, port
+  the change; do not let the two drift. `ui/theme/TriDesign.kt` holds the same
+  colour values as `TriDesign.swift`, and `ui/theme/` holds the shared primitives
+  (`TriScreen` nav bar, `TriSheet`, `InsetGroup`, chips, cards, `triPress`).
+- One file per iOS view in `ui/screens/`; services in `data/`, pure models and
+  analytics in `model/`. `AppGraph` builds every shared object once.
+- Navigation is a per-tab `Navigator` stack (`ui/nav/`) with a floating tab bar.
+  Sheets are `TriSheet` dialogs. State a covered screen must keep lives in
+  `rememberRetained` / `ScreenModel`, which is released when the screen pops.
+- Locker network work runs in the app scope (`LockerStore.refresh/claim` return
+  a `Job`). Running it in a screen scope stranded the Locker on "Pulling your
+  results" when onboarding left composition mid-claim.
+- The feed's `@odata.nextLink` pages through `/web/wtc_results`, not
+  `/web/results`. Both paths are accepted; rejecting the first broke "Against
+  the field" for every event with more than 500 finishers.
+- Debug-only launch extras (`DebugLaunchOptions`): `resetLocker`,
+  `seedScreenshotData`, `pattieMode`, `forcePro`, `appearance`, `tipsMode`,
+  `uiTest`. Release and `qa` builds compile a no-op.
+
 ## Build and signing
 
 - Current Play target is API 36. Verify Google's target API requirement before
@@ -75,8 +96,15 @@ cd android
 ```
 
 Connected tests require an API 36 Google Play AVD and intentionally exercise
-the live timing feed. Capture and inspect screenshots in both light and dark
-mode. Check the built AAB's package name, version code, target SDK, signing
+the live timing feed. They run under the test orchestrator with
+`clearPackageData`, so each starts from a clean install. Start the AVD on its own
+console port (`-port 5580`, serial `emulator-5580`) and set `ANDROID_SERIAL`:
+other sessions on this Mac drive emulators too, and an unqualified `adb emu kill`
+stops whichever one is on 5554. `./gradlew assembleQa` builds the shipped R8
+configuration with the debug key and no RevenueCat key, for emulator checks of
+the minified app without touching the production project.
+
+Capture and inspect screenshots in both light and dark mode. Check the built AAB's package name, version code, target SDK, signing
 certificate, permissions, and bundled assets before upload.
 
 Upload the signed AAB to internal testing first. Verify the Play-installed app,

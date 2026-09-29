@@ -54,10 +54,10 @@ Support: https://jackwallner.github.io/ironman/support.html
 
 ## Phone screenshots
 
-- `screenshots/01-search.png`: Search explains the name and optional location
-  data sent to the public timing service.
-- `screenshots/02-split-rankings.png`: The Locker shows published race history
-  and ranks bike splits within one distance.
+- `screenshots/01-search.png`: The one-screen onboarding asks for the name used
+  at registration and says where the search is sent.
+- `screenshots/02-split-rankings.png`: The Locker ranks bike splits within one
+  distance, with the gap to the personal best.
 - `screenshots/03-ask-pattie.png`: Ask Pattie pairs a recorded race-day
   situation with her matching pointer and voice playback.
 - `screenshots/04-episode-library.png`: The episode library lists downloadable

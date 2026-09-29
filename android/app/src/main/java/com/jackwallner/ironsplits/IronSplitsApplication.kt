@@ -1,16 +1,20 @@
 package com.jackwallner.ironsplits
 
 import android.app.Application
-import com.revenuecat.purchases.LogLevel
-import com.revenuecat.purchases.Purchases
-import com.revenuecat.purchases.PurchasesConfiguration
+import android.net.http.HttpResponseCache
+import java.io.File
 
 class IronSplitsApplication : Application() {
+    lateinit var graph: AppGraph
+        private set
+
     override fun onCreate() {
         super.onCreate()
-        val key = BuildConfig.REVENUECAT_API_KEY
-        if (key.isBlank()) return
-        Purchases.logLevel = if (BuildConfig.DEBUG) LogLevel.DEBUG else LogLevel.ERROR
-        Purchases.configure(PurchasesConfiguration.Builder(this, key).build())
+        // The proxy's answers for past races never change; a local HTTP cache
+        // makes coming back to a screen instant instead of another round trip.
+        runCatching { HttpResponseCache.install(File(cacheDir, "http"), 20L * 1024 * 1024) }
+        graph = AppGraph(this)
+        graph.review.recordAppLaunch()
+        graph.diagnostics.recordAppOpen()
     }
 }

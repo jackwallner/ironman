@@ -1,11 +1,10 @@
 <resources>
+    <!-- The canvas colour behind the first frame, so launch never flashes white in dark mode. -->
     <style name="Theme.IronSplits" parent="android:style/Theme.Material.Light.NoActionBar">
-        <item name="android:fontFamily">sans</item>
-        <item name="android:colorAccent">#F07852</item>
-        <item name="android:statusBarColor">#112B43</item>
-        <item name="android:navigationBarColor">#F4F6F8</item>
+        <item name="android:windowBackground">@color/launch_canvas</item>
+        <item name="android:colorAccent">@color/sunrise</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>
-        <item name="android:windowLightNavigationBar">true</item>
-        <item name="android:windowActionModeOverlay">true</item>
     </style>
 </resources>

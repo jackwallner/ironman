@@ -40,6 +40,8 @@ android {
         versionCode = 1
         versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // Every connected test starts from a clean install: no locker, no purchase.
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
         buildConfigField("String", "REVENUECAT_API_KEY", "\"$testKey\"")
     }
 
@@ -69,6 +71,19 @@ android {
             buildConfigField("String", "REVENUECAT_API_KEY", "\"$playKey\"")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+        // The release build as shipped (R8, no debug hooks), signed with the debug
+        // key and with no RevenueCat key, so it can run on an emulator without
+        // ever touching the production project.
+        create("qa") {
+            initWith(getByName("release"))
+            signingConfig = signingConfigs.getByName("debug")
+            buildConfigField("String", "REVENUECAT_API_KEY", "\"\"")
+            matchingFallbacks += "release"
+        }
+    }
+
+    sourceSets {
+        getByName("qa").kotlin.directories.add("src/release/java")
     }
 
     compileOptions {
@@ -78,6 +93,7 @@ android {
 
     testOptions {
         animationsDisabled = true
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
 }
 
@@ -98,12 +114,18 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("com.revenuecat.purchases:purchases:10.23.2")
+    implementation("androidx.media3:media3-exoplayer:1.11.1")
+    implementation("androidx.media3:media3-ui:1.11.1")
+    implementation("androidx.browser:browser:1.10.0")
+    implementation("com.google.android.play:review-ktx:2.0.2")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     androidTestImplementation(platform("androidx.compose:compose-bom:2026.06.01"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     androidTestImplementation("androidx.test.ext:junit:1.3.0")
     androidTestImplementation("androidx.test:runner:1.7.0")
+    androidTestImplementation("androidx.test:core-ktx:1.7.0")
+    androidTestUtil("androidx.test:orchestrator:1.6.1")
     androidTestImplementation("androidx.test.uiautomator:uiautomator:2.4.0")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     testImplementation("junit:junit:4.13.2")
