@@ -10,9 +10,12 @@ import java.net.SocketTimeoutException
 import java.net.URL
 import java.net.URLEncoder
 import java.net.UnknownHostException
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
@@ -20,6 +23,7 @@ import org.json.JSONObject
 sealed class ResultsApiException(message: String) : Exception(message) {
     class BadConfiguration : ResultsApiException("The results search could not be prepared. Please try again.")
     class BadResponse(val code: Int) : ResultsApiException("The results site is having trouble. Please try again shortly.")
+    class Undecodable : ResultsApiException("Couldn't reach the results site. Please try again.")
     class UpstreamRejected(val detail: String) : ResultsApiException("The results site could not complete that search. Please try again.")
     class PageLimitReached : ResultsApiException("Some older results may be missing. Try refreshing again later.")
 }
@@ -112,7 +116,7 @@ class ResultsApi(private val configLoader: FeedConfigLoader) : ResultsProviding 
         ResultsFetch(rows, truncated)
     }
 
-    private fun load(url: String, config: FeedConfig, timeoutSeconds: Int): Pair<List<ODataResultRow>, String?> {
+    private suspend fun load(url: String, config: FeedConfig, timeoutSeconds: Int): Pair<List<ODataResultRow>, String?> {
         val connection = (URL(url).openConnection() as HttpURLConnection).apply {
             connectTimeout = timeoutSeconds * 1_000
             readTimeout = timeoutSeconds * 1_000
@@ -120,19 +124,19 @@ class ResultsApi(private val configLoader: FeedConfigLoader) : ResultsProviding 
             setRequestProperty("Accept", "application/json")
             setRequestProperty("Referer", config.referer)
         }
-        try {
-            val status = connection.responseCode
-            if (status !in 200..299) throw ResultsApiException.BadResponse(status)
-            val body = connection.inputStream.bufferedReader().use { it.readText() }
-            val json = runCatching { JSONObject(body) }.getOrNull() ?: throw ResultsApiException.BadResponse(-1)
-            // The proxy answers 200 with {"error": "..."} for a URL it declines to sign.
-            json.optNullableString("error")?.let { throw ResultsApiException.UpstreamRejected(it) }
-            val values = json.optJSONArray("value") ?: throw ResultsApiException.BadResponse(-1)
-            val rows = (0 until values.length()).mapNotNull { values.optJSONObject(it)?.let(::ODataResultRow) }
-            return rows to json.optNullableString("@odata.nextLink")
-        } finally {
-            connection.disconnect()
-        }
+        return runCancellable(connection, ::readPage)
+    }
+
+    private fun readPage(connection: HttpURLConnection): Pair<List<ODataResultRow>, String?> {
+        val status = connection.responseCode
+        if (status !in 200..299) throw ResultsApiException.BadResponse(status)
+        val body = connection.inputStream.bufferedReader().use { it.readText() }
+        val json = runCatching { JSONObject(body) }.getOrNull() ?: throw ResultsApiException.Undecodable()
+        // The proxy answers 200 with {"error": "..."} for a URL it declines to sign.
+        json.optNullableString("error")?.let { throw ResultsApiException.UpstreamRejected(it) }
+        val values = json.optJSONArray("value") ?: throw ResultsApiException.Undecodable()
+        val rows = (0 until values.length()).mapNotNull { values.optJSONObject(it)?.let(::ODataResultRow) }
+        return rows to json.optNullableString("@odata.nextLink")
     }
 
     companion object {
@@ -161,7 +165,8 @@ class ResultsApi(private val configLoader: FeedConfigLoader) : ResultsProviding 
         fun nameFilter(term: String, depth: SearchDepth = SearchDepth.PREFIX): String {
             val op = if (depth == SearchDepth.PREFIX) "startswith" else "contains"
             val components = term.split(",", limit = 2)
-            val words = components.first().split(Regex("\\s+"))
+            // Character.isWhitespace semantics, so NBSP and U+2007 / U+202F split words like iOS.
+            val words = components.first().map { if (it.isWhitespace()) ' ' else it }.joinToString("").split(' ')
                 .map { escapeODataLiteral(it) }
                 .filter { it.isNotEmpty() }
                 .take(3)
@@ -313,6 +318,26 @@ class ResultsApi(private val configLoader: FeedConfigLoader) : ResultsProviding 
         )
     }
 }
+
+/**
+ * Runs a blocking request so that cancelling the caller (Stop, a new query,
+ * leaving the screen) disconnects the socket instead of leaving the request to
+ * run out its timeout.
+ */
+internal suspend fun <T> runCancellable(connection: HttpURLConnection, read: (HttpURLConnection) -> T): T =
+    suspendCancellableCoroutine { continuation ->
+        continuation.invokeOnCancellation { connection.disconnect() }
+        if (!continuation.isActive) return@suspendCancellableCoroutine
+        try {
+            continuation.resume(read(connection))
+        } catch (error: Throwable) {
+            // Resuming a cancelled continuation is a no-op, so the disconnect's
+            // "Socket closed" never replaces the CancellationException.
+            continuation.resumeWithException(error)
+        } finally {
+            connection.disconnect()
+        }
+    }
 
 /** True when a thrown error only means the caller stopped waiting. */
 fun isCancellation(error: Throwable): Boolean = error is CancellationException

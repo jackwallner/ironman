@@ -18,6 +18,7 @@ import com.jackwallner.ironsplits.ui.LocalGraph
 import com.jackwallner.ironsplits.ui.RootScreen
 import com.jackwallner.ironsplits.ui.theme.Haptics
 import com.jackwallner.ironsplits.ui.theme.TriTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +47,8 @@ class MainActivity : ComponentActivity() {
             }
             LaunchedEffect(settings.hapticsEnabled) { Haptics.enabled = settings.hapticsEnabled }
             LaunchedEffect(Unit) {
-                graph.store.start()
+                // Independent of the store: a slow RevenueCat must not delay the hotfix config.
+                launch { graph.store.start() }
                 graph.feedConfig.refreshIfStale()
             }
             CompositionLocalProvider(LocalGraph provides graph) {

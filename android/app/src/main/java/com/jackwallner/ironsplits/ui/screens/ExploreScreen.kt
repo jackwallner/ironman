@@ -272,7 +272,7 @@ private fun ProfileHeader(athlete: Athlete, results: List<RaceResult>) {
     ) {
         Text(athlete.name, style = TriType.athleteName, color = colors.inkOnDark)
         athlete.location?.let { Text(it, style = TriType.small, color = colors.inkOnDark.copy(alpha = 0.7f)) }
-        FlowRow(horizontalArrangement = Arrangement.spacedBy(TriSpace.x6), verticalArrangement = Arrangement.spacedBy(TriSpace.x3)) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(TriSpace.x4), verticalArrangement = Arrangement.spacedBy(TriSpace.x3)) {
             StatTile("${summary.finishes}", "Finishes", colors.inkOnDark, caption)
             if (summary.fullDistance > 0) StatTile("${summary.fullDistance}", "Full", colors.inkOnDark, caption)
             if (summary.halfDistance > 0) StatTile("${summary.halfDistance}", "Half", colors.inkOnDark, caption)

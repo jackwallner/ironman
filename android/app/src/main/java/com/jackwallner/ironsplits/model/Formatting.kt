@@ -49,11 +49,13 @@ enum class UnitPreference(val rawValue: String, val title: String) {
     companion object {
         fun fromRaw(raw: String?): UnitPreference? = entries.firstOrNull { it.rawValue == raw }
 
-        val deviceDefault: UnitPreference
-            get() = when (Locale.getDefault().country.uppercase(Locale.ROOT)) {
-                "US", "LR", "MM" -> IMPERIAL
-                else -> METRIC
-            }
+        val deviceDefault: UnitPreference get() = forCountry(Locale.getDefault().country)
+
+        /** Matches iOS, where only the metric measurement system is metric: the US, UK, Liberia and Myanmar are not. */
+        fun forCountry(country: String): UnitPreference = when (country.uppercase(Locale.ROOT)) {
+            "US", "GB", "LR", "MM" -> IMPERIAL
+            else -> METRIC
+        }
     }
 }
 

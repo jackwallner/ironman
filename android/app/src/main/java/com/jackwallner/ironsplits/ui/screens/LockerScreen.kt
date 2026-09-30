@@ -1,10 +1,11 @@
 package com.jackwallner.ironsplits.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +18,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -425,6 +425,7 @@ private fun RaceSearchField(value: String, onValueChange: (String) -> Unit) {
 }
 
 /** Career summary above the race list, on the navy brand colour. */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun LockerHeader(athlete: Athlete?, results: List<RaceResult>, lastRefreshed: Long?) {
     val colors = Tri.colors
@@ -444,9 +445,12 @@ private fun LockerHeader(athlete: Athlete?, results: List<RaceResult>, lastRefre
                 athlete.location?.let { Text(it, style = TriType.small, color = colors.inkOnDark.copy(alpha = 0.7f)) }
             }
         }
-        Row(
-            Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(vertical = TriSpace.x1),
-            horizontalArrangement = Arrangement.spacedBy(TriSpace.x6),
+        // Wraps rather than scrolls: a scrolled row clipped the last caption
+        // mid-word on a 411dp phone.
+        FlowRow(
+            Modifier.fillMaxWidth().padding(vertical = TriSpace.x1),
+            horizontalArrangement = Arrangement.spacedBy(TriSpace.x4),
+            verticalArrangement = Arrangement.spacedBy(TriSpace.x3),
         ) {
             val caption = colors.inkOnDark.copy(alpha = 0.6f)
             StatTile("${summary.finishes}", "Finishes", colors.inkOnDark, caption)
