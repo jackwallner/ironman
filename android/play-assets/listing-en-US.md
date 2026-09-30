@@ -58,7 +58,9 @@ Support: https://jackwallner.github.io/ironman/support.html
   at registration and says where the search is sent.
 - `screenshots/02-split-rankings.png`: The Locker ranks bike splits within one
   distance, with the gap to the personal best.
-- `screenshots/03-ask-pattie.png`: Ask Pattie pairs a recorded race-day
+- `screenshots/03-against-the-field.png`: Race detail shows each split and
+  where it placed among the event's finishers.
+- `screenshots/04-ask-pattie.png`: Ask Pattie pairs a recorded race-day
   situation with her matching pointer and voice playback.
-- `screenshots/04-episode-library.png`: The episode library lists downloadable
+- `screenshots/05-episode-library.png`: The episode library lists downloadable
   race-day advice and playback length.
