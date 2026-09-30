@@ -1,6 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- The portrait lock implies this feature, which would hide the app from
+         landscape-only devices. They can still run it letterboxed. -->
+    <uses-feature android:name="android.hardware.screen.portrait" android:required="false" />
+
     <application
         android:name=".IronSplitsApplication"
         android:allowBackup="false"
