@@ -349,9 +349,11 @@ shut down. Never pass `-wipe-data`.
 Last verified 2026-09-29 (evening): internal testing serves 3 (1.0.0),
 version code 3. A fresh Play install of it on `small_phone` searched and
 claimed a real athlete, loaded a 2,317-finisher field, restored the owned
-Race Book purchase automatically, and built the PDF. Production has a draft
-release, 178 countries saved, managed publishing on, and has not been sent for
-review. Recheck Play Console before relying on this state. The same test
+Race Book purchase automatically, and built the PDF. Later that evening
+production 3 (1.0.0), full rollout to 178 countries, was sent to Google review
+with the IM Tri Tracker name, description, feature graphic and screenshots.
+Managed publishing is on, so approval does not publish it; Jack publishes from
+Publishing overview. Recheck Play Console before relying on this state. The same test
 account owns the non-consumable test purchase; do not attempt to buy it again.
 
 Chrome's file-upload tool rejects files over 10 MB and the extension drops
