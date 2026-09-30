@@ -346,14 +346,19 @@ shut down. Never pass `-wipe-data`.
 
 ### Play and RevenueCat state
 
-Last verified 2026-09-29: Play internal testing release 1.0.0 (version code 1)
-was active, production was inactive and not sent for review, and the one-person
-internal tester list was selected for account-level License testing. The
-Play-installed internal build was opened on `small_phone`, and the Play test
-purchase granted RevenueCat entitlement `pro` in sandbox. Recheck Play Console
-before relying on this state. The same test account owns the non-consumable
-test purchase; do not attempt to buy it again. Use Restore Purchases to recheck
-persistence.
+Last verified 2026-09-29 (evening): internal testing serves 3 (1.0.0),
+version code 3. A fresh Play install of it on `small_phone` searched and
+claimed a real athlete, loaded a 2,317-finisher field, restored the owned
+Race Book purchase automatically, and built the PDF. Production has a draft
+release, 178 countries saved, managed publishing on, and has not been sent for
+review. Recheck Play Console before relying on this state. The same test
+account owns the non-consumable test purchase; do not attempt to buy it again.
+
+Chrome's file-upload tool rejects files over 10 MB and the extension drops
+large transfers, so an AAB goes up as 2 MB `split -b 2000000` chunks into a
+temporary page file input, reassembled in page JavaScript as a `File`, checked
+against the local SHA-256, then assigned to Play's `.aab` input. Only do this
+with Jack's approval for that upload.
 
 To get a fresh opt-in URL, open Play Console **Test and release > Testing >
 Internal testing > Testers** and copy **Join on the web**. Use the existing
