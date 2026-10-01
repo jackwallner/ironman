@@ -175,14 +175,10 @@ struct SettingsView: View {
 
                 Section("About") {
                     if AppStoreReviewLinks.isConfigured {
-                        Button("Rate or send feedback") {
-                            reviewCoordinator.requestEnjoymentPrompt()
-                        }
                         Link("Write a review on the App Store", destination: AppStoreReviewLinks.writeReviewURL)
-                    } else {
-                        Button("Send feedback") {
-                            reviewCoordinator.requestFeedback()
-                        }
+                    }
+                    Button("Send feedback") {
+                        reviewCoordinator.requestFeedback()
                     }
                     Link("Privacy policy", destination: IronSplitsLegal.privacyURL)
                     Link("Terms of use", destination: IronSplitsLegal.termsURL)

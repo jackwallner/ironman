@@ -205,7 +205,7 @@ final class LockerFlowUITests: XCTestCase {
         XCTAssertTrue(app.navigationBars["Locker"].waitForExistence(timeout: 30))
 
         app.tabBars.buttons["Settings"].tap()
-        let reviewButton = app.buttons["Rate or send feedback"]
+        let reviewButton = app.buttons["Send feedback"]
         let tabBar = app.tabBars.firstMatch
         // Above the floating tab bar, not just hittable: XCUI calls a row under
         // the glass tab bar hittable, and the tap then lands on the bar.
@@ -218,8 +218,6 @@ final class LockerFlowUITests: XCTestCase {
         XCTAssertTrue(reviewButton.isHittable, "About actions should remain reachable after scrolling at accessibility text size")
         reviewButton.tap()
 
-        XCTAssertTrue(app.navigationBars["Enjoying IM Tri Tracker?"].waitForExistence(timeout: 10))
-        app.buttons["Not really"].tap()
         XCTAssertTrue(app.navigationBars["Help us improve"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["What would make IM Tri Tracker work better for you?"].exists)
         let sendButton = app.buttons["Continue in email"]

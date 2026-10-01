@@ -1,7 +1,7 @@
 import Foundation
 
 extension Notification.Name {
-    /// Posted after a satisfaction moment, host may present the enjoyment funnel after a short delay.
+    /// Posted after a satisfaction moment, host may ask for an App Store rating after a short delay.
     static let ironSplitsPositiveMomentForReview = Notification.Name("com.jackwallner.ironman.positiveMomentForReview")
 }
 
@@ -37,13 +37,12 @@ enum ReviewPromptTracker {
         }
     }
 
-    // Enjoyment pre-filter keeps unhappy users off the public Store; thresholds
-    // match the Vitals portfolio standard for passive prompts.
+    // Thresholds match the Vitals portfolio standard for passive prompts.
     static let minimumLaunchCount = 5
     static let minimumDaysSinceFirstOpen = 7
     static let minimumPositiveMoments = 3
     static let cooldownDays = 120
-    /// Shorter cooldown after "Maybe later". Apple's `requestReview()` is
+    /// Shorter cooldown after a native prompt. Apple's `requestReview()` is
     /// rate-limited and silently shows nothing much of the time, so the common
     /// case was a user who never saw a prompt being locked out for four months.
     static let softDeferCooldownDays = 30
@@ -160,7 +159,7 @@ enum ReviewPromptTracker {
         return now.timeIntervalSince(last) >= TimeInterval(days) * 86_400
     }
 
-    /// True after "Maybe later" until the next hard `markShown` or outcome.
+    /// True after a native prompt until the next hard `markShown` or outcome.
     /// Callers must NOT call `markShown()` on sheet dismiss while this is set,
     /// that clears the flag and reinstates the full cooldown, which is exactly
     /// the leak this exists to close.
@@ -168,8 +167,7 @@ enum ReviewPromptTracker {
         defaults.bool(forKey: softDeferKey)
     }
 
-    /// The user said they like the app, then deferred the store review. We fire
-    /// `requestReview()`, which Apple often no-ops, so keep the door open with
+    /// After a passive `requestReview()`, which Apple often no-ops, keep the door open with
     /// the short cooldown instead of jailing them for the full term.
     static func markSoftDeferred(now: Date = .now) {
         lastShownDate = now
@@ -177,7 +175,7 @@ enum ReviewPromptTracker {
         consumePendingPositiveMoment()
     }
 
-    static func canPresentEnjoymentPrompt(
+    static func canPresentRatingPrompt(
         hasCompletedOnboarding: Bool,
         now: Date = .now
     ) -> Bool {
@@ -200,7 +198,7 @@ enum ReviewPromptTracker {
         now: Date = .now
     ) -> Bool {
         guard hasPendingPositiveMoment else { return false }
-        return canPresentEnjoymentPrompt(hasCompletedOnboarding: hasCompletedOnboarding, now: now)
+        return canPresentRatingPrompt(hasCompletedOnboarding: hasCompletedOnboarding, now: now)
     }
 
     static func markShown(now: Date = .now) {

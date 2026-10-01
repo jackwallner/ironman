@@ -7,8 +7,7 @@ struct RootTabView: View {
     @EnvironmentObject private var reviewCoordinator: ReviewPromptCoordinator
     @EnvironmentObject private var pattie: PattieMode
 
-    @State private var reviewSheet: ReviewPromptSheet.Step?
-    @State private var pendingRequestReview = false
+    @State private var showingFeedback = false
     @State private var selectedTab: Tab = .locker
     @Environment(\.requestReview) private var requestReview
 
@@ -40,15 +39,15 @@ struct RootTabView: View {
         .onReceive(NotificationCenter.default.publisher(for: .ironSplitsPositiveMomentForReview)) { _ in
             presentReviewPromptIfEligible()
         }
-        .onReceive(reviewCoordinator.$pendingPresentation.compactMap { $0 }) { presentation in
-            reviewSheet = presentation == .feedbackOnly ? .feedback : .enjoyment
+        .onReceive(reviewCoordinator.$feedbackRequested.filter { $0 }) { _ in
+            showingFeedback = true
             reviewCoordinator.clear()
         }
-        .sheet(item: $reviewSheet, onDismiss: requestReviewIfNeeded) { step in
-            ReviewPromptSheet(initialStep: step) { outcome in
+        .sheet(isPresented: $showingFeedback) {
+            ReviewPromptSheet { outcome in
                 handle(outcome)
             }
-        } 
+        }
     }
 
     private var tabs: some View {
@@ -83,7 +82,10 @@ struct RootTabView: View {
         guard ReviewPromptTracker.shouldShowAfterPositiveMoment(
             hasCompletedOnboarding: settings.hasCompletedOnboarding
         ) else { return }
-        reviewSheet = .enjoyment
+        // Apple's own prompt, asked of everyone who qualifies. It is
+        // rate-limited and often shows nothing, hence the short cooldown.
+        ReviewPromptTracker.markSoftDeferred()
+        requestReview()
     }
 
     private func handle(_ outcome: ReviewPromptDismissOutcome) {
@@ -92,30 +94,8 @@ struct RootTabView: View {
             ReviewPromptTracker.markShown()
         case .feedbackDraftOpened:
             ReviewPromptTracker.markFeedbackDraftOpened()
-        case .openedWriteReview:
-            ReviewPromptTracker.markOpenedWriteReview()
-        case .enjoyed:
-            // Apple's native prompt is rate-limited and often shows nothing, so
-            // this uses the short cooldown rather than the full one.
-            ReviewPromptTracker.markSoftDeferred()
-            pendingRequestReview = true
         }
-        reviewSheet = nil
-    }
-
-    private func requestReviewIfNeeded() {
-        if pendingRequestReview {
-            pendingRequestReview = false
-            requestReview()
-        }
+        showingFeedback = false
     }
 }
 
-extension ReviewPromptSheet.Step: Identifiable {
-    public var id: Int {
-        switch self {
-        case .enjoyment: return 0
-        case .feedback: return 1
-        }
-    }
-}
