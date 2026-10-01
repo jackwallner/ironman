@@ -98,11 +98,7 @@ struct RaceRow: View {
             if result.isComplete {
                 SplitBar(result: result)
                 if !personalBestLegs.isEmpty {
-                    HStack(spacing: TriSpace.x1) {
-                        ForEach(Discipline.rankable.filter { personalBestLegs.contains($0) }) { leg in
-                    TriBadge(text: "PB \(leg.shortTitle)", color: TriPalette.sunrise, filled: true)
-                        }
-                    }
+                    personalBestBadges
                 }
             }
         }
@@ -110,6 +106,23 @@ struct RaceRow: View {
         .padding(.vertical, TriSpace.x1)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilityLabel)
+    }
+
+    /// One badge per leg while they fit on a line, otherwise a single count.
+    /// Five badges used to squeeze into the row and wrap "PB FINISH" onto two
+    /// lines inside each pill.
+    private var personalBestBadges: some View {
+        let legs = Discipline.rankable.filter { personalBestLegs.contains($0) }
+        return ViewThatFits(in: .horizontal) {
+            HStack(spacing: TriSpace.x1) {
+                ForEach(legs) { leg in
+                    TriBadge(text: "PB \(leg.shortTitle)", color: TriPalette.sunrise, filled: true)
+                        .fixedSize()
+                }
+            }
+            TriBadge(text: legs.count == 1 ? "PB" : "\(legs.count) PBs", color: TriPalette.sunrise, filled: true)
+                .fixedSize()
+        }
     }
 
     private var accessibilityLabel: String {
@@ -298,6 +311,42 @@ struct TriPlaceholder: View {
 }
 
 /// Big number + caption, used across the locker header and race detail.
+/// Finishes, full, half and podiums on a navy career card, Locker and Explore
+/// alike. Equal columns that always fit: the old horizontal scroller cut the
+/// fourth tile ("29 PODIU…") off at the card edge on a real phone, and at
+/// accessibility sizes the columns fold into two rows instead.
+struct CareerStatsRow: View {
+    let summary: RaceAnalytics.CareerSummary
+
+    var body: some View {
+        ViewThatFits(in: .horizontal) {
+            HStack(alignment: .top, spacing: TriSpace.x2) { tiles }
+            LazyVGrid(columns: [GridItem(.flexible(), spacing: TriSpace.x2),
+                                GridItem(.flexible(), spacing: TriSpace.x2)],
+                      alignment: .leading, spacing: TriSpace.x3) { tiles }
+        }
+        .padding(.vertical, TriSpace.x1)
+    }
+
+    @ViewBuilder
+    private var tiles: some View {
+        StatTile(value: "\(summary.finishes)", caption: "Finishes", tint: TriPalette.inkOnDark)
+            .frame(maxWidth: .infinity)
+        if summary.fullDistance > 0 {
+            StatTile(value: "\(summary.fullDistance)", caption: "Full", tint: TriPalette.inkOnDark)
+                .frame(maxWidth: .infinity)
+        }
+        if summary.halfDistance > 0 {
+            StatTile(value: "\(summary.halfDistance)", caption: "Half", tint: TriPalette.inkOnDark)
+                .frame(maxWidth: .infinity)
+        }
+        if summary.podiums > 0 {
+            StatTile(value: "\(summary.podiums)", caption: "Podiums", tint: TriPalette.sunrise)
+                .frame(maxWidth: .infinity)
+        }
+    }
+}
+
 struct StatTile: View {
     let value: String
     let caption: String

@@ -27,7 +27,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.jackwallner.ironman
         PRODUCT_NAME: "IM Tri Tracker"
         PRODUCT_MODULE_NAME: IM_Iron_Splits
-        MARKETING_VERSION: "1.1.1"
+        MARKETING_VERSION: "1.1.2"
         CURRENT_PROJECT_VERSION: "31"
         GENERATE_INFOPLIST_FILE: NO
         INFOPLIST_FILE: IronSplits/Info.plist

@@ -161,7 +161,7 @@ private struct ExploreAthleteRow: View {
         HStack(spacing: TriSpace.x3) {
             Image(systemName: "person.crop.circle.fill")
                 .font(.system(size: 28))
-                .foregroundStyle(TriPalette.deep)
+                .foregroundStyle(TriPalette.inkSecondary)
                 .frame(width: TriSpace.x10, height: TriSpace.x10)
             VStack(alignment: .leading, spacing: TriSpace.x1) {
                 Text(athlete.name)
@@ -237,7 +237,7 @@ private struct ExploreAthleteView: View {
         }
         .navigationTitle(athlete.name)
         .navigationBarTitleDisplayMode(.inline)
-        .triNavBar()
+        .triNavBar(pushed: true)
         .task {
             if state == .idle { await load() }
         }
@@ -255,36 +255,7 @@ private struct ExploreAthleteView: View {
                     .font(TriType.small)
                     .foregroundStyle(TriPalette.inkOnDark.opacity(0.7))
             }
-            ViewThatFits(in: .horizontal) {
-                HStack(spacing: TriSpace.x6) {
-                    StatTile(value: "\(summary.finishes)", caption: "Finishes", tint: TriPalette.inkOnDark)
-                    if summary.fullDistance > 0 {
-                        StatTile(value: "\(summary.fullDistance)", caption: "Full", tint: TriPalette.inkOnDark)
-                    }
-                    if summary.halfDistance > 0 {
-                        StatTile(value: "\(summary.halfDistance)", caption: "Half", tint: TriPalette.inkOnDark)
-                    }
-                    if summary.podiums > 0 {
-                        StatTile(value: "\(summary.podiums)", caption: "Podiums", tint: TriPalette.sunrise)
-                    }
-                }
-                VStack(spacing: TriSpace.x3) {
-                    HStack(spacing: TriSpace.x6) {
-                        StatTile(value: "\(summary.finishes)", caption: "Finishes", tint: TriPalette.inkOnDark)
-                        if summary.fullDistance > 0 {
-                            StatTile(value: "\(summary.fullDistance)", caption: "Full", tint: TriPalette.inkOnDark)
-                        }
-                    }
-                    HStack(spacing: TriSpace.x6) {
-                        if summary.halfDistance > 0 {
-                            StatTile(value: "\(summary.halfDistance)", caption: "Half", tint: TriPalette.inkOnDark)
-                        }
-                        if summary.podiums > 0 {
-                            StatTile(value: "\(summary.podiums)", caption: "Podiums", tint: TriPalette.sunrise)
-                        }
-                    }
-                }
-            }
+            CareerStatsRow(summary: summary)
             if let years = summary.years {
                 Text("Racing since " + String(years.lowerBound))
                     .font(TriType.micro)
@@ -337,7 +308,7 @@ private struct ExploreAthleteView: View {
 
     private var loadingView: some View {
         VStack(spacing: TriSpace.x3) {
-            ProgressView().tint(TriPalette.deep)
+            ProgressView().tint(TriPalette.inkSecondary)
             Text("Loading this career…")
                 .font(TriType.small)
                 .foregroundStyle(TriPalette.inkTertiary)

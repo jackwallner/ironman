@@ -1,1 +1,1 @@
-Corrige le chargement des classements des grandes courses et des recherches avec beaucoup de résultats.
+Le bouton pour changer d'athlète et les autres boutons de la barre du haut sont désormais faciles à lire sur tous les iPhone. Les statistiques de carrière ne sont plus coupées et le mode sombre est plus clair.

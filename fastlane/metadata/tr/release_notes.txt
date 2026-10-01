@@ -1,1 +1,1 @@
-Büyük yarışların sonuçları ve çok sonuçlu isim aramalarının yüklenmemesi sorunu giderildi.
+Sporcu değiştirme düğmesi ve üst çubuktaki diğer düğmeler artık her iPhone'da kolayca okunuyor. Kariyer istatistikleri artık kesilmiyor ve karanlık mod daha net.

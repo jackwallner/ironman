@@ -148,7 +148,13 @@ final class LockerFlowUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["TIME BY LEG"].waitForExistence(timeout: 10))
         app.navigationBars["Compare races"].buttons.element(boundBy: 0).tap()
 
+        // Export sits below Compare, so look further down first, then back up.
         let exportButton = app.buttons["Build PDF and image"]
+        for _ in 0..<12 {
+            if exportButton.exists, exportButton.isHittable,
+               exportButton.frame.maxY <= tabBar.frame.minY { break }
+            app.swipeUp()
+        }
         for _ in 0..<12 where !exportButton.isHittable {
             app.swipeDown()
         }
@@ -200,7 +206,12 @@ final class LockerFlowUITests: XCTestCase {
 
         app.tabBars.buttons["Settings"].tap()
         let reviewButton = app.buttons["Rate or send feedback"]
-        for _ in 0..<8 where !reviewButton.isHittable {
+        let tabBar = app.tabBars.firstMatch
+        // Above the floating tab bar, not just hittable: XCUI calls a row under
+        // the glass tab bar hittable, and the tap then lands on the bar.
+        for _ in 0..<16 {
+            if reviewButton.exists, reviewButton.isHittable,
+               reviewButton.frame.maxY <= tabBar.frame.minY { break }
             app.swipeUp()
         }
         XCTAssertTrue(reviewButton.waitForExistence(timeout: 10))

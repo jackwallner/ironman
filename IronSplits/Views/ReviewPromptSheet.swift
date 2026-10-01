@@ -83,14 +83,13 @@ struct ReviewPromptSheet: View {
                 }
             }
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Not now") {
+                TriBarItem(placement: .cancellationAction) {
+                    Button {
                         handleNotNow()
+                    } label: {
+                        TriBarLabel(title: "Not now")
                     }
-                    .foregroundStyle(TriPalette.inkOnDark)
                     .buttonStyle(.triPressSilent)
-                    .padding(.horizontal, TriSpace.x4)
-                    .triTapTarget()
                 }
             }
         }

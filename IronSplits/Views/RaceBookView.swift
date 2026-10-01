@@ -39,16 +39,11 @@ struct RaceBookView: View {
         .triNavBar()
         .toolbar {
             if showsDoneButton {
-                ToolbarItem(placement: .topBarTrailing) {
+                TriBarItem(placement: .topBarTrailing) {
                     Button {
                         dismiss()
                     } label: {
-                        Text("Done")
-                            .font(TriType.bodyBold)
-                            .foregroundStyle(TriPalette.inkOnDark)
-                            .padding(.horizontal, TriSpace.x3)
-                            .frame(minWidth: TriSpace.x10 + TriSpace.x8,
-                                   minHeight: TriGeo.tapTarget)
+                        TriBarLabel(title: "Done", emphasized: true)
                     }
                     .buttonStyle(.triPressSilent)
                 }
@@ -454,7 +449,7 @@ struct RaceBookView: View {
             if isBuildingExports {
                 HStack(spacing: TriSpace.x2) {
                     ProgressView()
-                        .tint(TriPalette.deep)
+                        .tint(TriPalette.inkSecondary)
                     Text("Building both files on this phone...")
                         .font(TriType.small)
                         .foregroundStyle(TriPalette.inkSecondary)
@@ -842,7 +837,7 @@ struct RaceCompareView: View {
         }
         .navigationTitle("Compare races")
         .navigationBarTitleDisplayMode(.inline)
-        .triNavBar()
+        .triNavBar(pushed: true)
         .onAppear { syncKindAndRaces() }
         .onChange(of: selectedKind) { _, _ in syncRaces() }
         .onChange(of: locker.results) { _, _ in syncKindAndRaces() }

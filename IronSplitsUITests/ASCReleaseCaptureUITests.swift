@@ -36,7 +36,9 @@ final class ASCReleaseCaptureUITests: XCTestCase {
         let fieldHeading = app.staticTexts["AGAINST THE FIELD"]
         XCTAssertTrue(fieldHeading.waitForExistence(timeout: 15))
         let firstFieldPlacement = app.descendants(matching: .any)
-            .matching(NSPredicate(format: "label CONTAINS '8 of 11 finishers'"))
+            // Overall is the default scope since 11a93e3; the seeded runner is
+            // 13th of the 37 seeded finishers.
+            .matching(NSPredicate(format: "label CONTAINS '13 of 37 finishers'"))
             .firstMatch
         XCTAssertTrue(firstFieldPlacement.waitForExistence(timeout: 10))
         if !fieldHeading.isHittable {

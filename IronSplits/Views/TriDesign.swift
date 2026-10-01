@@ -47,6 +47,15 @@ enum TriPalette {
     /// Deliberately black media stage, resolved through the same token path as
     /// every other full-screen surface.
     static let mediaCanvas  = adaptive(light: (0.000, 0.000, 0.000), dark: (0.000, 0.000, 0.000))
+    /// The fill behind every control on the navy navigation bar. Fixed, not
+    /// glass, so the white label on it reads the same on every device.
+    static let chromeFill   = inkOnDark.opacity(0.18)
+
+    /// A selected chip or segment. Navy in light mode; in dark mode navy sits
+    /// too close to the dark surfaces around it, so selection flips to a light
+    /// fill the way the system's own segmented controls do.
+    static let selectedFill = adaptive(light: (0.020, 0.094, 0.208), dark: (0.902, 0.925, 0.949))
+    static let inkOnSelected = adaptive(light: (1.000, 1.000, 1.000), dark: (0.043, 0.059, 0.078))
 
     // MARK: Brand
 
@@ -282,12 +291,43 @@ extension ButtonStyle where Self == TriPressStyle {
 // MARK: - Modifiers
 
 /// Dark nav bar with white title, applied to every stack in the app.
+///
+/// A pushed screen passes `pushed: true` and gets `TriBackButton` in place of
+/// the system one, whose glass circle has the same light-or-dark lottery as
+/// every other toolbar item (white chevron on pale glass in light mode). The
+/// edge swipe survives because `UINavigationController` keeps its pop gesture
+/// below.
 struct TriNavBar: ViewModifier {
+    var pushed = false
+
     func body(content: Content) -> some View {
-        content
+        let bar = content
             .toolbarBackground(TriPalette.deep, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)
+        if pushed {
+            bar
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    TriBarItem(placement: .topBarLeading) { TriBackButton() }
+                }
+        } else {
+            bar
+        }
+    }
+}
+
+/// Hiding the system back button also disables the edge swipe to go back. This
+/// keeps it for any stack deeper than its root, so `TriNavBar(pushed:)` screens
+/// still swipe back like every other iOS screen.
+extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
+    override open func viewDidLoad() {
+        super.viewDidLoad()
+        interactivePopGestureRecognizer?.delegate = self
+    }
+
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        gestureRecognizer !== interactivePopGestureRecognizer || viewControllers.count > 1
     }
 }
 
@@ -310,16 +350,7 @@ private struct TriCard: ViewModifier {
 }
 
 extension View {
-    func triNavBar() -> some View { modifier(TriNavBar()) }
-
-    @ViewBuilder
-    func triToolbarCircleBackground() -> some View {
-        if #available(iOS 26.0, *) {
-            glassEffect(.regular.tint(TriPalette.deep).interactive(), in: .circle)
-        } else {
-            background(TriPalette.deep, in: Circle())
-        }
-    }
+    func triNavBar(pushed: Bool = false) -> some View { modifier(TriNavBar(pushed: pushed)) }
 
     /// The standard card: surface, hairline, one radius, one elevation.
     func triCard(padding: CGFloat = TriGeo.padCard) -> some View {
@@ -340,14 +371,106 @@ struct TriBackButton: View {
         Button {
             dismiss()
         } label: {
-            Image(systemName: "chevron.left")
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundStyle(TriPalette.inkOnDark)
-                .frame(width: TriGeo.tapTarget, height: TriGeo.tapTarget)
-                .triToolbarCircleBackground()
+            TriBarLabel(systemImage: "chevron.left")
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.triPressSilent)
         .accessibilityLabel("Back")
+    }
+}
+
+// MARK: - Navigation bar chrome
+
+/// The label for any action on the navy navigation bar: white type or symbol on
+/// a fixed `chromeFill` capsule (a circle when it is icon-only).
+///
+/// iOS 26 wraps toolbar items in Liquid Glass, and whether that glass comes out
+/// light or dark depends on what the system samples under it, not on the bar's
+/// colour scheme. It rendered light on the simulator and dark on Pattie's
+/// iPhone, so the old Change button, which guessed "light glass, navy text",
+/// was navy on navy on a real phone. Every bar control now opts out of the
+/// system glass through `TriBarItem` and draws this instead, so nothing on the
+/// bar depends on a guess. `ChromeLegibilityUITests` measures the result.
+struct TriBarLabel: View {
+    var title: String?
+    var systemImage: String?
+    var emphasized = false
+
+    var body: some View {
+        HStack(spacing: TriSpace.x1) {
+            if let systemImage {
+                Image(systemName: systemImage)
+                    .font(.system(size: 15, weight: .semibold))
+            }
+            if let title {
+                Text(title)
+                    .font(emphasized ? TriType.bodyBold : TriType.body)
+                    .lineLimit(1)
+                    .fixedSize()
+            }
+        }
+        .foregroundStyle(TriPalette.inkOnDark)
+        .padding(.horizontal, title == nil ? 0 : TriSpace.x4)
+        .frame(minWidth: TriGeo.tapTarget, minHeight: TriGeo.tapTarget)
+        // Sheet bars propose a 44pt slot to cancel/confirm items, which
+        // squeezed "Cancel" out past its own capsule.
+        .fixedSize()
+        .background(TriPalette.chromeFill, in: Capsule())
+        .contentShape(Capsule())
+    }
+}
+
+/// A toolbar item with the system glass switched off on iOS 26, for content
+/// that draws its own `TriBarLabel`.
+struct TriBarItem<Content: View>: ToolbarContent {
+    let placement: ToolbarItemPlacement
+    @ViewBuilder let content: () -> Content
+
+    init(placement: ToolbarItemPlacement, @ViewBuilder content: @escaping () -> Content) {
+        self.placement = placement
+        self.content = content
+    }
+
+    var body: some ToolbarContent {
+        if #available(iOS 26.0, *) {
+            ToolbarItem(placement: placement, content: content)
+                .sharedBackgroundVisibility(.hidden)
+        } else {
+            ToolbarItem(placement: placement, content: content)
+        }
+    }
+}
+
+/// A two-or-more option switch for the navigation bar, used where a system
+/// segmented control would otherwise pick up the unpredictable glass.
+struct TriBarSegments<Option: Hashable & Identifiable>: View {
+    let options: [Option]
+    @Binding var selection: Option
+    let title: (Option) -> String
+
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(options) { option in
+                let isSelected = option == selection
+                Button {
+                    selection = option
+                } label: {
+                    Text(title(option))
+                        .font(TriType.smallBold)
+                        .lineLimit(1)
+                        .fixedSize()
+                        .foregroundStyle(isSelected ? TriPalette.deep : TriPalette.inkOnDark)
+                        .padding(.horizontal, TriSpace.x4)
+                        .frame(minHeight: TriGeo.tapTarget - TriSpace.x2)
+                        .background(isSelected ? TriPalette.inkOnDark : Color.clear, in: Capsule())
+                        .contentShape(Capsule())
+                }
+                .buttonStyle(.triPressSilent)
+                .accessibilityAddTraits(isSelected ? .isSelected : [])
+            }
+        }
+        .padding(TriSpace.x1)
+        .background(TriPalette.chromeFill, in: Capsule())
+        .animation(.easeOut(duration: 0.18), value: selection)
     }
 }
 
@@ -429,10 +552,10 @@ struct TriChip: View {
         } label: {
             Text(title)
                 .font(TriType.smallBold)
-                .foregroundStyle(isSelected ? TriPalette.inkOnDark : TriPalette.inkSecondary)
+                .foregroundStyle(isSelected ? TriPalette.inkOnSelected : TriPalette.inkSecondary)
                 .padding(.horizontal, TriSpace.x4)
                 .frame(minHeight: TriGeo.tapTarget)
-                .background(isSelected ? TriPalette.deep : TriPalette.surface, in: Capsule())
+                .background(isSelected ? TriPalette.selectedFill : TriPalette.surface, in: Capsule())
                 .overlay(
                     Capsule().stroke(TriPalette.hairline,
                                      lineWidth: isSelected ? 0 : TriGeo.hairline)

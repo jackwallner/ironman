@@ -1,1 +1,1 @@
-Opravené načítanie výsledkov veľkých pretekov a vyhľadávaní s mnohými výsledkami.
+Tlačidlo na zmenu športovca a ďalšie tlačidlá v hornej lište sú teraz dobre čitateľné na každom iPhone. Štatistiky kariéry sa už neorezávajú a tmavý režim je prehľadnejší.

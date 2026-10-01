@@ -16,25 +16,17 @@ struct RaceBookPDFPreview: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .triNavBar()
                 .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
+                    TriBarItem(placement: .topBarLeading) {
                         Button {
                             dismiss()
                         } label: {
-                            Text("Done")
-                                .font(TriType.bodyBold)
-                                .foregroundStyle(TriPalette.inkOnDark)
-                                .padding(.horizontal, TriSpace.x4)
-                                .frame(minWidth: TriSpace.x10 + TriSpace.x8,
-                                       minHeight: TriGeo.tapTarget)
+                            TriBarLabel(title: "Done", emphasized: true)
                         }
                         .buttonStyle(.triPressSilent)
                     }
-                    ToolbarItem(placement: .topBarTrailing) {
+                    TriBarItem(placement: .topBarTrailing) {
                         ShareLink(item: url) {
-                            Image(systemName: "square.and.arrow.up")
-                                .font(TriType.bodyBold)
-                                .foregroundStyle(TriPalette.inkOnDark)
-                                .frame(width: TriGeo.tapTarget, height: TriGeo.tapTarget)
+                            TriBarLabel(systemImage: "square.and.arrow.up")
                         }
                         .accessibilityLabel("Share PDF")
                     }

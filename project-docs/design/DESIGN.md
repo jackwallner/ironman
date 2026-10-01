@@ -83,6 +83,12 @@ Rules:
   bar and unreadable as type.
 - Status bar content stays light because every app navigation bar uses `deep`,
   including in the light appearance.
+- **Never use `deep` as text or a spinner tint on a surface.** It is navy in
+  both schemes, so it vanishes on a dark card. Text is `ink`; spinners are
+  `inkSecondary`. `deep` is a fill.
+- Selection is `selectedFill` with `inkOnSelected`: navy with white in light
+  mode, a light fill with dark ink in dark mode. Navy selection on a dark
+  canvas read as unselected.
 
 ## 4. Radius: one for surfaces, one for what sits inside them
 
@@ -117,7 +123,22 @@ is; they are not decoration.
   different heights, none of which cleared 44.
 - One primary button, `TriPrimaryButton`.
 
-## 7. Native feel
+## 7. Navigation bar chrome
+
+Every control on the navy bar is a `TriBarLabel` (white on the fixed
+`chromeFill` capsule, a circle when icon-only) inside a `TriBarItem`, which
+switches the iOS 26 system glass off. Pushed screens use
+`.triNavBar(pushed: true)` for the matching `TriBackButton`; the edge swipe
+still works. Mode switches on the bar are `TriBarSegments`, not a system
+segmented `Picker`.
+
+Why: Liquid Glass picks light or dark from what it samples under it, not from
+the bar's colour scheme. 1.1.1 guessed "light glass, navy text" for Change;
+the simulator agreed and Pattie's iPhone rendered dark glass, so the button was
+navy on navy. The same lottery put white chevrons and white segment labels on
+pale glass. Nothing on the bar may depend on what the glass decides.
+
+## 8. Native feel
 
 - Real `NavigationStack` with a real navigation path, so the system back button
   and the back-swipe work. Ask Pattie drives one.
@@ -128,9 +149,28 @@ is; they are not decoration.
 - `.inline` navigation titles where a screen already draws its own header, so a
   large title does not leave an empty navy band above a card that repeats it.
 
-## 8. The weekly audit
+## 9. The audit, and what it must measure
 
-Twenty minutes, in the simulator, in **both** colour schemes:
+Before any release with UI changes, run both measured suites on **two** lanes,
+the iOS 26 phone (`agent-sim checkout ironsplits --slot 1`) and the default
+iOS 27 phone, and in both schemes:
+
+```
+xcodebuild test ... -only-testing:IronSplitsUITests/ChromeLegibilityUITests
+xcrun simctl ui <udid> appearance light   # then dark
+TEST_RUNNER_IRON_SPLITS_AUDIT_APPEARANCE=light xcodebuild test ... \
+  -only-testing:IronSplitsUITests/DesignAuditUITests/testEveryScreen
+```
+
+`ChromeLegibilityUITests` fails any bar control under 4.5:1 contrast and any
+text that runs off the screen edge. `DesignAuditUITests` runs the same two
+checks on every screenshot it takes. Then export the attachments
+(`xcrun xcresulttool export attachments`) and look at every screen. A test that
+only asserts an element *exists* proves nothing about whether anyone can see
+it; that gap is how 1.1.1 shipped. A new screen or bar control is not done until
+the audit walk reaches it.
+
+The questions to ask of every screenshot:
 
 1. Any font that is not SF, or a fourth weight?
 2. Any padding that is not on the 4pt scale?

@@ -1,1 +1,1 @@
-Memperbaiki pemuatan hasil lomba besar dan pencarian nama dengan banyak hasil.
+Tombol ganti atlet dan tombol lain di bilah atas kini mudah dibaca di semua iPhone. Statistik karier tidak lagi terpotong, dan mode gelap lebih jelas.

@@ -1,1 +1,1 @@
-Fixes large race fields and busy name searches that failed to load.
+The Change athlete button and other top-bar buttons are now easy to read on every iPhone. Career stats no longer cut off, and dark mode is clearer.

@@ -1,1 +1,1 @@
-S'ha corregit la càrrega de les classificacions de curses grans i de les cerques amb molts resultats.
+El botó per canviar d'atleta i els altres botons de la barra superior ara es llegeixen bé a tots els iPhone. Les estadístiques de la carrera ja no es tallen i el mode fosc és més clar.

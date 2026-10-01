@@ -6,7 +6,6 @@ struct LockerView: View {
     @EnvironmentObject private var notes: RaceNotesStore
     @EnvironmentObject private var pattie: PattieMode
     @EnvironmentObject private var settings: AppSettings
-    @Environment(\.colorScheme) private var colorScheme
 
     @State private var showingAthleteSearch = false
     @State private var showingAddRegistration = false
@@ -29,20 +28,17 @@ struct LockerView: View {
             .navigationBarTitleDisplayMode(.inline)
             .triNavBar()
             .toolbar {
-                ToolbarItemGroup(placement: .topBarTrailing) {
+                TriBarItem(placement: .topBarTrailing) {
                     Button {
                         pattie.react(.selection)
                         showingAthleteSearch = true
                     } label: {
-                        Text("Change")
-                            .font(TriType.smallBold)
-                            .foregroundStyle(changeActionForeground)
-                            .padding(.horizontal, TriSpace.x3)
-                            .frame(minWidth: TriGeo.tapTarget, minHeight: TriGeo.tapTarget)
+                        TriBarLabel(title: "Change", systemImage: "person.2")
                     }
                     .buttonStyle(.triPressSilent)
                     .accessibilityLabel("Change athlete")
-
+                }
+                TriBarItem(placement: .topBarTrailing) {
                     Menu {
                         Button {
                             showingAddRegistration = true
@@ -56,11 +52,7 @@ struct LockerView: View {
                             Label("Refresh results", systemImage: "arrow.clockwise")
                         }
                     } label: {
-                        Image(systemName: "ellipsis")
-                            .font(.system(size: 15, weight: .bold))
-                            .foregroundStyle(TriPalette.inkOnDark)
-                            .frame(width: TriGeo.tapTarget, height: TriGeo.tapTarget)
-                            .triToolbarCircleBackground()
+                        TriBarLabel(systemImage: "ellipsis")
                     }
                     .accessibilityLabel("More locker actions")
                 }
@@ -90,7 +82,7 @@ struct LockerView: View {
         switch state {
         case .loading where locker.results.isEmpty:
             VStack(spacing: TriSpace.x3) {
-                ProgressView().tint(TriPalette.deep)
+                ProgressView().tint(TriPalette.inkSecondary)
                 Text("Pulling your results…")
                     .font(TriType.small)
                     .foregroundStyle(TriPalette.inkTertiary)
@@ -120,18 +112,22 @@ struct LockerView: View {
 
     private var list: some View {
         List {
+            // The header is its own section with a clear row, so it keeps all
+            // four rounded corners. Sharing a section with the search field
+            // gave the inset-grouped clip the field's top corners and left the
+            // card square on top.
             Section {
                 raceSearchField
-                    .listRowInsets(EdgeInsets(top: TriSpace.x2, leading: TriGeo.padPage,
-                                              bottom: TriSpace.x2, trailing: TriGeo.padPage))
-                    .listRowBackground(TriPalette.canvas)
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)
-
+            }
+            Section {
                 LockerHeader(athlete: locker.athlete,
                              results: locker.results,
                              lastRefreshed: locker.lastRefreshed)
                     .listRowInsets(EdgeInsets())
-                    .listRowBackground(TriPalette.canvas)
+                    .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)
             }
 
@@ -146,15 +142,16 @@ struct LockerView: View {
                 }
             }
 
-            if locker.availableKinds.count > 1 {
-                Section {
-                    kindPicker
-                        .listRowInsets(EdgeInsets(top: 0, leading: TriGeo.padPage, bottom: TriSpace.x2, trailing: TriGeo.padPage))
-                        .listRowBackground(Color.clear)
-                }
-            }
-
+            // Both filter rows share one section: as two sections they each
+            // took a full inset-grouped gap and floated apart.
             Section {
+                if locker.availableKinds.count > 1 {
+                    kindPicker
+                        .listRowInsets(EdgeInsets(top: 0, leading: TriGeo.padPage,
+                                                  bottom: TriSpace.x1, trailing: TriGeo.padPage))
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                }
                 HStack(spacing: TriSpace.x2) {
                     TriChip(title: "Races", isSelected: !showingRankings) {
                         showingRankings = false
@@ -170,6 +167,7 @@ struct LockerView: View {
                 .listRowInsets(EdgeInsets(top: TriSpace.x1, leading: TriGeo.padPage,
                                           bottom: TriSpace.x1, trailing: TriGeo.padPage))
                 .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
             }
 
             if showingRankings {
@@ -231,6 +229,7 @@ struct LockerView: View {
             }
         }
         .listStyle(.insetGrouped)
+        .listSectionSpacing(TriSpace.x4)
         .scrollContentBackground(.hidden)
     }
 
@@ -266,12 +265,6 @@ struct LockerView: View {
         .padding(.horizontal, TriSpace.x3)
         .frame(maxWidth: .infinity, minHeight: TriGeo.tapTarget, alignment: .leading)
         .background(TriPalette.surfaceAlt, in: Capsule())
-    }
-
-    private var changeActionForeground: Color {
-        // iOS 26 groups toolbar actions on a light glass capsule in light mode.
-        if #available(iOS 26.0, *), colorScheme == .light { return TriPalette.deep }
-        return TriPalette.inkOnDark
     }
 
     private var kindPicker: some View {
@@ -389,22 +382,7 @@ private struct LockerHeader: View {
                 }
             }
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: TriSpace.x6) {
-                    StatTile(value: "\(summary.finishes)", caption: "Finishes", tint: TriPalette.inkOnDark)
-                    if summary.fullDistance > 0 {
-                        StatTile(value: "\(summary.fullDistance)", caption: "Full", tint: TriPalette.inkOnDark)
-                    }
-                    if summary.halfDistance > 0 {
-                        StatTile(value: "\(summary.halfDistance)", caption: "Half", tint: TriPalette.inkOnDark)
-                    }
-                    if summary.podiums > 0 {
-                        StatTile(value: "\(summary.podiums)", caption: "Podiums", tint: TriPalette.sunrise)
-                    }
-                }
-                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                .padding(.vertical, TriSpace.x1)
-            }
+            CareerStatsRow(summary: summary)
 
             if let years = summary.years {
                 Text("Racing since " + String(years.lowerBound))
@@ -420,7 +398,7 @@ private struct LockerHeader: View {
         }
         .padding(TriGeo.padCard)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(TriPalette.deep)
+        .background(TriPalette.deep, in: RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous))
     }
 }
 
@@ -474,13 +452,17 @@ private struct SplitStandingRow: View {
 
             Spacer(minLength: TriSpace.x2)
 
+            // Times never wrap: the race name yields first. "13:49:39" broke
+            // onto two lines when the name had layout priority.
             VStack(alignment: .trailing, spacing: TriSpace.x1) {
                 Text(TimeFormat.hms(standing.seconds))
                     .font(TriType.statMed)
                     .foregroundStyle(TriPalette.ink)
+                    .fixedSize()
                 Text(standing.gapToBest == 0 ? "Personal best" : "+\(TimeFormat.hms(standing.gapToBest))")
                     .font(TriType.small)
                     .foregroundStyle(standing.gapToBest == 0 ? TriPalette.sunrise : TriPalette.inkTertiary)
+                    .fixedSize()
             }
         }
         .frame(minHeight: TriGeo.tapTarget)

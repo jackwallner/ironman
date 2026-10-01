@@ -1,1 +1,1 @@
-Korjattu suurten kilpailujen tulosten ja monta osumaa tuottavien hakujen lataus.
+Urheilijan vaihtopainike ja muut yläpalkin painikkeet ovat nyt helppolukuisia kaikilla iPhoneilla. Uratilastot eivät enää katkea, ja tumma tila on selkeämpi.

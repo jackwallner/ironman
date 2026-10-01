@@ -1,1 +1,1 @@
-Behebt Ladefehler bei großen Rennen und Namenssuchen mit vielen Treffern.
+Die Schaltfläche zum Wechseln des Athleten und die übrigen Schaltflächen oben sind jetzt auf jedem iPhone gut lesbar. Karrierestatistiken werden nicht mehr abgeschnitten, und der Dunkelmodus ist klarer.

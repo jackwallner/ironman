@@ -1,1 +1,1 @@
-Naprawiono wczytywanie wyników dużych zawodów i wyszukiwań z wieloma wynikami.
+Przycisk zmiany zawodnika i pozostałe przyciski na górnym pasku są teraz czytelne na każdym iPhonie. Statystyki kariery nie są już ucinane, a tryb ciemny jest wyraźniejszy.

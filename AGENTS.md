@@ -18,6 +18,13 @@ does not reach UIKit-backed chrome; a literal `Color(red:...)` in a view is a
 dark-mode bug waiting to happen. Never hardcode a colour, a padding, or a corner
 radius in a view.
 
+**UI changes are not verified until they are measured.** Run
+`ChromeLegibilityUITests` and `DesignAuditUITests` (both schemes, iOS 26 lane
+and iOS 27 lane) per DESIGN.md section 9, then look at every exported
+screenshot. Bar controls go through `TriBarItem`/`TriBarLabel`, never the
+system glass. 1.1.1 shipped an unreadable Change button because a test only
+checked that it existed.
+
 ## Tech Stack
 - Swift 6 / SwiftUI (strict concurrency), iOS 17+
 - XcodeGen (`project.yml`). Targets: `IronSplits`, `IronSplitsTests`, `IronSplitsUITests`

@@ -47,7 +47,7 @@ struct RaceDetailView: View {
         .background(TriPalette.canvas)
         .navigationTitle(result.raceName)
         .navigationBarTitleDisplayMode(.inline)
-        .triNavBar()
+        .triNavBar(pushed: true)
         .sheet(isPresented: $editingNote) {
             RaceNoteEditor(note: notes.note(for: result.id), raceName: result.raceName) { updated in
                 notes.save(updated)
@@ -188,7 +188,7 @@ struct RaceDetailView: View {
                 switch fieldState {
                 case .idle, .loading:
                     HStack(spacing: TriSpace.x2) {
-                        ProgressView().tint(TriPalette.deep)
+                        ProgressView().tint(TriPalette.inkSecondary)
                         Text("Loading the field…")
                             .font(TriType.small)
                             .foregroundStyle(TriPalette.inkTertiary)
@@ -493,20 +493,18 @@ struct RaceNoteEditor: View {
             .triNavBar()
             .interactiveDismissDisabled(isDirty)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { requestDismiss() }
-                        .foregroundStyle(TriPalette.inkOnDark)
-                        .padding(.horizontal, TriSpace.x4)
-                        .triTapTarget()
+                TriBarItem(placement: .cancellationAction) {
+                    Button { requestDismiss() } label: { TriBarLabel(title: "Cancel") }
+                        .buttonStyle(.triPressSilent)
                 }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
+                TriBarItem(placement: .confirmationAction) {
+                    Button {
                         onSave(note)
                         dismiss()
+                    } label: {
+                        TriBarLabel(title: "Save", emphasized: true)
                     }
-                    .foregroundStyle(TriPalette.inkOnDark)
-                    .padding(.horizontal, TriSpace.x4)
-                    .fontWeight(.semibold)
+                    .buttonStyle(.triPressSilent)
                 }
             }
             .confirmationDialog("Discard unsaved note changes?",

@@ -42,7 +42,7 @@ struct AskPattieGoalList: View {
 
     var body: some View {
         if model.guide.goals.isEmpty && model.isLoading {
-            ProgressView().tint(TriPalette.deep)
+            ProgressView().tint(TriPalette.inkSecondary)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else if model.guide.goals.isEmpty {
             TriPlaceholder(systemImage: "questionmark.bubble",
@@ -110,7 +110,7 @@ struct AskPattieTopicList: View {
         }
         .navigationTitle(goal?.title ?? "Ask Pattie")
         .navigationBarTitleDisplayMode(.inline)
-        .triNavBar()
+        .triNavBar(pushed: true)
     }
 }
 
@@ -136,7 +136,7 @@ struct AskPattieAnswerList: View {
         }
         .navigationTitle(model.guide.topic(topicID)?.title ?? "Pointers")
         .navigationBarTitleDisplayMode(.inline)
-        .triNavBar()
+        .triNavBar(pushed: true)
         .task { pattie.fire(.askAnswered, petState: .forTopicID(topicID)) }
         .onDisappear {
             // Replace the answer clip with a useful back-navigation reaction.
@@ -238,7 +238,7 @@ struct AskPattieAnswerCard: View {
                     } label: {
                         Label("Full clip", systemImage: "play.rectangle")
                             .font(TriType.smallBold)
-                            .foregroundStyle(TriPalette.deep)
+                            .foregroundStyle(TriPalette.ink)
                             .padding(.horizontal, TriSpace.x4)
                             .frame(minHeight: TriGeo.tapTarget)
                             .overlay(Capsule().stroke(TriPalette.hairline, lineWidth: TriGeo.hairline))

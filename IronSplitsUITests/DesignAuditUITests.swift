@@ -8,11 +8,13 @@ import XCTest
 /// `Form` rows, sheets) follows the scheme, and the only way to know it actually
 /// does is to look at the same screen twice.
 ///
-/// It is a screenshot harness, not an assertion suite: it claims one athlete,
-/// walks every screen, and leaves the attachments on the result bundle for the
-/// twenty-minute audit in `project-docs/design/DESIGN.md`. The handful of assertions it does make
-/// are only there to fail loudly if a screen never rendered, so an empty
-/// screenshot is not mistaken for a clean one.
+/// It claims one athlete, walks every screen, and leaves the attachments on the
+/// result bundle for the audit in `project-docs/design/DESIGN.md`. Every
+/// screenshot also runs two measured checks from `UIAuditAssertions`: each
+/// navigation bar control must read at 4.5:1 or better, and no text may run
+/// off the screen edge. Those exist because 1.1.1 passed this harness with an
+/// unreadable Change button and a clipped Podiums tile; a screenshot nobody
+/// measures is not an audit.
 ///
 /// Run it once per scheme, setting the simulator first:
 ///
@@ -71,6 +73,23 @@ final class DesignAuditUITests: XCTestCase {
         settle()
         shoot(app, "03-locker")
 
+        app.buttons["Change athlete"].tap()
+        XCTAssertTrue(app.navigationBars.buttons["Cancel"].waitForExistence(timeout: 10))
+        settle()
+        shoot(app, "03b-change-athlete")
+        app.navigationBars.buttons["Cancel"].tap()
+
+        app.buttons["More locker actions"].tap()
+        XCTAssertTrue(app.buttons["Refresh results"].waitForExistence(timeout: 5))
+        settle()
+        shoot(app, "03c-locker-menu", measure: false)
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.6)).tap()
+
+        app.buttons["Rankings"].tap()
+        settle()
+        shoot(app, "03d-locker-rankings")
+        app.buttons["Races"].tap()
+
         // Race detail, which is the densest screen and the one with the hero.
         let firstRace = app.buttons.matching(
             NSPredicate(format: "label CONTAINS[c] %@", "IRONMAN")
@@ -82,6 +101,30 @@ final class DesignAuditUITests: XCTestCase {
                       "Race Detail must render for the visual audit")
         settle()
         shoot(app, "04-race-detail")
+        app.swipeUp()
+        settle()
+        shoot(app, "04b-race-detail-field")
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+
+        // Explore: a second athlete's career, pushed from search.
+        app.tabBars.buttons["Explore"].tap()
+        let findRacer = app.buttons.matching(
+            NSPredicate(format: "label CONTAINS[c] %@", "Find a racer")
+        ).firstMatch
+        XCTAssertTrue(findRacer.waitForExistence(timeout: 10))
+        settle()
+        shoot(app, "05a-explore")
+        findRacer.tap()
+        let exploreField = app.textFields["Your name as you registered"]
+        XCTAssertTrue(exploreField.waitForExistence(timeout: 10))
+        exploreField.tap()
+        exploreField.typeText("Pattie Wallner")
+        let exploreMatch = app.staticTexts["Pattie Wallner"].firstMatch
+        XCTAssertTrue(exploreMatch.waitForExistence(timeout: 45), "Explore search should reach the feed")
+        exploreMatch.tap()
+        XCTAssertTrue(app.staticTexts["RACE HISTORY"].waitForExistence(timeout: 40))
+        settle()
+        shoot(app, "05b-explore-athlete")
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
         for (tab, name) in [("Tips", "05-ask-pattie")] {
@@ -178,10 +221,13 @@ final class DesignAuditUITests: XCTestCase {
         _ = XCTWaiter.wait(for: [expectation(description: "settle")], timeout: 1.2)
     }
 
-    private func shoot(_ app: XCUIApplication, _ name: String) {
+    private func shoot(_ app: XCUIApplication, _ name: String, measure: Bool = true) {
         let attachment = XCTAttachment(screenshot: app.screenshot())
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
+        guard measure else { return }
+        assertNavigationBarLegible(app, screen: name)
+        assertNoTextRunsOffScreen(app, screen: name)
     }
 }

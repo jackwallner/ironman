@@ -1,1 +1,1 @@
-Risolto il caricamento delle classifiche delle gare più grandi e delle ricerche con molti risultati.
+Il pulsante per cambiare atleta e gli altri pulsanti della barra in alto ora si leggono bene su ogni iPhone. Le statistiche della carriera non vengono più tagliate e la modalità scura è più chiara.

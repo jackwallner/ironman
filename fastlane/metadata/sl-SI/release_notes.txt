@@ -1,1 +1,1 @@
-Popravljeno nalaganje rezultatov velikih tekem in iskanj z veliko zadetki.
+Gumb za zamenjavo športnika in drugi gumbi v zgornji vrstici so zdaj dobro berljivi na vsakem iPhonu. Statistika kariere se ne odreže več, temni način pa je jasnejši.

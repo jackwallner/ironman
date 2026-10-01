@@ -61,11 +61,9 @@ struct AthleteSearchView: View {
             .triNavBar()
         .toolbar {
                 if !isOnboarding {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") { dismiss() }
-                            .foregroundStyle(TriPalette.inkOnDark)
-                            .padding(.horizontal, TriSpace.x4)
-                            .triTapTarget()
+                    TriBarItem(placement: .cancellationAction) {
+                        Button { dismiss() } label: { TriBarLabel(title: "Cancel") }
+                            .buttonStyle(.triPressSilent)
                     }
                 }
             }
@@ -190,7 +188,7 @@ struct AthleteSearchView: View {
 
     private var searchingState: some View {
         VStack(spacing: TriSpace.x3) {
-            ProgressView().tint(TriPalette.deep)
+            ProgressView().tint(TriPalette.inkSecondary)
             // The deep pass is the slow one, and saying so is the difference
             // between "it's working" and "it's broken".
             Text(phase == .deep
@@ -462,7 +460,7 @@ private struct AthleteRow: View {
             }
             Spacer(minLength: TriSpace.x2)
             if isClaiming {
-                ProgressView().tint(TriPalette.deep)
+                ProgressView().tint(TriPalette.inkSecondary)
             } else {
                 // "At least", because the search reads a capped number of rows:
                 // claiming the athlete is what pulls their complete history.

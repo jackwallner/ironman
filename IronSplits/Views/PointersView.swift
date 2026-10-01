@@ -47,7 +47,7 @@ struct PointersView: View {
             .navigationBarTitleDisplayMode(.inline)
             .triNavBar()
             .toolbar {
-                ToolbarItem(placement: .principal) {
+                TriBarItem(placement: .principal) {
                     PointerModePicker(selection: $mode)
                 }
             }
@@ -86,14 +86,11 @@ private struct PointerModePicker: View {
     @Binding var selection: PointersView.Mode
 
     var body: some View {
-        Picker("Tips", selection: $selection) {
-            ForEach(PointersView.Mode.allCases) { option in
-                Text(option.rawValue).tag(option)
-            }
-        }
-        .pickerStyle(.segmented)
-        .tint(TriPalette.deep)
-        .accessibilityLabel("Tips")
+        TriBarSegments(options: PointersView.Mode.allCases,
+                       selection: $selection,
+                       title: \.rawValue)
+            .accessibilityElement(children: .contain)
+            .accessibilityLabel("Tips")
     }
 }
 
@@ -121,7 +118,7 @@ struct PointerLibraryView: View {
     @ViewBuilder
     private var content: some View {
         if isLoading && catalog.pointers.isEmpty {
-            ProgressView().tint(TriPalette.deep)
+            ProgressView().tint(TriPalette.inkSecondary)
         } else if let loadError {
             TriPlaceholder(systemImage: "wifi.exclamationmark",
                            title: "Couldn't load episodes",
@@ -327,12 +324,18 @@ private struct PointerRow: View {
         HStack(spacing: TriSpace.x3) {
             thumbnail
 
+            // Duration and size ride on the episode line instead of a third
+            // column, which squeezed the summary into a five-line sliver.
             VStack(alignment: .leading, spacing: TriSpace.x1) {
                 HStack(spacing: TriSpace.x1) {
-                    if let episode = pointer.episode {
-                        Text("EP " + String(episode))
+                    let eyebrow = [pointer.episode.map { "EP " + String($0) },
+                                   pointer.durationText, pointer.fileSizeText].compactMap { $0 }
+                    if !eyebrow.isEmpty {
+                        Text(eyebrow.joined(separator: " · "))
                             .font(TriType.micro)
+                            .monospacedDigit()
                             .foregroundStyle(TriPalette.inkTertiary)
+                            .lineLimit(1)
                     }
                     if isDownloaded {
                         Image(systemName: "arrow.down.circle.fill")
@@ -352,19 +355,11 @@ private struct PointerRow: View {
                         .font(TriType.small)
                         .foregroundStyle(TriPalette.inkTertiary)
                         .multilineTextAlignment(.leading)
-                        .fixedSize(horizontal: false, vertical: true)
+                        .lineLimit(2)
                 }
             }
 
-            Spacer(minLength: TriSpace.x2)
-
-            let metadata = [pointer.durationText, pointer.fileSizeText].compactMap { $0 }
-            if !metadata.isEmpty {
-                Text(metadata.joined(separator: " · "))
-                    .font(TriType.statSmall)
-                    .foregroundStyle(TriPalette.inkTertiary)
-                    .fixedSize(horizontal: true, vertical: false)
-            }
+            Spacer(minLength: 0)
         }
         .frame(minHeight: TriGeo.tapTarget + TriSpace.x4)
         .triCard(padding: TriSpace.x3)
@@ -378,7 +373,7 @@ private struct PointerRow: View {
     private var thumbnail: some View {
         ZStack {
             RoundedRectangle(cornerRadius: TriGeo.radiusInner, style: .continuous)
-                .fill(TriPalette.deep.opacity(0.10))
+                .fill(TriPalette.surfaceSunk)
 
             if let thumb = pointer.thumbnailURL.flatMap(URL.init(string:)) {
                 AsyncImage(url: thumb) { image in
@@ -427,13 +422,13 @@ struct PointerPlayerSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .triNavBar()
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Done") {
+                TriBarItem(placement: .cancellationAction) {
+                    Button {
                         dismiss()
+                    } label: {
+                        TriBarLabel(title: "Done", emphasized: true)
                     }
-                        .foregroundStyle(TriPalette.inkOnDark)
-                        .padding(.horizontal, TriSpace.x4)
-                        .triTapTarget()
+                    .buttonStyle(.triPressSilent)
                 }
             }
         }

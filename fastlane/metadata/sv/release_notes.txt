@@ -1,1 +1,1 @@
-Åtgärdar laddning av resultat för stora lopp och namnsökningar med många träffar.
+Knappen för att byta idrottare och de andra knapparna i toppfältet är nu lätta att läsa på alla iPhone. Karriärstatistiken klipps inte längre av och mörkt läge är tydligare.

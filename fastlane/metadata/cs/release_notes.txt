@@ -1,1 +1,1 @@
-Opraveno načítání výsledků velkých závodů a vyhledávání s mnoha výsledky.
+Tlačítko pro změnu sportovce a další tlačítka v horní liště jsou nyní dobře čitelná na každém iPhonu. Statistiky kariéry se už neořezávají a tmavý režim je přehlednější.

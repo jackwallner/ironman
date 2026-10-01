@@ -1,1 +1,1 @@
-Javítottuk a nagy versenyek eredményeinek és a sok találatos kereséseknek a betöltését.
+A sportolóváltás gombja és a felső sáv többi gombja mostantól minden iPhone-on jól olvasható. A pályafutás statisztikái már nem vágódnak le, és a sötét mód is áttekinthetőbb.

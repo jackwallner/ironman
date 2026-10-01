@@ -1,1 +1,1 @@
-Retter indlæsning af resultater for store løb og navnesøgninger med mange hits.
+Knappen til at skifte atlet og de andre knapper i topbjælken er nu lette at læse på alle iPhones. Karrierestatistikken bliver ikke længere skåret af, og mørk tilstand er tydeligere.
