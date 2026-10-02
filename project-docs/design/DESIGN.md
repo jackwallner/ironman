@@ -156,9 +156,9 @@ the iOS 26 phone (`agent-sim checkout ironsplits --slot 1`) and the default
 iOS 27 phone, and in both schemes:
 
 ```
-xcodebuild test ... -only-testing:IronSplitsUITests/ChromeLegibilityUITests
+xcodebuild test -scheme IronSplitsUITests ... -only-testing:IronSplitsUITests/ChromeLegibilityUITests
 xcrun simctl ui <udid> appearance light   # then dark
-TEST_RUNNER_IRON_SPLITS_AUDIT_APPEARANCE=light xcodebuild test ... \
+TEST_RUNNER_IRON_SPLITS_AUDIT_APPEARANCE=light xcodebuild test -scheme IronSplitsUITests ... \
   -only-testing:IronSplitsUITests/DesignAuditUITests/testEveryScreen
 ```
 

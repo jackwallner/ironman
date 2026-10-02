@@ -20,7 +20,7 @@ ATTACHMENTS="$TEMP_ROOT/attachments"
 
 xcodebuild test \
   -project IronSplits.xcodeproj \
-  -scheme IronSplits \
+  -scheme IronSplitsUITests \
   -destination "id=$UDID" \
   -parallel-testing-enabled NO \
   -collect-test-diagnostics never \

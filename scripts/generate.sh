@@ -14,11 +14,11 @@ set -euo pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR/.."
 
-SCHEME="IronSplits.xcodeproj/xcshareddata/xcschemes/IronSplits.xcscheme"
 CONFIG="../../IronSplits/Services/Products.storekit"
 
 xcodegen generate
 
+for SCHEME in IronSplits.xcodeproj/xcshareddata/xcschemes/{IronSplits,IronSplitsUITests}.xcscheme; do
 if grep -q "StoreKitConfigurationFileReference" "$SCHEME" && \
    /usr/bin/python3 - "$SCHEME" "$CONFIG" <<'PY'
 import re, sys
@@ -46,5 +46,6 @@ with open(path, "w") as handle:
     handle.write(scheme.replace(block, patched))
 PY
 then
-  echo "==> Patched StoreKit configuration into the scheme's TestAction."
+  echo "==> Patched StoreKit configuration into $(basename "$SCHEME" .xcscheme)'s TestAction."
 fi
+done

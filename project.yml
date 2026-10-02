@@ -64,6 +64,22 @@ targets:
         TEST_TARGET_NAME: IronSplits
 
 schemes:
+  # UI tests are slow, so they get their own scheme and stay out of the
+  # default `xcodebuild test -scheme IronSplits` run.
+  IronSplitsUITests:
+    build:
+      targets:
+        IronSplits: all
+        IronSplitsUITests: [test]
+    run:
+      config: Debug
+      storeKitConfiguration: IronSplits/Services/Products.storekit
+    test:
+      config: Debug
+      targets:
+        - IronSplitsUITests
+      gatherCoverageData: false
+
   IronSplits:
     build:
       targets:
@@ -77,7 +93,6 @@ schemes:
       config: Debug
       targets:
         - IronSplitsTests
-        - IronSplitsUITests
       gatherCoverageData: false
     profile:
       config: Release
