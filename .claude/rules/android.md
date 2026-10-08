@@ -95,16 +95,19 @@ cd android
 ./gradlew bundleRelease
 ```
 
+All IM Tri Tracker Android emulator work runs on the remote Pro. Do not boot or
+target Android emulators on the Air. This applies to debug installs, manual
+checks, screenshots, logcat, connected tests, Play Store installs, and billing
+checks. Run ADB and emulator-console commands on Pro over SSH, and do not forward
+ADB or emulator-console ports to the Air.
+
 Connected tests require an API 36 Google Play AVD and intentionally exercise
 the live timing feed. They run under the test orchestrator with
-`clearPackageData`, so each starts from a clean install. Start the AVD on its own
-console port for local Air testing (`-port 5580`, serial `emulator-5580`) and
-set `ANDROID_SERIAL`. Other sessions on the Air drive emulators too. An
-unqualified `adb emu kill` stops whichever emulator is attached to that ADB
-server on port 5554. Remote Pro testing uses the separate connection and
-serial documented below. `./gradlew assembleQa` builds the shipped R8
-configuration with the debug key and no RevenueCat key, for emulator checks of
-the minified app without touching the production project.
+`clearPackageData`, so each starts from a clean install. Run them on Pro using
+the isolated AVD and `ANDROID_SERIAL` documented below. `./gradlew assembleQa`
+builds the shipped R8 configuration with the debug key and no RevenueCat key,
+for emulator checks of the minified app without touching the production
+project.
 
 Capture and inspect screenshots in both light and dark mode. Check the built AAB's package name, version code, target SDK, signing
 certificate, permissions, and bundled assets before upload.
@@ -128,7 +131,7 @@ voice metadata, and Pattie's original `.m4a` clips. After changing any source in
 `python3 scripts/sync-android-assets.py` and commit the resulting Android asset
 changes with the source update.
 
-## Remote MacBook Pro AVD and Android tests
+## Android emulator host: remote MacBook Pro
 
 Use the common workflow in the `android-dev` skill section **Remote MacBook
 Pro Play AVD**. Current Iron Splits host details:
@@ -155,15 +158,15 @@ Pro Play AVD**. Current Iron Splits host details:
   install this repo's Debug APK on it: both builds use
   `com.jackwallner.ironman`, but the Play and Debug signatures differ. Never
   uninstall the Play build to make instrumentation tests install.
-- Connected tests must run on Pro itself. A forwarded remote ADB list showed
-  the device to Air, but Gradle/UTP could not use it through the tunnel. Run
-  Gradle over SSH from a temporary copy of the current `android/` worktree.
-  Do not forward ADB or emulator console ports for Gradle tests.
+- Connected tests and every other emulator task run on Pro itself. A forwarded
+  remote ADB list showed the device to Air, but Gradle/UTP could not use it
+  through the tunnel. Run Gradle over SSH from a temporary copy of the current
+  `android/` worktree. Do not forward ADB or emulator console ports to the Air.
 
 ### Start or reuse the Play AVD
 
 Check the Pro ADB server before launching an emulator. If `small_phone` is
-already running, reuse it. Otherwise start it headlessly from the Air:
+already running, reuse it. Otherwise start it headlessly on Pro through SSH:
 
 ```sh
 ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=yes \
@@ -283,7 +286,7 @@ ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=yes \
   '"/Users/jackwallner/Library/Android/sdk/platform-tools/adb" start-server'
 ```
 
-Launch this AVD headlessly on port `5560` from the Air:
+Launch this AVD headlessly on port `5560` on Pro through SSH:
 
 ```sh
 ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=yes \
@@ -317,9 +320,9 @@ export ANDROID_SERIAL=emulator-5560
 
 Check Gradle output and `app/build/reports/androidTests/connected/debug/index.html`
 for a nonzero executed count. A successful Gradle exit or a listed device
-alone is not a test pass. Do not use `adb kill-server`; do not use the Air's local
-`emulator-5580` for these remote commands. Avoid the zsh variable name `path`,
-which is tied to `PATH`; use `remote_dir` or another distinct variable name.
+alone is not a test pass. Do not use `adb kill-server`. Avoid the zsh variable
+name `path`, which is tied to `PATH`; use `remote_dir` or another distinct
+variable name.
 
 After tests, stop the exact serial on Pro:
 
