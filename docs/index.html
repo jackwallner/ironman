@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/png" sizes="256x256" href="icon_256.png" />
     <link rel="apple-touch-icon" href="icon_256.png" />
-    <title>IM Tri Tracker: Race Results, Ranked by Split</title>
+    <title>IM Tri Tracker: Race Results, Ranked by Split on iPhone and Android</title>
     <meta
       name="description"
       content="Find published full and half-distance triathlon results, rank every split within its distance, and read the field behind each race. Personal bests, progression and Pattie's filmed race-day tips stay free."
@@ -14,7 +14,7 @@
     <meta name="apple-itunes-app" content="app-id=6803727074" />
     <meta
       name="keywords"
-      content="triathlon race results, race splits, swim bike run, transition times, personal bests, race history, full distance, half distance, race book, iPhone"
+      content="triathlon race results, race splits, swim bike run, transition times, personal bests, race history, full distance, half distance, race book, iPhone, Android"
     />
     <meta
       property="og:title"
@@ -49,7 +49,7 @@
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
         "name": "IM Tri Tracker",
-        "operatingSystem": "iOS 17.0",
+        "operatingSystem": "iOS 17.0 or later, Android 8.0 or later",
         "applicationCategory": "SportsApplication",
         "offers": {
           "@type": "Offer",
@@ -59,9 +59,12 @@
         },
         "description": "Find published full and half-distance triathlon results, rank every split within its distance, and read the field behind each race. Personal bests, progression and Pattie's filmed race-day tips stay free.",
         "url": "https://jackwallner.com/ios/ironman/",
-        "downloadUrl": "https://apps.apple.com/us/app/im-tri-tracker/id6803727074?uo=4",
+        "downloadUrl": [
+          "https://apps.apple.com/us/app/im-tri-tracker/id6803727074?uo=4",
+          "https://play.google.com/store/apps/details?id=com.jackwallner.ironman"
+        ],
         "screenshot": "https://jackwallner.github.io/ironman/appstore-screenshot-01.png",
-        "softwareVersion": "1.1.0",
+        "softwareVersion": "iOS 1.1.0, Android 1.0.0",
         "author": { "@type": "Person", "name": "Jack Wallner" }
       }
     </script>
@@ -75,13 +78,11 @@
             >IM Tri Tracker</span
           ></a
         >
-        <a class="nav-link" href="https://apps.apple.com/us/app/im-tri-tracker/id6803727074?uo=4"
-          >Download</a
-        >
+        <a class="nav-link" href="#download">Download</a>
       </div>
     </nav>
 
-    <section class="hero">
+    <section class="hero" id="download">
       <h1>Your triathlon history, <span>ranked by split</span></h1>
       <p class="tagline">
         Search your registered name for published full and half-distance
@@ -89,11 +90,16 @@
         places and field context.
       </p>
       <p class="platforms">
-        iPhone &middot; Full and half distance &middot; No account
+        iPhone and Android &middot; Full and half distance &middot; No account
       </p>
-      <a class="download-btn" href="https://apps.apple.com/us/app/im-tri-tracker/id6803727074?uo=4"
-        >Download on the App Store</a
-      >
+      <div class="download-actions">
+        <a class="download-btn" href="https://apps.apple.com/us/app/im-tri-tracker/id6803727074?uo=4"
+          >Download on the App Store</a
+        >
+        <a class="download-btn" href="https://play.google.com/store/apps/details?id=com.jackwallner.ironman"
+          >Get it on Google Play</a
+        >
+      </div>
     </section>
 
     <section class="showcase" aria-label="Screens from IM Tri Tracker">
@@ -454,11 +460,11 @@
             <table class="specs-table">
               <tr>
                 <td>Platform</td>
-                <td>iPhone &middot; iOS 17 or later</td>
+                <td>iPhone &middot; iOS 17 or later &middot; Android 8 or later</td>
               </tr>
               <tr>
                 <td>Framework</td>
-                <td>SwiftUI &middot; Swift 6 &middot; RevenueCat</td>
+                <td>SwiftUI &middot; Swift 6 &middot; Jetpack Compose &middot; Kotlin &middot; RevenueCat</td>
               </tr>
               <tr>
                 <td>Data</td>
@@ -537,9 +543,14 @@
     <section class="cta">
       <h2>Find your races by name.</h2>
       <p>Free to download. No account required.</p>
-      <a class="download-btn" href="https://apps.apple.com/us/app/im-tri-tracker/id6803727074?uo=4"
-        >Download on the App Store</a
-      >
+      <div class="download-actions">
+        <a class="download-btn" href="https://apps.apple.com/us/app/im-tri-tracker/id6803727074?uo=4"
+          >Download on the App Store</a
+        >
+        <a class="download-btn" href="https://play.google.com/store/apps/details?id=com.jackwallner.ironman"
+          >Get it on Google Play</a
+        >
+      </div>
     </section>
 
     <footer class="site-footer">
