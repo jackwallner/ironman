@@ -37,8 +37,8 @@ android {
         applicationId = "com.jackwallner.ironman"
         minSdk = 26
         targetSdk = 36
-        versionCode = 3
-        versionName = "1.0.0"
+        versionCode = 4
+        versionName = "1.0.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // Every connected test starts from a clean install: no locker, no purchase.
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
@@ -117,6 +117,8 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer:1.11.1")
     implementation("androidx.media3:media3-ui:1.11.1")
     implementation("androidx.browser:browser:1.10.0")
+    // Play SDK Index flags fragment 1.1.0, pulled in transitively by play-services-basement.
+    implementation("androidx.fragment:fragment:1.9.1")
     implementation("com.google.android.play:review-ktx:2.0.2")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
