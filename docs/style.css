@@ -164,7 +164,7 @@ a {
 .pattie-feature {
   padding: 80px 0;
   background: var(--deep);
-  color: var(--page);
+  color: #ffffff;
 }
 .pattie-feature-grid {
   display: grid;
@@ -174,15 +174,6 @@ a {
 }
 .pattie-feature-copy {
   max-width: 560px;
-}
-.pattie-feature .label {
-  display: inline-block;
-  margin-bottom: 12px;
-  color: var(--sunrise);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
 }
 .pattie-feature h2 {
   margin: 0 0 12px;
@@ -233,15 +224,6 @@ a {
   max-width: 640px;
   margin: 0 auto 40px;
   text-align: center;
-}
-.pattie-gallery-header .label {
-  display: inline-block;
-  margin-bottom: 12px;
-  color: var(--sunrise);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
 }
 .pattie-gallery-header h2 {
   margin: 0 0 10px;
@@ -345,7 +327,6 @@ a {
   padding: 36px 32px;
   background: var(--surface);
 }
-.feature-card .label,
 .more-info-section h3 {
   display: inline-block;
   margin-bottom: 10px;
@@ -354,9 +335,6 @@ a {
   font-weight: 600;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-}
-.feature-card .label.plus {
-  color: var(--sunrise);
 }
 .feature-card h3 {
   margin: 0 0 8px;
