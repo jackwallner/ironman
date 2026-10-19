@@ -89,11 +89,14 @@ Run all of the following before release:
 
 ```bash
 cd android
-./gradlew testDebugUnitTest
-./gradlew connectedDebugAndroidTest
-./gradlew assembleRelease
+fm-gradle testDebugUnitTest     # runs on jmbp, copies reports back
+# connectedDebugAndroidTest: on Pro against the isolated AVD, see below
+./gradlew assembleRelease       # signed, stays on the Air with the keystore
 ./gradlew bundleRelease
 ```
+
+Never run any other Gradle task on the Air: use `fm-gradle <tasks>` from
+`android/`.
 
 All IM Tri Tracker Android emulator work runs on the remote Pro. Do not boot or
 target Android emulators on the Air. This applies to debug installs, manual
@@ -104,7 +107,7 @@ ADB or emulator-console ports to the Air.
 Connected tests require an API 36 Google Play AVD and intentionally exercise
 the live timing feed. They run under the test orchestrator with
 `clearPackageData`, so each starts from a clean install. Run them on Pro using
-the isolated AVD and `ANDROID_SERIAL` documented below. `./gradlew assembleQa`
+the isolated AVD and `ANDROID_SERIAL` documented below. `fm-gradle assembleQa`
 builds the shipped R8 configuration with the debug key and no RevenueCat key,
 for emulator checks of the minified app without touching the production
 project.
@@ -145,11 +148,8 @@ Pro Play AVD**. Current Iron Splits host details:
   absolute `adb` and `emulator` paths because they are not on Pro's default
   noninteractive SSH PATH.
 - Pro's normal Java is 12. This project requires Java 17 for Gradle 9.7 and
-  Android Gradle Plugin 9.4.1. Use Android Studio's JBR if available; otherwise
-  download a temporary x86_64 Temurin 17 runtime from [Adoptium's JDK 17
-  releases](https://adoptium.net/temurin/releases/?version=17), verify the
-  published SHA-256, and remove it after testing. Do not install Java globally
-  for this task.
+  Android Gradle Plugin 9.4.1. Use the installed JDK 17 at
+  `$HOME/jdks/temurin-17/Contents/Home`. Do not install Java globally.
 - Play AVD `small_phone`: Google Play API 36.1 x86_64, serial
   `emulator-5554`, console port `5554`, 720 by 1280, 2 vCPUs, 2 GB RAM, 6 GB
   data partition, 256 MB heap. This AVD contains the signed-in Play account
@@ -299,20 +299,18 @@ Wait until ADB reports `emulator-5560 device` and
 do not start Gradle while the device is `offline` or still booting.
 
 Run the tests in an SSH shell on Pro from the temporary checkout. Set
-`JAVA_HOME` to the verified temporary JDK's `Contents/Home` and target the test
-AVD serial:
+`JAVA_HOME` to the Pro's JDK 17 and target the test AVD serial:
 
 ```sh
 ssh -tt -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=yes \
   jackwallner@192.168.4.25
 ```
 
-Then, in that Pro shell, use the actual unique directory and JDK path created
-for this run:
+Then, in that Pro shell, use the actual unique directory created for this run:
 
 ```sh
 cd /tmp/ironsplits-android-test.<unique>/android
-export JAVA_HOME="/tmp/ironsplits-android-test.<unique>/jdk/Contents/Home"
+export JAVA_HOME="$HOME/jdks/temurin-17/Contents/Home"
 export PATH="$JAVA_HOME/bin:$PATH"
 export ANDROID_SERIAL=emulator-5560
 ./gradlew --no-daemon testDebugUnitTest connectedDebugAndroidTest
@@ -342,8 +340,8 @@ ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=yes \
 
 Wait until Pro `adb devices -l` is empty and confirm the emulator process has
 exited. Then delete only
-`ironsplits_agent_test.avd` and its sibling `.ini`, the temporary source tree,
-and any temporary JDK. Use the exact paths created for this run. The production
+`ironsplits_agent_test.avd` and its sibling `.ini`, and the temporary source tree
+(keep `~/jdks/temurin-17`). Use the exact paths created for this run. The production
 Play AVD `small_phone` must remain registered with its userdata intact and be
 shut down. Never pass `-wipe-data`.
 
