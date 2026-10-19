@@ -189,44 +189,11 @@ ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=yes \
 
 ### Run connected tests on an isolated AVD
 
-Pro has no repository checkout or Android `cmdline-tools`/`avdmanager`. From
-the repo root on the Air, create a unique temporary copy of `android/` on Pro.
-The commands below exclude generated files and ignored local properties, then
-stream only the SDK path and Debug/Test Store key into the remote copy:
-
-```sh
-set -e -o pipefail
-remote_test_dir="$(ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=yes \
-  jackwallner@192.168.4.25 'mktemp -d /tmp/ironsplits-android-test.XXXXXX')"
-ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=yes \
-  jackwallner@192.168.4.25 "mkdir -p '$remote_test_dir/android'"
-rsync -a -e 'ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=yes' \
-  --exclude 'build/' --exclude '.gradle/' --exclude 'local.properties' \
-  --exclude 'play-assets/' android/ \
-  "jackwallner@192.168.4.25:$remote_test_dir/android/"
-python3 - <<'PY' | ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=yes \
-  jackwallner@192.168.4.25 \
-  "cat > '$remote_test_dir/android/local.properties' && chmod 600 '$remote_test_dir/android/local.properties'"
-from pathlib import Path
-
-properties = {}
-for line in Path("android/local.properties").read_text().splitlines():
-    if line.lstrip().startswith("#") or "=" not in line:
-        continue
-    key, value = line.split("=", 1)
-    properties[key.strip()] = value.strip()
-
-test_key = properties.get("REVENUECAT_TEST_KEY")
-if not test_key:
-    raise SystemExit("REVENUECAT_TEST_KEY is missing from ignored local.properties")
-
-print("sdk.dir=/Users/jackwallner/Library/Android/sdk")
-print(f"REVENUECAT_TEST_KEY={test_key}")
-PY
-```
-
-Do not copy `REVENUECAT_PLAY_KEY`, the upload keystore path, or signing
-passwords. Keep `remote_test_dir` for later cleanup. Never print the test key.
+Pro has no Android `cmdline-tools`/`avdmanager`. Builds go through
+`fm-gradle`, which syncs `android/` to `~/fleet-work/gradle/ironman/android` on
+Pro and writes a debug-only `local.properties` there (the SDK path and Test
+Store key; never `REVENUECAT_PLAY_KEY`, the upload keystore or signing
+passwords). It forwards `ANDROID_SERIAL`, so no hand sync is needed.
 
 The Play AVD already owns the app package, so instrumentation uses a temporary
 debug AVD named `ironsplits_agent_test` on port `5560`, serial
@@ -298,29 +265,16 @@ Wait until ADB reports `emulator-5560 device` and
 `getprop sys.boot_completed` returns `1`. The first boot took about 72 seconds;
 do not start Gradle while the device is `offline` or still booting.
 
-Run the tests in an SSH shell on Pro from the temporary checkout. Set
-`JAVA_HOME` to the Pro's JDK 17 and target the test AVD serial:
+Run the tests from `android/` on the Air; Gradle runs on Pro and the reports
+copy back:
 
 ```sh
-ssh -tt -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=yes \
-  jackwallner@192.168.4.25
-```
-
-Then, in that Pro shell, use the actual unique directory created for this run:
-
-```sh
-cd /tmp/ironsplits-android-test.<unique>/android
-export JAVA_HOME="$HOME/jdks/temurin-17/Contents/Home"
-export PATH="$JAVA_HOME/bin:$PATH"
-export ANDROID_SERIAL=emulator-5560
-./gradlew --no-daemon testDebugUnitTest connectedDebugAndroidTest
+ANDROID_SERIAL=emulator-5560 fm-gradle testDebugUnitTest connectedDebugAndroidTest
 ```
 
 Check Gradle output and `app/build/reports/androidTests/connected/debug/index.html`
 for a nonzero executed count. A successful Gradle exit or a listed device
-alone is not a test pass. Do not use `adb kill-server`. Avoid the zsh variable
-name `path`, which is tied to `PATH`; use `remote_dir` or another distinct
-variable name.
+alone is not a test pass. Do not use `adb kill-server`.
 
 After tests, stop the exact serial on Pro:
 
@@ -340,8 +294,8 @@ ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=yes \
 
 Wait until Pro `adb devices -l` is empty and confirm the emulator process has
 exited. Then delete only
-`ironsplits_agent_test.avd` and its sibling `.ini`, and the temporary source tree
-(keep `~/jdks/temurin-17`). Use the exact paths created for this run. The production
+`ironsplits_agent_test.avd` and its sibling `.ini` (keep `~/jdks/temurin-17`
+and `~/fleet-work`). Use the exact paths created for this run. The production
 Play AVD `small_phone` must remain registered with its userdata intact and be
 shut down. Never pass `-wipe-data`.
 
