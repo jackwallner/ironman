@@ -167,13 +167,17 @@ th { font-weight: 600; background: #f1f4f8; }
 footer { text-align: center; padding: 20px 24px; font-size: 12px; color: #6e6e73; border-top: 1px solid rgba(0,0,0,0.08); }
 footer a { color: #6e6e73; text-decoration: none; margin: 0 10px; }
 @media (max-width: 768px) { article h1 { font-size: 28px; } article { padding: 36px 0 56px; } .answer { font-size: 18px; } }
+.get-app { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0; --badge-h: 48px; }
+.get-app .store-btn { display: inline-flex; align-items: center; box-sizing: border-box; height: var(--badge-h); padding: 0 28px; border-radius: 980px; background: #102b4b; color: #fff; font-size: 15px; font-weight: 500; text-decoration: none; }
+.play-badge { display: block; width: calc(var(--badge-h) * 564 / 168); height: var(--badge-h); }
+.play-badge img { display: block; width: calc(var(--badge-h) * 646 / 168); height: auto; max-width: none; margin: calc(var(--badge-h) * -41 / 168); }
 </style>
 </head>
 <body>
 <nav>
 <div class="container">
 <a class="nav-brand" href="./"><img src="icon_256.webp" alt="IM Tri Tracker" loading="lazy" decoding="async"><span>IM Tri Tracker</span></a>
-<a class="nav-link" href="https://apps.apple.com/us/app/id6803727074?pt=128748779&amp;ct=jw-ironman-triathlon-splits-explained&amp;mt=8">Download</a>
+<a class="nav-link" href="#get-app">Download</a>
 </div>
 </nav>
 <article>
@@ -256,6 +260,10 @@ footer a { color: #6e6e73; text-decoration: none; margin: 0 10px; }
 
 <h2>How IM Tri Tracker helps</h2>
 <p><a href="./">IM Tri Tracker</a> is an independent app for iPhone and Android, not affiliated with any race organizer or timing company. Search a name and it pulls the published full and half-distance results from the supported timing feed, shows the swim, T1, bike, T2 and run for each race and ranks every split within the distance, overall and by division. Full and half results are ranked separately.</p>
+<div class="get-app" id="get-app">
+<a class="store-btn" href="https://apps.apple.com/us/app/id6803727074?pt=128748779&amp;ct=jw-ironman-triathlon-splits-explained&amp;mt=8" rel="noopener">Download on the App Store</a>
+<a class="play-badge" href="https://play.google.com/store/apps/details?id=com.jackwallner.ironman&amp;referrer=utm_source%3Djackwallner.com%26utm_medium%3Dweb%26utm_campaign%3Djw-ironman-triathlon-splits-explained" rel="noopener"><img src="google-play-badge.png" width="646" height="250" alt="Get it on Google Play"></a>
+</div>
 <h2>Frequently asked questions</h2>
 <div class="faq">
 <details><summary>What is T1 in triathlon?</summary><p>T1 is the first transition, the time between leaving the swim and starting the bike. It includes running to the bike rack, removing the wetsuit and putting on a helmet and bike shoes.</p></details>

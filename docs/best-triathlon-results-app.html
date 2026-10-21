@@ -212,13 +212,17 @@ footer a { color: #6e6e73; text-decoration: none; margin: 0 10px; }
 .faq details { border-bottom: 1px solid rgba(0,0,0,0.08); padding: 14px 0; }
 .faq summary { font-size: 17px; font-weight: 600; cursor: pointer; }
 .faq details p { font-size: 16px; color: #6e6e73; margin: 10px 0 0; }
+.get-app { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0; --badge-h: 48px; }
+.get-app .store-btn { display: inline-flex; align-items: center; box-sizing: border-box; height: var(--badge-h); padding: 0 28px; border-radius: 980px; background: #102b4b; color: #fff; font-size: 15px; font-weight: 500; text-decoration: none; }
+.play-badge { display: block; width: calc(var(--badge-h) * 564 / 168); height: var(--badge-h); }
+.play-badge img { display: block; width: calc(var(--badge-h) * 646 / 168); height: auto; max-width: none; margin: calc(var(--badge-h) * -41 / 168); }
 </style>
 </head>
 <body>
 <nav>
 <div class="container">
 <a class="nav-brand" href="./"><img src="icon_256.webp" alt="IM Tri Tracker" loading="lazy" decoding="async"><span>IM Tri Tracker</span></a>
-<a class="nav-link" href="https://apps.apple.com/us/app/id6803727074?pt=128748779&amp;ct=jw-ironman-best-triathlon-results-app&amp;mt=8">Download</a>
+<a class="nav-link" href="#get-app">Download</a>
 </div>
 </nav>
 <article>
@@ -241,6 +245,10 @@ footer a { color: #6e6e73; text-decoration: none; margin: 0 10px; }
 <p class="note">Ratings, update dates and device support come from Apple's App Store lookup on October 12, 2026. IM Tri Tracker is new and has only one rating, so its score says little yet. "Not stated" means the listing does not say.</p>
 <h2>IM Tri Tracker</h2>
 <p>IM Tri Tracker searches published full and half-distance triathlon results by the name you registered with. It shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks, ranks each split against the finishers of that event with field size and percentile, and keeps your history, personal bests and race notes in one place. Search, history and rankings are free with no account, and an optional one-time Race Book purchase adds race comparisons and PDF or image exports. The trade-offs: it covers supported published results only, not every race, it is not a live tracker, it has no Apple Watch app, and it is new with a single rating. It is independent and not affiliated with any race organizer or timing company.</p>
+<div class="get-app" id="get-app">
+<a class="store-btn" href="https://apps.apple.com/us/app/id6803727074?pt=128748779&amp;ct=jw-ironman-best-triathlon-results-app&amp;mt=8" rel="noopener">Download on the App Store</a>
+<a class="play-badge" href="https://play.google.com/store/apps/details?id=com.jackwallner.ironman&amp;referrer=utm_source%3Djackwallner.com%26utm_medium%3Dweb%26utm_campaign%3Djw-ironman-best-triathlon-results-app" rel="noopener"><img src="google-play-badge.png" width="646" height="250" alt="Get it on Google Play"></a>
+</div>
 <h2>IRONMAN Tracker</h2>
 <p>IRONMAN Tracker is the app for following athletes on race day. Its listing describes real-time times, paces, split estimates and division placement, live course maps, tracking several athletes at once and push notifications at select events. It has a large audience and a high rating. The listing does not describe searching your past results by name across races, and the latest update shown is March 2024. Choose it for spectating a supported race.</p>
 <h2>RTRT.me</h2>
@@ -273,6 +281,7 @@ footer a { color: #6e6e73; text-decoration: none; margin: 0 10px; }
 <h2>Sources</h2>
 <ol class="sources">
 <li><a href="https://apps.apple.com/us/app/id6803727074?pt=128748779&amp;ct=jw-ironman-best-triathlon-results-app&amp;mt=8" rel="noopener">IM Tri Tracker on the App Store</a></li>
+<li><a href="https://play.google.com/store/apps/details?id=com.jackwallner.ironman" rel="noopener">IM Tri Tracker on Google Play</a></li>
 <li><a href="https://apps.apple.com/us/app/id1183983404" rel="noopener">IRONMAN Tracker on the App Store</a></li>
 <li><a href="https://apps.apple.com/us/app/id799017226" rel="noopener">RTRT.me on the App Store</a></li>
 <li><a href="https://apps.apple.com/us/app/id1357445733" rel="noopener">USA Triathlon Events Tracker on the App Store</a></li>

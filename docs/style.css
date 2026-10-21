@@ -1,4 +1,5 @@
 :root {
+  --badge-h: 48px;
   color-scheme: light dark;
   --page: #fafafa;
   --surface: #ffffff;
@@ -127,6 +128,25 @@ a {
   padding: 14px 36px;
   font-size: 15px;
   font-weight: 500;
+}
+.download-actions .download-btn {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: var(--badge-h);
+  padding: 0 28px;
+}
+.play-badge {
+  display: block;
+  width: calc(var(--badge-h) * 564 / 168);
+  height: var(--badge-h);
+}
+.play-badge img {
+  display: block;
+  width: calc(var(--badge-h) * 646 / 168);
+  height: auto;
+  max-width: none;
+  margin: calc(var(--badge-h) * -41 / 168);
 }
 .showcase {
   padding: 0 0 80px;
