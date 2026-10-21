@@ -1,0 +1,37 @@
+Sök upp dina triathlonresultat på namn och se varje mellantid rankad. IM Tri Tracker hittar publicerade resultat från triathlon på hel- och halvdistans och gör dem till en tävlingshistorik du läser på ett ögonblick.
+
+Sök på namnet du tävlade under. Spara dina egna resultat i Locker på enheten, eller titta i Explore på en annan atlets publicerade resultat: en träningskompis, en rival eller en vän du följde på tävlingsdagen.
+
+VARJE MELLANTID
+Simning, T1, cykel, T2, löpning och sluttid för varje triathlon, med startnummer, åldersklass och placering totalt, per kön och i åldersklass när tidtagningen publicerat dem. DNF, DNS och DQ är markerade och räknas aldrig som en snabb tid.
+
+RANKING PER DISTANS
+Ranka dina sim-, cykel- och löptider, växlingar och sluttider mot alla lopp på samma distans. Hel- och halvdistans rankas var för sig, och varje tid visar avståndet till ditt personliga rekord.
+
+MOT STARTFÄLTET
+Se var varje tid placerade sig bland de som gick i mål i samma tävling, med placering och percentil för simning, cykel, löpning och sluttid.
+
+TÄVLINGSANTECKNINGAR
+Spara anteckningar om förhållanden, energi och utrustning tillsammans med resultatet. Locker och anteckningar stannar på den här enheten.
+
+TRIATHLONTIPS FRÅN PATTIE
+Ett bibliotek med tips för simning, cykel, löpning och växlingar, och Ask Pattie, en guidad väg till hennes inspelade råd för just din situation på tävlingsdagen. Avsnitten laddas ner före uppspelning och fungerar offline.
+
+RACE BOOK
+Jämför lopp på lika villkor och exportera obegränsat med tävlingsrapporter som PDF eller bild med ett engångsköp för alltid. Google Play visar priset före köpet. Ingen prenumeration och ingen avgift per export.
+
+GRUNDEN ÄR GRATIS
+Resultatsök, tävlingshistorik, mellantider, rankingar, jämförelse med fältet, tävlingsdetaljer, anteckningar och hela tipsbiblioteket är gratis.
+
+DATA OCH OBEROENDE
+En sökning skickar namnet du skriver till den externa tidtagningstjänst som returnerar publicerade resultat. Locker, anteckningar och senaste Explore-profiler stannar på den här enheten.
+
+IM Tri Tracker är oberoende och inte knuten till, godkänd eller sponsrad av någon arrangör eller något tidtagningsföretag. Resultaten visas som de publicerats av varje tidtagare. Endast resultat från triathlon på hel- och halvdistans visas.
+
+Själva appen är på engelska.
+
+IM Tri Tracker ger endast allmän information om tävlingar och träning. Den är ingen medicinteknisk produkt och ställer inte diagnoser, behandlar, botar eller förebygger inte några sjukdomar.
+
+Integritetspolicy: https://jackwallner.github.io/ironman/privacy-policy.html
+Användarvillkor: https://jackwallner.github.io/ironman/terms.html
+Support: https://jackwallner.github.io/ironman/support.html

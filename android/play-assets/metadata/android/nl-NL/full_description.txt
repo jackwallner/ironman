@@ -1,0 +1,37 @@
+Zoek je triatlonuitslagen op naam en zie elke tussentijd in een ranglijst. IM Tri Tracker vindt gepubliceerde uitslagen van hele en halve triatlons en maakt er een racegeschiedenis van die je in één oogopslag leest.
+
+Zoek op de naam waaronder je startte. Bewaar je eigen uitslagen in de Locker op je toestel, of bekijk via Explore de gepubliceerde uitslagen van een andere atleet: een trainingsmaatje, een rivaal of een vriend die je op de racedag volgde.
+
+ELKE TUSSENTIJD
+Zwemmen, T1, fietsen, T2, lopen en eindtijd voor elke triatlon, met startnummer, leeftijdsgroep en plaats overall, per geslacht en per leeftijdsgroep als de tijdwaarneming die publiceerde. DNF, DNS en DQ zijn gemarkeerd en tellen nooit als snelle tijd.
+
+RANGLIJST PER AFSTAND
+Rangschik je zwem-, fiets- en looptijden, wissels en eindtijden over alle races op dezelfde afstand. Hele en halve triatlons blijven gescheiden, en elke tijd toont het verschil met je persoonlijk record.
+
+TEGENOVER HET VELD
+Zie waar elke tijd eindigde tussen de finishers van dezelfde wedstrijd, met plaats en percentiel voor zwemmen, fietsen, lopen en eindtijd.
+
+RACENOTITIES
+Bewaar notities over omstandigheden, voeding en materiaal bij de uitslag waar ze bij horen. Je Locker en notities blijven op dit toestel.
+
+TRIATLONTIPS VAN PATTIE
+Een bibliotheek met tips voor zwemmen, fietsen, lopen en wissels, plus Ask Pattie, een begeleide route naar haar opgenomen advies voor jouw moment op de racedag. Afleveringen worden vooraf gedownload en werken offline.
+
+RACE BOOK
+Vergelijk races een-op-een en exporteer onbeperkt raceverslagen als pdf of afbeelding met één aankoop voor altijd. Google Play toont de prijs vóór aankoop. Geen abonnement en geen kosten per export.
+
+DE BASIS IS GRATIS
+Uitslagen zoeken, racegeschiedenis, tussentijden, ranglijsten, vergelijking met het veld, racedetails, notities en de volledige tipsbibliotheek blijven gratis.
+
+GEGEVENS EN ONAFHANKELIJKHEID
+Een zoekopdracht stuurt de ingevoerde naam naar de externe tijdwaarnemingsdienst die de gepubliceerde uitslagen teruggeeft. Je Locker, notities en recente Explore-profielen blijven op dit toestel.
+
+IM Tri Tracker is onafhankelijk en niet verbonden aan, goedgekeurd of gesponsord door een race-organisator of tijdwaarnemingsbedrijf. Uitslagen worden getoond zoals de tijdwaarneming ze publiceerde. Alleen uitslagen van hele en halve triatlons worden getoond.
+
+De app zelf is in het Engels.
+
+IM Tri Tracker geeft alleen algemene informatie over races en fitness. Het is geen medisch hulpmiddel en stelt geen diagnose, behandelt, geneest of voorkomt geen enkele aandoening.
+
+Privacybeleid: https://jackwallner.github.io/ironman/privacy-policy.html
+Gebruiksvoorwaarden: https://jackwallner.github.io/ironman/terms.html
+Ondersteuning: https://jackwallner.github.io/ironman/support.html

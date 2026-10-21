@@ -1,0 +1,37 @@
+Nájdite svoje výsledky z triatlonu podľa mena a pozrite si poradie každého medzičasu. IM Tri Tracker vyhľadá zverejnené výsledky triatlonov na plnej a polovičnej trati a spraví z nich históriu pretekov, ktorú prečítate na prvý pohľad.
+
+Hľadajte meno, pod ktorým ste pretekali. Uložte si vlastné výsledky do Lockera v zariadení alebo si v Explore pozrite zverejnené výsledky iného pretekára: tréningového partnera, súpera alebo kamaráta, ktorého ste v deň pretekov sledovali.
+
+KAŽDÝ MEDZIČAS
+Plávanie, T1, bicykel, T2, beh a cieľový čas každého triatlonu so štartovým číslom, vekovou kategóriou a poradím celkovo, podľa pohlavia aj v kategórii, ak ich časomiera zverejnila. DNF, DNS a DQ sú označené a nikdy sa nerátajú ako rýchly čas.
+
+PORADIE PODĽA TRATE
+Zoraďte svoje časy plávania, bicykla a behu, depá a cieľové časy zo všetkých pretekov na rovnakej trati. Plná a polovičná trať majú oddelené poradia a každý čas ukazuje stratu na osobný rekord.
+
+V POROVNANÍ S POĽOM
+Pozrite sa, kde sa každý čas umiestnil medzi tými, ktorí dokončili rovnaké preteky, s poradím a percentilom pre plávanie, bicykel, beh aj cieľ.
+
+POZNÁMKY Z PRETEKOV
+Ukladajte poznámky o podmienkach, výžive a výstroji priamo k výsledku. Locker a poznámky zostávajú v tomto zariadení.
+
+TRIATLONOVÉ TIPY OD PATTIE
+Knižnica tipov pre plávanie, bicykel, beh a depo a Ask Pattie, sprevádzaná cesta k jej nahratým radám pre vašu situáciu v deň pretekov. Epizódy sa sťahujú pred prehraním a fungujú offline.
+
+RACE BOOK
+Porovnávajte preteky medzi sebou a exportujte neobmedzene pretekárske reporty ako PDF alebo obrázok vďaka jednorazovému doživotnému nákupu. Google Play zobrazí cenu pred nákupom. Žiadne predplatné ani poplatky za export.
+
+ZÁKLAD ZADARMO
+Hľadanie výsledkov, história pretekov, medzičasy, poradia, porovnanie s poľom, detaily pretekov, poznámky a celá knižnica tipov sú zadarmo.
+
+DÁTA A NEZÁVISLOSŤ
+Hľadanie odošle zadané meno externej časomiere, ktorá vracia zverejnené výsledky. Locker, poznámky a nedávne profily z Explore zostávajú v tomto zariadení.
+
+IM Tri Tracker je nezávislý. Nie je spojený so žiadnym organizátorom pretekov ani časomierou, ani nimi schválený či sponzorovaný. Výsledky sa zobrazujú tak, ako ich časomiera zverejnila. Zobrazujú sa iba výsledky triatlonov na plnej a polovičnej trati.
+
+Samotná aplikácia je v angličtine.
+
+IM Tri Tracker slúži len na všeobecné informácie o pretekoch a kondícii. Nie je zdravotníckou pomôckou a nediagnostikuje, nelieči ani nepredchádza žiadnej chorobe.
+
+Zásady ochrany súkromia: https://jackwallner.github.io/ironman/privacy-policy.html
+Podmienky používania: https://jackwallner.github.io/ironman/terms.html
+Podpora: https://jackwallner.github.io/ironman/support.html

@@ -1,0 +1,37 @@
+Hae triathlontuloksesi nimellä ja näe jokainen väliaika järjestettynä. IM Tri Tracker löytää julkaistut tulokset täyden matkan ja puolimatkan triathloneista ja kokoaa niistä kilpailuhistorian, jonka luet yhdellä silmäyksellä.
+
+Hae nimellä, jolla kilpailit. Tallenna omat tuloksesi laitteen Lockeriin tai katso Explore-näkymässä toisen urheilijan julkaistuja tuloksia: treenikaverin, kilpakumppanin tai ystävän, jota seurasit kisapäivänä.
+
+JOKAINEN VÄLIAIKA
+Uinti, T1, pyöräily, T2, juoksu ja loppuaika jokaisesta triathlonista, sekä kilpailunumero, ikäsarja ja sijoitukset kokonaiskilpailussa, sukupuolen mukaan ja sarjassa, kun ajanotto on ne julkaissut. DNF, DNS ja DQ on merkitty, eivätkä ne koskaan näy nopeana aikana.
+
+JÄRJESTYS MATKAN MUKAAN
+Järjestä uinti-, pyöräily- ja juoksuajat, vaihdot ja loppuajat kaikista saman matkan kilpailuista. Täysi matka ja puolimatka pidetään erillään, ja jokainen aika näyttää eron omaan ennätykseesi.
+
+SUHTEESSA MUIHIN
+Katso, mihin kukin aika sijoittui saman kilpailun maaliin tulleiden joukossa, sijoituksen ja persentiilin kanssa uinnissa, pyöräilyssä, juoksussa ja loppuajassa.
+
+KILPAILUMUISTIINPANOT
+Tallenna muistiinpanot olosuhteista, tankkauksesta ja varusteista kilpailutuloksen yhteyteen. Locker ja muistiinpanot pysyvät tässä laitteessa.
+
+PATTIEN TRIATHLONVINKIT
+Vinkkikirjasto uintiin, pyöräilyyn, juoksuun ja vaihtoihin sekä Ask Pattie, opastettu reitti hänen tallennettuihin neuvoihinsa juuri sinun kisatilanteeseesi. Jaksot ladataan ennen toistoa ja toimivat ilman yhteyttä.
+
+RACE BOOK
+Vertaa kilpailuja keskenään ja vie rajattomasti kilpailuraportteja PDF- tai kuvamuodossa yhdellä pysyvällä kertaostolla. Google Play näyttää hinnan ennen ostoa. Ei tilausta eikä maksua viennistä.
+
+PERUSKÄYTTÖ ON ILMAISTA
+Tulosten haku, kilpailuhistoria, väliajat, järjestykset, vertailu muihin, kilpailun tiedot, muistiinpanot ja koko vinkkikirjasto ovat ilmaisia.
+
+TIEDOT JA RIIPPUMATTOMUUS
+Haku lähettää kirjoittamasi nimen ulkopuoliselle ajanottopalvelulle, joka palauttaa julkaistut tulokset. Locker, muistiinpanot ja viimeisimmät Explore-profiilit pysyvät tässä laitteessa.
+
+IM Tri Tracker on riippumaton, eikä mikään kilpailujärjestäjä tai ajanottoyritys ole sidoksissa siihen, hyväksy tai sponsoroi sitä. Tulokset näytetään sellaisina kuin kukin ajanottaja ne julkaisi. Vain täyden matkan ja puolimatkan triathlonien tulokset näytetään.
+
+Itse sovellus on englanninkielinen.
+
+IM Tri Tracker antaa vain yleistä tietoa kilpailuista ja kunnosta. Se ei ole lääkinnällinen laite eikä se diagnosoi, hoida, paranna tai ehkäise mitään sairautta.
+
+Tietosuojakäytäntö: https://jackwallner.github.io/ironman/privacy-policy.html
+Käyttöehdot: https://jackwallner.github.io/ironman/terms.html
+Tuki: https://jackwallner.github.io/ironman/support.html

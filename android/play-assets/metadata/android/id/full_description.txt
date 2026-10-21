@@ -1,0 +1,37 @@
+Cari hasil triathlon kamu lewat nama dan lihat peringkat setiap split. IM Tri Tracker menemukan hasil resmi triathlon jarak penuh dan setengah jarak, lalu menyusunnya jadi riwayat lomba yang bisa dibaca sekilas.
+
+Cari nama yang kamu pakai saat lomba. Simpan hasil kamu sendiri di Locker pada perangkat, atau lihat hasil atlet lain di Explore: teman latihan, rival, atau teman yang kamu pantau saat hari lomba.
+
+SETIAP SPLIT
+Renang, T1, sepeda, T2, lari, dan waktu finis untuk setiap triathlon, lengkap dengan nomor dada, kelompok umur, serta peringkat keseluruhan, gender, dan kelompok umur jika pencatat waktu memublikasikannya. DNF, DNS, dan DQ ditandai dan tidak pernah dihitung sebagai split cepat.
+
+PERINGKAT PER JARAK
+Urutkan split renang, sepeda, lari, transisi, dan waktu finis dari semua lomba di jarak yang sama. Jarak penuh dan setengah jarak diperingkat terpisah, dan setiap split menunjukkan selisih dari rekor pribadimu.
+
+DIBANDINGKAN PESERTA LAIN
+Lihat posisi setiap split di antara finisher lomba yang sama, dengan peringkat dan persentil untuk renang, sepeda, lari, dan finis.
+
+CATATAN LOMBA
+Simpan catatan kondisi, nutrisi, dan perlengkapan bersama hasil lombanya. Locker dan catatan tetap di perangkat ini.
+
+TIPS TRIATHLON DARI PATTIE
+Perpustakaan tips untuk renang, sepeda, lari, dan transisi, plus Ask Pattie, jalur terpandu menuju saran rekamannya untuk situasimu di hari lomba. Episode diunduh sebelum diputar dan bisa ditonton offline.
+
+RACE BOOK
+Bandingkan lomba secara setara dan ekspor laporan lomba PDF atau gambar tanpa batas dengan satu kali pembelian seumur hidup. Google Play menampilkan harga sebelum pembelian. Tanpa langganan dan tanpa biaya per ekspor.
+
+FITUR INTI GRATIS
+Pencarian hasil, riwayat lomba, split, peringkat, perbandingan dengan peserta lain, detail lomba, catatan, dan seluruh perpustakaan tips tetap gratis.
+
+DATA DAN INDEPENDENSI
+Pencarian mengirim nama yang kamu ketik ke layanan pencatat waktu pihak ketiga yang mengembalikan hasil resmi. Locker, catatan, dan profil Explore terbaru tetap di perangkat ini.
+
+IM Tri Tracker bersifat independen. Aplikasi ini tidak berafiliasi dengan, didukung, atau disponsori oleh penyelenggara lomba atau perusahaan pencatat waktu mana pun. Hasil ditampilkan sesuai yang dipublikasikan setiap pencatat waktu. Hanya hasil triathlon jarak penuh dan setengah jarak yang ditampilkan.
+
+Aplikasinya sendiri berbahasa Inggris.
+
+IM Tri Tracker hanya untuk informasi umum seputar lomba dan kebugaran. Aplikasi ini bukan perangkat medis dan tidak mendiagnosis, mengobati, menyembuhkan, atau mencegah penyakit apa pun.
+
+Kebijakan Privasi: https://jackwallner.github.io/ironman/privacy-policy.html
+Ketentuan Penggunaan: https://jackwallner.github.io/ironman/terms.html
+Dukungan: https://jackwallner.github.io/ironman/support.html

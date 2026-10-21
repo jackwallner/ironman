@@ -1,0 +1,37 @@
+Keresd meg a triatlon eredményeidet név alapján, és nézd meg minden részidőd rangsorát. Az IM Tri Tracker megtalálja a teljes és fél távú triatlonok közzétett eredményeit, és áttekinthető versenytörténetet készít belőlük.
+
+Keress arra a névre, amellyel versenyeztél. A saját eredményeidet a készüléken lévő Lockerben tarthatod, az Explore részben pedig megnézheted egy másik versenyző közzétett eredményeit: edzőtársét, riválisét vagy egy barátét, akit a verseny napján követtél.
+
+MINDEN RÉSZIDŐ
+Úszás, T1, kerékpár, T2, futás és célidő minden triatlonon, rajtszámmal, korcsoporttal, valamint abszolút, nemenkénti és korcsoportos helyezéssel, ha az időmérő közzétette őket. A DNF, DNS és DQ jelölve van, és sosem számít gyors időnek.
+
+RANGSOR TÁVONKÉNT
+Rangsorold úszó-, kerékpáros- és futóidőidet, depóidőidet és célidőidet az azonos távú versenyeid között. A teljes és a fél táv külön rangsorban marad, és minden idő mutatja a különbséget az egyéni csúcsodhoz képest.
+
+A MEZŐNYHÖZ KÉPEST
+Nézd meg, hol végzett minden időd az adott verseny célba érői között, helyezéssel és percentilissel úszásban, kerékpárban, futásban és célidőben.
+
+VERSENYJEGYZETEK
+Ments jegyzeteket a körülményekről, a táplálkozásról és a felszerelésről az adott eredmény mellé. A Locker és a jegyzetek ezen a készüléken maradnak.
+
+PATTIE TRIATLON TIPPJEI
+Tippgyűjtemény úszáshoz, kerékpárhoz, futáshoz és depóhoz, valamint az Ask Pattie, egy vezetett út a felvett tanácsaihoz, a te versenynapi helyzetedre szabva. Az epizódok lejátszás előtt letöltődnek, és offline is működnek.
+
+RACE BOOK
+Hasonlítsd össze a versenyeidet egymással, és exportálj korlátlanul PDF- vagy képes versenyjelentéseket egyetlen, örökre szóló vásárlással. A Google Play a vásárlás előtt mutatja az árat. Nincs előfizetés és nincs exportonkénti díj.
+
+AZ ALAPOK INGYENESEK
+Az eredménykeresés, a versenytörténet, a részidők, a rangsorok, a mezőny-összehasonlítás, a versenyadatok, a jegyzetek és a teljes tippgyűjtemény ingyenes.
+
+ADATOK ÉS FÜGGETLENSÉG
+A keresés elküldi a beírt nevet a külső időmérő szolgáltatásnak, amely visszaadja a közzétett eredményeket. A Locker, a jegyzetek és a legutóbbi Explore-profilok ezen a készüléken maradnak.
+
+Az IM Tri Tracker független. Nem kapcsolódik egyetlen versenyszervezőhöz vagy időmérő céghez sem, és azok nem is támogatják vagy szponzorálják. Az eredmények úgy jelennek meg, ahogy az időmérő közzétette őket. Csak teljes és fél távú triatlonok eredményei jelennek meg.
+
+Maga az alkalmazás angol nyelvű.
+
+Az IM Tri Tracker csak általános verseny- és fitneszinformációt nyújt. Nem orvostechnikai eszköz, és nem diagnosztizál, nem kezel, nem gyógyít és nem előz meg semmilyen betegséget.
+
+Adatvédelmi irányelvek: https://jackwallner.github.io/ironman/privacy-policy.html
+Felhasználási feltételek: https://jackwallner.github.io/ironman/terms.html
+Támogatás: https://jackwallner.github.io/ironman/support.html

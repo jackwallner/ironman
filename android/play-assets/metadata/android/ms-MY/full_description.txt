@@ -1,0 +1,37 @@
+Cari keputusan triathlon anda ikut nama dan lihat kedudukan setiap split. IM Tri Tracker mencari keputusan rasmi triathlon jarak penuh dan separuh jarak, kemudian menyusunnya menjadi sejarah perlumbaan yang mudah dibaca sepintas lalu.
+
+Cari nama yang anda gunakan semasa berlumba. Simpan keputusan anda sendiri dalam Locker pada peranti, atau lihat keputusan atlet lain dalam Explore: rakan latihan, pesaing atau kawan yang anda ikuti pada hari perlumbaan.
+
+SETIAP SPLIT
+Renang, T1, basikal, T2, lari dan masa tamat bagi setiap triathlon, dengan nombor bib, kumpulan umur serta kedudukan keseluruhan, mengikut jantina dan dalam kumpulan umur jika pencatat masa menerbitkannya. DNF, DNS dan DQ ditandakan dan tidak sekali-kali dikira sebagai split pantas.
+
+KEDUDUKAN MENGIKUT JARAK
+Susun split renang, basikal, lari, transisi dan masa tamat daripada semua perlumbaan pada jarak yang sama. Jarak penuh dan separuh jarak disusun berasingan, dan setiap split menunjukkan beza daripada rekod peribadi anda.
+
+BERBANDING PESERTA LAIN
+Lihat kedudukan setiap split dalam kalangan peserta yang menamatkan perlumbaan yang sama, dengan kedudukan dan persentil untuk renang, basikal, lari dan tamat.
+
+NOTA PERLUMBAAN
+Simpan nota tentang keadaan, pemakanan dan peralatan bersama keputusan perlumbaan. Locker dan nota anda kekal pada peranti ini.
+
+TIP TRIATHLON DARIPADA PATTIE
+Perpustakaan tip untuk renang, basikal, lari dan transisi, serta Ask Pattie, laluan berpandu ke nasihat rakamannya untuk situasi anda pada hari perlumbaan. Episod dimuat turun sebelum dimainkan dan boleh ditonton di luar talian.
+
+RACE BOOK
+Bandingkan perlumbaan secara setara dan eksport laporan perlumbaan PDF atau imej tanpa had dengan satu pembelian seumur hidup. Google Play memaparkan harga sebelum pembelian. Tiada langganan dan tiada caj bagi setiap eksport.
+
+CIRI TERAS PERCUMA
+Carian keputusan, sejarah perlumbaan, split, kedudukan, perbandingan dengan peserta lain, butiran perlumbaan, nota dan seluruh perpustakaan tip kekal percuma.
+
+DATA DAN KEBEBASAN
+Carian menghantar nama yang anda taip kepada perkhidmatan pencatat masa pihak ketiga yang memulangkan keputusan rasmi. Locker, nota dan profil Explore terkini kekal pada peranti ini.
+
+IM Tri Tracker adalah bebas. Ia tidak bergabung dengan, disokong atau ditaja oleh mana-mana penganjur perlumbaan atau syarikat pencatat masa. Keputusan dipaparkan seperti yang diterbitkan oleh setiap pencatat masa. Hanya keputusan triathlon jarak penuh dan separuh jarak dipaparkan.
+
+Aplikasi ini dalam bahasa Inggeris.
+
+IM Tri Tracker hanya untuk maklumat umum tentang perlumbaan dan kecergasan. Ia bukan peranti perubatan dan tidak mendiagnosis, merawat, menyembuhkan atau mencegah sebarang penyakit.
+
+Dasar Privasi: https://jackwallner.github.io/ironman/privacy-policy.html
+Terma Penggunaan: https://jackwallner.github.io/ironman/terms.html
+Sokongan: https://jackwallner.github.io/ironman/support.html

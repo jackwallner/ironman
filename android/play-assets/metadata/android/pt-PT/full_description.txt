@@ -1,0 +1,37 @@
+Encontra os teus resultados de triatlo pelo nome e vê cada parcial classificado. O IM Tri Tracker encontra resultados publicados de triatlos de longa e média distância e transforma-os num histórico de provas fácil de ler.
+
+Pesquisa o nome com que competiste. Guarda os teus resultados no Locker, no teu dispositivo, ou vê no Explore os resultados publicados de outro atleta: um parceiro de treino, um rival ou um amigo que acompanhaste no dia da prova.
+
+TODOS OS PARCIAIS
+Natação, T1, bicicleta, T2, corrida e tempo final de cada triatlo, com dorsal, escalão etário e classificação geral, por género e por escalão quando a cronometragem os publicou. DNF, DNS e DQ ficam assinalados e nunca contam como parcial rápido.
+
+CLASSIFICAÇÃO POR DISTÂNCIA
+Ordena os teus parciais de natação, bicicleta e corrida, as transições e os tempos finais entre todas as provas da mesma distância. Longa e média distância ficam em classificações separadas, e cada parcial mostra a diferença para o teu recorde pessoal.
+
+FACE AO PELOTÃO
+Vê a posição de cada parcial entre os atletas que terminaram a mesma prova, com lugar e percentil na natação, bicicleta, corrida e tempo final.
+
+NOTAS DE PROVA
+Guarda notas sobre condições, nutrição e material junto ao resultado da prova. O teu Locker e as tuas notas ficam neste dispositivo.
+
+DICAS DE TRIATLO DA PATTIE
+Uma biblioteca de dicas para natação, bicicleta, corrida e transições, e o Ask Pattie, um percurso guiado até aos conselhos gravados dela para o teu momento de prova. Os episódios são descarregados antes da reprodução e funcionam offline.
+
+RACE BOOK
+Compara provas em igualdade de circunstâncias e exporta relatórios ilimitados em PDF ou imagem com uma única compra vitalícia. O Google Play mostra o preço antes da compra. Sem subscrição e sem custo por exportação.
+
+O ESSENCIAL É GRATUITO
+Pesquisa de resultados, histórico, parciais, classificações, comparação com o pelotão, detalhes das provas, notas e toda a biblioteca de dicas continuam gratuitos.
+
+DADOS E INDEPENDÊNCIA
+Uma pesquisa envia o nome introduzido ao serviço de cronometragem externo que devolve os resultados publicados. O teu Locker, as tuas notas e os perfis recentes do Explore ficam neste dispositivo.
+
+O IM Tri Tracker é independente. Não é afiliado, apoiado nem patrocinado por qualquer organizador de provas ou empresa de cronometragem. Os resultados aparecem tal como cada cronometragem os publicou. Só são apresentados resultados de triatlo de longa e média distância.
+
+A aplicação está em inglês.
+
+O IM Tri Tracker dá apenas informação geral sobre provas e forma física. Não é um dispositivo médico e não diagnostica, trata, cura nem previne qualquer doença.
+
+Política de Privacidade: https://jackwallner.github.io/ironman/privacy-policy.html
+Termos de Utilização: https://jackwallner.github.io/ironman/terms.html
+Suporte: https://jackwallner.github.io/ironman/support.html

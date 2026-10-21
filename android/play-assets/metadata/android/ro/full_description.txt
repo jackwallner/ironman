@@ -1,0 +1,37 @@
+Găsește-ți rezultatele de triatlon după nume și vezi fiecare split în clasament. IM Tri Tracker găsește rezultatele publicate ale triatloanelor pe distanță completă și pe jumătate de distanță și le transformă într-un istoric de curse ușor de citit.
+
+Caută numele sub care ai concurat. Păstrează-ți rezultatele în Locker, pe dispozitiv, sau vezi în Explore rezultatele publicate ale altui sportiv: un partener de antrenament, un rival sau un prieten pe care l-ai urmărit în ziua cursei.
+
+FIECARE SPLIT
+Înot, T1, bicicletă, T2, alergare și timp final pentru fiecare triatlon, cu număr de concurs, categorie de vârstă și locul la general, pe sexe și pe categorie, când cronometrajul le-a publicat. DNF, DNS și DQ sunt marcate și nu contează niciodată ca timp rapid.
+
+CLASAMENT PE DISTANȚĂ
+Ordonează timpii de înot, bicicletă și alergare, tranzițiile și timpii finali din toate cursele pe aceeași distanță. Distanța completă și jumătatea rămân separate, iar fiecare timp arată diferența față de recordul personal.
+
+FAȚĂ DE PLUTON
+Vezi unde s-a clasat fiecare timp printre cei care au terminat aceeași cursă, cu loc și percentilă la înot, bicicletă, alergare și timp final.
+
+NOTE DE CURSĂ
+Salvează note despre condiții, nutriție și echipament alături de rezultat. Locker-ul și notele rămân pe acest dispozitiv.
+
+SFATURI DE TRIATLON DE LA PATTIE
+O bibliotecă de sfaturi pentru înot, bicicletă, alergare și tranziții, plus Ask Pattie, un traseu ghidat spre sfaturile ei înregistrate pentru momentul tău din cursă. Episoadele se descarcă înainte de redare și merg offline.
+
+RACE BOOK
+Compară cursele între ele și exportă nelimitat rapoarte de cursă în PDF sau ca imagine, cu o singură achiziție pe viață. Google Play afișează prețul înainte de cumpărare. Fără abonament și fără taxă per export.
+
+ESENȚIALUL ESTE GRATUIT
+Căutarea rezultatelor, istoricul, splitările, clasamentele, comparația cu plutonul, detaliile curselor, notele și întreaga bibliotecă de sfaturi sunt gratuite.
+
+DATE ȘI INDEPENDENȚĂ
+O căutare trimite numele introdus către serviciul extern de cronometraj care returnează rezultatele publicate. Locker-ul, notele și profilurile recente din Explore rămân pe acest dispozitiv.
+
+IM Tri Tracker este independent. Nu este afiliat, aprobat sau sponsorizat de vreun organizator de curse sau de vreo firmă de cronometraj. Rezultatele apar așa cum le-a publicat fiecare cronometrare. Sunt afișate doar rezultate de triatlon pe distanță completă și pe jumătate de distanță.
+
+Aplicația în sine este în limba engleză.
+
+IM Tri Tracker oferă doar informații generale despre curse și condiție fizică. Nu este un dispozitiv medical și nu diagnostichează, nu tratează, nu vindecă și nu previne nicio afecțiune.
+
+Politica de confidențialitate: https://jackwallner.github.io/ironman/privacy-policy.html
+Termeni de utilizare: https://jackwallner.github.io/ironman/terms.html
+Asistență: https://jackwallner.github.io/ironman/support.html

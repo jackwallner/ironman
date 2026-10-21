@@ -1,0 +1,37 @@
+Poiščite svoje rezultate triatlona po imenu in si oglejte uvrstitev vsakega delnega časa. IM Tri Tracker najde objavljene rezultate triatlonov na polni in polovični razdalji ter jih uredi v zgodovino tekem, ki jo preberete na prvi pogled.
+
+Iščite ime, pod katerim ste tekmovali. Svoje rezultate shranite v Locker na napravi ali si v Explore oglejte objavljene rezultate drugega športnika: partnerja na treningu, tekmeca ali prijatelja, ki ste mu sledili na dan tekme.
+
+VSAK DELNI ČAS
+Plavanje, T1, kolo, T2, tek in končni čas za vsak triatlon, s štartno številko, starostno kategorijo ter uvrstitvijo skupno, po spolu in v kategoriji, kadar jih je merjenje časa objavilo. DNF, DNS in DQ so označeni in nikoli ne štejejo kot hiter čas.
+
+RAZVRSTITEV PO RAZDALJI
+Razvrstite svoje čase plavanja, kolesarjenja in teka, menjave ter končne čase med vsemi tekmami na isti razdalji. Polna in polovična razdalja sta ločeni, vsak čas pa pokaže zaostanek za osebnim rekordom.
+
+PROTI TEKMOVALCEM
+Poglejte, kje se je vsak čas uvrstil med tistimi, ki so končali isto tekmo, z uvrstitvijo in percentilom za plavanje, kolo, tek in končni čas.
+
+ZAPISKI S TEKEM
+Shranite zapiske o razmerah, prehrani in opremi skupaj z rezultatom. Locker in zapiski ostanejo v tej napravi.
+
+TRIATLONSKI NASVETI PATTIE
+Knjižnica nasvetov za plavanje, kolo, tek in menjave ter Ask Pattie, vodena pot do njenih posnetih nasvetov za vaš trenutek na tekmi. Epizode se prenesejo pred predvajanjem in delujejo brez povezave.
+
+RACE BOOK
+Primerjajte tekme med seboj in brez omejitev izvažajte poročila v PDF ali kot sliko z enkratnim nakupom za vedno. Google Play pokaže ceno pred nakupom. Brez naročnine in brez plačila za izvoz.
+
+OSNOVE SO BREZPLAČNE
+Iskanje rezultatov, zgodovina tekem, delni časi, razvrstitve, primerjava s tekmovalci, podrobnosti tekem, zapiski in celotna knjižnica nasvetov so brezplačni.
+
+PODATKI IN NEODVISNOST
+Iskanje pošlje vpisano ime zunanji storitvi za merjenje časa, ki vrne objavljene rezultate. Locker, zapiski in nedavni profili iz Explore ostanejo v tej napravi.
+
+IM Tri Tracker je neodvisen. Ni povezan z nobenim organizatorjem tekem ali podjetjem za merjenje časa, niti ga ti ne podpirajo ali sponzorirajo. Rezultati so prikazani, kot jih je objavilo merjenje časa. Prikazani so samo rezultati triatlonov na polni in polovični razdalji.
+
+Aplikacija je v angleščini.
+
+IM Tri Tracker ponuja samo splošne informacije o tekmah in telesni pripravljenosti. Ni medicinski pripomoček in ne postavlja diagnoz, ne zdravi in ne preprečuje nobene bolezni.
+
+Pravilnik o zasebnosti: https://jackwallner.github.io/ironman/privacy-policy.html
+Pogoji uporabe: https://jackwallner.github.io/ironman/terms.html
+Podpora: https://jackwallner.github.io/ironman/support.html

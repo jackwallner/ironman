@@ -1,0 +1,37 @@
+Znajdź swoje wyniki triathlonu po nazwisku i zobacz każdy międzyczas w rankingu. IM Tri Tracker wyszukuje opublikowane wyniki triathlonów na pełnym i połówkowym dystansie i tworzy z nich historię startów, którą czytasz w jednej chwili.
+
+Wpisz nazwisko, pod którym startowałeś. Zapisz własne wyniki w Lockerze na urządzeniu albo sprawdź w Explore opublikowane wyniki innego zawodnika: partnera treningowego, rywala lub znajomego, którego śledziłeś w dniu zawodów.
+
+KAŻDY MIĘDZYCZAS
+Pływanie, T1, rower, T2, bieg i czas na mecie dla każdego triathlonu, z numerem startowym, kategorią wiekową oraz miejscem w open, według płci i w kategorii, jeśli pomiar czasu je opublikował. DNF, DNS i DQ są oznaczone i nigdy nie liczą się jako szybki czas.
+
+RANKING WEDŁUG DYSTANSU
+Uszereguj swoje czasy pływania, roweru i biegu, strefy zmian i czasy na mecie spośród wszystkich startów na tym samym dystansie. Pełny dystans i połówka mają osobne rankingi, a każdy czas pokazuje stratę do rekordu życiowego.
+
+NA TLE STAWKI
+Zobacz, gdzie uplasował się każdy czas wśród zawodników, którzy ukończyli te same zawody, z miejscem i percentylem dla pływania, roweru, biegu i mety.
+
+NOTATKI ZE STARTÓW
+Zapisuj notatki o warunkach, odżywianiu i sprzęcie razem z wynikiem. Locker i notatki zostają na tym urządzeniu.
+
+PORADY TRIATHLONOWE OD PATTIE
+Biblioteka porad dotyczących pływania, roweru, biegu i stref zmian oraz Ask Pattie, prowadzona ścieżka do jej nagranych rad na twoją sytuację w dniu startu. Odcinki pobierają się przed odtworzeniem i działają offline.
+
+RACE BOOK
+Porównuj starty jeden do jednego i eksportuj bez limitu raporty w PDF lub jako obraz dzięki jednorazowemu zakupowi na zawsze. Google Play pokazuje cenę przed zakupem. Bez subskrypcji i opłat za eksport.
+
+PODSTAWY ZA DARMO
+Wyszukiwanie wyników, historia startów, międzyczasy, rankingi, porównanie ze stawką, szczegóły zawodów, notatki i cała biblioteka porad są bezpłatne.
+
+DANE I NIEZALEŻNOŚĆ
+Wyszukiwanie wysyła wpisane nazwisko do zewnętrznego serwisu pomiaru czasu, który zwraca opublikowane wyniki. Locker, notatki i ostatnie profile z Explore zostają na tym urządzeniu.
+
+IM Tri Tracker jest niezależny. Nie jest powiązany z żadnym organizatorem zawodów ani firmą mierzącą czas, ani przez nich zatwierdzony czy sponsorowany. Wyniki są pokazywane tak, jak opublikował je pomiar czasu. Pokazywane są tylko wyniki triathlonów na pełnym i połówkowym dystansie.
+
+Sama aplikacja jest w języku angielskim.
+
+IM Tri Tracker służy wyłącznie do ogólnych informacji o startach i formie. Nie jest wyrobem medycznym i nie diagnozuje, nie leczy ani nie zapobiega żadnym chorobom.
+
+Polityka prywatności: https://jackwallner.github.io/ironman/privacy-policy.html
+Warunki korzystania: https://jackwallner.github.io/ironman/terms.html
+Pomoc: https://jackwallner.github.io/ironman/support.html

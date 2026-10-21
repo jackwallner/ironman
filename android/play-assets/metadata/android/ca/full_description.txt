@@ -1,0 +1,37 @@
+Cerca els teus resultats de triatló pel nom i mira cada parcial classificat. IM Tri Tracker troba els resultats publicats de triatlons de llarga i mitja distància i els converteix en un historial de curses que es llegeix d'un cop d'ull.
+
+Cerca el nom amb què vas córrer. Desa els teus resultats al Locker del teu dispositiu o consulta a Explore els resultats publicats d'un altre atleta: un company d'entrenament, un rival o un amic que vas seguir el dia de la cursa.
+
+TOTS ELS PARCIALS
+Natació, T1, bici, T2, cursa a peu i temps final de cada triatló, amb dorsal, grup d'edat i posicions a la general, per sexe i per grup d'edat quan el cronometratge les va publicar. Els DNF, DNS i DQ estan marcats i mai no compten com a parcial ràpid.
+
+CLASSIFICACIÓ PER DISTÀNCIA
+Ordena els teus parcials de natació, bici i cursa, les transicions i els temps finals entre totes les curses de la mateixa distància. Llarga i mitja distància es classifiquen per separat, i cada parcial mostra la diferència amb la teva millor marca.
+
+DAVANT LA RESTA
+Mira on va quedar cada parcial entre els finishers de la mateixa prova, amb posició i percentil en natació, bici, cursa i temps final.
+
+NOTES DE CURSA
+Desa notes de condicions, nutrició i material amb el resultat que els correspon. El teu Locker i les notes es queden en aquest dispositiu.
+
+CONSELLS DE TRIATLÓ DE PATTIE
+Una biblioteca de consells per a natació, bici, cursa i transicions, i Ask Pattie, un recorregut guiat fins als seus consells enregistrats per al teu moment de cursa. Els episodis es baixen abans de reproduir-se i funcionen sense connexió.
+
+RACE BOOK
+Compara curses en igualtat de condicions i exporta informes il·limitats en PDF o imatge amb una sola compra per sempre. Google Play mostra el preu abans de comprar. Sense subscripció ni pagaments per exportació.
+
+L'ESSENCIAL, GRATIS
+La cerca de resultats, l'historial, els parcials, les classificacions, la comparació amb la resta, els detalls de les curses, les notes i tota la biblioteca de consells són gratuïts.
+
+DADES I INDEPENDÈNCIA
+Una cerca envia el nom que escrius al servei de cronometratge extern que retorna els resultats publicats. El teu Locker, les notes i els perfils recents d'Explore es queden en aquest dispositiu.
+
+IM Tri Tracker és independent. No està afiliat, avalat ni patrocinat per cap organitzador de curses ni empresa de cronometratge. Els resultats es mostren tal com els publica cada cronometrador. Només es mostren resultats de triatló de llarga i mitja distància.
+
+L'aplicació en si està en anglès.
+
+IM Tri Tracker ofereix només informació general sobre curses i forma física. No és un dispositiu mèdic i no diagnostica, tracta, cura ni prevé cap malaltia.
+
+Política de privadesa: https://jackwallner.github.io/ironman/privacy-policy.html
+Condicions d'ús: https://jackwallner.github.io/ironman/terms.html
+Assistència: https://jackwallner.github.io/ironman/support.html

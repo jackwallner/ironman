@@ -1,0 +1,37 @@
+Tìm kết quả ba môn phối hợp (triathlon) của bạn theo tên và xem thứ hạng từng split. IM Tri Tracker tìm kết quả đã công bố của các cuộc đua triathlon cự ly đầy đủ và nửa cự ly, rồi sắp xếp thành lịch sử thi đấu dễ đọc chỉ trong một cái nhìn.
+
+Tìm theo tên bạn dùng khi thi đấu. Lưu kết quả của chính bạn trong Locker trên thiết bị, hoặc xem kết quả đã công bố của vận động viên khác trong Explore: bạn tập, đối thủ hay người bạn bạn đã theo dõi trong ngày đua.
+
+TỪNG SPLIT
+Bơi, T1, đạp xe, T2, chạy và thời gian về đích của mỗi cuộc đua, kèm số báo danh, nhóm tuổi và thứ hạng chung, theo giới tính và trong nhóm tuổi khi đơn vị bấm giờ đã công bố. DNF, DNS và DQ được đánh dấu và không bao giờ được tính là split nhanh.
+
+XẾP HẠNG THEO CỰ LY
+Xếp hạng thời gian bơi, đạp xe, chạy, chuyển tiếp và về đích trong tất cả các cuộc đua cùng cự ly. Cự ly đầy đủ và nửa cự ly được xếp hạng riêng, và mỗi split cho thấy khoảng cách tới thành tích tốt nhất của bạn.
+
+SO VỚI CÁC VĐV KHÁC
+Xem mỗi split đứng ở đâu giữa những người về đích trong cùng cuộc đua, với thứ hạng và bách phân vị cho bơi, đạp xe, chạy và về đích.
+
+GHI CHÚ CUỘC ĐUA
+Lưu ghi chú về điều kiện, dinh dưỡng và trang bị cùng với kết quả cuộc đua đó. Locker và ghi chú của bạn ở lại trên thiết bị này.
+
+MẸO TRIATHLON TỪ PATTIE
+Thư viện mẹo cho bơi, đạp xe, chạy và chuyển tiếp, cùng Ask Pattie, lộ trình có hướng dẫn tới lời khuyên đã ghi âm của cô ấy cho tình huống của bạn trong ngày đua. Các tập được tải về trước khi phát và xem được khi ngoại tuyến.
+
+RACE BOOK
+So sánh các cuộc đua ngang hàng và xuất không giới hạn báo cáo cuộc đua dạng PDF hoặc hình ảnh với một lần mua trọn đời. Google Play hiển thị giá trước khi mua. Không có gói đăng ký và không tính phí cho mỗi lần xuất.
+
+TÍNH NĂNG CHÍNH MIỄN PHÍ
+Tìm kết quả, lịch sử thi đấu, split, bảng xếp hạng, so sánh với VĐV khác, chi tiết cuộc đua, ghi chú và toàn bộ thư viện mẹo đều miễn phí.
+
+DỮ LIỆU VÀ TÍNH ĐỘC LẬP
+Mỗi lần tìm kiếm sẽ gửi tên bạn nhập tới dịch vụ bấm giờ bên thứ ba trả về kết quả đã công bố. Locker, ghi chú và hồ sơ Explore gần đây ở lại trên thiết bị này.
+
+IM Tri Tracker là ứng dụng độc lập, không liên kết, không được chứng thực hay tài trợ bởi bất kỳ ban tổ chức giải đua hay công ty bấm giờ nào. Kết quả được hiển thị đúng như từng đơn vị bấm giờ đã công bố. Chỉ hiển thị kết quả triathlon cự ly đầy đủ và nửa cự ly.
+
+Bản thân ứng dụng dùng tiếng Anh.
+
+IM Tri Tracker chỉ cung cấp thông tin chung về thi đấu và thể lực. Đây không phải thiết bị y tế và không chẩn đoán, điều trị, chữa khỏi hay phòng ngừa bất kỳ bệnh nào.
+
+Chính sách quyền riêng tư: https://jackwallner.github.io/ironman/privacy-policy.html
+Điều khoản sử dụng: https://jackwallner.github.io/ironman/terms.html
+Hỗ trợ: https://jackwallner.github.io/ironman/support.html

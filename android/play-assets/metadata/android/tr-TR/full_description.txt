@@ -1,0 +1,37 @@
+Triatlon sonuçlarını isminle bul ve her ara zamanını sıralı gör. IM Tri Tracker, tam ve yarı mesafe triatlonların yayımlanmış sonuçlarını bulur ve bir bakışta okunan bir yarış geçmişine dönüştürür.
+
+Yarıştığın isimle ara. Kendi sonuçlarını cihazındaki Locker'da sakla ya da Explore ile başka bir sporcunun yayımlanmış sonuçlarına bak: antrenman arkadaşın, rakibin veya yarış günü takip ettiğin bir arkadaşın.
+
+HER ARA ZAMAN
+Her triatlon için yüzme, T1, bisiklet, T2, koşu ve bitiş süresi; zamanlama firması yayımladıysa göğüs numarası, yaş grubu ve genel, cinsiyet ve yaş grubu sıralamaları. DNF, DNS ve DQ işaretlenir ve asla hızlı bir süre sayılmaz.
+
+MESAFEYE GÖRE SIRALAMA
+Yüzme, bisiklet ve koşu sürelerini, geçişleri ve bitiş sürelerini aynı mesafedeki tüm yarışların arasında sırala. Tam ve yarı mesafe ayrı sıralanır, her süre kişisel rekoruna olan farkı gösterir.
+
+ALANA KARŞI
+Her sürenin aynı yarışı bitirenler arasında nereye yerleştiğini yüzme, bisiklet, koşu ve bitiş için sıra ve yüzdelik dilimle gör.
+
+YARIŞ NOTLARI
+Koşullar, beslenme ve ekipmanla ilgili notları ait oldukları sonuçla birlikte kaydet. Locker ve notların bu cihazda kalır.
+
+PATTIE'DEN TRIATLON İPUÇLARI
+Yüzme, bisiklet, koşu ve geçişler için bir ipucu kütüphanesi ve yarış günündeki anına göre onun kayıtlı tavsiyelerine götüren rehberli bir yol olan Ask Pattie. Bölümler oynatmadan önce indirilir ve çevrimdışı çalışır.
+
+RACE BOOK
+Yarışları birebir karşılaştır ve tek seferlik, ömür boyu geçerli bir satın alımla sınırsız PDF veya görsel yarış raporu dışa aktar. Google Play fiyatı satın almadan önce gösterir. Abonelik ve dışa aktarım başına ücret yoktur.
+
+TEMEL ÖZELLİKLER ÜCRETSİZ
+Sonuç arama, yarış geçmişi, ara zamanlar, sıralamalar, alan karşılaştırması, yarış ayrıntıları, notlar ve tüm ipucu kütüphanesi ücretsizdir.
+
+VERİ VE BAĞIMSIZLIK
+Bir arama, yazdığın ismi yayımlanmış sonuçları döndüren üçüncü taraf zamanlama hizmetine gönderir. Locker, notlar ve son Explore profilleri bu cihazda kalır.
+
+IM Tri Tracker bağımsızdır. Hiçbir yarış organizatörü veya zamanlama şirketiyle bağlantılı değildir, onlar tarafından onaylanmaz veya desteklenmez. Sonuçlar her zamanlama firmasının yayımladığı şekilde gösterilir. Yalnızca tam ve yarı mesafe triatlon sonuçları gösterilir.
+
+Uygulamanın kendisi İngilizcedir.
+
+IM Tri Tracker yalnızca genel yarış ve fitness bilgisi sunar. Tıbbi bir cihaz değildir ve hiçbir hastalığı teşhis etmez, tedavi etmez, iyileştirmez veya önlemez.
+
+Gizlilik Politikası: https://jackwallner.github.io/ironman/privacy-policy.html
+Kullanım Koşulları: https://jackwallner.github.io/ironman/terms.html
+Destek: https://jackwallner.github.io/ironman/support.html

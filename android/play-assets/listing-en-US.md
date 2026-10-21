@@ -56,6 +56,23 @@ keyword stuffing. The launcher name stays `IM Tri Tracker`; only the Play title
 carries the `: Triathlon` descriptor. Never add trademarked event names or
 distance shorthand as keywords.
 
+## Localized listings
+
+Title, short and full description per locale live in
+`metadata/android/<play-locale>/` in the fastlane supply layout. en-US there is
+the live listing, copied unchanged.
+
+Locales (50): en-US (default), en-GB/AU/CA/IN, de-DE, fr-FR/CA, es-ES/419/US,
+pt-BR/PT, it-IT, nl-NL, sv-SE, no-NO, da-DK, fi-FI, pl-PL, cs-CZ, sk, sl, hr,
+hu-HU, ro, el-GR, tr-TR, ru-RU, uk, ar, iw-IL, hi-IN, bn-BD, mr-IN, ta-IN,
+te-IN, kn-IN, ml-IN, id, ms, ms-MY, th, vi, ja-JP, ko-KR, zh-CN/TW/HK, ca.
+Titles keep `IM Tri Tracker:` plus the local word for triathlon (or triathlon
+results where it fits); short descriptions open with the local "triathlon
+results by name". Search terms come from the matching iOS
+`fastlane/metadata/<locale>/keywords.txt`. Every non-English description says
+the app itself is in English (the Android app is not localized). Check with
+`scripts/validate-play-listing.py`.
+
 ## App content
 
 - Category: Sports

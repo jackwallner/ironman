@@ -1,0 +1,37 @@
+Find dine triatlonresultater på navn, og se hver splittid rangeret. IM Tri Tracker finder offentliggjorte resultater fra triatlon på hel- og halvdistance og gør dem til en løbshistorik, du kan læse på et øjeblik.
+
+Søg på det navn, du stillede op under. Gem dine egne resultater i Locker på enheden, eller se en anden atlets offentliggjorte resultater i Explore: en træningsmakker, en rival eller en ven, du fulgte på løbsdagen.
+
+HVER SPLITTID
+Svømning, T1, cykel, T2, løb og sluttid for hver triatlon med startnummer, aldersgruppe og placering samlet, efter køn og i aldersgruppen, når tidtagningen har offentliggjort dem. DNF, DNS og DQ er markeret og tæller aldrig som en hurtig tid.
+
+RANGERING PR. DISTANCE
+Ranger dine svømme-, cykel- og løbetider, skift og sluttider mod alle løb på samme distance. Hel- og halvdistance holdes adskilt, og hver tid viser afstanden til din personlige rekord.
+
+MOD FELTET
+Se, hvor hver tid placerede sig blandt dem, der gennemførte samme løb, med placering og percentil for svømning, cykel, løb og sluttid.
+
+LØBSNOTER
+Gem noter om forhold, energi og udstyr sammen med resultatet. Locker og noter bliver på denne enhed.
+
+TRIATLONTIPS FRA PATTIE
+Et bibliotek med tips til svømning, cykel, løb og skift, og Ask Pattie, en guidet vej til hendes indspillede råd til din situation på løbsdagen. Episoderne hentes før afspilning og virker offline.
+
+RACE BOOK
+Sammenlign løb på lige vilkår, og eksportér ubegrænset med løbsrapporter som PDF eller billede med ét engangskøb for altid. Google Play viser prisen før købet. Intet abonnement og intet gebyr pr. eksport.
+
+GRUNDLAGET ER GRATIS
+Resultatsøgning, løbshistorik, splittider, ranglister, sammenligning med feltet, løbsdetaljer, noter og hele tipsbiblioteket er gratis.
+
+DATA OG UAFHÆNGIGHED
+En søgning sender det navn, du skriver, til den eksterne tidtagningstjeneste, der returnerer offentliggjorte resultater. Locker, noter og seneste Explore-profiler bliver på denne enhed.
+
+IM Tri Tracker er uafhængig og ikke tilknyttet, godkendt eller sponsoreret af nogen arrangør eller noget tidtagningsfirma. Resultaterne vises, som hver tidtager har offentliggjort dem. Kun resultater fra triatlon på hel- og halvdistance vises.
+
+Selve appen er på engelsk.
+
+IM Tri Tracker giver kun generel information om løb og motion. Den er ikke medicinsk udstyr og stiller ikke diagnoser, behandler, helbreder eller forebygger ingen sygdom.
+
+Privatlivspolitik: https://jackwallner.github.io/ironman/privacy-policy.html
+Vilkår for brug: https://jackwallner.github.io/ironman/terms.html
+Support: https://jackwallner.github.io/ironman/support.html
