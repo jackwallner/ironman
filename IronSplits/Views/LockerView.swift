@@ -15,6 +15,10 @@ struct LockerView: View {
     @State private var showingRankings = false
     @State private var rankingDiscipline: Discipline = .finish
     @State private var raceSearch = ""
+    #if DEBUG
+    /// Bumped by the capture tour to scroll the races or rankings into view.
+    @State private var captureTourScrolls = 0
+    #endif
 
     var body: some View {
         NavigationStack {
@@ -61,9 +65,10 @@ struct LockerView: View {
             }
             .onAppear { syncKindFilter() }
             #if DEBUG
-            .onReceive(NotificationCenter.default.publisher(for: .captureTourRankings)) { note in
+            .onReceive(NotificationCenter.default.publisher(for: .captureTourLocker)) { note in
                 showingRankings = note.object as? Bool ?? false
                 if showingRankings, kindFilter == nil { kindFilter = locker.availableKinds.first }
+                captureTourScrolls += 1
             }
             #endif
             .onChange(of: locker.athlete?.id) { _, _ in syncKindFilter() }
@@ -119,121 +124,133 @@ struct LockerView: View {
     }
 
     private var list: some View {
-        List {
-            // The header is its own section with a clear row, so it keeps all
-            // four rounded corners. Sharing a section with the search field
-            // gave the inset-grouped clip the field's top corners and left the
-            // card square on top.
-            Section {
-                raceSearchField
-                    .listRowInsets(EdgeInsets())
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
-            }
-            Section {
-                LockerHeader(athlete: locker.athlete,
-                             results: locker.results,
-                             lastRefreshed: locker.lastRefreshed)
-                    .listRowInsets(EdgeInsets())
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
-            }
-
-            if let warning = locker.refreshWarning {
+        ScrollViewReader { proxy in
+            List {
+                // The header is its own section with a clear row, so it keeps all
+                // four rounded corners. Sharing a section with the search field
+                // gave the inset-grouped clip the field's top corners and left the
+                // card square on top.
                 Section {
-                    Label(warning, systemImage: "info.circle")
-                        .font(TriType.small)
-                        .foregroundStyle(TriPalette.inkSecondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(minHeight: TriGeo.tapTarget, alignment: .leading)
-                        .listRowBackground(TriPalette.surface)
-                }
-            }
-
-            // Both filter rows share one section: as two sections they each
-            // took a full inset-grouped gap and floated apart.
-            Section {
-                if locker.availableKinds.count > 1 {
-                    kindPicker
-                        .listRowInsets(EdgeInsets(top: 0, leading: TriGeo.padPage,
-                                                  bottom: TriSpace.x1, trailing: TriGeo.padPage))
+                    raceSearchField
+                        .listRowInsets(EdgeInsets())
                         .listRowBackground(Color.clear)
                         .listRowSeparator(.hidden)
                 }
-                HStack(spacing: TriSpace.x2) {
-                    TriChip(title: "Races", isSelected: !showingRankings) {
-                        showingRankings = false
-                    }
-                    TriChip(title: "Rankings", isSelected: showingRankings) {
-                        if kindFilter == nil {
-                            kindFilter = settings.preferredKind.flatMap { locker.availableKinds.contains($0) ? $0 : nil }
-                                ?? locker.availableKinds.first
-                        }
-                        showingRankings = true
-                    }
-                }
-                .listRowInsets(EdgeInsets(top: TriSpace.x1, leading: TriGeo.padPage,
-                                          bottom: TriSpace.x1, trailing: TriGeo.padPage))
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
-            }
-
-            if showingRankings {
                 Section {
-                    rankingPicker
-                        .listRowInsets(EdgeInsets(top: 0, leading: TriGeo.padPage,
-                                                  bottom: TriSpace.x2, trailing: TriGeo.padPage))
+                    LockerHeader(athlete: locker.athlete,
+                                 results: locker.results,
+                                 lastRefreshed: locker.lastRefreshed)
+                        .listRowInsets(EdgeInsets())
                         .listRowBackground(Color.clear)
-                    if standings.isEmpty {
-                        Text("Finish a race at this distance to see your split rankings.")
+                        .listRowSeparator(.hidden)
+                }
+
+                if let warning = locker.refreshWarning {
+                    Section {
+                        Label(warning, systemImage: "info.circle")
                             .font(TriType.small)
-                            .foregroundStyle(TriPalette.inkTertiary)
+                            .foregroundStyle(TriPalette.inkSecondary)
                             .fixedSize(horizontal: false, vertical: true)
                             .frame(minHeight: TriGeo.tapTarget, alignment: .leading)
                             .listRowBackground(TriPalette.surface)
-                    } else {
-                        ForEach(standings) { standing in
-                            raceLink(standing.result) {
-                                SplitStandingRow(standing: standing)
+                    }
+                }
+
+                // Both filter rows share one section: as two sections they each
+                // took a full inset-grouped gap and floated apart.
+                Section {
+                    if locker.availableKinds.count > 1 {
+                        kindPicker
+                            .listRowInsets(EdgeInsets(top: 0, leading: TriGeo.padPage,
+                                                      bottom: TriSpace.x1, trailing: TriGeo.padPage))
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
+                    }
+                    HStack(spacing: TriSpace.x2) {
+                        TriChip(title: "Races", isSelected: !showingRankings) {
+                            showingRankings = false
+                        }
+                        TriChip(title: "Rankings", isSelected: showingRankings) {
+                            if kindFilter == nil {
+                                kindFilter = settings.preferredKind.flatMap { locker.availableKinds.contains($0) ? $0 : nil }
+                                    ?? locker.availableKinds.first
+                            }
+                            showingRankings = true
+                        }
+                    }
+                    .listRowInsets(EdgeInsets(top: TriSpace.x1, leading: TriGeo.padPage,
+                                              bottom: TriSpace.x1, trailing: TriGeo.padPage))
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                    .id(Self.modeRowID)
+                }
+
+                if showingRankings {
+                    Section {
+                        rankingPicker
+                            .listRowInsets(EdgeInsets(top: 0, leading: TriGeo.padPage,
+                                                      bottom: TriSpace.x2, trailing: TriGeo.padPage))
+                            .listRowBackground(Color.clear)
+                        if standings.isEmpty {
+                            Text("Finish a race at this distance to see your split rankings.")
+                                .font(TriType.small)
+                                .foregroundStyle(TriPalette.inkTertiary)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(minHeight: TriGeo.tapTarget, alignment: .leading)
+                                .listRowBackground(TriPalette.surface)
+                        } else {
+                            ForEach(standings) { standing in
+                                raceLink(standing.result) {
+                                    SplitStandingRow(standing: standing)
+                                }
+                            }
+                        }
+                    } header: {
+                        TriSectionHeader(title: "\(rankingDiscipline.title) rankings",
+                                         trailing: rankingKind?.longTitle)
+                    }
+                } else {
+                    ForEach(resultGroups, id: \.year) { group in
+                        Section(group.year > 0 ? String(group.year) : "Undated") {
+                            ForEach(group.results) { result in
+                                raceLink(result) {
+                                    RaceRow(result: result,
+                                            personalBestLegs: personalBestMap[result.id, default: []],
+                                            hasNote: notes.hasNote(for: result.id))
+                                }
                             }
                         }
                     }
-                } header: {
-                    TriSectionHeader(title: "\(rankingDiscipline.title) rankings",
-                                     trailing: rankingKind?.longTitle)
-                }
-            } else {
-                ForEach(resultGroups, id: \.year) { group in
-                    Section(group.year > 0 ? String(group.year) : "Undated") {
-                        ForEach(group.results) { result in
-                            raceLink(result) {
-                                RaceRow(result: result,
-                                        personalBestLegs: personalBestMap[result.id, default: []],
-                                        hasNote: notes.hasNote(for: result.id))
-                            }
+                    Section {
+                        Button {
+                            showingAddRegistration = true
+                        } label: {
+                            LockerAddRegistrationCard()
                         }
+                        .buttonStyle(.triPress)
+                        .listRowBackground(TriPalette.surface)
                     }
-                }
-                Section {
-                    Button {
-                        showingAddRegistration = true
-                    } label: {
-                        LockerAddRegistrationCard()
+                    Section {
+                        SplitLegend()
+                            .frame(maxWidth: .infinity)
+                            .listRowBackground(Color.clear)
                     }
-                    .buttonStyle(.triPress)
-                    .listRowBackground(TriPalette.surface)
-                }
-                Section {
-                    SplitLegend()
-                        .frame(maxWidth: .infinity)
-                        .listRowBackground(Color.clear)
                 }
             }
+            .listStyle(.insetGrouped)
+            .listSectionSpacing(TriSpace.x4)
+            .scrollContentBackground(.hidden)
+            #if DEBUG
+            .task(id: captureTourScrolls) {
+                guard captureTourScrolls > 0 else { return }
+                try? await Task.sleep(for: .milliseconds(400))
+                withAnimation { proxy.scrollTo(Self.modeRowID, anchor: .top) }
+            }
+            #endif
         }
-        .listStyle(.insetGrouped)
-        .listSectionSpacing(TriSpace.x4)
-        .scrollContentBackground(.hidden)
     }
+
+    private static let modeRowID = "locker.mode"
 
     /// Pushes the race on a phone. Unfolded, it shows it in the pane beside the
     /// list instead, and marks the row that pane is showing.
