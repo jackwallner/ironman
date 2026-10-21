@@ -6,6 +6,11 @@ struct RaceDetailView: View {
     let result: RaceResult
     var contextResults: [RaceResult]? = nil
     var isReadOnly = false
+    /// Shown without the athlete opening it (the unfolded Duo's default pane),
+    /// so it neither counts toward the review prompt nor wakes Pattie.
+    var opensQuietly = false
+    /// The root of that pane's stack, so there is nothing to go back to.
+    var isPaneRoot = false
 
     @EnvironmentObject private var locker: LockerStore
     @EnvironmentObject private var notes: RaceNotesStore
@@ -47,7 +52,7 @@ struct RaceDetailView: View {
         .background(TriPalette.canvas)
         .navigationTitle(result.raceName)
         .navigationBarTitleDisplayMode(.inline)
-        .triNavBar(pushed: true)
+        .triNavBar(pushed: !isPaneRoot)
         .sheet(isPresented: $editingNote) {
             RaceNoteEditor(note: notes.note(for: result.id), raceName: result.raceName) { updated in
                 notes.save(updated)
@@ -56,12 +61,13 @@ struct RaceDetailView: View {
             }
         }
         .task {
-            if ReviewPromptTracker.isPositiveMoment(result: result,
+            if !opensQuietly,
+               ReviewPromptTracker.isPositiveMoment(result: result,
                                                     isReadOnly: isReadOnly,
                                                     within: careerResults) {
                 ReviewPromptTracker.recordPositiveMoment(identifier: result.id)
             }
-            if !isReadOnly { pattie.fire(pattieMoment) }
+            if !isReadOnly, !opensQuietly { pattie.fire(pattieMoment) }
             guard result.isComplete else { return }
             await loadField()
         }

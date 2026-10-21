@@ -6,6 +6,8 @@ struct LockerView: View {
     @EnvironmentObject private var notes: RaceNotesStore
     @EnvironmentObject private var pattie: PattieMode
     @EnvironmentObject private var settings: AppSettings
+    /// Set on the unfolded Duo, where a race opens in the pane beside the list.
+    @Environment(RacePane.self) private var racePane: RacePane?
 
     @State private var showingAthleteSearch = false
     @State private var showingAddRegistration = false
@@ -58,6 +60,12 @@ struct LockerView: View {
                 }
             }
             .onAppear { syncKindFilter() }
+            #if DEBUG
+            .onReceive(NotificationCenter.default.publisher(for: .captureTourRankings)) { note in
+                showingRankings = note.object as? Bool ?? false
+                if showingRankings, kindFilter == nil { kindFilter = locker.availableKinds.first }
+            }
+            #endif
             .onChange(of: locker.athlete?.id) { _, _ in syncKindFilter() }
             .onChange(of: locker.availableKinds) { _, kinds in
                 if let kindFilter, !kinds.contains(kindFilter) {
@@ -185,12 +193,9 @@ struct LockerView: View {
                             .listRowBackground(TriPalette.surface)
                     } else {
                         ForEach(standings) { standing in
-                            NavigationLink {
-                                RaceDetailView(result: standing.result)
-                            } label: {
+                            raceLink(standing.result) {
                                 SplitStandingRow(standing: standing)
                             }
-                            .listRowBackground(TriPalette.surface)
                         }
                     }
                 } header: {
@@ -201,14 +206,11 @@ struct LockerView: View {
                 ForEach(resultGroups, id: \.year) { group in
                     Section(group.year > 0 ? String(group.year) : "Undated") {
                         ForEach(group.results) { result in
-                            NavigationLink {
-                                RaceDetailView(result: result)
-                            } label: {
+                            raceLink(result) {
                                 RaceRow(result: result,
                                         personalBestLegs: personalBestMap[result.id, default: []],
                                         hasNote: notes.hasNote(for: result.id))
                             }
-                            .listRowBackground(TriPalette.surface)
                         }
                     }
                 }
@@ -231,6 +233,32 @@ struct LockerView: View {
         .listStyle(.insetGrouped)
         .listSectionSpacing(TriSpace.x4)
         .scrollContentBackground(.hidden)
+    }
+
+    /// Pushes the race on a phone. Unfolded, it shows it in the pane beside the
+    /// list instead, and marks the row that pane is showing.
+    @ViewBuilder
+    private func raceLink<Label: View>(_ result: RaceResult, @ViewBuilder label: () -> Label) -> some View {
+        if let racePane {
+            let isShown = racePane.race(in: locker.results)?.id == result.id
+            Button {
+                racePane.select(result)
+            } label: {
+                label()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .listRowBackground(isShown ? TriPalette.sunrise.opacity(0.12) : TriPalette.surface)
+            .accessibilityAddTraits(isShown ? .isSelected : [])
+        } else {
+            NavigationLink {
+                RaceDetailView(result: result)
+            } label: {
+                label()
+            }
+            .listRowBackground(TriPalette.surface)
+        }
     }
 
     private var raceSearchField: some View {
