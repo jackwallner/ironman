@@ -117,9 +117,9 @@ struct RootTabView: View {
     }
 
     #if DEBUG
-    /// `-CaptureTour`: walks Locker, Rankings, Race Book, Explore and Tips on a timer, so
-    /// one unattended gh-sim launch (which can only screenshot on its own clock)
-    /// captures every store screen. Dwell is `-CaptureTourStep <s>`, the first
+    /// `-CaptureTour`: walks the Locker races and rankings, Race Book, Explore
+    /// and Tips on a timer, so one unattended gh-sim launch (which can only
+    /// screenshot on its own clock) captures every store screen. Dwell is `-CaptureTourStep <s>`, the first
     /// screen holds for `-CaptureTourFirst <s>` folded and that plus
     /// `-CaptureTourUnfoldedDelay <s>` unfolded, where the runner waits for the
     /// inner display to draw before its first shot.
@@ -132,16 +132,25 @@ struct RootTabView: View {
         }
         let step = value("-CaptureTourStep", 13.5)
         var first = value("-CaptureTourFirst", 19.5)
-        if horizontalSizeClass == .regular { first += value("-CaptureTourUnfoldedDelay", 5) }
-        // Tab, and whether the Locker shows rankings rather than races.
-        let stops: [(Tab, Bool)] = [
-            (.locker, false), (.locker, true), (.resume, false), (.explore, false), (.pattie, false),
+        if horizontalSizeClass == .regular { first += value("-CaptureTourUnfoldedDelay", 7.5) }
+        // Tab, the race in the unfolded detail pane, and for the Locker
+        // stops whether it shows rankings. The first stop is the launch state.
+        let stops: [(tab: Tab, race: String?, rankings: Bool?)] = [
+            (.locker, nil, nil),
+            (.locker, "demo-half-2025", false),
+            (.locker, "demo-full-2025", true),
+            (.resume, "demo-full-2025", nil),
+            (.explore, "demo-full-2025", nil),
+            (.pattie, "demo-full-2025", nil),
         ]
         for (index, stop) in stops.enumerated() {
             if Task.isCancelled { return }
             if index > 0 {
-                NotificationCenter.default.post(name: .captureTourRankings, object: stop.1)
-                selectedTab = stop.0
+                if let rankings = stop.rankings {
+                    NotificationCenter.default.post(name: .captureTourLocker, object: rankings)
+                }
+                racePane.selectedID = stop.race
+                selectedTab = stop.tab
             }
             try? await Task.sleep(for: .seconds(index == 0 ? first : step))
         }
@@ -229,7 +238,8 @@ final class RacePane {
 
 #if DEBUG
 extension Notification.Name {
-    /// The capture tour switching the Locker between races and rankings.
-    static let captureTourRankings = Notification.Name("ironsplits.captureTourRankings")
+    /// The capture tour scrolling the Locker to its races (`false`) or
+    /// rankings (`true`).
+    static let captureTourLocker = Notification.Name("ironsplits.captureTourLocker")
 }
 #endif

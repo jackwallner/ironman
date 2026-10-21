@@ -21,7 +21,10 @@ paths:
 - The default pane opens quietly (`RaceDetailView.opensQuietly`): it does not
   count toward the review prompt or fire Pattie until the athlete picks it.
 - Capture: `gh-sim all --device 'iPhone Duo' --args "-UITest -ResetLocker
-  -SeedScreenshotData -AuditLight -CaptureTour" --wait 12 --url noop://1 ...
-  --url noop://4`. The DEBUG tour walks Locker, Rankings, Race Book, Explore,
-  Tips on a timer because gh-sim shoots on its own clock and `simctl openurl`
-  with a real scheme raises a confirmation alert.
+  -SeedScreenshotData -AuditLight -CaptureTour" --wait 12` plus `--url
+  noop://1` through `noop://5`. The failing noop URLs only pace extra shots;
+  the DEBUG tour walks six screens on a timer because gh-sim shoots on its own
+  clock and `simctl openurl` with a real scheme raises a confirmation alert.
+- Record in a separate `gh-sim launch --record-seconds`: in `all`, the test
+  recording never stops and blocks the launch recordings ("A recording is
+  already in progress").
