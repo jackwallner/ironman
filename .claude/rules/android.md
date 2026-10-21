@@ -160,8 +160,7 @@ Pro Play AVD**. Current Iron Splits host details:
   uninstall the Play build to make instrumentation tests install.
 - Connected tests and every other emulator task run on Pro itself. A forwarded
   remote ADB list showed the device to Air, but Gradle/UTP could not use it
-  through the tunnel. Run Gradle over SSH from a temporary copy of the current
-  `android/` worktree. Do not forward ADB or emulator console ports to the Air.
+  through the tunnel. Run Gradle with `fm-gradle` (below). Do not forward ADB or emulator console ports to the Air.
 
 ### Start or reuse the Play AVD
 
@@ -189,7 +188,7 @@ ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=yes \
 
 ### Run connected tests on an isolated AVD
 
-Pro has no Android `cmdline-tools`/`avdmanager`. Builds go through
+Builds go through
 `fm-gradle`, which syncs `android/` to `~/fleet-work/gradle/ironman/android` on
 Pro and writes a debug-only `local.properties` there (the SDK path and Test
 Store key; never `REVENUECAT_PLAY_KEY`, the upload keystore or signing
@@ -198,7 +197,7 @@ passwords). It forwards `ANDROID_SERIAL`, so no hand sync is needed.
 The Play AVD already owns the app package, so instrumentation uses a temporary
 debug AVD named `ironsplits_agent_test` on port `5560`, serial
 `emulator-5560`. The installed API 36.1 Play image is shared, but the new AVD
-must have fresh userdata and no account. Pro has no `avdmanager`; create the
+must have fresh userdata and no account. Create the
 test AVD by copying only `small_phone.avd/config.ini`, changing `AvdId` and
 `avd.ini.displayname`, and registering the new `.ini` with target
 `android-36.1`. Do not copy `userdata-qemu.img`, snapshots, or any other
