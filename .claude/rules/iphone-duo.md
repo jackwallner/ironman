@@ -22,7 +22,8 @@ paths:
   count toward the review prompt or fire Pattie until the athlete picks it.
 - Unfolded, the leading pane hides the system's floating glass tab bar and
   shows `paneTabBar`, an opaque bar of the same tabs, as a bottom
-  `safeAreaInset`, so lists scroll their last row clear of it and nothing
+  `safeAreaInset`, topped by a short canvas fade so rows dissolve at its edge
+  instead of being cut; lists scroll their last row clear of it and nothing
   shows through. Don't size a clearance from the system bar's safe-area
   inset: on the inner display (iOS 27.1) it reports about 167 pt for a bar
   whose top is about 83 pt up. Folded keeps the system bar.
