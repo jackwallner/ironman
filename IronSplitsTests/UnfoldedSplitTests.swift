@@ -46,13 +46,6 @@ final class UnfoldedSplitTests: XCTestCase {
         XCTAssertEqual(pane.race(in: DebugScreenshotFixtures.results)?.id, "demo-full-2025")
     }
 
-    func testBarClearanceKeepsAGapAboveTheTabBar() {
-        // The floating bar's inset, plus a gap so no row sits under its glass.
-        XCTAssertEqual(UnfoldedSplit.barClearance(safeAreaBottom: 83), 83 + UnfoldedSplit.barGap)
-        XCTAssertEqual(UnfoldedSplit.barClearance(safeAreaBottom: -4), UnfoldedSplit.barGap)
-        XCTAssertGreaterThan(UnfoldedSplit.barFade, 0)
-    }
-
     func testDuoScreenOpensEverySurfaceOnASeededRace() {
         let seeded = Set(DebugScreenshotFixtures.results.map(\.id))
         for screen in DuoScreen.allCases {

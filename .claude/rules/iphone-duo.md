@@ -20,9 +20,12 @@ paths:
   navigation and scroll survive. Never swap layouts with an `if`.
 - The default pane opens quietly (`RaceDetailView.opensQuietly`): it does not
   count toward the review prompt or fire Pattie until the athlete picks it.
-- Unfolded, every tab ends above the floating tab bar (`clearsTabBar`, a gap
-  plus a short fade into the canvas), so no row sits under the bar's glass.
-  Folded keeps the system bar over scrolling content as before.
+- Unfolded, the leading pane hides the system's floating glass tab bar and
+  shows `paneTabBar`, an opaque bar of the same tabs, as a bottom
+  `safeAreaInset`, so lists scroll their last row clear of it and nothing
+  shows through. Don't size a clearance from the system bar's safe-area
+  inset: on the inner display (iOS 27.1) it reports about 167 pt for a bar
+  whose top is about 83 pt up. Folded keeps the system bar.
 - The inner display's status bar is a vertical column on the trailing edge
   and insets the detail pane's trailing safe area. The pane's race ignores
   that inset horizontally, otherwise every card sits off centre.

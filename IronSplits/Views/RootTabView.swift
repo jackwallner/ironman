@@ -16,6 +16,26 @@ struct RootTabView: View {
 
     private enum Tab: CaseIterable, Hashable {
         case locker, explore, pattie, resume, settings
+
+        var title: String {
+            switch self {
+            case .locker: "Locker"
+            case .explore: "Explore"
+            case .pattie: "Tips"
+            case .resume: "Race Book"
+            case .settings: "Settings"
+            }
+        }
+
+        var systemImage: String {
+            switch self {
+            case .locker: "tray.full.fill"
+            case .explore: "person.2.fill"
+            case .pattie: "play.rectangle.fill"
+            case .resume: "book.closed.fill"
+            case .settings: "gearshape.fill"
+            }
+        }
     }
 
     /// Unfolded, the selected race gets its own pane beside the tabs.
@@ -87,26 +107,11 @@ struct RootTabView: View {
 
     private var tabs: some View {
         TabView(selection: $selectedTab) {
-            LockerView()
-                .clearsTabBar(split != nil)
-                .tabItem { Label("Locker", systemImage: "tray.full.fill") }
-                .tag(Tab.locker)
-            ExploreView()
-                .clearsTabBar(split != nil)
-                .tabItem { Label("Explore", systemImage: "person.2.fill") }
-                .tag(Tab.explore)
-            PointersView()
-                .clearsTabBar(split != nil)
-                .tabItem { Label("Tips", systemImage: "play.rectangle.fill") }
-                .tag(Tab.pattie)
-            ResumeView()
-                .clearsTabBar(split != nil)
-                .tabItem { Label("Race Book", systemImage: "book.closed.fill") }
-                .tag(Tab.resume)
-            SettingsView()
-                .clearsTabBar(split != nil)
-                .tabItem { Label("Settings", systemImage: "gearshape.fill") }
-                .tag(Tab.settings)
+            tab(.locker) { LockerView() }
+            tab(.explore) { ExploreView() }
+            tab(.pattie) { PointersView() }
+            tab(.resume) { ResumeView() }
+            tab(.settings) { SettingsView() }
         }
         .tint(TriPalette.sunrise)
         .background(TriPalette.canvas.ignoresSafeArea())
@@ -119,6 +124,54 @@ struct RootTabView: View {
         #if DEBUG
         .task { await openDuoScreen() }
         #endif
+    }
+
+    /// One tab's screen. Unfolded, the system's floating glass bar let rows show
+    /// through it and reported an inset about twice its height, so the leading
+    /// pane hides it for an opaque bar of the same tabs. That bar is a safe-area
+    /// inset, so every list scrolls its last row clear of it.
+    private func tab<Content: View>(_ tab: Tab, @ViewBuilder content: () -> Content) -> some View {
+        content()
+            .toolbar(split == nil ? .automatic : .hidden, for: .tabBar)
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                if split != nil { paneTabBar }
+            }
+            .tabItem { Label(tab.title, systemImage: tab.systemImage) }
+            .tag(tab)
+    }
+
+    private var paneTabBar: some View {
+        HStack(spacing: 0) {
+            ForEach(Tab.allCases, id: \.self) { tab in
+                let isSelected = selectedTab == tab
+                Button {
+                    selectedTab = tab
+                } label: {
+                    VStack(spacing: TriSpace.x1) {
+                        Image(systemName: tab.systemImage)
+                            .font(TriType.bodyBold)
+                            .imageScale(.large)
+                        Text(tab.title)
+                            .font(TriType.micro)
+                            .lineLimit(1)
+                    }
+                    .foregroundStyle(isSelected ? TriPalette.sunrise : TriPalette.inkSecondary)
+                    .frame(maxWidth: .infinity, minHeight: TriGeo.tapTarget)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.triPressSilent)
+                .accessibilityLabel(tab.title)
+                .accessibilityAddTraits(isSelected ? .isSelected : [])
+            }
+        }
+        .padding(.horizontal, TriSpace.x2)
+        .padding(.vertical, TriSpace.x2)
+        .background(TriPalette.surface.ignoresSafeArea(edges: .bottom))
+        .overlay(alignment: .top) {
+            Rectangle()
+                .fill(TriPalette.hairline)
+                .frame(height: TriGeo.hairline)
+        }
     }
 
     #if DEBUG
@@ -221,38 +274,6 @@ final class RacePane {
         let finishes = results.filter(\.isComplete)
         return (finishes.isEmpty ? results : finishes)
             .max { ($0.eventDate ?? .distantPast) < ($1.eventDate ?? .distantPast) }
-    }
-}
-
-/// Unfolded, the floating tab bar sits inside the leading pane, and rows
-/// scrolling under its glass read as content behind a sheet. Each tab ends a
-/// gap above the bar instead, its last visible rows fading into the canvas,
-/// and the last row still scrolls clear. Folded, nothing changes.
-private struct TabBarClearance: ViewModifier {
-    let isActive: Bool
-    @State private var barInset: CGFloat = 0
-
-    func body(content: Content) -> some View {
-        content
-            .safeAreaPadding(.bottom, isActive ? UnfoldedSplit.barFade : 0)
-            .overlay(alignment: .bottom) {
-                LinearGradient(colors: [TriPalette.canvas.opacity(0), TriPalette.canvas],
-                               startPoint: .top, endPoint: .bottom)
-                    .frame(height: UnfoldedSplit.barFade)
-                    .opacity(isActive ? 1 : 0)
-                    .allowsHitTesting(false)
-            }
-            .padding(.bottom, isActive ? UnfoldedSplit.barClearance(safeAreaBottom: barInset) : 0)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(isActive ? TriPalette.canvas : .clear)
-            // Measured outside the padding, so it stays the bar's inset.
-            .onGeometryChange(for: CGFloat.self) { $0.safeAreaInsets.bottom } action: { barInset = $0 }
-    }
-}
-
-private extension View {
-    func clearsTabBar(_ isActive: Bool) -> some View {
-        modifier(TabBarClearance(isActive: isActive))
     }
 }
 
