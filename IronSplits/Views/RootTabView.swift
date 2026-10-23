@@ -88,18 +88,23 @@ struct RootTabView: View {
     private var tabs: some View {
         TabView(selection: $selectedTab) {
             LockerView()
+                .clearsTabBar(split != nil)
                 .tabItem { Label("Locker", systemImage: "tray.full.fill") }
                 .tag(Tab.locker)
             ExploreView()
+                .clearsTabBar(split != nil)
                 .tabItem { Label("Explore", systemImage: "person.2.fill") }
                 .tag(Tab.explore)
             PointersView()
+                .clearsTabBar(split != nil)
                 .tabItem { Label("Tips", systemImage: "play.rectangle.fill") }
                 .tag(Tab.pattie)
             ResumeView()
+                .clearsTabBar(split != nil)
                 .tabItem { Label("Race Book", systemImage: "book.closed.fill") }
                 .tag(Tab.resume)
             SettingsView()
+                .clearsTabBar(split != nil)
                 .tabItem { Label("Settings", systemImage: "gearshape.fill") }
                 .tag(Tab.settings)
         }
@@ -112,48 +117,26 @@ struct RootTabView: View {
         }
         .task { await locker.refresh() }
         #if DEBUG
-        .task { await runCaptureTour() }
+        .task { await openDuoScreen() }
         #endif
     }
 
     #if DEBUG
-    /// `-CaptureTour`: walks the Locker races and rankings, Race Book, Explore
-    /// and Tips on a timer, so one unattended gh-sim launch (which can only
-    /// screenshot on its own clock) captures every store screen. Dwell is `-CaptureTourStep <s>`, the first
-    /// screen holds for `-CaptureTourFirst <s>` folded and that plus
-    /// `-CaptureTourUnfoldedDelay <s>` unfolded, where the runner waits for the
-    /// inner display to draw before its first shot.
-    private func runCaptureTour() async {
-        let args = ProcessInfo.processInfo.arguments
-        guard args.contains("-CaptureTour") else { return }
-        func value(_ key: String, _ fallback: Double) -> Double {
-            guard let i = args.firstIndex(of: key), i + 1 < args.count else { return fallback }
-            return Double(args[i + 1]) ?? fallback
+    /// `-DuoScreen <surface>` opens one store surface on the seeded data, so
+    /// each gh-sim `--screen` launch captures it folded and unfolded.
+    private func openDuoScreen() async {
+        guard let screen = DuoScreen(arguments: ProcessInfo.processInfo.arguments) else { return }
+        racePane.selectedID = screen.race
+        selectedTab = switch screen {
+        case .locker, .races, .rankings: .locker
+        case .racebook: .resume
+        case .explore: .explore
+        case .tips: .pattie
         }
-        let step = value("-CaptureTourStep", 13.5)
-        var first = value("-CaptureTourFirst", 19.5)
-        if horizontalSizeClass == .regular { first += value("-CaptureTourUnfoldedDelay", 7.5) }
-        // Tab, the race in the unfolded detail pane, and for the Locker
-        // stops whether it shows rankings. The first stop is the launch state.
-        let stops: [(tab: Tab, race: String?, rankings: Bool?)] = [
-            (.locker, nil, nil),
-            (.locker, "demo-half-2025", false),
-            (.locker, "demo-full-2025", true),
-            (.resume, "demo-full-2025", nil),
-            (.explore, "demo-full-2025", nil),
-            (.pattie, "demo-full-2025", nil),
-        ]
-        for (index, stop) in stops.enumerated() {
-            if Task.isCancelled { return }
-            if index > 0 {
-                if let rankings = stop.rankings {
-                    NotificationCenter.default.post(name: .captureTourLocker, object: rankings)
-                }
-                racePane.selectedID = stop.race
-                selectedTab = stop.tab
-            }
-            try? await Task.sleep(for: .seconds(index == 0 ? first : step))
-        }
+        guard let rankings = screen.lockerRankings else { return }
+        // Give the seeded Locker a moment to lay out before scrolling it.
+        try? await Task.sleep(for: .seconds(1.5))
+        NotificationCenter.default.post(name: .duoScreenLocker, object: rankings)
     }
     #endif
 
@@ -195,6 +178,11 @@ private struct RaceDetailPane: View {
                     RaceDetailView(result: race,
                                    opensQuietly: pane.selectedID != race.id,
                                    isPaneRoot: true)
+                        // The inner display's status column insets the trailing
+                        // edge only, which pushed every card off centre. The
+                        // column sits beside the nav bar, so the cards below
+                        // can use the pane's full width.
+                        .ignoresSafeArea(.container, edges: .trailing)
                         .id(race.id)
                 } else {
                     TriPlaceholder(systemImage: "flag.checkered",
@@ -236,10 +224,74 @@ final class RacePane {
     }
 }
 
+/// Unfolded, the floating tab bar sits inside the leading pane, and rows
+/// scrolling under its glass read as content behind a sheet. Each tab ends a
+/// gap above the bar instead, its last visible rows fading into the canvas,
+/// and the last row still scrolls clear. Folded, nothing changes.
+private struct TabBarClearance: ViewModifier {
+    let isActive: Bool
+    @State private var barInset: CGFloat = 0
+
+    func body(content: Content) -> some View {
+        content
+            .safeAreaPadding(.bottom, isActive ? UnfoldedSplit.barFade : 0)
+            .overlay(alignment: .bottom) {
+                LinearGradient(colors: [TriPalette.canvas.opacity(0), TriPalette.canvas],
+                               startPoint: .top, endPoint: .bottom)
+                    .frame(height: UnfoldedSplit.barFade)
+                    .opacity(isActive ? 1 : 0)
+                    .allowsHitTesting(false)
+            }
+            .padding(.bottom, isActive ? UnfoldedSplit.barClearance(safeAreaBottom: barInset) : 0)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(isActive ? TriPalette.canvas : .clear)
+            // Measured outside the padding, so it stays the bar's inset.
+            .onGeometryChange(for: CGFloat.self) { $0.safeAreaInsets.bottom } action: { barInset = $0 }
+    }
+}
+
+private extension View {
+    func clearsTabBar(_ isActive: Bool) -> some View {
+        modifier(TabBarClearance(isActive: isActive))
+    }
+}
+
 #if DEBUG
 extension Notification.Name {
-    /// The capture tour scrolling the Locker to its races (`false`) or
-    /// rankings (`true`).
-    static let captureTourLocker = Notification.Name("ironsplits.captureTourLocker")
+    /// `-DuoScreen` scrolling the Locker to its races (`false`) or rankings
+    /// (`true`).
+    static let duoScreenLocker = Notification.Name("ironsplits.duoScreenLocker")
+}
+
+/// The store surfaces `-DuoScreen` can open.
+enum DuoScreen: String, CaseIterable {
+    case locker, races, rankings, racebook, explore, tips
+
+    init?(arguments: [String]) {
+        guard let index = arguments.firstIndex(of: "-DuoScreen"),
+              index + 1 < arguments.count else { return nil }
+        self.init(rawValue: arguments[index + 1].lowercased())
+    }
+
+    /// The seeded race in the unfolded detail pane; nil is the latest finish.
+    var race: String? {
+        switch self {
+        case .locker: nil
+        case .races: "demo-half-2025"
+        case .rankings: "demo-full-2025"
+        case .racebook: "demo-full-2024"
+        case .explore: "demo-half-2024"
+        case .tips: "demo-full-2023"
+        }
+    }
+
+    /// For the Locker surfaces, whether it scrolls to rankings or races.
+    var lockerRankings: Bool? {
+        switch self {
+        case .races: false
+        case .rankings: true
+        default: nil
+        }
+    }
 }
 #endif

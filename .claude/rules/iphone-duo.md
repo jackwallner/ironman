@@ -20,11 +20,17 @@ paths:
   navigation and scroll survive. Never swap layouts with an `if`.
 - The default pane opens quietly (`RaceDetailView.opensQuietly`): it does not
   count toward the review prompt or fire Pattie until the athlete picks it.
+- Unfolded, every tab ends above the floating tab bar (`clearsTabBar`, a gap
+  plus a short fade into the canvas), so no row sits under the bar's glass.
+  Folded keeps the system bar over scrolling content as before.
+- The inner display's status bar is a vertical column on the trailing edge
+  and insets the detail pane's trailing safe area. The pane's race ignores
+  that inset horizontally, otherwise every card sits off centre.
 - Capture: `gh-sim all --device 'iPhone Duo' --args "-UITest -ResetLocker
-  -SeedScreenshotData -AuditLight -CaptureTour" --wait 12` plus `--url
-  noop://1` through `noop://5`. The failing noop URLs only pace extra shots;
-  the DEBUG tour walks six screens on a timer because gh-sim shoots on its own
-  clock and `simctl openurl` with a real scheme raises a confirmation alert.
-- Record in a separate `gh-sim launch --record-seconds`: in `all`, the test
-  recording never stops and blocks the launch recordings ("A recording is
-  already in progress").
+  -SeedScreenshotData -AuditLight"` plus one `--screen "-DuoScreen <s>"` per
+  surface: `locker`, `races`, `rankings`, `racebook`, `explore`, `tips`
+  (DEBUG, `DuoScreen` in `RootTabView`). Never `--url`: on iOS 27.1 every
+  custom-scheme openurl raises an "Open in" alert.
+- Record in a separate `gh-sim launch --record-seconds`: in `all`
+  (2026-10-21) the test recording never stopped and blocked the launch
+  recordings ("A recording is already in progress").

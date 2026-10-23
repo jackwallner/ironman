@@ -64,7 +64,7 @@ final class ASCReleaseCaptureUITests: XCTestCase {
 
         app.tabBars.buttons["Explore"].tap()
         XCTAssertTrue(app.staticTexts["RECENTLY EXPLORED"].waitForExistence(timeout: 15))
-        let recentAthlete = app.staticTexts["Riley Example"].firstMatch
+        let recentAthlete = app.staticTexts["Riley Brooks"].firstMatch
         XCTAssertTrue(recentAthlete.waitForExistence(timeout: 10))
         recentAthlete.tap()
         XCTAssertTrue(app.staticTexts["RACE HISTORY"].waitForExistence(timeout: 15))
@@ -72,7 +72,7 @@ final class ASCReleaseCaptureUITests: XCTestCase {
         capture(app, named: "explore")
 
         app.tabBars.buttons["Locker"].tap()
-        XCTAssertTrue(app.staticTexts["Alex Runner"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Alex Navarro"].waitForExistence(timeout: 10))
 
         app.tabBars.buttons["Tips"].tap()
         XCTAssertTrue(app.navigationBars["Tips"].waitForExistence(timeout: 15))
