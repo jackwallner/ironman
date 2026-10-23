@@ -16,8 +16,8 @@ struct LockerView: View {
     @State private var rankingDiscipline: Discipline = .finish
     @State private var raceSearch = ""
     #if DEBUG
-    /// Bumped by the capture tour to scroll the races or rankings into view.
-    @State private var captureTourScrolls = 0
+    /// Bumped by `-DuoScreen` to scroll the races or rankings into view.
+    @State private var duoScreenScrolls = 0
     #endif
 
     var body: some View {
@@ -65,10 +65,10 @@ struct LockerView: View {
             }
             .onAppear { syncKindFilter() }
             #if DEBUG
-            .onReceive(NotificationCenter.default.publisher(for: .captureTourLocker)) { note in
+            .onReceive(NotificationCenter.default.publisher(for: .duoScreenLocker)) { note in
                 showingRankings = note.object as? Bool ?? false
                 if showingRankings, kindFilter == nil { kindFilter = locker.availableKinds.first }
-                captureTourScrolls += 1
+                duoScreenScrolls += 1
             }
             #endif
             .onChange(of: locker.athlete?.id) { _, _ in syncKindFilter() }
@@ -241,10 +241,10 @@ struct LockerView: View {
             .listSectionSpacing(TriSpace.x4)
             .scrollContentBackground(.hidden)
             #if DEBUG
-            .task(id: captureTourScrolls) {
-                guard captureTourScrolls > 0 else { return }
+            .task(id: duoScreenScrolls) {
+                guard duoScreenScrolls > 0 else { return }
                 try? await Task.sleep(for: .milliseconds(400))
-                withAnimation { proxy.scrollTo(Self.modeRowID, anchor: .top) }
+                proxy.scrollTo(Self.modeRowID, anchor: .top)
             }
             #endif
         }

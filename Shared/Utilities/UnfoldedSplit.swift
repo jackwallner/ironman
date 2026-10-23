@@ -16,6 +16,17 @@ struct UnfoldedSplit: Equatable, Sendable {
     /// Narrowest pane that still fits the compact Locker and race layouts.
     static let minimumPaneWidth: CGFloat = 360
 
+    /// Space kept between a pane's content and the top of the floating tab bar.
+    static let barGap: CGFloat = 8
+    /// Height of the fade that ends the content above the bar.
+    static let barFade: CGFloat = 24
+
+    /// How far a split pane's tab content stops short of the bottom: the bar's
+    /// safe-area inset plus a gap, so no row sits under the bar's glass.
+    static func barClearance(safeAreaBottom: CGFloat) -> CGFloat {
+        max(safeAreaBottom, 0) + barGap
+    }
+
     /// - Parameters:
     ///   - width: the container's width.
     ///   - fold: the vertical fold's leading and trailing edge in the same

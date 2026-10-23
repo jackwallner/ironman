@@ -155,7 +155,7 @@ final class ChromeLegibilityUITests: XCTestCase {
 
         // Explore's pushed athlete page.
         app.tabBars.buttons["Explore"].tap()
-        let recent = app.staticTexts["Riley Example"].firstMatch
+        let recent = app.staticTexts["Riley Brooks"].firstMatch
         XCTAssertTrue(recent.waitForExistence(timeout: 15))
         recent.tap()
         XCTAssertTrue(app.staticTexts["RACE HISTORY"].waitForExistence(timeout: 15))

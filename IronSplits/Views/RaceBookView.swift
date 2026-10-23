@@ -162,13 +162,15 @@ struct RaceBookView: View {
 
     private var careerCard: some View {
         let summary = RaceAnalytics.summary(locker.results)
+        // Red celebrates a podium; a zero in red reads as a warning.
+        let podiumTint = summary.podiums > 0 ? TriPalette.sunrise : TriPalette.ink
         return VStack(alignment: .leading, spacing: TriSpace.x3) {
             TriSectionHeader(title: "Career at a glance")
             ViewThatFits(in: .horizontal) {
                 HStack {
                     StatTile(value: String(summary.finishes), caption: "Finishes")
                     Spacer(minLength: 0)
-                    StatTile(value: String(summary.podiums), caption: "Podiums", tint: TriPalette.sunrise)
+                    StatTile(value: String(summary.podiums), caption: "Podiums", tint: podiumTint)
                     Spacer(minLength: 0)
                     StatTile(value: String(summary.starts), caption: "Starts")
                 }
@@ -176,7 +178,7 @@ struct RaceBookView: View {
                     HStack {
                         StatTile(value: String(summary.finishes), caption: "Finishes")
                         Spacer(minLength: 0)
-                        StatTile(value: String(summary.podiums), caption: "Podiums", tint: TriPalette.sunrise)
+                        StatTile(value: String(summary.podiums), caption: "Podiums", tint: podiumTint)
                     }
                     HStack {
                         StatTile(value: String(summary.starts), caption: "Starts")
