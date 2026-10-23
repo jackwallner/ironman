@@ -165,6 +165,7 @@ struct LockerView: View {
                                                       bottom: TriSpace.x1, trailing: TriGeo.padPage))
                             .listRowBackground(Color.clear)
                             .listRowSeparator(.hidden)
+                            .id(Self.kindRowID)
                     }
                     HStack(spacing: TriSpace.x2) {
                         TriChip(title: "Races", isSelected: !showingRankings) {
@@ -244,13 +245,16 @@ struct LockerView: View {
             .task(id: duoScreenScrolls) {
                 guard duoScreenScrolls > 0 else { return }
                 try? await Task.sleep(for: .milliseconds(400))
-                proxy.scrollTo(Self.modeRowID, anchor: .top)
+                // From the distance chips down, so no chip is half under the bar.
+                let top = locker.availableKinds.count > 1 ? Self.kindRowID : Self.modeRowID
+                proxy.scrollTo(top, anchor: .top)
             }
             #endif
         }
     }
 
     private static let modeRowID = "locker.mode"
+    private static let kindRowID = "locker.kind"
 
     /// Pushes the race on a phone. Unfolded, it shows it in the pane beside the
     /// list instead, and marks the row that pane is showing.

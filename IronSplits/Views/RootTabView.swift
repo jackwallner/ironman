@@ -140,38 +140,53 @@ struct RootTabView: View {
             .tag(tab)
     }
 
+    /// The pane's bar, topped by a short fade so a row scrolling toward it
+    /// dissolves into the canvas instead of being cut at the bar's edge. The
+    /// fade is part of the inset, so the last row still scrolls clear of it.
     private var paneTabBar: some View {
-        HStack(spacing: 0) {
-            ForEach(Tab.allCases, id: \.self) { tab in
-                let isSelected = selectedTab == tab
-                Button {
-                    selectedTab = tab
-                } label: {
-                    VStack(spacing: TriSpace.x1) {
-                        Image(systemName: tab.systemImage)
-                            .font(TriType.bodyBold)
-                            .imageScale(.large)
-                        Text(tab.title)
-                            .font(TriType.micro)
-                            .lineLimit(1)
-                    }
-                    .foregroundStyle(isSelected ? TriPalette.sunrise : TriPalette.inkSecondary)
-                    .frame(maxWidth: .infinity, minHeight: TriGeo.tapTarget)
-                    .contentShape(Rectangle())
+        VStack(spacing: 0) {
+            LinearGradient(colors: [TriPalette.canvas.opacity(0), TriPalette.canvas],
+                           startPoint: .top, endPoint: .bottom)
+                .frame(height: TriSpace.x6)
+                .allowsHitTesting(false)
+            HStack(spacing: 0) {
+                ForEach(Tab.allCases, id: \.self) { tab in
+                    paneTabButton(tab)
                 }
-                .buttonStyle(.triPressSilent)
-                .accessibilityLabel(tab.title)
-                .accessibilityAddTraits(isSelected ? .isSelected : [])
+            }
+            .padding(.horizontal, TriSpace.x2)
+            .padding(.vertical, TriSpace.x2)
+            .background(TriPalette.surface.ignoresSafeArea(edges: .bottom))
+            .overlay(alignment: .top) {
+                Rectangle()
+                    .fill(TriPalette.hairline)
+                    .frame(height: TriGeo.hairline)
             }
         }
-        .padding(.horizontal, TriSpace.x2)
-        .padding(.vertical, TriSpace.x2)
-        .background(TriPalette.surface.ignoresSafeArea(edges: .bottom))
-        .overlay(alignment: .top) {
-            Rectangle()
-                .fill(TriPalette.hairline)
-                .frame(height: TriGeo.hairline)
+    }
+
+    private func paneTabButton(_ tab: Tab) -> some View {
+        let isSelected = selectedTab == tab
+        return Button {
+            selectedTab = tab
+        } label: {
+            VStack(spacing: TriSpace.x1) {
+                // A fixed icon box keeps every label on one baseline.
+                Image(systemName: tab.systemImage)
+                    .font(TriType.bodyBold)
+                    .imageScale(.large)
+                    .frame(height: TriSpace.x8)
+                Text(tab.title)
+                    .font(TriType.micro)
+                    .lineLimit(1)
+            }
+            .foregroundStyle(isSelected ? TriPalette.sunrise : TriPalette.inkSecondary)
+            .frame(maxWidth: .infinity, minHeight: TriGeo.tapTarget)
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.triPressSilent)
+        .accessibilityLabel(tab.title)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     #if DEBUG
