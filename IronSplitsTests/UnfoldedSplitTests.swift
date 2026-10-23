@@ -57,4 +57,14 @@ final class UnfoldedSplitTests: XCTestCase {
         XCTAssertEqual(DuoScreen.races.lockerRankings, false)
         XCTAssertEqual(DuoScreen.rankings.lockerRankings, true)
     }
+
+    func testSeededRanksAreConsistent() {
+        // The pane shows division, gender and overall side by side.
+        for race in DebugScreenshotFixtures.results + DebugScreenshotFixtures.exploreResults {
+            guard let group = race.finishRankGroup, let gender = race.finishRankGender,
+                  let overall = race.finishRankOverall else { continue }
+            XCTAssertLessThanOrEqual(group, gender, race.id)
+            XCTAssertLessThanOrEqual(gender, overall, race.id)
+        }
+    }
 }

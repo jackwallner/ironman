@@ -150,7 +150,8 @@ enum DebugScreenshotFixtures {
             runOverall: 240 + bib % 140,
             runGroup: 7 + bib % 8,
             finishOverall: 200 + bib % 120,
-            finishGender: 150 + bib % 100,
+            // Gender place can never trail overall place.
+            finishGender: (200 + bib % 120) * 4 / 5,
             finishGroup: 6 + bib % 9
         )
         let date = Calendar(identifier: .gregorian).date(from: DateComponents(year: year, month: month, day: day))
