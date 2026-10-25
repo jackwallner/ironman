@@ -1,0 +1,2 @@
+{"created": "2026-10-25T22:48:11+00:00", "id": "Q001", "match": "overlap|test02LockerRaceAndRankings|rankings|*", "reason": "a mid-list ranking row scrolling under the system tab bar's translucent material; the list scrolls it clear and the last row rests above the bar", "status": "accepted"}
+{"created": "2026-10-25T22:48:11+00:00", "id": "Q002", "match": "clipped|*|tips|tips", "reason": "the system TabView draws the selected Tips item as its glyph stacked over its title; that is the tab bar's own layout, not app text breaking", "status": "accepted"}

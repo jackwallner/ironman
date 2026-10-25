@@ -62,6 +62,7 @@ struct PaywallView: View {
     @EnvironmentObject private var locker: LockerStore
     @EnvironmentObject private var store: StoreService
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     let trigger: PaywallTrigger
 
@@ -155,7 +156,19 @@ struct PaywallView: View {
                 .padding(.bottom, TriSpace.x5)
             }
         }
+        .safeAreaInset(edge: .bottom) {
+            if pinsPurchaseButton {
+                purchaseButton
+                    .padding(.horizontal, TriSpace.x5)
+                    .padding(.vertical, TriSpace.x3)
+                    .background(TriPalette.canvas)
+            }
+        }
     }
+
+    /// At accessibility text sizes the plan and its button sit screens below
+    /// the hero, so the button (which carries the price) docks to the bottom.
+    private var pinsPurchaseButton: Bool { dynamicTypeSize.isAccessibilitySize }
 
     // Bold navy hero: the entry-point icon over a faint percentile-bar motif,
     // a "Pro" eyebrow, the benefit headline, and the emotional subtitle. Sells
@@ -335,25 +348,33 @@ struct PaywallView: View {
         }
     }
 
+    private var purchaseButton: some View {
+        Button(action: startPurchase) {
+            ZStack {
+                Text(ctaTitle)
+                    .font(TriType.bodyBold)
+                    .foregroundStyle(TriPalette.inkOnSunrise)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.6)
+                    .opacity(isPurchasing ? 0 : 1)
+                if isPurchasing {
+                    ProgressView().tint(TriPalette.inkOnSunrise)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: TriGeo.tapTarget + TriSpace.x1)
+            .padding(.vertical, pinsPurchaseButton ? TriSpace.x2 : 0)
+            .background(TriPalette.sunrise)
+            .clipShape(RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous))
+        }
+        .buttonStyle(.triPressSilent)
+        .disabled(isPurchasing || selectedPlan?.isPurchasable != true)
+    }
+
     private var purchaseSection: some View {
         VStack(spacing: TriSpace.x3) {
-                Button(action: startPurchase) {
-                ZStack {
-                    Text(ctaTitle)
-                        .font(TriType.bodyBold)
-                        .foregroundStyle(TriPalette.inkOnSunrise)
-                        .opacity(isPurchasing ? 0 : 1)
-                    if isPurchasing {
-                        ProgressView().tint(TriPalette.inkOnSunrise)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .frame(height: TriGeo.tapTarget + TriSpace.x1)
-                .background(TriPalette.sunrise)
-                .clipShape(RoundedRectangle(cornerRadius: TriGeo.radiusCard, style: .continuous))
-            }
-            .buttonStyle(.triPressSilent)
-            .disabled(isPurchasing || selectedPlan?.isPurchasable != true)
+            if !pinsPurchaseButton { purchaseButton }
 
             if let disclosure = disclosureText {
                 Text(disclosure)
