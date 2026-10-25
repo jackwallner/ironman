@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+已公布的全程與半程鐵人三項成績，依分段排名，集中保存在同一處。
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+搜尋你報名時使用的名字。IM Tri Tracker 會找到支援的已公布成績，並顯示游泳、T1、自行車、T2 與跑步分段成績、號碼布、分組名次與總排名。
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+分段排名
+依游泳、自行車、跑步、轉換區或完賽時間為每個項目排名。全程與半程賽事分別排名。
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+你的位置
+將每個分段與該賽事的完賽者比較，排名旁顯示參賽人數與百分位。
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+個人最佳與進步趨勢免費使用。Race Book 透過一次性終身購買，加入同類賽事比較以及無限次 PDF 或圖片匯出。無須訂閱，匯出不另收費。
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+比賽筆記
+將天候狀況、補給與裝備和對應的成績記錄在一起。
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+PATTIE 小撇步
+瀏覽比賽日影片技巧，用 Ask Pattie 快速找到合適的片段。
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+免費核心功能
+搜尋、認領支援的歷史成績，並保留全部分段、排名、百分位、參賽背景、比賽筆記、個人最佳、進步趨勢與完整技巧庫。你的成績永遠不會被鎖在付費之後。
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+隱私權政策: https://jackwallner.github.io/ironman/privacy-policy.html
+使用條款: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker 是獨立 App，與任何賽事主辦單位或計時公司均無關聯，也未獲其認可或贊助。成績依各賽事計時單位公布的內容顯示。
 
 App 介面目前僅提供英文版本。

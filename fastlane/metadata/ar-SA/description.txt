@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+نتائج منشورة لسباقات الترياتلون كاملة المسافة ونصف المسافة، مرتبة حسب كل مرحلة ومحفوظة في مكان واحد.
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+ابحث بالاسم الذي سجلت به. يعثر IM Tri Tracker على النتائج المنشورة المدعومة ويعرض أزمنة السباحة وT1 والدراجة وT2 والجري، وأرقام الصدر، والمراكز في الفئة والترتيب العام.
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+الترتيب حسب المراحل
+رتّب كل مرحلة حسب السباحة أو الدراجة أو الجري أو مناطق الانتقال أو زمن النهاية. تبقى سباقات المسافة الكاملة ونصف المسافة في ترتيبات منفصلة.
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+أين جاء ترتيبك
+شاهد كل زمن مقارنة بمن أنهوا ذلك السباق، مع عدد المشاركين والشريحة المئوية بجانب المركز.
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+أفضل أزمنتك الشخصية وتطورك مجانية. يضيف Race Book مقارنات بين السباقات المتماثلة وتصديرًا غير محدود بصيغة PDF أو صورة بشراء واحد مدى الحياة. لا اشتراك ولا رسوم لكل تصدير.
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+ملاحظات السباق
+احتفظ بالظروف والتغذية والمعدات مرتبطة بالنتيجة التي حققتها.
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+نصائح من Pattie
+تصفح نصائح مصورة ليوم السباق، واستخدم Ask Pattie للوصول إلى المقطع المناسب.
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+الأساسيات مجانية
+ابحث، وأضف سجلك المدعوم إلى حسابك، واحتفظ بكل الأزمنة والترتيبات والشرائح المئوية وسياق المشاركين وملاحظات السباق وأفضل الأزمنة والتطور ومكتبة النصائح كاملة. نتائجك لا تُخفى أبدًا خلف عملية شراء.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+سياسة الخصوصية: https://jackwallner.github.io/ironman/privacy-policy.html
+شروط الاستخدام: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker تطبيق مستقل، غير تابع لأي منظم سباقات أو شركة توقيت ولا يحظى بتأييدها أو رعايتها. تُعرض النتائج كما نشرها مسؤول التوقيت في كل سباق.
 
 واجهة التطبيق متاحة باللغة الإنجليزية فقط.

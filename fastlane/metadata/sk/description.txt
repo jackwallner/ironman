@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+Zverejnené výsledky triatlonov na plnej a polovičnej distancii, zoradené podľa medzičasov a uložené na jednom mieste.
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+Vyhľadajte meno, pod ktorým ste sa registrovali. IM Tri Tracker nájde podporované zverejnené výsledky a zobrazí medzičasy plávania, T1, bicykla, T2 a behu, štartové čísla, umiestnenie v kategórii a celkové poradie.
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+REBRÍČKY MEDZIČASOV
+Zoraďte každú časť podľa plávania, bicykla, behu, depa alebo cieľového času. Preteky na plnej a polovičnej distancii majú oddelené rebríčky.
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+KDE STE SKONČILI
+Porovnajte každý medzičas s pretekármi, ktorí dané preteky dokončili, s veľkosťou štartového poľa a percentilom vedľa umiestnenia.
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+Osobné rekordy a vývoj výkonnosti sú zadarmo. Race Book pridáva porovnania podobných pretekov a neobmedzené exporty do PDF alebo obrázka za jednorazový doživotný nákup. Žiadne predplatné ani poplatky za export.
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+POZNÁMKY Z PRETEKOV
+Uchovajte podmienky, výživu a výstroj pri výsledku, ku ktorému patria.
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+TIPY OD PATTIE
+Prezerajte si natočené tipy na pretekový deň a pomocou Ask Pattie nájdite správne video.
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+ZÁKLAD ZADARMO
+Vyhľadávajte, prihláste sa k svojej podporovanej histórii a majte všetky medzičasy, rebríčky, percentily, kontext štartového poľa, poznámky, osobné rekordy, vývoj a celú knižnicu tipov. Vaše výsledky nikdy nie sú skryté za nákupom.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Zásady ochrany súkromia: https://jackwallner.github.io/ironman/privacy-policy.html
+Podmienky používania: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker je nezávislá aplikácia. Nie je pridružená k žiadnemu organizátorovi pretekov ani spoločnosti na meranie času a nie je nimi schválená ani sponzorovaná. Výsledky sa zobrazujú tak, ako ich zverejnila časomiera každého podujatia.
 
 Rozhranie aplikácie je momentálne dostupné iba v angličtine.

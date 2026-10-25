@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+ఫుల్ మరియు హాఫ్-డిస్టెన్స్ ట్రయథ్లాన్‌ల ప్రచురించిన ఫలితాలు, ప్రతి స్ప్లిట్ ప్రకారం ర్యాంక్ చేసి ఒకే చోట.
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+మీరు నమోదు చేసుకున్న పేరును వెతకండి. IM Tri Tracker మద్దతు ఉన్న ప్రచురిత ఫలితాలను కనుగొని ఈత, T1, బైక్, T2 మరియు పరుగు స్ప్లిట్‌లు, బిబ్ నంబర్లు, విభాగ స్థానాలు మరియు మొత్తం ర్యాంక్‌లను చూపిస్తుంది.
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+స్ప్లిట్ ర్యాంకింగ్‌లు
+ప్రతి దశను ఈత, బైక్, పరుగు, ట్రాన్సిషన్‌లు లేదా ఫినిష్ టైమ్ ప్రకారం ర్యాంక్ చేయండి. ఫుల్-డిస్టెన్స్ మరియు హాఫ్-డిస్టెన్స్ రేసులు వేర్వేరు ర్యాంకింగ్‌లలో ఉంటాయి.
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+మీరు ఎక్కడ నిలిచారు
+ప్రతి స్ప్లిట్‌ను ఆ రేసును పూర్తి చేసిన వారితో పోల్చి చూడండి, ర్యాంక్ పక్కన పాల్గొన్నవారి సంఖ్య మరియు పర్సెంటైల్‌తో.
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+వ్యక్తిగత ఉత్తమ సమయాలు మరియు పురోగతి ఉచితం. Race Book ఒక్కసారి చేసే జీవితకాల కొనుగోలుతో ఒకే రకమైన రేసుల పోలికలు మరియు అపరిమిత PDF లేదా ఇమేజ్ ఎగుమతులను జోడిస్తుంది. సబ్‌స్క్రిప్షన్ లేదా ప్రతి ఎగుమతికి ఛార్జీ లేదు.
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+రేస్ నోట్స్
+పరిస్థితులు, పోషణ మరియు గేర్‌ను అవి అందించిన ఫలితంతో జోడించి ఉంచండి.
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+Pattie చిట్కాలు
+రేస్ రోజు కోసం చిత్రీకరించిన చిట్కాలను చూడండి, సరైన క్లిప్‌ను చేరుకోవడానికి Ask Pattie ఉపయోగించండి.
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+ఉచిత ప్రధాన ఫీచర్లు
+వెతకండి, మీ మద్దతు ఉన్న చరిత్రను జోడించుకోండి మరియు అన్ని స్ప్లిట్‌లు, ర్యాంకింగ్‌లు, పర్సెంటైల్‌లు, పాల్గొన్నవారి సందర్భం, రేస్ నోట్స్, వ్యక్తిగత ఉత్తమ సమయాలు, పురోగతి మరియు పూర్తి చిట్కాల లైబ్రరీని ఉంచుకోండి. మీ ఫలితాలు ఎప్పుడూ కొనుగోలు వెనుక దాచబడవు.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+గోప్యతా విధానం: https://jackwallner.github.io/ironman/privacy-policy.html
+వినియోగ నిబంధనలు: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker స్వతంత్ర యాప్. ఇది ఏ రేస్ నిర్వాహకుడితో లేదా టైమింగ్ సంస్థతో అనుబంధం కలిగి లేదు, వారి ఆమోదం లేదా స్పాన్సర్‌షిప్ పొందలేదు. ప్రతి ఈవెంట్ టైమర్ ప్రచురించిన విధంగానే ఫలితాలు చూపబడతాయి.
 
 యాప్ ఇంటర్‌ఫేస్ ప్రస్తుతం ఇంగ్లీష్‌లో మాత్రమే అందుబాటులో ఉంది.

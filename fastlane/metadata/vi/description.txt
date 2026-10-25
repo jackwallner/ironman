@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+Kết quả ba môn phối hợp cự ly đầy đủ và nửa cự ly đã công bố, xếp hạng theo từng chặng và lưu ở một nơi.
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+Tìm theo tên bạn đã dùng khi đăng ký. IM Tri Tracker tìm các kết quả đã công bố được hỗ trợ và hiển thị thời gian bơi, T1, đạp xe, T2 và chạy, số bib, thứ hạng nhóm tuổi và thứ hạng chung.
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+XẾP HẠNG THEO CHẶNG
+Xếp hạng từng chặng theo bơi, đạp xe, chạy, chuyển tiếp hoặc thời gian về đích. Các giải cự ly đầy đủ và nửa cự ly được xếp hạng riêng.
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+BẠN ĐỨNG Ở ĐÂU
+So sánh từng chặng với những người về đích của giải đó, kèm số người tham gia và phân vị bên cạnh thứ hạng.
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+Thành tích cá nhân tốt nhất và tiến bộ đều miễn phí. Race Book bổ sung so sánh giữa các giải tương đương và xuất PDF hoặc hình ảnh không giới hạn với một lần mua trọn đời. Không đăng ký định kỳ, không tính phí mỗi lần xuất.
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+GHI CHÚ GIẢI ĐẤU
+Lưu điều kiện, dinh dưỡng và trang bị gắn với kết quả mà chúng mang lại.
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+MẸO TỪ PATTIE
+Xem các mẹo ngày thi đấu được quay sẵn và dùng Ask Pattie để tìm đúng video.
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+PHẦN CỐT LÕI MIỄN PHÍ
+Tìm kiếm, nhận lịch sử được hỗ trợ của bạn và giữ toàn bộ thời gian từng chặng, xếp hạng, phân vị, bối cảnh người tham gia, ghi chú, thành tích tốt nhất, tiến bộ và toàn bộ thư viện mẹo. Kết quả của bạn không bao giờ bị ẩn sau một giao dịch mua.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Chính sách quyền riêng tư: https://jackwallner.github.io/ironman/privacy-policy.html
+Điều khoản sử dụng: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker là ứng dụng độc lập, không liên kết, không được chứng thực hay tài trợ bởi bất kỳ ban tổ chức giải hoặc công ty bấm giờ nào. Kết quả được hiển thị đúng như bên bấm giờ của từng sự kiện đã công bố.
 
 Giao diện ứng dụng hiện chỉ có bằng tiếng Anh.

@@ -1,1 +1,1 @@
-Knappen för att byta idrottare och de andra knapparna i toppfältet är nu lätta att läsa på alla iPhone. Karriärstatistiken klipps inte längre av och mörkt läge är tydligare.
+Förbättringar bakom kulisserna och buggfixar för en smidigare upplevelse. Tack för att du är här.

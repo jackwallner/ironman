@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+ผลไตรกีฬาระยะเต็มและครึ่งระยะที่เผยแพร่แล้ว จัดอันดับตามแต่ละช่วงและเก็บไว้ในที่เดียว
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+ค้นหาด้วยชื่อที่คุณใช้ลงทะเบียน IM Tri Tracker จะค้นหาผลที่เผยแพร่และรองรับ แล้วแสดงเวลาว่ายน้ำ T1 ปั่นจักรยาน T2 และวิ่ง หมายเลขบิบ อันดับในรุ่น และอันดับรวม
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+อันดับตามช่วง
+จัดอันดับแต่ละช่วงตามว่ายน้ำ ปั่นจักรยาน วิ่ง ทรานซิชัน หรือเวลาเข้าเส้นชัย รายการระยะเต็มและครึ่งระยะแยกอันดับกัน
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+คุณอยู่ตรงไหน
+ดูเวลาแต่ละช่วงเทียบกับผู้เข้าเส้นชัยในรายการนั้น พร้อมจำนวนผู้แข่งขันและเปอร์เซ็นไทล์ข้างอันดับ
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+สถิติส่วนตัวที่ดีที่สุดและพัฒนาการใช้ได้ฟรี Race Book เพิ่มการเปรียบเทียบรายการประเภทเดียวกันและส่งออกเป็น PDF หรือรูปภาพได้ไม่จำกัดด้วยการซื้อครั้งเดียวใช้ได้ตลอดชีพ ไม่มีการสมัครสมาชิกหรือค่าธรรมเนียมต่อการส่งออก
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+บันทึกการแข่งขัน
+เก็บสภาพการแข่งขัน โภชนาการ และอุปกรณ์ไว้คู่กับผลที่ได้จากสิ่งเหล่านั้น
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+เคล็ดลับจาก Pattie
+ดูเคล็ดลับวันแข่งขันแบบวิดีโอ และใช้ Ask Pattie เพื่อไปยังคลิปที่ใช่
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+ฟีเจอร์หลักฟรี
+ค้นหา เพิ่มประวัติที่รองรับของคุณ และเก็บเวลาทุกช่วง อันดับ เปอร์เซ็นไทล์ ข้อมูลผู้แข่งขัน บันทึกการแข่งขัน สถิติส่วนตัว พัฒนาการ และคลังเคล็ดลับทั้งหมด ผลของคุณจะไม่ถูกซ่อนไว้หลังการซื้อ
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+นโยบายความเป็นส่วนตัว: https://jackwallner.github.io/ironman/privacy-policy.html
+ข้อกำหนดการใช้งาน: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker เป็นแอปอิสระ ไม่มีส่วนเกี่ยวข้อง ไม่ได้รับการรับรองหรือการสนับสนุนจากผู้จัดการแข่งขันหรือบริษัทจับเวลาใด ผลแสดงตามที่ผู้จับเวลาของแต่ละรายการเผยแพร่
 
 ขณะนี้อินเทอร์เฟซของแอปมีให้บริการเป็นภาษาอังกฤษเท่านั้น

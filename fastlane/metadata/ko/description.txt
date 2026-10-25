@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+풀 코스와 하프 코스 트라이애슬론의 공개 기록을 구간별로 순위를 매겨 한곳에 모았습니다.
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+대회에 등록한 이름으로 검색하세요. IM Tri Tracker가 지원되는 공개 기록을 찾아 수영, T1, 사이클, T2, 달리기 구간 기록과 배번, 연령대 순위, 종합 순위를 보여 줍니다.
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+구간 순위
+수영, 사이클, 달리기, 바꿈터 또는 완주 기록으로 각 구간의 순위를 확인하세요. 풀 코스와 하프 코스 대회는 순위가 따로 관리됩니다.
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+나의 위치
+각 구간 기록을 해당 대회 완주자와 비교하고, 순위 옆에 참가자 수와 백분위를 함께 확인하세요.
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+개인 최고 기록과 성장 추이는 무료입니다. Race Book은 한 번의 평생 구매로 같은 조건의 대회 비교와 무제한 PDF 또는 이미지 내보내기를 추가합니다. 구독이나 내보내기별 요금은 없습니다.
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+레이스 노트
+컨디션, 보급, 장비를 그 결과를 만든 기록에 함께 남겨 두세요.
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+PATTIE의 팁
+대회 당일을 위한 영상 팁을 둘러보고 Ask Pattie로 알맞은 클립을 찾아보세요.
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+무료 핵심 기능
+검색하고, 지원되는 기록을 내 것으로 등록하고, 모든 구간 기록, 순위, 백분위, 참가자 정보, 레이스 노트, 개인 최고 기록, 성장 추이, 전체 팁 라이브러리를 계속 이용하세요. 기록이 구매 뒤에 숨겨지는 일은 없습니다.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+개인정보 처리방침: https://jackwallner.github.io/ironman/privacy-policy.html
+이용 약관: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker는 독립 앱입니다. 어떤 대회 주최 측이나 기록 측정 회사와도 제휴, 보증, 후원 관계가 없습니다. 기록은 각 대회 계측 담당이 공개한 그대로 표시됩니다.
 
 앱 인터페이스는 현재 영어로만 제공됩니다.

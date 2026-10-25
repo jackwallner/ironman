@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+Resultats publicats de triatlons de distància completa i mitja distància, classificats per parcials i reunits en un sol lloc.
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+Cerca el nom amb què et vas inscriure. IM Tri Tracker troba resultats publicats compatibles i mostra els parcials de natació, T1, bici, T2 i cursa, el dorsal, la posició a la categoria i la classificació general.
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+CLASSIFICACIONS PER PARCIALS
+Ordena cada segment per natació, bici, cursa, transicions o temps final. Les curses de distància completa i mitja distància tenen classificacions separades.
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+ON VAS QUEDAR
+Compara cada parcial amb els finishers d'aquella prova, amb la mida del grup i el percentil al costat de la posició.
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+Les millors marques personals i la progressió són gratuïtes. Race Book afegeix comparacions entre curses equivalents i exportacions il·limitades en PDF o imatge amb una única compra de per vida. Sense subscripció ni càrrec per exportació.
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+NOTES DE CURSA
+Desa les condicions, la nutrició i l'equipament al costat del resultat que van produir.
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+CONSELLS DE LA PATTIE
+Explora consells filmats per al dia de cursa i fes servir Ask Pattie per trobar el clip adequat.
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+L'ESSENCIAL, GRATIS
+Cerca, reclama el teu historial compatible i conserva tots els parcials, classificacions, percentils, context del grup, notes de cursa, millors marques, progressió i tota la biblioteca de consells. Els teus resultats mai no queden amagats darrere d'una compra.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Privacitat: https://jackwallner.github.io/ironman/privacy-policy.html
+Condicions d'ús: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker és independent. No està afiliada, avalada ni patrocinada per cap organitzador de curses ni empresa de cronometratge. Els resultats es mostren tal com els publica el cronometrador de cada prova.
 
 La interfície de l'aplicació només està disponible en anglès.

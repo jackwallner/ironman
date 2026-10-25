@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+Опубликованные результаты триатлонов на полной и половинной дистанции, ранжированные по сплитам и собранные в одном месте.
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+Найдите имя, под которым вы регистрировались. IM Tri Tracker находит поддерживаемые опубликованные результаты и показывает сплиты плавания, T1, велоэтапа, T2 и бега, стартовые номера, места в возрастной группе и в абсолюте.
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+РЕЙТИНГИ ПО СПЛИТАМ
+Ранжируйте каждый этап по плаванию, велосипеду, бегу, транзитам или финишному времени. Старты на полной и половинной дистанции остаются в отдельных рейтингах.
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+ВАШЕ МЕСТО
+Сравнивайте каждый сплит с финишёрами этого старта: рядом с местом указаны размер поля и перцентиль.
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+Личные рекорды и прогресс бесплатны. Race Book добавляет сравнения однотипных стартов и неограниченный экспорт в PDF или изображение за одну пожизненную покупку. Без подписки и без оплаты за экспорт.
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+ЗАМЕТКИ О СТАРТАХ
+Храните условия, питание и снаряжение рядом с результатом, которого они помогли достичь.
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+СОВЕТЫ ОТ PATTIE
+Смотрите видеосоветы для дня старта и используйте Ask Pattie, чтобы найти нужный ролик.
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+БЕСПЛАТНАЯ ОСНОВА
+Ищите, закрепляйте за собой поддерживаемую историю и сохраняйте все сплиты, рейтинги, перцентили, контекст поля, заметки, личные рекорды, прогресс и всю библиотеку советов. Ваши результаты никогда не скрыты за покупкой.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Политика конфиденциальности: https://jackwallner.github.io/ironman/privacy-policy.html
+Условия использования: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker является независимым приложением. Оно не связано ни с одним организатором соревнований или компанией по хронометражу, не одобрено и не спонсируется ими. Результаты показаны в том виде, в каком их опубликовал хронометраж каждого старта.
 
 Интерфейс приложения сейчас доступен только на английском языке.

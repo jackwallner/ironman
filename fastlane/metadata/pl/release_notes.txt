@@ -1,1 +1,1 @@
-Przycisk zmiany zawodnika i pozostałe przyciski na górnym pasku są teraz czytelne na każdym iPhonie. Statystyki kariery nie są już ucinane, a tryb ciemny jest wyraźniejszy.
+Ulepszenia w tle i poprawki błędów dla płynniejszego działania. Dziękujemy, że jesteś.

@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+Publicerade triathlonresultat på hel- och halvdistans, rankade per delsträcka och samlade på ett ställe.
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+Sök på namnet du var anmäld med. IM Tri Tracker hittar publicerade resultat som stöds och visar sim-, T1-, cykel-, T2- och löpsplittar, startnummer, placering i klassen och totalplacering.
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+RANKING PER DELSTRÄCKA
+Ranka varje gren efter simning, cykel, löpning, växlingar eller sluttid. Lopp på hel- och halvdistans hålls i separata rankingar.
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+VAR DU HAMNADE
+Se varje delsträcka mot dem som gick i mål i loppet, med fältets storlek och percentil bredvid placeringen.
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+Personbästan och utveckling är gratis. Race Book lägger till jämförelser mellan likvärdiga lopp och obegränsade exporter som PDF eller bild med ett engångsköp för livet. Ingen prenumeration och ingen avgift per export.
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+LOPPANTECKNINGAR
+Spara förhållanden, energi och utrustning tillsammans med resultatet de gav.
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+TIPS FRÅN PATTIE
+Bläddra bland filmade tips inför tävlingsdagen och använd Ask Pattie för att hitta rätt klipp.
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+GRATIS GRUND
+Sök, gör anspråk på din historik som stöds och behåll alla splittar, rankingar, percentiler, fältkontext, loppanteckningar, personbästan, utveckling och hela tipsbiblioteket. Dina resultat göms aldrig bakom ett köp.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Integritetspolicy: https://jackwallner.github.io/ironman/privacy-policy.html
+Användarvillkor: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker är oberoende och är inte anslutet till, godkänt eller sponsrat av någon arrangör eller tidtagningsfirma. Resultaten visas som de publicerats av varje tävlings tidtagare.
 
 Appens gränssnitt är för närvarande bara tillgängligt på engelska.

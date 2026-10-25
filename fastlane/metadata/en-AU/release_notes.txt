@@ -1,1 +1,1 @@
-The Change athlete button and other top-bar buttons are now easy to read on every iPhone. Career stats no longer cut off, and dark mode is clearer.
+Behind-the-scenes improvements and bug fixes for a smoother experience. Thank you for being here.

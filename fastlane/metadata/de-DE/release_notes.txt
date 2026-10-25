@@ -1,1 +1,1 @@
-Die Schaltfläche zum Wechseln des Athleten und die übrigen Schaltflächen oben sind jetzt auf jedem iPhone gut lesbar. Karrierestatistiken werden nicht mehr abgeschnitten, und der Dunkelmodus ist klarer.
+Verbesserungen und Fehlerbehebungen im Hintergrund für ein reibungsloseres Erlebnis. Danke, dass du dabei bist.

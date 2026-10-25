@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+Rezultate publicate de triatlon pe distanța completă și pe jumătate de distanță, clasate pe segmente și păstrate într-un singur loc.
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+Caută numele cu care te-ai înscris. IM Tri Tracker găsește rezultatele publicate acceptate și afișează timpii pentru înot, T1, bicicletă, T2 și alergare, numerele de concurs, locurile la categorie și clasamentul general.
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+CLASAMENTE PE SEGMENTE
+Clasează fiecare probă după înot, bicicletă, alergare, tranziții sau timpul final. Cursele pe distanța completă și pe jumătate de distanță rămân în clasamente separate.
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+UNDE AI AJUNS
+Vezi fiecare segment raportat la cei care au terminat acea cursă, cu numărul de participanți și percentila lângă loc.
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+Recordurile personale și progresul sunt gratuite. Race Book adaugă comparații între curse echivalente și exporturi nelimitate în PDF sau imagine, cu o singură achiziție pe viață. Fără abonament și fără taxă per export.
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+NOTIȚE DE CURSĂ
+Păstrează condițiile, nutriția și echipamentul legate de rezultatul pe care l-au produs.
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+SFATURI DE LA PATTIE
+Răsfoiește sfaturi filmate pentru ziua cursei și folosește Ask Pattie ca să ajungi la clipul potrivit.
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+ESENȚIALUL GRATUIT
+Caută, revendică-ți istoricul acceptat și păstrează toți timpii, clasamentele, percentilele, contextul participanților, notițele, recordurile personale, progresul și întreaga bibliotecă de sfaturi. Rezultatele tale nu sunt niciodată ascunse în spatele unei achiziții.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Politica de confidențialitate: https://jackwallner.github.io/ironman/privacy-policy.html
+Termeni de utilizare: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker este independentă. Nu este afiliată, aprobată sau sponsorizată de niciun organizator de curse sau companie de cronometrare. Rezultatele sunt afișate așa cum au fost publicate de cronometrorul fiecărui eveniment.
 
 Interfața aplicației este disponibilă momentan doar în engleză.

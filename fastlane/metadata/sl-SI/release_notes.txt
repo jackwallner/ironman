@@ -1,1 +1,1 @@
-Gumb za zamenjavo športnika in drugi gumbi v zgornji vrstici so zdaj dobro berljivi na vsakem iPhonu. Statistika kariere se ne odreže več, temni način pa je jasnejši.
+Izboljšave v ozadju in popravki napak za bolj gladko delovanje. Hvala, da ste z nami.

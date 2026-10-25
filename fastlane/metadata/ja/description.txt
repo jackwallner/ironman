@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+フルディスタンスとハーフディスタンスのトライアスロン公開リザルトを、スプリットごとに順位付けして1か所にまとめます。
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+エントリー時の名前で検索してください。IM Tri Trackerは対応する公開リザルトを見つけ、スイム、T1、バイク、T2、ランの各スプリット、ゼッケン番号、エイジ順位、総合順位を表示します。
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+スプリット順位
+スイム、バイク、ラン、トランジション、フィニッシュタイムで各種目を順位付け。フルとハーフのレースは別々の順位で管理されます。
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+あなたの位置
+各スプリットをその大会の完走者と比較し、順位の横に出場者数とパーセンタイルを表示します。
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+自己ベストと成長の推移は無料です。Race Bookは一度きりの買い切り購入で、同条件レースの比較と無制限のPDF・画像書き出しを追加します。サブスクリプションも書き出しごとの料金もありません。
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+レースメモ
+コンディション、補給、ギアを、それが生んだリザルトに紐づけて残せます。
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+PATTIEのヒント
+レース当日の動画ヒントを閲覧し、Ask Pattieで最適なクリップにたどり着けます。
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+無料の基本機能
+検索、対応する履歴の登録に加え、すべてのスプリット、順位、パーセンタイル、出場者データ、レースメモ、自己ベスト、成長の推移、ヒントライブラリ全体を利用できます。結果が購入の向こうに隠されることはありません。
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+プライバシーポリシー: https://jackwallner.github.io/ironman/privacy-policy.html
+利用規約: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Trackerは独立したアプリです。いかなる大会主催者や計測会社とも提携しておらず、承認や協賛も受けていません。リザルトは各大会の計測担当が公開したとおりに表示されます。
 
 アプリのインターフェイスは現在、英語のみでご利用いただけます。

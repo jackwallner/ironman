@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+Opublikowane wyniki triathlonów na pełnym i połówkowym dystansie, uszeregowane według międzyczasów i zebrane w jednym miejscu.
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+Wyszukaj imię i nazwisko, pod którym się zapisałeś. IM Tri Tracker znajduje obsługiwane opublikowane wyniki i pokazuje międzyczasy pływania, T1, roweru, T2 i biegu, numery startowe, miejsca w kategorii i klasyfikację generalną.
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+RANKINGI MIĘDZYCZASÓW
+Szereguj każdy etap według pływania, roweru, biegu, stref zmian lub czasu końcowego. Zawody na pełnym i połówkowym dystansie mają osobne rankingi.
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+GDZIE SIĘ ZNALAZŁEŚ
+Zobacz każdy międzyczas na tle uczestników, którzy ukończyli dane zawody, z liczbą startujących i percentylem obok miejsca.
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+Rekordy życiowe i postępy są bezpłatne. Race Book dodaje porównania analogicznych startów oraz nielimitowany eksport do PDF lub obrazu w ramach jednorazowego, dożywotniego zakupu. Bez subskrypcji i bez opłat za eksport.
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+NOTATKI ZE STARTÓW
+Przechowuj warunki, odżywianie i sprzęt razem z wynikiem, który dzięki nim osiągnąłeś.
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+WSKAZÓWKI OD PATTIE
+Przeglądaj nagrane wskazówki na dzień zawodów i korzystaj z Ask Pattie, by trafić do właściwego filmu.
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+DARMOWA PODSTAWA
+Wyszukuj, przypisz sobie obsługiwaną historię startów i zachowaj wszystkie międzyczasy, rankingi, percentyle, kontekst stawki, notatki, rekordy życiowe, postępy i całą bibliotekę wskazówek. Twoje wyniki nigdy nie są ukryte za zakupem.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Polityka prywatności: https://jackwallner.github.io/ironman/privacy-policy.html
+Warunki korzystania: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker jest niezależną aplikacją. Nie jest powiązana z żadnym organizatorem zawodów ani firmą pomiaru czasu, nie jest przez nie zatwierdzona ani sponsorowana. Wyniki są pokazywane tak, jak opublikował je pomiar czasu każdego wydarzenia.
 
 Interfejs aplikacji jest obecnie dostępny tylko w języku angielskim.

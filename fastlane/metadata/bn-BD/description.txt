@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+ফুল ও হাফ-ডিসট্যান্স ট্রায়াথলনের প্রকাশিত ফলাফল, প্রতিটি স্প্লিট অনুযায়ী র‍্যাঙ্ক করা এবং এক জায়গায় রাখা।
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+যে নামে নিবন্ধন করেছিলেন সেই নাম খুঁজুন। IM Tri Tracker সমর্থিত প্রকাশিত ফলাফল খুঁজে সাঁতার, T1, বাইক, T2 ও দৌড়ের স্প্লিট, বিব নম্বর, বিভাগের অবস্থান ও সামগ্রিক র‍্যাঙ্ক দেখায়।
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+স্প্লিট র‍্যাঙ্কিং
+প্রতিটি অংশ সাঁতার, বাইক, দৌড়, ট্রানজিশন বা ফিনিশ টাইম অনুযায়ী সাজান। ফুল-ডিসট্যান্স ও হাফ-ডিসট্যান্স রেস আলাদা র‍্যাঙ্কিংয়ে থাকে।
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+আপনি কোথায় ছিলেন
+প্রতিটি স্প্লিট সেই রেসের ফিনিশারদের সঙ্গে তুলনা করে দেখুন, র‍্যাঙ্কের পাশে অংশগ্রহণকারীর সংখ্যা ও পার্সেন্টাইলসহ।
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+ব্যক্তিগত সেরা ও অগ্রগতি বিনামূল্যে। Race Book একবারের আজীবন কেনাকাটায় একই ধরনের রেসের তুলনা এবং সীমাহীন PDF বা ছবি এক্সপোর্ট যোগ করে। কোনো সাবস্ক্রিপশন বা প্রতি এক্সপোর্টে চার্জ নেই।
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+রেস নোট
+পরিস্থিতি, পুষ্টি ও সরঞ্জাম সেই ফলাফলের সঙ্গে সংযুক্ত রাখুন, যেটি সেগুলোর ফলে এসেছে।
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+Pattie-র টিপস
+রেস ডে-র ভিডিও টিপস দেখুন এবং সঠিক ক্লিপে পৌঁছাতে Ask Pattie ব্যবহার করুন।
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+বিনামূল্যের মূল সুবিধা
+সার্চ করুন, আপনার সমর্থিত ইতিহাস যুক্ত করুন এবং সব স্প্লিট, র‍্যাঙ্কিং, পার্সেন্টাইল, অংশগ্রহণকারীর প্রেক্ষাপট, রেস নোট, ব্যক্তিগত সেরা, অগ্রগতি ও সম্পূর্ণ টিপস লাইব্রেরি রাখুন। আপনার ফলাফল কখনো কেনাকাটার আড়ালে লুকানো থাকে না।
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+গোপনীয়তা নীতি: https://jackwallner.github.io/ironman/privacy-policy.html
+ব্যবহারের শর্তাবলি: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker একটি স্বাধীন অ্যাপ। এটি কোনো রেস আয়োজক বা টাইমিং কোম্পানির সঙ্গে যুক্ত নয় এবং তাদের দ্বারা অনুমোদিত বা স্পনসর করা নয়। প্রতিটি ইভেন্টের টাইমার যেভাবে প্রকাশ করেছে, ফলাফল ঠিক সেভাবেই দেখানো হয়।
 
 অ্যাপের ইন্টারফেস বর্তমানে শুধু ইংরেজিতে উপলভ্য।

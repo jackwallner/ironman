@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+முழு மற்றும் அரை தூர டிரையத்லான்களின் வெளியிடப்பட்ட முடிவுகள், ஒவ்வொரு ஸ்பிளிட்டின்படி தரவரிசைப்படுத்தப்பட்டு ஒரே இடத்தில்.
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+நீங்கள் பதிவுசெய்த பெயரைத் தேடுங்கள். IM Tri Tracker ஆதரிக்கப்படும் வெளியிடப்பட்ட முடிவுகளைக் கண்டறிந்து நீச்சல், T1, சைக்கிள், T2 மற்றும் ஓட்டத்தின் ஸ்பிளிட்கள், பிப் எண்கள், பிரிவு இடங்கள் மற்றும் ஒட்டுமொத்த தரவரிசையைக் காட்டுகிறது.
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+ஸ்பிளிட் தரவரிசை
+ஒவ்வொரு பகுதியையும் நீச்சல், சைக்கிள், ஓட்டம், டிரான்சிஷன் அல்லது முடிவு நேரத்தின்படி தரவரிசைப்படுத்துங்கள். முழு தூர மற்றும் அரை தூரப் பந்தயங்கள் தனித்தனி தரவரிசைகளில் இருக்கும்.
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+நீங்கள் எங்கே இருந்தீர்கள்
+ஒவ்வொரு ஸ்பிளிட்டையும் அந்தப் பந்தயத்தை முடித்தவர்களுடன் ஒப்பிட்டுப் பாருங்கள், தரவரிசைக்கு அருகில் பங்கேற்பாளர் எண்ணிக்கை மற்றும் பர்சென்டைலுடன்.
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+தனிப்பட்ட சிறந்த நேரங்களும் முன்னேற்றமும் இலவசம். Race Book ஒருமுறை வாழ்நாள் கொள்முதல் மூலம் ஒத்த பந்தயங்களின் ஒப்பீடுகளையும் வரம்பற்ற PDF அல்லது பட ஏற்றுமதிகளையும் சேர்க்கிறது. சந்தாவோ ஒவ்வொரு ஏற்றுமதிக்கும் கட்டணமோ இல்லை.
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+பந்தயக் குறிப்புகள்
+சூழ்நிலைகள், ஊட்டச்சத்து மற்றும் உபகரணங்களை அவை தந்த முடிவுடன் இணைத்து வைத்திருங்கள்.
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+Pattie-யின் குறிப்புகள்
+பந்தய நாளுக்கான படமாக்கப்பட்ட குறிப்புகளை உலாவுங்கள், சரியான கிளிப்பை அடைய Ask Pattie-ஐப் பயன்படுத்துங்கள்.
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+இலவச அடிப்படை வசதிகள்
+தேடுங்கள், உங்கள் ஆதரிக்கப்படும் வரலாற்றைச் சேர்த்துக்கொள்ளுங்கள், மேலும் அனைத்து ஸ்பிளிட்கள், தரவரிசைகள், பர்சென்டைல்கள், பங்கேற்பாளர் சூழல், பந்தயக் குறிப்புகள், தனிப்பட்ட சிறந்த நேரங்கள், முன்னேற்றம் மற்றும் முழு குறிப்பு நூலகத்தையும் வைத்திருங்கள். உங்கள் முடிவுகள் ஒருபோதும் கொள்முதலுக்குப் பின்னால் மறைக்கப்படுவதில்லை.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+தனியுரிமைக் கொள்கை: https://jackwallner.github.io/ironman/privacy-policy.html
+பயன்பாட்டு விதிமுறைகள்: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker ஒரு சுயாதீன செயலி. இது எந்தப் பந்தய ஏற்பாட்டாளருடனோ நேரக்கணிப்பு நிறுவனத்துடனோ இணைக்கப்படவில்லை, அவர்களால் அங்கீகரிக்கப்படவோ நிதியுதவி செய்யப்படவோ இல்லை. ஒவ்வொரு நிகழ்வின் நேரக்கணிப்பாளர் வெளியிட்டபடியே முடிவுகள் காட்டப்படுகின்றன.
 
 செயலியின் இடைமுகம் தற்போது ஆங்கிலத்தில் மட்டுமே கிடைக்கும்.

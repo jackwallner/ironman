@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+Hasil triatlon jarak penuh dan setengah yang telah dipublikasikan, diperingkat per split dan tersimpan di satu tempat.
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+Cari nama yang Anda gunakan saat mendaftar. IM Tri Tracker menemukan hasil terpublikasi yang didukung dan menampilkan split renang, T1, sepeda, T2 dan lari, nomor dada, posisi kategori, serta peringkat keseluruhan.
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+PERINGKAT SPLIT
+Urutkan setiap leg berdasarkan renang, sepeda, lari, transisi atau waktu finis. Lomba jarak penuh dan setengah tetap berada di peringkat terpisah.
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+POSISI ANDA
+Lihat setiap split dibandingkan dengan finisher di lomba tersebut, dengan jumlah peserta dan persentil di samping peringkat.
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+Rekor pribadi dan perkembangan gratis. Race Book menambahkan perbandingan antarlomba sejenis serta ekspor PDF atau gambar tanpa batas dengan satu kali pembelian seumur hidup. Tanpa langganan dan tanpa biaya per ekspor.
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+CATATAN LOMBA
+Simpan kondisi, nutrisi dan perlengkapan bersama hasil yang dicapainya.
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+TIPS DARI PATTIE
+Jelajahi tips hari lomba dalam bentuk video dan gunakan Ask Pattie untuk menemukan klip yang tepat.
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+INTI GRATIS
+Cari, klaim riwayat Anda yang didukung, dan simpan semua split, peringkat, persentil, konteks peserta, catatan lomba, rekor pribadi, perkembangan, serta seluruh pustaka tips. Hasil Anda tidak pernah disembunyikan di balik pembelian.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Kebijakan Privasi: https://jackwallner.github.io/ironman/privacy-policy.html
+Ketentuan Penggunaan: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker adalah aplikasi independen. Aplikasi ini tidak berafiliasi dengan, didukung, atau disponsori oleh penyelenggara lomba atau perusahaan pencatat waktu mana pun. Hasil ditampilkan sebagaimana dipublikasikan oleh pencatat waktu setiap acara.
 
 Antarmuka aplikasi saat ini hanya tersedia dalam bahasa Inggris.

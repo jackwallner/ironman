@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+Objavljeni rezultati triatlona na punoj i polovičnoj distanci, rangirani po prolaznim vremenima i spremljeni na jednom mjestu.
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+Potražite ime pod kojim ste se prijavili. IM Tri Tracker pronalazi podržane objavljene rezultate i prikazuje prolazna vremena plivanja, T1, bicikla, T2 i trčanja, startne brojeve, plasman u kategoriji i ukupni plasman.
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+LJESTVICE PROLAZNIH VREMENA
+Rangirajte svaku dionicu po plivanju, biciklu, trčanju, izmjenama ili završnom vremenu. Utrke na punoj i polovičnoj distanci ostaju na odvojenim ljestvicama.
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+GDJE STE ZAVRŠILI
+Usporedite svako prolazno vrijeme s natjecateljima koji su završili tu utrku, uz broj sudionika i percentil pokraj plasmana.
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+Osobni rekordi i napredak su besplatni. Race Book dodaje usporedbe istovrsnih utrka i neograničene izvoze u PDF ili sliku uz jednokratnu doživotnu kupnju. Bez pretplate i bez naplate po izvozu.
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+BILJEŠKE S UTRKA
+Uvjete, prehranu i opremu čuvajte uz rezultat koji su donijeli.
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+SAVJETI OD PATTIE
+Pregledajte snimljene savjete za dan utrke i uz Ask Pattie pronađite pravi isječak.
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+BESPLATNA OSNOVA
+Pretražujte, preuzmite svoju podržanu povijest i zadržite sva prolazna vremena, ljestvice, percentile, kontekst polja, bilješke, osobne rekorde, napredak i cijelu biblioteku savjeta. Vaši rezultati nikad nisu skriveni iza kupnje.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Pravila privatnosti: https://jackwallner.github.io/ironman/privacy-policy.html
+Uvjeti korištenja: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker je neovisna aplikacija. Nije povezana ni s jednim organizatorom utrka ni tvrtkom za mjerenje vremena, niti je oni podržavaju ili sponzoriraju. Rezultati se prikazuju onako kako ih je objavila služba za mjerenje vremena pojedine utrke.
 
 Sučelje aplikacije trenutačno je dostupno samo na engleskom.

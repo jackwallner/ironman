@@ -5,6 +5,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from asc_descriptions import localized_description
+
 
 ROOT = Path(__file__).resolve().parent.parent
 METADATA = ROOT / "fastlane" / "metadata"
@@ -22,7 +24,7 @@ LOCALES = [
 URLS = {
     "privacy_url": "https://jackwallner.github.io/ironman/privacy-policy.html",
     "support_url": "https://jackwallner.github.io/ironman/support.html",
-    "marketing_url": "https://jackwallner.github.io/ironman/",
+    "marketing_url": "https://jackwallner.com/ios/ironman/",
 }
 
 ENGLISH = {
@@ -945,21 +947,17 @@ def write_metadata(locale: str, values: dict[str, str]) -> None:
     directory = METADATA / locale
     directory.mkdir(parents=True, exist_ok=True)
     language = LOCALE_TO_LANGUAGE[locale]
+    # Promotional text and release notes are edited in fastlane/metadata
+    # directly (ASO rewrites, per-release notes), so they are never regenerated.
+    values = {k: v for k, v in values.items() if k not in ("promotional_text", "release_notes")}
     if language != "en":
-        # The product UI is English-only. Keep localized titles and keywords,
-        # but use the same precise, supported-results description in every
-        # storefront so translated copy cannot imply broader race coverage.
-        values = {
-            **values,
-            "description": ENGLISH["description"],
-            "promotional_text": ENGLISH["promotional_text"],
-        }
+        # Native translation of the scoped en-US description (supported,
+        # published full and half-distance results only), never English body
+        # text in another storefront. The product UI itself is English-only.
+        key = locale if locale in ("pt-BR", "pt-PT") else language
+        values = {**values, "description": localized_description(key, ENGLISH_ONLY_COPY[language])}
     merged = {**values, **URLS}
     for key, value in merged.items():
-        if key == "description" and language != "en":
-            value = f"{value.rstrip()}\n\n{ENGLISH_ONLY_COPY[language]}"
-        if key == "release_notes" and language != "en":
-            value = ENGLISH["release_notes"]
         if key == "keywords":
             words: list[str] = []
             length = 0

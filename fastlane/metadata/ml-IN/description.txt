@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+ഫുൾ, ഹാഫ് ഡിസ്റ്റൻസ് ട്രയാത്‌ലോണുകളുടെ പ്രസിദ്ധീകരിച്ച ഫലങ്ങൾ, ഓരോ സ്പ്ലിറ്റ് അനുസരിച്ചും റാങ്ക് ചെയ്ത് ഒരിടത്ത്.
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+നിങ്ങൾ രജിസ്റ്റർ ചെയ്ത പേര് തിരയുക. IM Tri Tracker പിന്തുണയുള്ള പ്രസിദ്ധീകരിച്ച ഫലങ്ങൾ കണ്ടെത്തി നീന്തൽ, T1, ബൈക്ക്, T2, ഓട്ടം എന്നിവയുടെ സ്പ്ലിറ്റുകൾ, ബിബ് നമ്പറുകൾ, ഡിവിഷൻ സ്ഥാനങ്ങൾ, മൊത്തം റാങ്ക് എന്നിവ കാണിക്കുന്നു.
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+സ്പ്ലിറ്റ് റാങ്കിംഗുകൾ
+ഓരോ ഘട്ടവും നീന്തൽ, ബൈക്ക്, ഓട്ടം, ട്രാൻസിഷനുകൾ അല്ലെങ്കിൽ ഫിനിഷ് സമയം അനുസരിച്ച് റാങ്ക് ചെയ്യുക. ഫുൾ ഡിസ്റ്റൻസ്, ഹാഫ് ഡിസ്റ്റൻസ് റേസുകൾ വെവ്വേറെ റാങ്കിംഗുകളിൽ തുടരും.
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+നിങ്ങൾ എവിടെ എത്തി
+ഓരോ സ്പ്ലിറ്റും ആ റേസ് പൂർത്തിയാക്കിയവരുമായി താരതമ്യം ചെയ്ത് കാണുക, റാങ്കിന് അരികിൽ പങ്കെടുത്തവരുടെ എണ്ണവും പെർസെന്റൈലും സഹിതം.
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+വ്യക്തിഗത മികച്ച സമയങ്ങളും പുരോഗതിയും സൗജന്യമാണ്. ഒറ്റത്തവണ ആജീവനാന്ത വാങ്ങലിലൂടെ Race Book സമാന റേസുകളുടെ താരതമ്യവും പരിധിയില്ലാത്ത PDF അല്ലെങ്കിൽ ചിത്ര എക്സ്പോർട്ടുകളും ചേർക്കുന്നു. സബ്സ്ക്രിപ്ഷനോ ഓരോ എക്സ്പോർട്ടിനും ചാർജോ ഇല്ല.
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+റേസ് കുറിപ്പുകൾ
+സാഹചര്യങ്ങൾ, പോഷണം, ഉപകരണങ്ങൾ എന്നിവ അവ നൽകിയ ഫലത്തോട് ചേർത്ത് സൂക്ഷിക്കുക.
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+Pattie-യുടെ ടിപ്പുകൾ
+റേസ് ദിനത്തിനായി ചിത്രീകരിച്ച ടിപ്പുകൾ കാണുക, ശരിയായ ക്ലിപ്പിലെത്താൻ Ask Pattie ഉപയോഗിക്കുക.
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+സൗജന്യ അടിസ്ഥാന സൗകര്യങ്ങൾ
+തിരയുക, നിങ്ങളുടെ പിന്തുണയുള്ള ചരിത്രം ചേർക്കുക, എല്ലാ സ്പ്ലിറ്റുകളും റാങ്കിംഗുകളും പെർസെന്റൈലുകളും പങ്കാളികളുടെ സന്ദർഭവും റേസ് കുറിപ്പുകളും വ്യക്തിഗത മികച്ച സമയങ്ങളും പുരോഗതിയും മുഴുവൻ ടിപ്പ് ലൈബ്രറിയും സൂക്ഷിക്കുക. നിങ്ങളുടെ ഫലങ്ങൾ ഒരിക്കലും ഒരു വാങ്ങലിന് പിന്നിൽ മറയ്ക്കില്ല.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+സ്വകാര്യതാ നയം: https://jackwallner.github.io/ironman/privacy-policy.html
+ഉപയോഗ നിബന്ധനകൾ: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker ഒരു സ്വതന്ത്ര ആപ്പാണ്. ഇത് ഏതെങ്കിലും റേസ് സംഘാടകരുമായോ ടൈമിംഗ് കമ്പനിയുമായോ ബന്ധപ്പെട്ടതല്ല, അവരുടെ അംഗീകാരമോ സ്പോൺസർഷിപ്പോ ഇല്ല. ഓരോ ഇവന്റിന്റെയും ടൈമർ പ്രസിദ്ധീകരിച്ചതുപോലെയാണ് ഫലങ്ങൾ കാണിക്കുന്നത്.
 
 ആപ്പിന്റെ ഇന്റർഫേസ് നിലവിൽ ഇംഗ്ലീഷിൽ മാത്രം ലഭ്യമാണ്.

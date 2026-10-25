@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+Tam ve yarı mesafe triatlonların yayımlanmış sonuçları, ara derecelere göre sıralanmış ve tek bir yerde.
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+Kayıt olduğun adı ara. IM Tri Tracker desteklenen yayımlanmış sonuçları bulur ve yüzme, T1, bisiklet, T2 ve koşu ara derecelerini, göğüs numaralarını, kategori sıralamalarını ve genel sıralamayı gösterir.
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+ARA DERECE SIRALAMALARI
+Her etabı yüzme, bisiklet, koşu, geçişler veya bitiş süresine göre sırala. Tam ve yarı mesafe yarışlar ayrı sıralamalarda kalır.
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+NEREDE BİTİRDİN
+Her ara dereceni o yarışı bitirenlerle karşılaştır. Sıranın yanında katılımcı sayısı ve yüzdelik dilim yer alır.
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+Kişisel rekorlar ve gelişim ücretsizdir. Race Book, benzer yarışlar arasında karşılaştırma ve sınırsız PDF veya görsel dışa aktarımı tek seferlik, ömür boyu geçerli bir satın alımla ekler. Abonelik ya da dışa aktarım başına ücret yoktur.
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+YARIŞ NOTLARI
+Koşulları, beslenmeyi ve ekipmanı ortaya çıkardıkları sonuca bağlı tut.
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+PATTIE'DEN İPUÇLARI
+Yarış günü için çekilmiş ipuçlarına göz at ve doğru videoya ulaşmak için Ask Pattie'yi kullan.
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+ÜCRETSİZ TEMEL
+Ara, desteklenen geçmişini sahiplen ve tüm ara dereceleri, sıralamaları, yüzdelik dilimleri, katılımcı bağlamını, yarış notlarını, kişisel rekorları, gelişimi ve tüm ipucu kütüphanesini sakla. Sonuçların asla bir satın alımın arkasına gizlenmez.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Gizlilik Politikası: https://jackwallner.github.io/ironman/privacy-policy.html
+Kullanım Koşulları: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker bağımsızdır. Hiçbir yarış organizatörü veya zamanlama şirketiyle bağlantılı değildir, onlar tarafından onaylanmamış ya da desteklenmemiştir. Sonuçlar, her etkinliğin zamanlama hizmeti tarafından yayımlandığı şekliyle gösterilir.
 
 Uygulama arayüzü şu anda yalnızca İngilizce olarak sunulmaktadır.

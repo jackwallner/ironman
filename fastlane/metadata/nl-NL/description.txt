@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+Gepubliceerde triatlonuitslagen over de hele en halve afstand, gerangschikt per onderdeel en op één plek bewaard.
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+Zoek op de naam waarmee je je hebt ingeschreven. IM Tri Tracker vindt ondersteunde gepubliceerde uitslagen en toont je zwem-, T1-, fiets-, T2- en looptijden, startnummer, plaats in je categorie en algemene klassering.
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+RANGLIJSTEN PER ONDERDEEL
+Rangschik elk onderdeel op zwemmen, fietsen, lopen, wissels of eindtijd. Wedstrijden over de hele en halve afstand blijven in aparte ranglijsten.
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+WAAR JE EINDIGDE
+Zie elk onderdeel afgezet tegen de finishers van die wedstrijd, met veldgrootte en percentiel naast je plaats.
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+Persoonlijke records en voortgang zijn gratis. Race Book voegt vergelijkingen tussen gelijkwaardige wedstrijden en onbeperkte exports als pdf of afbeelding toe met één aankoop voor altijd. Geen abonnement en geen kosten per export.
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+WEDSTRIJDNOTITIES
+Bewaar omstandigheden, voeding en materiaal bij de uitslag waar ze bij horen.
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+TIPS VAN PATTIE
+Blader door gefilmde tips voor de wedstrijddag en gebruik Ask Pattie om snel de juiste clip te vinden.
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+GRATIS BASIS
+Zoek, claim je ondersteunde wedstrijdgeschiedenis en houd alle tussentijden, ranglijsten, percentielen, veldcontext, wedstrijdnotities, persoonlijke records, voortgang en de volledige tipsbibliotheek. Je uitslagen zitten nooit achter een aankoop.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Privacybeleid: https://jackwallner.github.io/ironman/privacy-policy.html
+Gebruiksvoorwaarden: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+IM Tri Tracker is onafhankelijk en niet gelieerd aan, goedgekeurd door of gesponsord door een wedstrijdorganisator of tijdwaarnemingsbedrijf. Uitslagen worden getoond zoals gepubliceerd door de tijdwaarneming van elk evenement.
 
 De appinterface is momenteel alleen beschikbaar in het Engels.

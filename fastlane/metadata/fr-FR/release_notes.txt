@@ -1,1 +1,1 @@
-Le bouton pour changer d'athlète et les autres boutons de la barre du haut sont désormais faciles à lire sur tous les iPhone. Les statistiques de carrière ne sont plus coupées et le mode sombre est plus clair.
+Améliorations en coulisses et corrections de bugs pour une expérience plus fluide. Merci d'être là.

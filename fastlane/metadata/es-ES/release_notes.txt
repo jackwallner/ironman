@@ -1,1 +1,1 @@
-El botón para cambiar de atleta y los demás botones de la barra superior ahora se leen bien en cualquier iPhone. Las estadísticas de carrera ya no se cortan y el modo oscuro es más claro.
+Mejoras internas y correcciones de errores para una experiencia más fluida. Gracias por estar aquí.

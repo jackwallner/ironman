@@ -1,28 +1,28 @@
-Published full and half-distance triathlon results, ranked by split and kept in one place.
+Közzétett teljes és fél távú triatloneredmények részidők szerint rangsorolva, egy helyen.
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+Keress rá arra a névre, amellyel neveztél. Az IM Tri Tracker megtalálja a támogatott közzétett eredményeket, és megmutatja az úszás, T1, kerékpár, T2 és futás részidejeit, a rajtszámot, a korcsoportos és az abszolút helyezést.
 
-SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+RÉSZIDŐ-RANGSOROK
+Rangsorold az egyes szakaszokat úszás, kerékpár, futás, depó vagy célidő szerint. A teljes és a fél távú versenyek külön rangsorban maradnak.
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
+HOL VÉGEZTÉL
+Nézd meg minden részidődet az adott verseny célba érkezőihez képest, a helyezés mellett a mezőny méretével és a percentilissel.
 
 RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+Az egyéni csúcsok és a fejlődés ingyenesek. A Race Book azonos típusú versenyek összehasonlítását és korlátlan PDF- vagy képexportot ad egyetlen, örökre szóló vásárlással. Nincs előfizetés és exportonkénti díj.
 
-RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+VERSENYJEGYZETEK
+Tartsd a körülményeket, a táplálkozást és a felszerelést ahhoz az eredményhez kapcsolva, amelyet hoztak.
 
-TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+PATTIE TIPPJEI
+Böngéssz a versenynapra szóló videós tippek között, és az Ask Pattie segítségével találd meg a megfelelő klipet.
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+INGYENES ALAPOK
+Keress, igényeld a támogatott versenytörténetedet, és tartsd meg az összes részidőt, rangsort, percentilist, mezőnyadatot, versenyjegyzetet, egyéni csúcsot, a fejlődést és a teljes tipptárat. Az eredményeid soha nincsenek vásárlás mögé rejtve.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Adatvédelmi irányelvek: https://jackwallner.github.io/ironman/privacy-policy.html
+Felhasználási feltételek: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+Az IM Tri Tracker független alkalmazás. Nem áll kapcsolatban egyetlen versenyszervezővel vagy időmérő céggel sem, és azok nem támogatják vagy szponzorálják. Az eredmények úgy jelennek meg, ahogy az egyes versenyek időmérői közzétették őket.
 
 Az alkalmazás kezelőfelülete jelenleg csak angolul érhető el.
