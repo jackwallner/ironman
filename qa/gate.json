@@ -1,0 +1,16 @@
+{
+  "project": "IronSplits.xcodeproj",
+  "scheme": "IronSplitsUITests",
+  "uitests_dir": "IronSplitsUITests",
+  "journeys": [
+    "IronSplitsUITests/ReleaseJourneysUITests"
+  ],
+  "personas": [
+    "newcomer",
+    "accessibility",
+    "reduce-motion",
+    "german"
+  ],
+  "persona_overrides": {},
+  "slot": null
+}
