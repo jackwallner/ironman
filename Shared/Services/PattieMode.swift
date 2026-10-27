@@ -184,9 +184,11 @@ final class PattieMode: ObservableObject {
 
     // MARK: - Firing
 
+    #if DEBUG
     private static let isPattieModeOptedIn =
         ProcessInfo.processInfo.arguments.contains("-PattieMode")
         || ProcessInfo.processInfo.environment["IRONSPLITS_PATTIE_MODE"] == "1"
+    #endif
 
     /// Offer a meaningful screen moment. It lands if Pattie Mode is on, the
     /// moment's cooldown has expired, and the quiet period behind it has elapsed.
