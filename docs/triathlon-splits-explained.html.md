@@ -6,7 +6,7 @@ Web page: https://jackwallner.com/ios/ironman/triathlon-splits-explained.html
 
 ## Triathlon splits explained: swim, T1, bike, T2 and run
 
-By Jack Wallner. Last updated October 18, 2026.
+By Jack Wallner. Last updated October 28, 2026.
 
 A triathlon result is five split times that add up to your finish: swim, T1 (the first transition), bike, T2 (the second transition) and run. Each split measures one stretch of the race, so you can compare your swim to your run or to other athletes in the same race. Turn each leg into a pace (per 100 meters, miles per hour, minutes per mile) before comparing, and only compare races of the same distance.
 
