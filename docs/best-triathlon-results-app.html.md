@@ -6,7 +6,7 @@ Web page: https://jackwallner.com/ios/ironman/best-triathlon-results-app.html
 
 ## Best triathlon results app for iPhone (October 2026)
 
-By [Jack Wallner](https://jackwallner.com/). Last updated October 18, 2026.
+By [Jack Wallner](https://jackwallner.com/). Last updated October 28, 2026.
 
 A triathlon results app is a phone app that does one of two jobs: following an athlete live on race day, or looking up finished results later. Best for looking up published full and half-distance results by name, with swim, T1, bike, T2 and run splits ranked against the field: IM Tri Tracker. Best for live race-day tracking at supported events: IRONMAN Tracker, RTRT.me or USA Triathlon Events Tracker, depending on who timed the race. Best for keeping your own manual log: My Results.
 
