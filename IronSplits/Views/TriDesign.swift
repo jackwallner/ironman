@@ -496,7 +496,7 @@ struct TriSectionHeader: View {
     }
 
     private var heading: some View {
-        Text(title.uppercased())
+        Text(title.localizedUppercase)
             .font(TriType.sectionTitle)
             .kerning(0.8)
             .foregroundStyle(TriPalette.inkSecondary)
@@ -525,7 +525,7 @@ struct TriBadge: View {
     var filled: Bool = false
 
     var body: some View {
-        Text(text.uppercased())
+        Text(text.localizedUppercase)
             .font(TriType.micro)
             .kerning(0.5)
             .foregroundStyle(filled ? TriPalette.inkOnSunrise : color)
@@ -564,7 +564,7 @@ struct TriChip: View {
         }
         .buttonStyle(.triPressSilent)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
-        .accessibilityValue(isSelected ? "Selected" : "")
+        .accessibilityValue(isSelected ? String(localized: "Selected") : "")
     }
 }
 

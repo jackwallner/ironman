@@ -43,7 +43,7 @@ struct RaceBookView: View {
                     Button {
                         dismiss()
                     } label: {
-                        TriBarLabel(title: "Done", emphasized: true)
+                        TriBarLabel(title: String(localized: "Done"), emphasized: true)
                     }
                     .buttonStyle(.triPressSilent)
                 }
@@ -78,8 +78,8 @@ struct RaceBookView: View {
     private var content: some View {
         if locker.results.isEmpty {
             TriPlaceholder(systemImage: "book.closed",
-                           title: "Your Race Book is waiting",
-                           message: "Claim an athlete to preview personal bests, progression, comparison and export tools.")
+                           title: String(localized: "Your Race Book is waiting"),
+                           message: String(localized: "Claim an athlete to preview personal bests, progression, comparison and export tools."))
         } else {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: TriSpace.x6) {
@@ -110,7 +110,7 @@ struct RaceBookView: View {
                             .contentShape(Rectangle())
                         }
                         .buttonStyle(.triPressSilent)
-                        .accessibilityValue(isCustomizingExport ? "Expanded" : "Collapsed")
+                        .accessibilityValue(isCustomizingExport ? String(localized: "Expanded") : String(localized: "Collapsed"))
                         if isCustomizingExport {
                             includeCard
                                 .transition(.opacity.combined(with: .move(edge: .top)))
@@ -152,7 +152,7 @@ struct RaceBookView: View {
                 .font(TriType.body)
                 .foregroundStyle(TriPalette.inkSecondary)
                 .fixedSize(horizontal: false, vertical: true)
-            Text(raceBookUnlocked ? "Race Book unlocked" : "Preview included. No subscription.")
+            Text(raceBookUnlocked ? String(localized: "Race Book unlocked") : String(localized: "Preview included. No subscription."))
                 .font(TriType.smallBold)
                 .foregroundStyle(raceBookUnlocked ? TriPalette.positive : TriPalette.inkTertiary)
         }
@@ -165,23 +165,23 @@ struct RaceBookView: View {
         // Red celebrates a podium; a zero in red reads as a warning.
         let podiumTint = summary.podiums > 0 ? TriPalette.sunrise : TriPalette.ink
         return VStack(alignment: .leading, spacing: TriSpace.x3) {
-            TriSectionHeader(title: "Career at a glance")
+            TriSectionHeader(title: String(localized: "Career at a glance"))
             ViewThatFits(in: .horizontal) {
                 HStack {
-                    StatTile(value: String(summary.finishes), caption: "Finishes")
+                    StatTile(value: String(summary.finishes), caption: String(localized: "Finishes"))
                     Spacer(minLength: 0)
-                    StatTile(value: String(summary.podiums), caption: "Podiums", tint: podiumTint)
+                    StatTile(value: String(summary.podiums), caption: String(localized: "Podiums"), tint: podiumTint)
                     Spacer(minLength: 0)
-                    StatTile(value: String(summary.starts), caption: "Starts")
+                    StatTile(value: String(summary.starts), caption: String(localized: "Starts"))
                 }
                 VStack(spacing: TriSpace.x3) {
                     HStack {
-                        StatTile(value: String(summary.finishes), caption: "Finishes")
+                        StatTile(value: String(summary.finishes), caption: String(localized: "Finishes"))
                         Spacer(minLength: 0)
-                        StatTile(value: String(summary.podiums), caption: "Podiums", tint: podiumTint)
+                        StatTile(value: String(summary.podiums), caption: String(localized: "Podiums"), tint: podiumTint)
                     }
                     HStack {
-                        StatTile(value: String(summary.starts), caption: "Starts")
+                        StatTile(value: String(summary.starts), caption: String(localized: "Starts"))
                     }
                 }
             }
@@ -197,39 +197,39 @@ struct RaceBookView: View {
 
     private var includeCard: some View {
         VStack(alignment: .leading, spacing: TriSpace.x3) {
-            TriSectionHeader(title: "Things to include")
+            TriSectionHeader(title: String(localized: "Things to include"))
             Text("Shape the book around the parts of your career you will want on race morning and after the finish.")
                 .font(TriType.small)
                 .foregroundStyle(TriPalette.inkTertiary)
                 .fixedSize(horizontal: false, vertical: true)
 
             VStack(spacing: TriSpace.x1) {
-                optionToggle("Career overview", detail: "Starts, finishes, podiums and years",
+                optionToggle(String(localized: "Career overview"), detail: String(localized: "Starts, finishes, podiums and years"),
                              isOn: $exportOptions.includeCareerSummary)
-                optionToggle("Podium highlights", detail: "Your top-three race moments",
+                optionToggle(String(localized: "Podium highlights"), detail: String(localized: "Your top-three race moments"),
                              isOn: $exportOptions.includePodiumHighlights)
-                optionToggle("Personal bests", detail: "Fastest finish and leg at each distance",
+                optionToggle(String(localized: "Personal bests"), detail: String(localized: "Fastest finish and leg at each distance"),
                              isOn: $exportOptions.includePersonalBests)
-                optionToggle("Progression", detail: "First and latest finish by distance",
+                optionToggle(String(localized: "Progression"), detail: String(localized: "First and latest finish by distance"),
                              isOn: $exportOptions.includeProgression)
-                optionToggle("Race history", detail: "A complete timeline of selected races",
+                optionToggle(String(localized: "Race history"), detail: String(localized: "A complete timeline of selected races"),
                              isOn: $exportOptions.includeRaceHistory)
-                optionToggle("Official splits", detail: "Swim, T1, bike, T2 and run",
+                optionToggle(String(localized: "Official splits"), detail: String(localized: "Swim, T1, bike, T2 and run"),
                              isOn: $exportOptions.includeSplits)
-                optionToggle("Placements", detail: "Bib, age group and overall rank",
+                optionToggle(String(localized: "Placements"), detail: String(localized: "Bib, age group and overall rank"),
                              isOn: $exportOptions.includePlacements)
-                optionToggle("Race-day notes", detail: "Optional in the PDF; never added to the share image",
+                optionToggle(String(localized: "Race-day notes"), detail: String(localized: "Optional in the PDF; never added to the share image"),
                              isOn: $exportOptions.includeRaceNotes)
-                optionToggle("Incomplete results", detail: "Include DNF, DNS and DQ entries",
+                optionToggle(String(localized: "Incomplete results"), detail: String(localized: "Include DNF, DNS and DQ entries"),
                              isOn: $exportOptions.includeIncomplete)
                 Divider()
                     .background(TriPalette.divider)
-                optionToggle("One-page PDF", detail: "A condensed summary for quick sharing",
+                optionToggle(String(localized: "One-page PDF"), detail: String(localized: "A condensed summary for quick sharing"),
                              isOn: $exportOptions.onePage)
             }
 
             if locker.availableKinds.count > 1 {
-                TriSectionHeader(title: "Distances")
+                TriSectionHeader(title: String(localized: "Distances"))
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: TriSpace.x2) {
                         ForEach(locker.availableKinds, id: \.self) { kind in
@@ -271,7 +271,7 @@ struct RaceBookView: View {
     private var kindFilter: some View {
         if locker.availableKinds.count > 1 {
             VStack(alignment: .leading, spacing: TriSpace.x2) {
-                TriSectionHeader(title: "Compare by distance")
+                TriSectionHeader(title: String(localized: "Compare by distance"))
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: TriSpace.x2) {
                         ForEach(locker.availableKinds, id: \.self) { kind in
@@ -295,7 +295,7 @@ struct RaceBookView: View {
 
     private var personalBestsCard: some View {
         VStack(alignment: .leading, spacing: TriSpace.x3) {
-            TriSectionHeader(title: "Personal bests", trailing: activeKind?.longTitle)
+            TriSectionHeader(title: String(localized: "Personal bests"), trailing: activeKind?.longTitle)
             if personalBests.isEmpty {
                 Text("No complete splits are available for this distance yet.")
                     .font(TriType.small)
@@ -317,7 +317,7 @@ struct RaceBookView: View {
 
     private var progressionCard: some View {
         VStack(alignment: .leading, spacing: TriSpace.x3) {
-            TriSectionHeader(title: "Progression", trailing: activeKind?.longTitle)
+            TriSectionHeader(title: String(localized: "Progression"), trailing: activeKind?.longTitle)
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: TriSpace.x2) {
                     ForEach(Discipline.rankable) { discipline in
@@ -337,7 +337,7 @@ struct RaceBookView: View {
                         Button(name) { progressionRaceName = name }
                     }
                 } label: {
-                    Label(progressionRaceName ?? "All courses", systemImage: "line.3.horizontal.decrease")
+                    Label(progressionRaceName ?? String(localized: "All courses"), systemImage: "line.3.horizontal.decrease")
                         .font(TriType.smallBold)
                         .foregroundStyle(TriPalette.sunrise)
                         .frame(minHeight: TriGeo.tapTarget, alignment: .leading)
@@ -348,15 +348,15 @@ struct RaceBookView: View {
             if progressionPoints.count > 1 {
                 Text(progressionRaceName == nil
                      ? (repeatedCourseNames.isEmpty
-                        ? "Courses vary. A like-for-like event comparison will appear after another finish at the same race."
-                        : "Courses vary. Choose a repeat event above for a like-for-like view.")
-                     : "Same event, oldest to newest.")
+                        ? String(localized: "Courses vary. A like-for-like event comparison will appear after another finish at the same race.")
+                        : String(localized: "Courses vary. Choose a repeat event above for a like-for-like view."))
+                     : String(localized: "Same event, oldest to newest."))
                     .font(TriType.micro)
                     .foregroundStyle(TriPalette.inkTertiary)
                     .fixedSize(horizontal: false, vertical: true)
                 ForEach(visibleProgressionPoints) { point in
                     HStack(spacing: TriSpace.x3) {
-                        Text(point.result.year > 0 ? String(point.result.year) : "--")
+                        Text(verbatim: point.result.year > 0 ? String(point.result.year) : "--")
                             .font(TriType.statSmall)
                             .foregroundStyle(TriPalette.inkSecondary)
                             .frame(minWidth: TriSpace.x10, alignment: .leading)
@@ -376,7 +376,7 @@ struct RaceBookView: View {
                     }
                 }
                 if progressionPoints.count > 4 {
-                    Button(showsAllProgression ? "Show fewer races" : "Show all \(progressionPoints.count) races") {
+                    Button(showsAllProgression ? String(localized: "Show fewer races") : String(localized: "Show all \(progressionPoints.count) races")) {
                         showsAllProgression.toggle()
                     }
                     .font(TriType.smallBold)
@@ -395,10 +395,10 @@ struct RaceBookView: View {
 
     private var compareCard: some View {
         VStack(alignment: .leading, spacing: TriSpace.x3) {
-            TriSectionHeader(title: "Compare races")
+            TriSectionHeader(title: String(localized: "Compare races"))
             Text(comparableRaces.count >= 2
-                 ? "Put two \(distanceLabel) finishes side by side and see every leg's gain or loss."
-                 : "You need two complete races at the same distance before comparison is available.")
+                 ? compareIntro
+                 : String(localized: "You need two complete races at the same distance before comparison is available."))
                 .font(TriType.body)
                 .foregroundStyle(TriPalette.inkSecondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -408,8 +408,8 @@ struct RaceBookView: View {
                     NavigationLink {
                         RaceCompareView(kind: activeKind)
                     } label: {
-                        RaceBookActionLabel(title: "Compare two races",
-                                            subtitle: "Time gained or lost by leg",
+                        RaceBookActionLabel(title: String(localized: "Compare two races"),
+                                            subtitle: String(localized: "Time gained or lost by leg"),
                                             systemImage: "arrow.left.arrow.right")
                     }
                     .buttonStyle(.triPress)
@@ -417,8 +417,8 @@ struct RaceBookView: View {
                     Button {
                         paywallTrigger = .raceBookCompare
                     } label: {
-                        RaceBookActionLabel(title: "Unlock race comparison",
-                                            subtitle: "One lifetime purchase, no subscription",
+                        RaceBookActionLabel(title: String(localized: "Unlock race comparison"),
+                                            subtitle: String(localized: "One lifetime purchase, no subscription"),
                                             systemImage: "lock.fill")
                     }
                     .buttonStyle(.triPress)
@@ -430,15 +430,15 @@ struct RaceBookView: View {
 
     private var exportCard: some View {
         VStack(alignment: .leading, spacing: TriSpace.x3) {
-            TriSectionHeader(title: "Build your Race Book")
+            TriSectionHeader(title: String(localized: "Build your Race Book"))
             Text("Build a polished full report or one-page PDF, plus a tall shareable image. Everything is generated on this phone.")
                 .font(TriType.body)
                 .foregroundStyle(TriPalette.inkSecondary)
                 .fixedSize(horizontal: false, vertical: true)
 
             TriPrimaryButton(title: raceBookUnlocked
-                             ? (exportError == nil ? "Build PDF and image" : "Try export again")
-                             : "Unlock to export",
+                             ? (exportError == nil ? String(localized: "Build PDF and image") : String(localized: "Try export again"))
+                             : String(localized: "Unlock to export"),
                              systemImage: raceBookUnlocked ? "square.and.arrow.up" : "lock.fill",
                              isBusy: isBuildingExports) {
                 if raceBookUnlocked {
@@ -473,8 +473,8 @@ struct RaceBookView: View {
                 Button {
                     pdfPreview = RaceBookPDFItem(url: pdf)
                 } label: {
-                    RaceBookActionLabel(title: "View PDF",
-                                        subtitle: "Read it here before sharing",
+                    RaceBookActionLabel(title: String(localized: "View PDF"),
+                                        subtitle: String(localized: "Read it here before sharing"),
                                         systemImage: "doc.text.magnifyingglass")
                 }
                 .buttonStyle(.triPress)
@@ -499,7 +499,7 @@ struct RaceBookView: View {
                 .buttonStyle(.triPressSilent)
             }
 
-            Text(raceBookUnlocked ? "Unlimited exports are included with Race Book." : "Your results remain free. Compare and export are the only Race Book actions.")
+            Text(raceBookUnlocked ? String(localized: "Unlimited exports are included with Race Book.") : String(localized: "Your results remain free. Compare and export are the only Race Book actions."))
                 .font(TriType.micro)
                 .foregroundStyle(TriPalette.inkTertiary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -519,8 +519,12 @@ struct RaceBookView: View {
         RaceBookAnalytics.comparableRaces(locker.results, kind: activeKind)
     }
 
-    private var distanceLabel: String {
-        activeKind?.longTitle.lowercased() ?? "like-for-like"
+    private var compareIntro: String {
+        switch activeKind {
+        case .fullDistance: String(localized: "Put two full distance finishes side by side and see every leg's gain or loss.")
+        case .halfDistance: String(localized: "Put two half distance finishes side by side and see every leg's gain or loss.")
+        default: String(localized: "Put two like-for-like finishes side by side and see every leg's gain or loss.")
+        }
     }
 
     private var personalBests: [PersonalBest] {
@@ -552,7 +556,7 @@ struct RaceBookView: View {
 
     private func progressionPoint(title: String, point: RaceBookProgressionPoint) -> some View {
         VStack(alignment: .leading, spacing: TriSpace.x1) {
-            Text(title.uppercased())
+            Text(title.localizedUppercase)
                 .font(TriType.micro)
                 .foregroundStyle(TriPalette.inkTertiary)
             Text(TimeFormat.hms(point.seconds))
@@ -603,7 +607,7 @@ struct RaceBookView: View {
             guard !Task.isCancelled, generation == exportGeneration else { return }
             exports = built
             exportError = built.pdf == nil && built.image == nil
-                ? "The export could not be created. Check available storage and try again."
+                ? String(localized: "The export could not be created. Check available storage and try again.")
                 : nil
             isBuildingExports = false
             pattie.fire(.resumeExported)
@@ -664,21 +668,21 @@ struct RaceBookView: View {
     }
 
     private func yearsText(_ years: ClosedRange<Int>?) -> String {
-        guard let years else { return "No dated races" }
+        guard let years else { return String(localized: "No dated races") }
         return years.lowerBound == years.upperBound
             ? String(years.lowerBound)
-            : "\(years.lowerBound) to \(years.upperBound)"
+            : String(localized: "\(String(years.lowerBound)) to \(String(years.upperBound))")
     }
 
     private func dateText(_ result: RaceResult) -> String {
-        result.eventDate.map(RaceDate.medium) ?? (result.year > 0 ? String(result.year) : "Undated")
+        result.eventDate.map(RaceDate.medium) ?? (result.year > 0 ? String(result.year) : String(localized: "Undated"))
     }
 
     private func changeText(_ change: Int) -> String {
-        if change == 0 { return "No change between first and latest" }
+        if change == 0 { return String(localized: "No change between first and latest") }
         return change < 0
-            ? "\(TimeFormat.hms(abs(change))) faster than the first"
-            : "\(TimeFormat.hms(change)) slower than the first"
+            ? String(localized: "\(TimeFormat.hms(abs(change))) faster than the first")
+            : String(localized: "\(TimeFormat.hms(change)) slower than the first")
     }
 
     private func changeColor(_ change: Int) -> Color {
@@ -828,8 +832,8 @@ struct RaceCompareView: View {
                     if availableKinds.count > 1 {
                         kindPicker
                     }
-                    selector(title: "Earlier race", selectedID: $baselineID)
-                    selector(title: "Later race", selectedID: $comparisonID)
+                    selector(title: String(localized: "Earlier race"), selectedID: $baselineID)
+                    selector(title: String(localized: "Later race"), selectedID: $comparisonID)
                     comparisonCard
                 }
                 .padding(.horizontal, TriGeo.padPage)
@@ -877,7 +881,7 @@ struct RaceCompareView: View {
 
     private var kindPicker: some View {
         VStack(alignment: .leading, spacing: TriSpace.x2) {
-            TriSectionHeader(title: "Distance")
+            TriSectionHeader(title: String(localized: "Distance"))
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: TriSpace.x2) {
                     ForEach(availableKinds, id: \.self) { kind in
@@ -907,7 +911,7 @@ struct RaceCompareView: View {
             } label: {
                 HStack(spacing: TriSpace.x2) {
                     Text(selectedID.wrappedValue.flatMap { id in races.first { $0.id == id }.map(raceLabel) }
-                         ?? "Choose a finish")
+                         ?? String(localized: "Choose a finish"))
                         .font(TriType.body)
                         .foregroundStyle(TriPalette.ink)
                         .multilineTextAlignment(.leading)
@@ -927,7 +931,7 @@ struct RaceCompareView: View {
     private var comparisonCard: some View {
         if let baseline, let comparison {
             VStack(alignment: .leading, spacing: TriSpace.x3) {
-                TriSectionHeader(title: "Time by leg")
+                TriSectionHeader(title: String(localized: "Time by leg"))
                 let pair = chronologicalPair
                 Text("\(pair?.earlier.raceName ?? baseline.raceName) to \(pair?.later.raceName ?? comparison.raceName)")
                     .font(TriType.small)
@@ -946,8 +950,8 @@ struct RaceCompareView: View {
             .triCard(padding: TriSpace.x3)
         } else {
             TriPlaceholder(systemImage: "arrow.left.arrow.right",
-                           title: "Choose two finishes",
-                           message: "The leg-by-leg comparison will appear here.")
+                           title: String(localized: "Choose two finishes"),
+                           message: String(localized: "The leg-by-leg comparison will appear here."))
                 .triCard(padding: TriSpace.x3)
         }
     }
@@ -978,7 +982,7 @@ struct RaceCompareView: View {
     }
 
     private func raceLabel(_ result: RaceResult) -> String {
-        let date = result.eventDate.map(RaceDate.medium) ?? (result.year > 0 ? String(result.year) : "Undated")
+        let date = result.eventDate.map(RaceDate.medium) ?? (result.year > 0 ? String(result.year) : String(localized: "Undated"))
         return "\(date), \(result.raceName)"
     }
 
@@ -1019,7 +1023,7 @@ private struct RaceBookDeltaRow: View {
                 Text(changeDescription)
                     .font(TriType.statSmall)
                     .foregroundStyle(deltaColor)
-                Text(delta.change == 0 ? "No change" : (delta.improved ? "Faster" : "Slower"))
+                Text(delta.change == 0 ? String(localized: "No change") : (delta.improved ? String(localized: "Faster") : String(localized: "Slower")))
                     .font(TriType.micro)
                     .foregroundStyle(TriPalette.inkTertiary)
             }
@@ -1027,12 +1031,13 @@ private struct RaceBookDeltaRow: View {
         .frame(minHeight: TriGeo.tapTarget)
         .padding(.vertical, TriSpace.x1)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(delta.discipline.title), \(changeDescription)")
+        .accessibilityLabel([delta.discipline.title, changeDescription].joined(separator: ", "))
     }
 
     private var changeDescription: String {
-        guard delta.change != 0 else { return "No change" }
-        return "\(TimeFormat.hms(abs(delta.change))) \(delta.improved ? "faster" : "slower")"
+        guard delta.change != 0 else { return String(localized: "No change") }
+        let time = TimeFormat.hms(abs(delta.change))
+        return delta.improved ? String(localized: "\(time) faster") : String(localized: "\(time) slower")
     }
 
     private var deltaColor: Color {

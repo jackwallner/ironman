@@ -80,7 +80,7 @@ struct PattieCompanion: View {
         }
         .buttonStyle(.triPressSilent)
         .accessibilityIdentifier("pattie-avatar")
-        .accessibilityLabel(line == nil ? "Pattie, hear a tip" : "Pattie, replay the tip")
+        .accessibilityLabel(line == nil ? String(localized: "Pattie, hear a tip") : String(localized: "Pattie, replay the tip"))
         .accessibilityValue(petState.accessibilityName)
         .scaleEffect(avatarScale, anchor: .bottomLeading)
         .frame(width: Self.avatarFrameWidth * avatarScale,

@@ -88,7 +88,7 @@ struct RaceRow: View {
                         .foregroundStyle(result.isComplete ? TriPalette.ink : TriPalette.negative)
                         .fixedSize(horizontal: true, vertical: false)
                     if let group = result.ageGroup, let place = result.finishRankGroup {
-                        Text(group + " #" + String(place))
+                        Text(verbatim: group + " #" + String(place))
                             .font(TriType.small)
                             .foregroundStyle(TriPalette.inkTertiary)
                     }
@@ -116,11 +116,11 @@ struct RaceRow: View {
         return ViewThatFits(in: .horizontal) {
             HStack(spacing: TriSpace.x1) {
                 ForEach(legs) { leg in
-                    TriBadge(text: "PB \(leg.shortTitle)", color: TriPalette.sunrise, filled: true)
+                    TriBadge(text: String(localized: "PB \(leg.shortTitle)"), color: TriPalette.sunrise, filled: true)
                         .fixedSize()
                 }
             }
-            TriBadge(text: legs.count == 1 ? "PB" : "\(legs.count) PBs", color: TriPalette.sunrise, filled: true)
+            TriBadge(text: legs.count == 1 ? String(localized: "PB") : String(localized: "\(legs.count) PBs"), color: TriPalette.sunrise, filled: true)
                 .fixedSize()
         }
     }
@@ -128,17 +128,17 @@ struct RaceRow: View {
     private var accessibilityLabel: String {
         let finish = result.isComplete
             ? TimeFormat.spoken(result.finish)
-            : (result.disqualified ? "Disqualified" : result.didNotStart ? "Did not start" : "Did not finish")
-        let date = result.eventDate.map(RaceDate.medium) ?? (result.year > 0 ? String(result.year) : "Undated")
+            : (result.disqualified ? String(localized: "Disqualified") : result.didNotStart ? String(localized: "Did not start") : String(localized: "Did not finish"))
+        let date = result.eventDate.map(RaceDate.medium) ?? (result.year > 0 ? String(result.year) : String(localized: "Undated"))
         var parts = [result.raceName, date, finish]
         if let ageGroup = result.ageGroup, let rank = result.finishRankGroup {
-            parts.append("\(Ordinal.text(rank) ?? String(rank)) in \(ageGroup)")
+            parts.append(String(localized: "\(Ordinal.text(rank) ?? String(rank)) in \(ageGroup)"))
         }
         if !personalBestLegs.isEmpty {
             let labels = Discipline.rankable.filter { personalBestLegs.contains($0) }.map(\.title)
-            parts.append("Personal best: \(labels.joined(separator: ", "))")
+            parts.append(String(localized: "Personal best: \(labels.formatted(.list(type: .and)))"))
         }
-        if hasNote { parts.append("Has race notes") }
+        if hasNote { parts.append(String(localized: "Has race notes")) }
         return parts.joined(separator: ", ")
     }
 
@@ -149,7 +149,7 @@ struct RaceRow: View {
                 .foregroundStyle(TriPalette.inkTertiary)
             TriBadge(text: result.kind.title, color: TriPalette.inkTertiary)
             if let bib = result.bib {
-                Text("Bib " + String(bib))
+                Text("Bib \(String(bib))")
                     .font(TriType.small)
                     .foregroundStyle(TriPalette.inkTertiary)
             }
@@ -172,7 +172,7 @@ struct RaceRow: View {
             }
             HStack(spacing: TriSpace.x2) {
                 if let bib = result.bib {
-                    Text("Bib " + String(bib))
+                    Text("Bib \(String(bib))")
                         .font(TriType.small)
                         .foregroundStyle(TriPalette.inkTertiary)
                 }
@@ -194,7 +194,7 @@ struct RaceRow: View {
 
     private var dateText: String {
         guard let date = result.eventDate else {
-            return result.year > 0 ? String(result.year) : "Undated"
+            return result.year > 0 ? String(result.year) : String(localized: "Undated")
         }
         return RaceDate.medium(date)
     }
@@ -233,7 +233,7 @@ struct SplitLegend: View {
 struct LockedRow: View {
     let title: String
     let subtitle: String
-    var cta: String = "Unlock"
+    var cta: String = String(localized: "Unlock")
     let action: () -> Void
 
     var body: some View {
@@ -330,18 +330,18 @@ struct CareerStatsRow: View {
 
     @ViewBuilder
     private var tiles: some View {
-        StatTile(value: "\(summary.finishes)", caption: "Finishes", tint: TriPalette.inkOnDark)
+        StatTile(value: "\(summary.finishes)", caption: String(localized: "Finishes"), tint: TriPalette.inkOnDark)
             .frame(maxWidth: .infinity)
         if summary.fullDistance > 0 {
-            StatTile(value: "\(summary.fullDistance)", caption: "Full", tint: TriPalette.inkOnDark)
+            StatTile(value: "\(summary.fullDistance)", caption: String(localized: "Full"), tint: TriPalette.inkOnDark)
                 .frame(maxWidth: .infinity)
         }
         if summary.halfDistance > 0 {
-            StatTile(value: "\(summary.halfDistance)", caption: "Half", tint: TriPalette.inkOnDark)
+            StatTile(value: "\(summary.halfDistance)", caption: String(localized: "Half"), tint: TriPalette.inkOnDark)
                 .frame(maxWidth: .infinity)
         }
         if summary.podiums > 0 {
-            StatTile(value: "\(summary.podiums)", caption: "Podiums", tint: TriPalette.sunrise)
+            StatTile(value: "\(summary.podiums)", caption: String(localized: "Podiums"), tint: TriPalette.sunrise)
                 .frame(maxWidth: .infinity)
         }
     }
@@ -357,7 +357,7 @@ struct StatTile: View {
             Text(value)
                 .font(TriType.statMed)
                 .foregroundStyle(tint)
-            Text(caption.uppercased())
+            Text(caption.localizedUppercase)
                 .font(TriType.micro)
                 .kerning(0.4)
                 .foregroundStyle(TriPalette.inkTertiary)
@@ -369,6 +369,6 @@ struct StatTile: View {
         }
         .frame(minWidth: TriSpace.x10 + TriSpace.x8)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(caption), \(value)")
+        .accessibilityLabel([caption, value].joined(separator: ", "))
     }
 }

@@ -39,7 +39,7 @@ struct LockerView: View {
                         pattie.react(.selection)
                         showingAthleteSearch = true
                     } label: {
-                        TriBarLabel(title: "Change", systemImage: "person.2")
+                        TriBarLabel(title: String(localized: "Change"), systemImage: "person.2")
                     }
                     .buttonStyle(.triPressSilent)
                     .accessibilityLabel("Change athlete")
@@ -102,18 +102,18 @@ struct LockerView: View {
             }
         case .failed(let message) where locker.results.isEmpty:
             TriPlaceholder(systemImage: "wifi.exclamationmark",
-                           title: "Couldn't load your races",
+                           title: String(localized: "Couldn't load your races"),
                            message: message,
-                           actionTitle: "Try again") {
+                           actionTitle: String(localized: "Try again")) {
                 pattie.react(.refresh)
                 Task { await locker.refresh(force: true) }
             }
         default:
             if locker.results.isEmpty {
                 TriPlaceholder(systemImage: "flag.checkered",
-                               title: "No results yet",
-                               message: "We couldn't find any published results under this athlete. If you registered under a different name, pick the right one.",
-                               actionTitle: "Change athlete") {
+                               title: String(localized: "No results yet"),
+                               message: String(localized: "We couldn't find any published results under this athlete. If you registered under a different name, pick the right one."),
+                               actionTitle: String(localized: "Change athlete")) {
                     pattie.react(.selection)
                     showingAthleteSearch = true
                 }
@@ -168,10 +168,10 @@ struct LockerView: View {
                             .id(Self.kindRowID)
                     }
                     HStack(spacing: TriSpace.x2) {
-                        TriChip(title: "Races", isSelected: !showingRankings) {
+                        TriChip(title: String(localized: "Races"), isSelected: !showingRankings) {
                             showingRankings = false
                         }
-                        TriChip(title: "Rankings", isSelected: showingRankings) {
+                        TriChip(title: String(localized: "Rankings"), isSelected: showingRankings) {
                             if kindFilter == nil {
                                 kindFilter = settings.preferredKind.flatMap { locker.availableKinds.contains($0) ? $0 : nil }
                                     ?? locker.availableKinds.first
@@ -207,12 +207,12 @@ struct LockerView: View {
                             }
                         }
                     } header: {
-                        TriSectionHeader(title: "\(rankingDiscipline.title) rankings",
+                        TriSectionHeader(title: rankingDiscipline.rankingsTitle,
                                          trailing: rankingKind?.longTitle)
                     }
                 } else {
                     ForEach(resultGroups, id: \.year) { group in
-                        Section(group.year > 0 ? String(group.year) : "Undated") {
+                        Section(group.year > 0 ? String(group.year) : String(localized: "Undated")) {
                             ForEach(group.results) { result in
                                 raceLink(result) {
                                     RaceRow(result: result,
@@ -320,7 +320,7 @@ struct LockerView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: TriSpace.x2) {
                 if !showingRankings {
-                    TriChip(title: "All", isSelected: kindFilter == nil) {
+                    TriChip(title: String(localized: "All"), isSelected: kindFilter == nil) {
                         kindFilter = nil
                         settings.preferredKind = nil
                         pattie.react(.filter)
@@ -434,7 +434,7 @@ private struct LockerHeader: View {
             CareerStatsRow(summary: summary)
 
             if let years = summary.years {
-                Text("Racing since " + String(years.lowerBound))
+                Text("Racing since \(String(years.lowerBound))")
                     .font(TriType.micro)
                     .kerning(0.5)
                     .foregroundStyle(TriPalette.inkOnDark.opacity(0.6))
@@ -493,7 +493,7 @@ private struct SplitStandingRow: View {
                     .font(TriType.cardTitle)
                     .foregroundStyle(TriPalette.ink)
                     .fixedSize(horizontal: false, vertical: true)
-                Text(String(standing.result.year) + " · " + standing.result.kind.title)
+                Text(verbatim: String(standing.result.year) + " · " + standing.result.kind.title)
                     .font(TriType.small)
                     .foregroundStyle(TriPalette.inkTertiary)
             }
@@ -508,7 +508,7 @@ private struct SplitStandingRow: View {
                     .font(TriType.statMed)
                     .foregroundStyle(TriPalette.ink)
                     .fixedSize()
-                Text(standing.gapToBest == 0 ? "Personal best" : "+\(TimeFormat.hms(standing.gapToBest))")
+                Text(verbatim: standing.gapToBest == 0 ? String(localized: "Personal best") : "+" + TimeFormat.hms(standing.gapToBest))
                     .font(TriType.small)
                     .foregroundStyle(standing.gapToBest == 0 ? TriPalette.sunrise : TriPalette.inkTertiary)
                     .fixedSize()
@@ -517,6 +517,15 @@ private struct SplitStandingRow: View {
         .frame(minHeight: TriGeo.tapTarget)
         .padding(.vertical, TriSpace.x2)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(standing.rank), \(standing.result.raceName), \(standing.result.year), \(standing.discipline.title) \(TimeFormat.hms(standing.seconds)), \(standing.gapToBest == 0 ? "personal best" : "\(TimeFormat.hms(standing.gapToBest)) behind best")")
+        .accessibilityLabel(accessibilityText)
+    }
+
+    private var accessibilityText: String {
+        let gap = standing.gapToBest == 0
+            ? String(localized: "personal best")
+            : String(localized: "\(TimeFormat.hms(standing.gapToBest)) behind best")
+        return [String(standing.rank), standing.result.raceName, String(standing.result.year),
+                "\(standing.discipline.title) \(TimeFormat.hms(standing.seconds))", gap]
+            .joined(separator: ", ")
     }
 }

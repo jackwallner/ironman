@@ -46,8 +46,8 @@ struct AskPattieGoalList: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else if model.guide.goals.isEmpty {
             TriPlaceholder(systemImage: "questionmark.bubble",
-                           title: "Ask Pattie isn't loaded",
-                           message: "Pull down to fetch her pointers again.")
+                           title: String(localized: "Ask Pattie isn't loaded"),
+                           message: String(localized: "Pull down to fetch her pointers again."))
         } else {
             ScrollView {
                 VStack(alignment: .leading, spacing: TriSpace.x3) {
@@ -91,7 +91,7 @@ struct AskPattieTopicList: View {
             TriPalette.canvas.ignoresSafeArea()
             ScrollView {
                 VStack(alignment: .leading, spacing: TriSpace.x3) {
-                    TriSectionHeader(title: "What do you need help with?", trailing: goal?.title)
+                    TriSectionHeader(title: String(localized: "What do you need help with?"), trailing: goal?.title)
                     ForEach(goal.map { model.guide.topics(for: $0) } ?? []) { topic in
                         let count = model.guide.answers(for: goalID, topic: topic.id).count
                         Button {
@@ -100,7 +100,7 @@ struct AskPattieTopicList: View {
                         } label: {
                             AskPattieOptionRow(symbol: topic.symbol,
                                                title: topic.title,
-                                               subtitle: "\(count) pointer\(count == 1 ? "" : "s")")
+                                               subtitle: String(localized: "\(count) pointers"))
                         }
                         .buttonStyle(.triPress)
                     }
@@ -134,7 +134,7 @@ struct AskPattieAnswerList: View {
                 .padding(TriGeo.padPage)
             }
         }
-        .navigationTitle(model.guide.topic(topicID)?.title ?? "Pointers")
+        .navigationTitle(model.guide.topic(topicID)?.title ?? String(localized: "Pointers"))
         .navigationBarTitleDisplayMode(.inline)
         .triNavBar(pushed: true)
         .task { pattie.fire(.askAnswered, petState: .forTopicID(topicID)) }
@@ -212,15 +212,15 @@ struct AskPattieAnswerCard: View {
                 .foregroundStyle(TriPalette.ink)
                 .fixedSize(horizontal: false, vertical: true)
 
-            block("Here's the situation", answer.situation, answer.situationVoice)
-            block("Here's the solution", answer.solution, answer.solutionVoice)
+            block(String(localized: "Here's the situation"), answer.situation, answer.situationVoice)
+            block(String(localized: "Here's the solution"), answer.solution, answer.solutionVoice)
 
             HStack(spacing: TriSpace.x2) {
                 Button {
                     Haptics.tap()
                     voice.toggle(answer.solutionVoice ?? answer.situationVoice)
                 } label: {
-                    Label(isSpeaking ? "Stop" : "Hear it from Pattie",
+                    Label(isSpeaking ? String(localized: "Stop") : String(localized: "Hear it from Pattie"),
                           systemImage: isSpeaking ? "stop.fill" : "play.fill")
                         .font(TriType.smallBold)
                         .foregroundStyle(TriPalette.inkOnSunrise)
@@ -261,7 +261,7 @@ struct AskPattieAnswerCard: View {
     private func block(_ label: String, _ text: String, _ clip: String?) -> some View {
         VStack(alignment: .leading, spacing: TriSpace.x1) {
             HStack(spacing: TriSpace.x1) {
-                Text(label.uppercased())
+                Text(label.localizedUppercase)
                     .font(TriType.micro)
                     .kerning(0.6)
                     .foregroundStyle(TriPalette.sunrise)

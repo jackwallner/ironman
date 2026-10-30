@@ -62,7 +62,7 @@ struct AthleteSearchView: View {
         .toolbar {
                 if !isOnboarding {
                     TriBarItem(placement: .cancellationAction) {
-                        Button { dismiss() } label: { TriBarLabel(title: "Cancel") }
+                        Button { dismiss() } label: { TriBarLabel(title: String(localized: "Cancel")) }
                             .buttonStyle(.triPressSilent)
                     }
                 }
@@ -75,7 +75,11 @@ struct AthleteSearchView: View {
             Button("Replace", role: .destructive) { performClaim(athlete) }
             Button("Cancel", role: .cancel) { pendingClaim = nil }
         } message: { athlete in
-            Text("Replace \(locker.athlete?.name ?? "your current athlete") with \(athlete.name)? Your saved race notes stay on this phone.")
+            if let current = locker.athlete?.name {
+                Text("Replace \(current) with \(athlete.name)? Your saved race notes stay on this phone.")
+            } else {
+                Text("Replace your current athlete with \(athlete.name)? Your saved race notes stay on this phone.")
+            }
         }
         .pattieMoment(.searching, pattie)
         .task {
@@ -108,16 +112,16 @@ struct AthleteSearchView: View {
         if phase == .stopped {
             Spacer()
             TriPlaceholder(systemImage: "pause.circle",
-                           title: "Search stopped",
-                           message: "Your name is still here. Search again when you're ready.",
-                           actionTitle: "Search again") { runSearch() }
+                           title: String(localized: "Search stopped"),
+                           message: String(localized: "Your name is still here. Search again when you're ready."),
+                           actionTitle: String(localized: "Search again")) { runSearch() }
             Spacer()
         } else if let errorMessage {
             Spacer()
             TriPlaceholder(systemImage: "wifi.exclamationmark",
-                           title: "Couldn't search",
+                           title: String(localized: "Couldn't search"),
                            message: errorMessage,
-                           actionTitle: "Try again") { runSearch() }
+                           actionTitle: String(localized: "Try again")) { runSearch() }
             Spacer()
         } else if matches.isEmpty && phase == .done {
             noResultsState
@@ -160,9 +164,9 @@ struct AthleteSearchView: View {
         VStack(spacing: TriSpace.x3) {
             Spacer()
             TriPlaceholder(systemImage: "magnifyingglass",
-                           title: hasUnsupportedResults ? "No supported races found" : "No athletes found",
+                           title: hasUnsupportedResults ? String(localized: "No supported races found") : String(localized: "No athletes found"),
                            message: noResultsMessage,
-                           actionTitle: "Try another name") {
+                           actionTitle: String(localized: "Try another name")) {
                 phase = .idle
                 fieldFocused = true
             }
@@ -178,12 +182,12 @@ struct AthleteSearchView: View {
 
     private var noResultsMessage: String {
         if hasUnsupportedResults {
-            return "We found published results for this name, but none were full or half-distance triathlons. Try another registration if you raced under a different name."
+            return String(localized: "We found published results for this name, but none were full or half-distance triathlons. Try another registration if you raced under a different name.")
         }
         if resultsWereTruncated {
-            return "There are many matches for this name. Add a city or state after a comma, such as John Smith, Madison, to narrow the search."
+            return String(localized: "There are many matches for this name. Add a city or state after a comma, such as John Smith, Madison, to narrow the search.")
         }
-        return "Search published full and half-distance triathlon results. Try your full registered first name, surname first, or add a city after a comma."
+        return String(localized: "Search published full and half-distance triathlon results. Try your full registered first name, surname first, or add a city after a comma.")
     }
 
     private var searchingState: some View {
@@ -192,8 +196,8 @@ struct AthleteSearchView: View {
             // The deep pass is the slow one, and saying so is the difference
             // between "it's working" and "it's broken".
             Text(phase == .deep
-                 ? "No quick match yet. This broader search can take around 30 seconds. Your name stays here."
-                 : "Searching published results…")
+                 ? String(localized: "No quick match yet. This broader search can take around 30 seconds. Your name stays here.")
+                 : String(localized: "Searching published results…"))
                 .font(TriType.small)
                 .foregroundStyle(TriPalette.inkTertiary)
                 .multilineTextAlignment(.center)
@@ -420,20 +424,20 @@ struct AthleteSearchView: View {
     }
 
     private var title: String {
-        if isOnboarding { return "Find your races" }
-        if addingToCurrentAthlete { return "Find another registration" }
-        if onSelect != nil { return "Find a racer" }
-        return "Change athlete"
+        if isOnboarding { return String(localized: "Find your races") }
+        if addingToCurrentAthlete { return String(localized: "Find another registration") }
+        if onSelect != nil { return String(localized: "Find a racer") }
+        return String(localized: "Change athlete")
     }
 
     private var introText: String {
         if addingToCurrentAthlete {
-            return "Search the official results feed for another name you raced under. Choose the right person and those published races will be added to this profile."
+            return String(localized: "Search the official results feed for another name you raced under. Choose the right person and those published races will be added to this profile.")
         }
         if onSelect != nil {
-            return "Search the official results feed, then open a racer’s career without changing the athlete in your Locker."
+            return String(localized: "Search the official results feed, then open a racer’s career without changing the athlete in your Locker.")
         }
-        return "Find published full and half-distance triathlon results under the name you registered with. Try your full legal first name, surname first, or add a city after a comma to narrow common names."
+        return String(localized: "Find published full and half-distance triathlon results under the name you registered with. Try your full legal first name, surname first, or add a city after a comma to narrow common names.")
     }
 }
 
@@ -464,7 +468,7 @@ private struct AthleteRow: View {
             } else {
                 // "At least", because the search reads a capped number of rows:
                 // claiming the athlete is what pulls their complete history.
-                Text(String(athlete.knownRaceCount) + "+ races")
+                Text("\(athlete.knownRaceCount)+ races")
                     .font(TriType.statSmall)
                     .foregroundStyle(TriPalette.inkTertiary)
                     .fixedSize(horizontal: true, vertical: false)

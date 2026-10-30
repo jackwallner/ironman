@@ -50,7 +50,7 @@ enum RaceBookPDFRenderer {
         func beginContentPage(kicker: String, title: String) -> CGFloat {
             beginPage()
             fill(CGRect(x: 0, y: 0, width: size.width, height: 8), Palette.deep)
-            text(kicker.uppercased(),
+            text(kicker.localizedUppercase,
                  in: CGRect(x: Self.margin, y: 34, width: size.width - Self.margin * 2, height: 14),
                  font: .systemFont(ofSize: 8, weight: .bold),
                  color: Palette.coral,
@@ -71,7 +71,7 @@ enum RaceBookPDFRenderer {
                  to: CGPoint(x: size.width - Self.margin, y: size.height - 38),
                  color: Palette.line,
                  width: 0.7)
-            text("IM TRI TRACKER  |  OFFICIAL RESULTS, PRIVATE NOTES",
+            text("IM TRI TRACKER  |  " + String(localized: "Official results, private notes").localizedUppercase,
                  in: CGRect(x: Self.margin, y: size.height - 30, width: 420, height: 12),
                  font: .systemFont(ofSize: 7.5, weight: .semibold),
                  color: Palette.muted,
@@ -213,7 +213,7 @@ enum RaceBookPDFRenderer {
         let heroHeight: CGFloat = 164
         document.fill(CGRect(x: 0, y: 0, width: pageSize.width, height: heroHeight), Palette.deep)
         document.fill(CGRect(x: 0, y: 0, width: 12, height: heroHeight), Palette.coral)
-        document.text("IM TRI TRACKER  |  ONE-PAGE RACE BOOK",
+        document.text("IM TRI TRACKER  |  " + String(localized: "One-page Race Book").localizedUppercase,
                       in: CGRect(x: pageMargin, y: 32, width: pageSize.width - pageMargin * 2, height: 14),
                       font: .systemFont(ofSize: 8.5, weight: .bold),
                       color: Palette.coral,
@@ -237,9 +237,9 @@ enum RaceBookPDFRenderer {
             document.card(statsRect, fill: Palette.card, stroke: Palette.card)
             let statWidth = statsRect.width / 3
             let statY = statsRect.minY + 14
-            drawStat(document, value: "\(summary.starts)", label: "STARTS", x: statsRect.minX, width: statWidth, y: statY)
-            drawStat(document, value: "\(summary.finishes)", label: "FINISHES", x: statsRect.minX + statWidth, width: statWidth, y: statY)
-            drawStat(document, value: "\(summary.podiums)", label: "PODIUMS", x: statsRect.minX + statWidth * 2, width: statWidth, y: statY, accent: true)
+            drawStat(document, value: "\(summary.starts)", label: String(localized: "Starts").localizedUppercase, x: statsRect.minX, width: statWidth, y: statY)
+            drawStat(document, value: "\(summary.finishes)", label: String(localized: "Finishes").localizedUppercase, x: statsRect.minX + statWidth, width: statWidth, y: statY)
+            drawStat(document, value: "\(summary.podiums)", label: String(localized: "Podiums").localizedUppercase, x: statsRect.minX + statWidth * 2, width: statWidth, y: statY, accent: true)
             y = statsRect.maxY + 22
         }
 
@@ -251,13 +251,13 @@ enum RaceBookPDFRenderer {
             let cardHeight = CGFloat(max(rows.count, 1)) * 24 + 36
             let rect = CGRect(x: pageMargin, y: y, width: pageSize.width - pageMargin * 2, height: cardHeight)
             document.card(rect, fill: Palette.paleBlue, stroke: Palette.paleBlue)
-            document.text("PERSONAL BESTS",
+            document.text(String(localized: "Personal bests").localizedUppercase,
                           in: CGRect(x: rect.minX + 18, y: rect.minY + 12, width: rect.width - 36, height: 14),
                           font: .systemFont(ofSize: 8, weight: .bold),
                           color: Palette.aqua,
                           tracking: 0.8)
             if rows.isEmpty {
-                document.text("No complete splits are available yet.",
+                document.text(String(localized: "No complete splits are available yet."),
                               in: CGRect(x: rect.minX + 18, y: rect.minY + 30, width: rect.width - 36, height: 16),
                               font: .systemFont(ofSize: 9, weight: .regular),
                               color: Palette.secondary)
@@ -286,13 +286,13 @@ enum RaceBookPDFRenderer {
             let cardHeight = CGFloat(max(rows.count, 1)) * 24 + 36
             let rect = CGRect(x: pageMargin, y: y, width: pageSize.width - pageMargin * 2, height: cardHeight)
             document.card(rect, fill: Palette.paleCoral, stroke: Palette.paleCoral)
-            document.text("PODIUM MOMENTS",
+            document.text(String(localized: "Podium moments").localizedUppercase,
                           in: CGRect(x: rect.minX + 18, y: rect.minY + 12, width: rect.width - 36, height: 14),
                           font: .systemFont(ofSize: 8, weight: .bold),
                           color: Palette.coral,
                           tracking: 0.8)
             if rows.isEmpty {
-                document.text("No podium finishes recorded yet.",
+                document.text(String(localized: "No podium finishes recorded yet."),
                               in: CGRect(x: rect.minX + 18, y: rect.minY + 30, width: rect.width - 36, height: 16),
                               font: .systemFont(ofSize: 9, weight: .regular),
                               color: Palette.secondary)
@@ -318,13 +318,13 @@ enum RaceBookPDFRenderer {
             let cardHeight = CGFloat(max(rows.count, 1)) * 26 + 36
             let rect = CGRect(x: pageMargin, y: y, width: pageSize.width - pageMargin * 2, height: cardHeight)
             document.card(rect, fill: Palette.card)
-            document.text("RECENT RACE HISTORY",
+            document.text(String(localized: "Recent race history").localizedUppercase,
                           in: CGRect(x: rect.minX + 18, y: rect.minY + 12, width: rect.width - 36, height: 14),
                           font: .systemFont(ofSize: 8, weight: .bold),
                           color: Palette.coral,
                           tracking: 0.8)
             if rows.isEmpty {
-                document.text("No races match these choices.",
+                document.text(String(localized: "No races match these choices."),
                               in: CGRect(x: rect.minX + 18, y: rect.minY + 30, width: rect.width - 36, height: 16),
                               font: .systemFont(ofSize: 9, weight: .regular),
                               color: Palette.muted)
@@ -341,7 +341,7 @@ enum RaceBookPDFRenderer {
                                   color: Palette.ink)
                     let status = result.isComplete
                         ? TimeFormat.hms(result.finish)
-                        : (ResumeBuilder.statusLabel(for: result) ?? "Incomplete")
+                        : (ResumeBuilder.statusLabel(for: result) ?? String(localized: "Incomplete"))
                     document.text(status,
                                   in: CGRect(x: rect.maxX - 110, y: rowY, width: 92, height: 16),
                                   font: .monospacedDigitSystemFont(ofSize: 8, weight: .semibold),
@@ -351,7 +351,7 @@ enum RaceBookPDFRenderer {
                 }
             }
             if results.count > rows.count {
-                document.text("+\(results.count - rows.count) more races in the full report",
+                document.text(String(localized: "+\(results.count - rows.count) more races in the full report"),
                               in: CGRect(x: rect.minX + 18, y: rect.maxY - 18, width: rect.width - 36, height: 12),
                               font: .systemFont(ofSize: 7.5, weight: .regular),
                               color: Palette.muted,
@@ -379,7 +379,7 @@ enum RaceBookPDFRenderer {
                       font: .systemFont(ofSize: 9, weight: .bold),
                       color: Palette.coral,
                       tracking: 1.2)
-        document.text("A career in motion",
+        document.text(String(localized: "A career in motion"),
                       in: CGRect(x: pageMargin, y: 70, width: 430, height: 24),
                       font: .systemFont(ofSize: 15, weight: .semibold),
                       color: UIColor.white.withAlphaComponent(0.75))
@@ -406,8 +406,8 @@ enum RaceBookPDFRenderer {
         if let years = RaceAnalytics.summary(results).years {
             let locationBottom = athlete.location == nil ? 0 : 108 + nameHeight + 30
             document.text(years.lowerBound == years.upperBound
-                          ? "RACING SINCE \(years.lowerBound)"
-                          : "RACING \(years.lowerBound) TO \(years.upperBound)",
+                          ? String(localized: "Racing since \(String(years.lowerBound))").localizedUppercase
+                          : String(localized: "Racing \(String(years.lowerBound)) to \(String(years.upperBound))").localizedUppercase,
                           in: CGRect(x: pageMargin, y: max(226, locationBottom), width: 300, height: 16),
                           font: .systemFont(ofSize: 8.5, weight: .bold),
                           color: UIColor.white.withAlphaComponent(0.66),
@@ -426,13 +426,13 @@ enum RaceBookPDFRenderer {
             document.card(statsRect, fill: Palette.card, stroke: Palette.card)
             let statWidth = statsRect.width / 3
             let statY = statsRect.minY + 23
-            drawStat(document, value: "\(summary.starts)", label: "STARTS", x: statsRect.minX, width: statWidth, y: statY)
-            drawStat(document, value: "\(summary.finishes)", label: "FINISHES", x: statsRect.minX + statWidth, width: statWidth, y: statY)
-            drawStat(document, value: "\(summary.podiums)", label: "PODIUMS", x: statsRect.minX + statWidth * 2, width: statWidth, y: statY, accent: true)
+            drawStat(document, value: "\(summary.starts)", label: String(localized: "Starts").localizedUppercase, x: statsRect.minX, width: statWidth, y: statY)
+            drawStat(document, value: "\(summary.finishes)", label: String(localized: "Finishes").localizedUppercase, x: statsRect.minX + statWidth, width: statWidth, y: statY)
+            drawStat(document, value: "\(summary.podiums)", label: String(localized: "Podiums").localizedUppercase, x: statsRect.minX + statWidth * 2, width: statWidth, y: statY, accent: true)
         }
 
         var y: CGFloat = options.includeCareerSummary ? 398 + max(0, (max(244, 108 + nameHeight + (athlete.location == nil ? 0 : 38) + 30) - 244)) : 398
-        document.text("THE DISTANCE STORY",
+        document.text(String(localized: "The distance story").localizedUppercase,
                       in: CGRect(x: pageMargin, y: y, width: 300, height: 16),
                       font: .systemFont(ofSize: 9, weight: .bold),
                       color: Palette.coral,
@@ -455,13 +455,13 @@ enum RaceBookPDFRenderer {
                                  height: track.height), Palette.aqua)
         }
         drawDistanceLabel(document,
-                          title: "FULL DISTANCE",
+                          title: RaceKind.fullDistance.longTitle.localizedUppercase,
                           value: "\(summary.fullDistance)",
                           color: Palette.deep,
                           x: pageMargin,
                           y: y + 34)
         drawDistanceLabel(document,
-                          title: "HALF DISTANCE",
+                          title: RaceKind.halfDistance.longTitle.localizedUppercase,
                           value: "\(summary.halfDistance)",
                           color: Palette.aqua,
                           x: pageSize.width / 2 + 8,
@@ -469,14 +469,14 @@ enum RaceBookPDFRenderer {
 
         if let latest = results.first(where: \.isComplete) {
             let milestoneY: CGFloat = 560
-            document.text("LATEST MILESTONE",
+            document.text(String(localized: "Latest milestone").localizedUppercase,
                           in: CGRect(x: pageMargin, y: milestoneY, width: 300, height: 16),
                           font: .systemFont(ofSize: 9, weight: .bold),
                           color: Palette.coral,
                           tracking: 1)
             let cardRect = CGRect(x: pageMargin, y: milestoneY + 26, width: pageSize.width - pageMargin * 2, height: 100)
             document.card(cardRect, fill: Palette.paleCoral, stroke: Palette.paleCoral)
-            document.text(dateText(latest).uppercased(),
+            document.text(dateText(latest).localizedUppercase,
                           in: CGRect(x: cardRect.minX + 18, y: cardRect.minY + 16, width: 260, height: 14),
                           font: .systemFont(ofSize: 8, weight: .bold),
                           color: Palette.coral,
@@ -492,7 +492,7 @@ enum RaceBookPDFRenderer {
                           color: Palette.deep,
                           alignment: .right,
                           lineSpacing: 0)
-            document.text(latest.kind.longTitle.uppercased(),
+            document.text(latest.kind.longTitle.localizedUppercase,
                           in: CGRect(x: cardRect.maxX - 165, y: cardRect.minY + 60, width: 145, height: 14),
                           font: .systemFont(ofSize: 8, weight: .semibold),
                           color: Palette.secondary,
@@ -506,14 +506,14 @@ enum RaceBookPDFRenderer {
                                          athlete: Athlete,
                                          results: [RaceResult],
                                          options: RaceBookOptions) {
-        var y = document.beginContentPage(kicker: "THE NUMBERS", title: "The work behind the finish")
+        var y = document.beginContentPage(kicker: String(localized: "The numbers").localizedUppercase, title: String(localized: "The work behind the finish"))
         let kinds = RaceAnalytics.availableKinds(results)
 
         if options.includePersonalBests {
             for kind in kinds {
                 let bests = RaceBookAnalytics.bests(results, kind: kind)
                 let height: CGFloat = 164
-                ensureSpace(document, y: &y, height: height, title: "The work behind the finish")
+                ensureSpace(document, y: &y, height: height, title: String(localized: "The work behind the finish"))
                 drawBestCard(document, bests: bests, kind: kind, y: y, height: height)
                 y += height + 14
             }
@@ -521,15 +521,15 @@ enum RaceBookPDFRenderer {
 
         if options.includePodiumHighlights {
             let podiums = results.filter { $0.isComplete && ($0.finishRankGroup ?? .max) <= 3 }
-            ensureSpace(document, y: &y, height: 64, title: "The work behind the finish")
-            document.text("PODIUM MOMENTS",
+            ensureSpace(document, y: &y, height: 64, title: String(localized: "The work behind the finish"))
+            document.text(String(localized: "Podium moments").localizedUppercase,
                           in: CGRect(x: pageMargin, y: y, width: 300, height: 16),
                           font: .systemFont(ofSize: 9, weight: .bold),
                           color: Palette.coral,
                           tracking: 1)
             y += 24
             if podiums.isEmpty {
-                document.text("No podium finishes recorded yet.",
+                document.text(String(localized: "No podium finishes recorded yet."),
                               in: CGRect(x: pageMargin, y: y, width: pageSize.width - pageMargin * 2, height: 20),
                               font: .systemFont(ofSize: 10, weight: .regular),
                               color: Palette.muted)
@@ -537,7 +537,7 @@ enum RaceBookPDFRenderer {
             } else {
                 for result in podiums {
                     let height: CGFloat = 48
-                    ensureSpace(document, y: &y, height: height, title: "The work behind the finish")
+                    ensureSpace(document, y: &y, height: height, title: String(localized: "The work behind the finish"))
                     drawPodiumRow(document, result: result, y: y)
                     y += height
                 }
@@ -549,8 +549,8 @@ enum RaceBookPDFRenderer {
                 RaceBookAnalytics.progression(results, discipline: .finish, kind: kind).count >= 2
             }
             if !progressionKinds.isEmpty {
-                ensureSpace(document, y: &y, height: 190, title: "The work behind the finish")
-                document.text("PROGRESSION",
+                ensureSpace(document, y: &y, height: 190, title: String(localized: "The work behind the finish"))
+                document.text(String(localized: "Progression").localizedUppercase,
                               in: CGRect(x: pageMargin, y: y, width: 300, height: 16),
                               font: .systemFont(ofSize: 9, weight: .bold),
                               color: Palette.coral,
@@ -558,7 +558,7 @@ enum RaceBookPDFRenderer {
                 y += 24
                 for kind in progressionKinds {
                     let points = RaceBookAnalytics.progression(results, discipline: .finish, kind: kind)
-                    ensureSpace(document, y: &y, height: 136, title: "The work behind the finish")
+                    ensureSpace(document, y: &y, height: 136, title: String(localized: "The work behind the finish"))
                     drawProgression(document, points: points, kind: kind, y: y)
                     y += 150
                 }
@@ -571,9 +571,9 @@ enum RaceBookPDFRenderer {
                                       results: [RaceResult],
                                       notes: [String: RaceNote],
                                       options: RaceBookOptions) {
-        var y = document.beginContentPage(kicker: "THE ARCHIVE", title: "Race history")
+        var y = document.beginContentPage(kicker: String(localized: "The archive").localizedUppercase, title: String(localized: "Race history"))
         guard !results.isEmpty else {
-            document.text("No races match these choices.",
+            document.text(String(localized: "No races match these choices."),
                           in: CGRect(x: pageMargin, y: y, width: pageSize.width - pageMargin * 2, height: 24),
                           font: .systemFont(ofSize: 11, weight: .regular),
                           color: Palette.muted)
@@ -587,9 +587,9 @@ enum RaceBookPDFRenderer {
             guard !kindResults.isEmpty else { continue }
 
             let headingHeight: CGFloat = 38
-            ensureSpace(document, y: &y, height: headingHeight, title: "Race history")
+            ensureSpace(document, y: &y, height: headingHeight, title: String(localized: "Race history"))
             if y > 120 { y += 8 }
-            document.text(kind.longTitle.uppercased(),
+            document.text(kind.longTitle.localizedUppercase,
                           in: CGRect(x: pageMargin, y: y, width: 260, height: 16),
                           font: .systemFont(ofSize: 9, weight: .bold),
                           color: Palette.coral,
@@ -599,7 +599,7 @@ enum RaceBookPDFRenderer {
             for result in kindResults {
                 let note = notes[result.id]
                 let height = historyCardHeight(result: result, note: note, options: options)
-                ensureSpace(document, y: &y, height: height, title: "Race history")
+                ensureSpace(document, y: &y, height: height, title: String(localized: "Race history"))
                 drawHistoryCard(document, result: result, note: note, options: options, y: y, height: height)
                 y += height + 12
             }
@@ -654,19 +654,19 @@ enum RaceBookPDFRenderer {
                                      height: CGFloat) {
         let rect = CGRect(x: pageMargin, y: y, width: pageSize.width - pageMargin * 2, height: height)
         document.card(rect, fill: Palette.card)
-        document.text(kind.longTitle.uppercased(),
+        document.text(kind.longTitle.localizedUppercase,
                       in: CGRect(x: rect.minX + 18, y: rect.minY + 16, width: 180, height: 16),
                       font: .systemFont(ofSize: 8.5, weight: .bold),
                       color: Palette.coral,
                       tracking: 0.8)
-        document.text("PERSONAL BESTS",
+        document.text(String(localized: "Personal bests").localizedUppercase,
                       in: CGRect(x: rect.maxX - 180, y: rect.minY + 16, width: 162, height: 16),
                       font: .systemFont(ofSize: 8, weight: .semibold),
                       color: Palette.muted,
                       alignment: .right,
                       tracking: 0.4)
         guard !bests.isEmpty else {
-            document.text("No complete splits are available at this distance yet.",
+            document.text(String(localized: "No complete splits are available at this distance yet."),
                           in: CGRect(x: rect.minX + 18, y: rect.minY + 56, width: rect.width - 36, height: 24),
                           font: .systemFont(ofSize: 10, weight: .regular),
                           color: Palette.muted)
@@ -684,9 +684,9 @@ enum RaceBookPDFRenderer {
             let discipline: Discipline = [.finish, .swim, .bike, .run, .transitions][index]
             let best = bests.first { $0.discipline == discipline }
             drawMetric(document,
-                       title: discipline.title.uppercased(),
+                       title: discipline.title.localizedUppercase,
                        value: best.map { TimeFormat.hms($0.seconds) } ?? "-",
-                       source: best?.result.raceName ?? "No recorded split",
+                       source: best?.result.raceName ?? String(localized: "No recorded split"),
                        color: color(for: discipline),
                        x: position.0,
                        y: position.1)
@@ -731,7 +731,7 @@ enum RaceBookPDFRenderer {
                       in: CGRect(x: pageMargin + 42, y: y + 7, width: 300, height: 18),
                       font: .systemFont(ofSize: 10.5, weight: .semibold),
                       color: Palette.ink)
-        document.text("\(dateText(result))  |  \(result.ageGroup ?? "Division")",
+        document.text("\(dateText(result))  |  \(result.ageGroup ?? String(localized: "Division"))",
                       in: CGRect(x: pageMargin + 42, y: y + 27, width: 300, height: 14),
                       font: .systemFont(ofSize: 8, weight: .regular),
                       color: Palette.muted)
@@ -749,7 +749,7 @@ enum RaceBookPDFRenderer {
                                         y: CGFloat) {
         let rect = CGRect(x: pageMargin, y: y, width: pageSize.width - pageMargin * 2, height: 126)
         document.card(rect, fill: Palette.paleBlue, stroke: Palette.paleBlue)
-        document.text(kind.longTitle.uppercased(),
+        document.text(kind.longTitle.localizedUppercase,
                       in: CGRect(x: rect.minX + 18, y: rect.minY + 14, width: 180, height: 14),
                       font: .systemFont(ofSize: 8, weight: .bold),
                       color: Palette.aqua,
@@ -782,11 +782,11 @@ enum RaceBookPDFRenderer {
             document.context.cgContext.fillEllipse(in: CGRect(x: point.x - 3, y: point.y - 3, width: 6, height: 6))
         }
         if let first = points.first, let latest = points.last {
-            document.text("FIRST  \(TimeFormat.hms(first.seconds))",
+            document.text(String(localized: "First  \(TimeFormat.hms(first.seconds))").localizedUppercase,
                           in: CGRect(x: chart.minX, y: rect.maxY - 22, width: 180, height: 14),
                           font: .monospacedDigitSystemFont(ofSize: 7.5, weight: .semibold),
                           color: Palette.secondary)
-            document.text("LATEST  \(TimeFormat.hms(latest.seconds))",
+            document.text(String(localized: "Latest  \(TimeFormat.hms(latest.seconds))").localizedUppercase,
                           in: CGRect(x: chart.maxX - 180, y: rect.maxY - 22, width: 180, height: 14),
                           font: .monospacedDigitSystemFont(ofSize: 7.5, weight: .semibold),
                           color: Palette.secondary,
@@ -821,12 +821,12 @@ enum RaceBookPDFRenderer {
                                         height: CGFloat) {
         let rect = CGRect(x: pageMargin, y: y, width: pageSize.width - pageMargin * 2, height: height)
         document.card(rect, fill: Palette.card)
-        document.text(dateText(result).uppercased(),
+        document.text(dateText(result).localizedUppercase,
                       in: CGRect(x: rect.minX + 18, y: rect.minY + 14, width: 180, height: 14),
                       font: .systemFont(ofSize: 7.5, weight: .bold),
                       color: Palette.coral,
                       tracking: 0.6)
-        document.text(result.kind.title.uppercased(),
+        document.text(result.kind.title.localizedUppercase,
                       in: CGRect(x: rect.maxX - 100, y: rect.minY + 14, width: 82, height: 14),
                       font: .systemFont(ofSize: 7.5, weight: .bold),
                       color: Palette.muted,
@@ -843,7 +843,7 @@ enum RaceBookPDFRenderer {
                       lineSpacing: 1)
         let status = result.isComplete
             ? TimeFormat.hms(result.finish)
-            : (ResumeBuilder.statusLabel(for: result) ?? "Incomplete")
+            : (ResumeBuilder.statusLabel(for: result) ?? String(localized: "Incomplete"))
         document.text(status,
                       in: CGRect(x: rect.maxX - 170, y: rect.minY + 34, width: 152, height: 22),
                       font: .monospacedDigitSystemFont(ofSize: 15, weight: .bold),
@@ -853,14 +853,14 @@ enum RaceBookPDFRenderer {
 
         var currentY = max(rect.minY + 34 + nameHeight, rect.minY + 58) + 8
         var placement: [String] = []
-        if let bib = result.bib { placement.append("Bib \(bib)") }
+        if let bib = result.bib { placement.append(String(localized: "Bib \(String(bib))")) }
         if options.includePlacements {
             if let group = result.ageGroup, let place = result.finishRankGroup {
                 placement.append("\(group) #\(place)")
             } else if let place = result.finishRankGroup {
-                placement.append("Division #\(place)")
+                placement.append(String(localized: "Division #\(String(place))"))
             }
-            if let overall = result.finishRankOverall { placement.append("\(overall) overall") }
+            if let overall = result.finishRankOverall { placement.append(String(localized: "\(String(overall)) overall")) }
         }
         if !placement.isEmpty {
             document.text(placement.joined(separator: "  |  "),
@@ -914,27 +914,27 @@ enum RaceBookPDFRenderer {
                                     title: String) {
         guard y + height <= document.contentBottom else {
             document.endPage()
-            y = document.beginContentPage(kicker: "CONTINUED", title: title)
+            y = document.beginContentPage(kicker: String(localized: "Continued").localizedUppercase, title: title)
             return
         }
     }
 
     private static func noteText(_ note: RaceNote) -> String? {
         let fields: [(String, String)] = [
-            ("Conditions", note.conditions),
-            ("Nutrition", note.nutrition),
-            ("Gear", note.gear),
-            ("Notes", note.notes)
+            (String(localized: "Conditions"), note.conditions),
+            (String(localized: "Nutrition"), note.nutrition),
+            (String(localized: "Gear"), note.gear),
+            (String(localized: "Notes"), note.notes)
         ]
         let values = fields.compactMap { label, value -> String? in
             let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
-            return trimmed.isEmpty ? nil : "\(label): \(trimmed)"
+            return trimmed.isEmpty ? nil : String(localized: "\(label): \(trimmed)")
         }
         return values.isEmpty ? nil : values.joined(separator: "  |  ")
     }
 
     private static func dateText(_ result: RaceResult) -> String {
-        result.eventDate.map(RaceDate.medium) ?? (result.year > 0 ? String(result.year) : "Undated")
+        result.eventDate.map(RaceDate.medium) ?? (result.year > 0 ? String(result.year) : String(localized: "Undated"))
     }
 
     private static func singleLine(_ value: String, limit: Int) -> String {

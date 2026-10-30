@@ -19,11 +19,11 @@ struct RootTabView: View {
 
         var title: String {
             switch self {
-            case .locker: "Locker"
-            case .explore: "Explore"
-            case .pattie: "Tips"
-            case .resume: "Race Book"
-            case .settings: "Settings"
+            case .locker: String(localized: "Locker")
+            case .explore: String(localized: "Explore")
+            case .pattie: String(localized: "Tips")
+            case .resume: String(localized: "Race Book")
+            case .settings: String(localized: "Settings")
             }
         }
 
@@ -254,8 +254,8 @@ private struct RaceDetailPane: View {
                         .id(race.id)
                 } else {
                     TriPlaceholder(systemImage: "flag.checkered",
-                                   title: "Your races open here",
-                                   message: "Pick a race in your Locker to see its splits, ranks and field beside the list.")
+                                   title: String(localized: "Your races open here"),
+                                   message: String(localized: "Pick a race in your Locker to see its splits, ranks and field beside the list."))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .background(TriPalette.canvas)
                 }

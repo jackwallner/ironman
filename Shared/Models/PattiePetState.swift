@@ -71,21 +71,21 @@ enum PattiePetState: String, CaseIterable, Sendable {
 
     var accessibilityName: String {
         switch self {
-        case .idle: return "ready"
-        case .coach: return "thinking"
-        case .celebrate: return "celebrating"
-        case .encourage: return "encouraging"
-        case .shoes: return "talking about shoes"
-        case .swim: return "talking about swimming"
-        case .bike: return "talking about the bike"
-        case .run: return "running"
-        case .transition: return "in transition"
-        case .finish: return "finishing"
-        case .dance: return "dancing"
-        case .warmup: return "warming up"
-        case .hydrate: return "hydrating"
-        case .stretch: return "stretching"
-        case .recovery: return "recovering"
+        case .idle: return String(localized: "ready")
+        case .coach: return String(localized: "thinking")
+        case .celebrate: return String(localized: "celebrating")
+        case .encourage: return String(localized: "encouraging")
+        case .shoes: return String(localized: "talking about shoes")
+        case .swim: return String(localized: "talking about swimming")
+        case .bike: return String(localized: "talking about the bike")
+        case .run: return String(localized: "running")
+        case .transition: return String(localized: "in transition")
+        case .finish: return String(localized: "finishing")
+        case .dance: return String(localized: "dancing")
+        case .warmup: return String(localized: "warming up")
+        case .hydrate: return String(localized: "hydrating")
+        case .stretch: return String(localized: "stretching")
+        case .recovery: return String(localized: "recovering")
         }
     }
 

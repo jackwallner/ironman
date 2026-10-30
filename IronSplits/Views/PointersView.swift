@@ -13,6 +13,14 @@ struct PointersView: View {
         case ask = "Ask Pattie"
         case library = "All episodes"
         var id: String { rawValue }
+
+        /// The raw values are stored in `pointers.mode`, so the label is separate.
+        var title: String {
+            switch self {
+            case .ask: "Ask Pattie"
+            case .library: String(localized: "All episodes")
+            }
+        }
     }
 
     @AppStorage("pointers.mode") private var mode: Mode = .ask
@@ -88,7 +96,7 @@ private struct PointerModePicker: View {
     var body: some View {
         TriBarSegments(options: PointersView.Mode.allCases,
                        selection: $selection,
-                       title: \.rawValue)
+                       title: \.title)
             .accessibilityElement(children: .contain)
             .accessibilityLabel("Tips")
     }
@@ -121,9 +129,9 @@ struct PointerLibraryView: View {
             ProgressView().tint(TriPalette.inkSecondary)
         } else if let loadError {
             TriPlaceholder(systemImage: "wifi.exclamationmark",
-                           title: "Couldn't load episodes",
+                           title: String(localized: "Couldn't load episodes"),
                            message: loadError,
-                           actionTitle: "Try again") {
+                           actionTitle: String(localized: "Try again")) {
                 Task { await loadCatalog(force: true) }
             }
         } else if catalog.pointers.isEmpty {
@@ -150,7 +158,7 @@ struct PointerLibraryView: View {
                 if disciplines.count > 1 {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: TriSpace.x2) {
-                            TriChip(title: "All", isSelected: filter == nil) {
+                            TriChip(title: String(localized: "All"), isSelected: filter == nil) {
                                 filter = nil
                                 pattie.react(.filter)
                             }
@@ -240,7 +248,7 @@ struct PattieFeaturedHero: View {
                 )
 
                 VStack(alignment: .leading, spacing: TriSpace.x2) {
-                    Text("PATTIE WALLNER")
+                    Text(verbatim: "PATTIE WALLNER")
                         .font(TriType.micro)
                         .kerning(1.1)
                         .foregroundStyle(TriPalette.sunrise)
@@ -328,7 +336,7 @@ private struct PointerRow: View {
             // column, which squeezed the summary into a five-line sliver.
             VStack(alignment: .leading, spacing: TriSpace.x1) {
                 HStack(spacing: TriSpace.x1) {
-                    let eyebrow = [pointer.episode.map { "EP " + String($0) },
+                    let eyebrow = [pointer.episode.map { String(localized: "EP \(String($0))") },
                                    pointer.durationText, pointer.fileSizeText].compactMap { $0 }
                     if !eyebrow.isEmpty {
                         Text(eyebrow.joined(separator: " · "))
@@ -426,7 +434,7 @@ struct PointerPlayerSheet: View {
                     Button {
                         dismiss()
                     } label: {
-                        TriBarLabel(title: "Done", emphasized: true)
+                        TriBarLabel(title: String(localized: "Done"), emphasized: true)
                     }
                     .buttonStyle(.triPressSilent)
                 }
@@ -450,9 +458,9 @@ struct PointerPlayerSheet: View {
                 .ignoresSafeArea(edges: .bottom)
         } else if let errorMessage {
             TriPlaceholder(systemImage: "wifi.exclamationmark",
-                           title: "Couldn't load the episode",
+                           title: String(localized: "Couldn't load the episode"),
                            message: errorMessage,
-                           actionTitle: "Try again") {
+                           actionTitle: String(localized: "Try again")) {
                 Task { await load(force: true) }
             }
         } else {
@@ -461,7 +469,7 @@ struct PointerPlayerSheet: View {
                     .progressViewStyle(.linear)
                     .tint(TriPalette.sunrise)
                     .frame(maxWidth: 220)
-                Text(progress > 0 ? "Downloading \(Int(progress * 100))%" : "Starting the episode…")
+                Text(progress > 0 ? String(localized: "Downloading \(Int(progress * 100))%") : String(localized: "Starting the episode…"))
                     .font(TriType.small)
                     .foregroundStyle(TriPalette.inkOnDark.opacity(0.75))
                     .monospacedDigit()

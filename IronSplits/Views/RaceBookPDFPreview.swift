@@ -20,7 +20,7 @@ struct RaceBookPDFPreview: View {
                         Button {
                             dismiss()
                         } label: {
-                            TriBarLabel(title: "Done", emphasized: true)
+                            TriBarLabel(title: String(localized: "Done"), emphasized: true)
                         }
                         .buttonStyle(.triPressSilent)
                     }

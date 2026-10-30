@@ -18,20 +18,20 @@ enum PaywallTrigger: Identifiable, Hashable {
 
     var title: String {
         switch self {
-        case .raceBookCompare:    return "Compare your races"
-        case .raceBookExport:     return "Share your Race Book"
-        case .upgrade:           return "Unlock Race Book"
+        case .raceBookCompare:    return String(localized: "Compare your races")
+        case .raceBookExport:     return String(localized: "Share your Race Book")
+        case .upgrade:           return String(localized: "Unlock Race Book")
         }
     }
 
     var subtitle: String {
         switch self {
         case .raceBookCompare:
-            return "See exactly where one like-for-like race gained or lost time against another."
+            return String(localized: "See exactly where one like-for-like race gained or lost time against another.")
         case .raceBookExport:
-            return "Create a polished race-history PDF or image with official splits, career stats and optional notes."
+            return String(localized: "Create a polished race-history PDF or image with official splits, career stats and optional notes.")
         case .upgrade:
-            return "Compare like-for-like races and create unlimited PDF or image exports with one lifetime purchase."
+            return String(localized: "Compare like-for-like races and create unlimited PDF or image exports with one lifetime purchase.")
         }
     }
 
@@ -47,8 +47,8 @@ enum PaywallTrigger: Identifiable, Hashable {
     /// What the one-time unlock actually opens. The underlying race data is
     /// intentionally absent because it is free for everyone.
     private static let proFeatures: [(icon: String, title: String)] = [
-        ("arrow.left.arrow.right", "Compare like-for-like races leg by leg"),
-        ("doc.richtext", "Unlimited PDF and image exports, with optional race notes")
+        ("arrow.left.arrow.right", String(localized: "Compare like-for-like races leg by leg")),
+        ("doc.richtext", String(localized: "Unlimited PDF and image exports, with optional race notes"))
     ]
 
     var features: [(icon: String, title: String)] {
@@ -123,7 +123,7 @@ struct PaywallView: View {
             Text("Couldn't Load Plans")
                 .font(TriType.cardTitle)
                 .foregroundStyle(TriPalette.inkSecondary)
-            Text(store.lastError ?? "Check your connection and try again.")
+            Text(store.lastError ?? String(localized: "Check your connection and try again."))
                 .font(TriType.small)
                 .foregroundStyle(TriPalette.inkTertiary)
                 .multilineTextAlignment(.center)
@@ -253,7 +253,7 @@ struct PaywallView: View {
                         .font(TriType.micro)
                         .tracking(0.8)
                         .foregroundStyle(TriPalette.sunrise)
-                    Text(locker.athlete?.name ?? "Your race career")
+                    Text(locker.athlete?.name ?? String(localized: "Your race career"))
                         .font(TriType.cardTitle)
                         .foregroundStyle(TriPalette.ink)
                         .fixedSize(horizontal: false, vertical: true)
@@ -287,7 +287,14 @@ struct PaywallView: View {
         }
         .triCard(padding: TriSpace.x3)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Race Book preview for \(locker.athlete?.name ?? "your career"), \(summary.finishes) finishes and personal bests")
+        .accessibilityLabel(previewAccessibilityLabel(finishes: summary.finishes))
+    }
+
+    private func previewAccessibilityLabel(finishes: Int) -> String {
+        guard let name = locker.athlete?.name else {
+            return String(localized: "Race Book preview for your career, \(finishes) finishes and personal bests")
+        }
+        return String(localized: "Race Book preview for \(name), \(finishes) finishes and personal bests")
     }
 
     // Reassurance + real credibility: these are the official timing
@@ -313,7 +320,7 @@ struct PaywallView: View {
                     .font(TriType.smallBold)
                     .tracking(0.2)
             }
-            Text("·")
+            Text(verbatim: "·")
             HStack(spacing: TriSpace.x1) {
                 Image(systemName: "checkmark.shield.fill")
                     .font(.system(size: 11, weight: .semibold))
@@ -399,7 +406,7 @@ struct PaywallView: View {
             }
 
             Button(action: startRestore) {
-                Text(isRestoring ? "Restoring…" : "Restore Purchases")
+                Text(isRestoring ? String(localized: "Restoring…") : String(localized: "Restore Purchases"))
                     .font(TriType.smallBold)
                     .foregroundStyle(TriPalette.inkSecondary)
             }
@@ -438,14 +445,14 @@ struct PaywallView: View {
     // MARK: - Copy
 
     private var ctaTitle: String {
-        guard let plan = selectedPlan else { return "Continue" }
+        guard let plan = selectedPlan else { return String(localized: "Continue") }
         #if DEBUG
         // Simulator render of the configured catalog: there is no transaction
         // behind this card, and the button says so rather than failing on tap.
-        if !plan.isPurchasable { return "Preview only" }
+        if !plan.isPurchasable { return String(localized: "Preview only") }
         #endif
         if plan.kind == .lifetime { return store.directCTALabel(for: trigger) }
-        return "Continue"
+        return String(localized: "Continue")
     }
 
     /// Apple 3.1.2 disclosure adjacent to the purchase button.
@@ -453,9 +460,9 @@ struct PaywallView: View {
         guard let plan = selectedPlan else { return nil }
         let price = plan.priceLabel
         if plan.kind == .lifetime {
-            return "\(price). One-time purchase. Lifetime access, no subscription."
+            return String(localized: "\(price). One-time purchase. Lifetime access, no subscription.")
         }
-        return "\(price). One-time purchase. Lifetime access to Race Book. No subscription."
+        return String(localized: "\(price). One-time purchase. Lifetime access to Race Book. No subscription.")
     }
 
     // MARK: - Actions
@@ -490,12 +497,12 @@ struct PaywallView: View {
                 case .pending:
                     // Ask-to-Buy / deferred payment: nothing is unlocked yet and
                     // no error occurred, tell the user instead of going silent.
-                    restoreMessage = "Purchase pending approval. Race Book unlocks automatically once it's approved."
+                    restoreMessage = String(localized: "Purchase pending approval. Race Book unlocks automatically once it's approved.")
                 case .cancelled:
                     errorMessage = nil
                 }
             } catch {
-                errorMessage = store.lastError ?? "Couldn't complete the purchase. Please try again."
+                errorMessage = store.lastError ?? String(localized: "Couldn't complete the purchase. Please try again.")
             }
         }
     }
@@ -508,7 +515,7 @@ struct PaywallView: View {
             defer { isRestoring = false }
             await store.restorePurchases()
             if !store.isPro {
-                restoreMessage = store.restoreError ?? "No Race Book purchase was found for this Apple ID."
+                restoreMessage = store.restoreError ?? String(localized: "No Race Book purchase was found for this Apple ID.")
             }
         }
     }

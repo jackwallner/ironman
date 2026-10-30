@@ -110,12 +110,12 @@ struct SettingsView: View {
                 }
 
                 Section("Race Book") {
-                    Label(raceBookUnlocked ? "Race Book is unlocked" : "Unlock Race Book once",
+                    Label(raceBookUnlocked ? String(localized: "Race Book is unlocked") : String(localized: "Unlock Race Book once"),
                           systemImage: raceBookUnlocked ? "checkmark.seal.fill" : "book.closed.fill")
                         .foregroundStyle(raceBookUnlocked ? TriPalette.positive : TriPalette.sunrise)
                     Text(raceBookUnlocked
-                         ? "Your comparison and unlimited export tools are ready."
-                         : "Your complete results, splits, rankings and race details are free. Race Book adds like-for-like comparisons and beautiful unlimited PDF or image exports for one lifetime purchase.")
+                         ? String(localized: "Your comparison and unlimited export tools are ready.")
+                         : String(localized: "Your complete results, splits, rankings and race details are free. Race Book adds like-for-like comparisons and beautiful unlimited PDF or image exports for one lifetime purchase."))
                         .font(TriType.micro)
                         .foregroundStyle(TriPalette.inkTertiary)
                     if !raceBookUnlocked {
@@ -223,7 +223,7 @@ struct SettingsView: View {
 
     private var cacheSizeText: String {
         cacheBytes == 0
-            ? "None"
+            ? String(localized: "None")
             : ByteCountFormatter.string(fromByteCount: cacheBytes, countStyle: .file)
     }
 
@@ -237,13 +237,13 @@ struct SettingsView: View {
             return (result, note)
         }
         guard !records.isEmpty else { return nil }
-        var lines = ["IM Tri Tracker race notes", ""]
+        var lines = [String(localized: "IM Tri Tracker race notes"), ""]
         for (result, note) in records {
             lines.append("\(dateText(result)) · \(result.raceName)")
-            for (label, value) in [("Conditions", note.conditions), ("Nutrition", note.nutrition),
-                                   ("Gear", note.gear), ("Notes", note.notes)] {
+            for (label, value) in [(String(localized: "Conditions"), note.conditions), (String(localized: "Nutrition"), note.nutrition),
+                                   (String(localized: "Gear"), note.gear), (String(localized: "Notes"), note.notes)] {
                 let text = value.trimmingCharacters(in: .whitespacesAndNewlines)
-                if !text.isEmpty { lines.append("\(label): \(text)") }
+                if !text.isEmpty { lines.append(String(localized: "\(label): \(text)")) }
             }
             lines.append("")
         }
@@ -251,7 +251,7 @@ struct SettingsView: View {
     }
 
     private func dateText(_ result: RaceResult) -> String {
-        result.eventDate.map(RaceDate.medium) ?? (result.year > 0 ? String(result.year) : "Undated")
+        result.eventDate.map(RaceDate.medium) ?? (result.year > 0 ? String(result.year) : String(localized: "Undated"))
     }
 
     private func refreshCacheSize() async {

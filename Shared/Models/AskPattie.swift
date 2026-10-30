@@ -112,7 +112,7 @@ struct AskPattieGuide: Codable, Sendable, Equatable {
         version: 0,
         title: "Ask Pattie",
         subtitle: "",
-        goalQuestion: "What are you training for?",
+        goalQuestion: String(localized: "What are you training for?"),
         goals: [], topics: [], answers: []
     )
 }

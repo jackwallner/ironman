@@ -132,13 +132,26 @@ enum Discipline: String, CaseIterable, Codable, Sendable, Identifiable {
 
     var title: String {
         switch self {
-        case .swim: return "Swim"
+        case .swim: return String(localized: "Swim")
         case .t1: return "T1"
-        case .bike: return "Bike"
+        case .bike: return String(localized: "Bike")
         case .t2: return "T2"
-        case .run: return "Run"
-        case .transitions: return "Transitions"
-        case .finish: return "Finish"
+        case .run: return String(localized: "Run")
+        case .transitions: return String(localized: "Transitions")
+        case .finish: return String(localized: "Finish")
+        }
+    }
+
+    /// Heads the Locker's split rankings, one whole phrase per leg.
+    var rankingsTitle: String {
+        switch self {
+        case .swim: return String(localized: "Swim rankings")
+        case .t1: return String(localized: "T1 rankings")
+        case .bike: return String(localized: "Bike rankings")
+        case .t2: return String(localized: "T2 rankings")
+        case .run: return String(localized: "Run rankings")
+        case .transitions: return String(localized: "Transitions rankings")
+        case .finish: return String(localized: "Finish rankings")
         }
     }
 
@@ -182,21 +195,21 @@ enum RaceKind: String, Codable, Sendable, CaseIterable {
 
     var title: String {
         switch self {
-        case .fullDistance: return "Full"
-        case .halfDistance: return "Half"
-        case .otherTriathlon: return "Tri"
-        case .running: return "Run"
-        case .unknown: return "Race"
+        case .fullDistance: return String(localized: "Full")
+        case .halfDistance: return String(localized: "Half")
+        case .otherTriathlon: return String(localized: "Tri")
+        case .running: return String(localized: "Run")
+        case .unknown: return String(localized: "Race")
         }
     }
 
     var longTitle: String {
         switch self {
-        case .fullDistance: return "Full distance"
-        case .halfDistance: return "Half distance"
-        case .otherTriathlon: return "Triathlon"
-        case .running: return "Running"
-        case .unknown: return "Race"
+        case .fullDistance: return String(localized: "Full distance")
+        case .halfDistance: return String(localized: "Half distance")
+        case .otherTriathlon: return String(localized: "Triathlon")
+        case .running: return String(localized: "Running")
+        case .unknown: return String(localized: "Race")
         }
     }
 

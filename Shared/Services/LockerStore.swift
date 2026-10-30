@@ -154,8 +154,11 @@ final class LockerStore: ObservableObject {
             } else {
                 state = .loaded
                 if force {
-                    let updated = lastRefreshed?.formatted(.relative(presentation: .named)) ?? "earlier"
-                    refreshWarning = "Couldn't update. Showing results last refreshed \(updated)."
+                    if let updated = lastRefreshed?.formatted(.relative(presentation: .named)) {
+                        refreshWarning = String(localized: "Couldn't update. Showing results last refreshed \(updated).")
+                    } else {
+                        refreshWarning = String(localized: "Couldn't update. Showing results last refreshed earlier.")
+                    }
                 }
             }
         }

@@ -116,7 +116,7 @@ struct ExploreView: View {
 
     private var recentSection: some View {
         VStack(alignment: .leading, spacing: TriSpace.x3) {
-            TriSectionHeader(title: "Recently explored")
+            TriSectionHeader(title: String(localized: "Recently explored"))
             ForEach(recentAthletes) { athlete in
                 Button {
                     pattie.react(.selection)
@@ -214,17 +214,17 @@ private struct ExploreAthleteView: View {
                     profileHeader
                     if case .failed(let message) = state {
                         TriPlaceholder(systemImage: "wifi.exclamationmark",
-                                       title: "Couldn't load this history",
+                                       title: String(localized: "Couldn't load this history"),
                                        message: message,
-                                       actionTitle: "Try again") {
+                                       actionTitle: String(localized: "Try again")) {
                             Task { await load(retry: true) }
                         }
                     } else if results.isEmpty && state == .loading {
                         loadingView
                     } else if results.isEmpty {
                         TriPlaceholder(systemImage: "flag.checkered",
-                                       title: "No supported results",
-                                       message: "This racer has no published full or half-distance results in the feed.")
+                                       title: String(localized: "No supported results"),
+                                       message: String(localized: "This racer has no published full or half-distance results in the feed."))
                     } else {
                         distanceFilter
                         history
@@ -257,7 +257,7 @@ private struct ExploreAthleteView: View {
             }
             CareerStatsRow(summary: summary)
             if let years = summary.years {
-                Text("Racing since " + String(years.lowerBound))
+                Text("Racing since \(String(years.lowerBound))")
                     .font(TriType.micro)
                     .foregroundStyle(TriPalette.inkOnDark.opacity(0.62))
             }
@@ -269,7 +269,7 @@ private struct ExploreAthleteView: View {
 
     private var distanceFilter: some View {
         VStack(alignment: .leading, spacing: TriSpace.x2) {
-            TriSectionHeader(title: "Distance")
+            TriSectionHeader(title: String(localized: "Distance"))
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: TriSpace.x2) {
                     ForEach(availableKinds, id: \.self) { kind in
@@ -286,7 +286,7 @@ private struct ExploreAthleteView: View {
 
     private var history: some View {
         VStack(alignment: .leading, spacing: TriSpace.x3) {
-            TriSectionHeader(title: "Race history", trailing: activeKind?.longTitle)
+            TriSectionHeader(title: String(localized: "Race history"), trailing: activeKind?.longTitle)
             ForEach(visibleResults) { result in
                 NavigationLink {
                     RaceDetailView(result: result, contextResults: results, isReadOnly: true)

@@ -30,8 +30,8 @@ actor PointerMediaCache {
 
         var errorDescription: String? {
             switch self {
-            case .badResponse(let code): return "The episode couldn't be downloaded (\(code))."
-            case .empty: return "The episode file came back empty."
+            case .badResponse(let code): return String(localized: "The episode couldn't be downloaded (\(code)).")
+            case .empty: return String(localized: "The episode file came back empty.")
             }
         }
     }

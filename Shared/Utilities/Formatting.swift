@@ -29,7 +29,7 @@ enum TimeFormat {
     }
 
     static func spoken(_ seconds: Int?) -> String {
-        guard let seconds, seconds > 0 else { return "No time" }
+        guard let seconds, seconds > 0 else { return String(localized: "No time") }
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.hour, .minute, .second]
         formatter.unitsStyle = .full
@@ -44,8 +44,8 @@ enum UnitPreference: String, CaseIterable, Codable, Sendable {
 
     var title: String {
         switch self {
-        case .metric: return "Metric (km)"
-        case .imperial: return "Imperial (mi)"
+        case .metric: return String(localized: "Metric (km)")
+        case .imperial: return String(localized: "Imperial (mi)")
         }
     }
 
@@ -76,7 +76,7 @@ enum PaceFormat {
             let hours = Double(seconds) / 3600
             let distance = units == .metric ? distanceKm : distanceKm * 1000 / metersPerMile
             let speed = distance / hours
-            return String(format: "%.1f %@", speed, units == .metric ? "km/h" : "mph")
+            return speed.formatted(.number.precision(.fractionLength(1))) + (units == .metric ? " km/h" : " mph")
         case .run:
             let distance = units == .metric ? distanceKm : distanceKm * 1000 / metersPerMile
             return TimeFormat.mmss(Double(seconds) / distance) + (units == .metric ? " /km" : " /mi")
@@ -87,8 +87,8 @@ enum PaceFormat {
 
     static func distanceText(_ km: Double?, units: UnitPreference) -> String? {
         guard let km, km > 0.01 else { return nil }
-        if units == .metric { return String(format: "%.2f km", km) }
-        return String(format: "%.2f mi", km * 1000 / metersPerMile)
+        let value = units == .metric ? km : km * 1000 / metersPerMile
+        return value.formatted(.number.precision(.fractionLength(2))) + (units == .metric ? " km" : " mi")
     }
 }
 

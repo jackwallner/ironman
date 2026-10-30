@@ -31,9 +31,9 @@ struct RaceDetailView: View {
 
         var title: String {
             switch self {
-            case .division: "Division"
-            case .gender: "Gender"
-            case .overall: "Overall"
+            case .division: String(localized: "Division")
+            case .gender: String(localized: "Gender")
+            case .overall: String(localized: "Overall")
             }
         }
     }
@@ -109,7 +109,7 @@ struct RaceDetailView: View {
                         TriBadge(text: group, color: TriPalette.inkOnDark.opacity(0.85))
                     }
                     if let bib = result.bib {
-                        TriBadge(text: "Bib \(bib)", color: TriPalette.inkOnDark.opacity(0.85))
+                        TriBadge(text: String(localized: "Bib \(String(bib))"), color: TriPalette.inkOnDark.opacity(0.85))
                     }
                 }
             }
@@ -117,16 +117,16 @@ struct RaceDetailView: View {
             if result.isComplete {
                 ViewThatFits(in: .horizontal) {
                     HStack(spacing: 0) {
-                        StatTile(value: Ordinal.text(result.finishRankGroup) ?? "--", caption: "Division", tint: TriPalette.inkOnDark)
-                        StatTile(value: Ordinal.text(result.finishRankGender) ?? "--", caption: "Gender", tint: TriPalette.inkOnDark)
-                        StatTile(value: Ordinal.text(result.finishRankOverall) ?? "--", caption: "Overall", tint: TriPalette.inkOnDark)
+                        StatTile(value: Ordinal.text(result.finishRankGroup) ?? "--", caption: String(localized: "Division"), tint: TriPalette.inkOnDark)
+                        StatTile(value: Ordinal.text(result.finishRankGender) ?? "--", caption: String(localized: "Gender"), tint: TriPalette.inkOnDark)
+                        StatTile(value: Ordinal.text(result.finishRankOverall) ?? "--", caption: String(localized: "Overall"), tint: TriPalette.inkOnDark)
                     }
                     VStack(spacing: TriSpace.x2) {
                         HStack(spacing: TriSpace.x2) {
-                            StatTile(value: Ordinal.text(result.finishRankGroup) ?? "--", caption: "Division", tint: TriPalette.inkOnDark)
-                            StatTile(value: Ordinal.text(result.finishRankGender) ?? "--", caption: "Gender", tint: TriPalette.inkOnDark)
+                            StatTile(value: Ordinal.text(result.finishRankGroup) ?? "--", caption: String(localized: "Division"), tint: TriPalette.inkOnDark)
+                            StatTile(value: Ordinal.text(result.finishRankGender) ?? "--", caption: String(localized: "Gender"), tint: TriPalette.inkOnDark)
                         }
-                        StatTile(value: Ordinal.text(result.finishRankOverall) ?? "--", caption: "Overall", tint: TriPalette.inkOnDark)
+                        StatTile(value: Ordinal.text(result.finishRankOverall) ?? "--", caption: String(localized: "Overall"), tint: TriPalette.inkOnDark)
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -154,7 +154,7 @@ struct RaceDetailView: View {
 
     private var splitsCard: some View {
         VStack(alignment: .leading, spacing: TriSpace.x3) {
-            TriSectionHeader(title: "Splits")
+            TriSectionHeader(title: String(localized: "Splits"))
 
             if result.isComplete {
                 SplitBar(result: result, height: 12)
@@ -188,8 +188,8 @@ struct RaceDetailView: View {
     private var fieldCard: some View {
         if result.isComplete {
             VStack(alignment: .leading, spacing: TriSpace.x3) {
-                TriSectionHeader(title: "Against the field",
-                                 trailing: fieldState == .loaded ? "\(scopedField.filter(\.isComplete).count) finishers" : nil)
+                TriSectionHeader(title: String(localized: "Against the field"),
+                                 trailing: fieldState == .loaded ? String(localized: "\(scopedField.filter(\.isComplete).count) finishers") : nil)
 
                 switch fieldState {
                 case .idle, .loading:
@@ -295,9 +295,11 @@ struct RaceDetailView: View {
     }
 
     private var emptyFieldMessage: String {
-        fieldScope == .overall
-            ? "There isn't enough comparable field data for these splits."
-            : "No comparable finishers were found in this \(fieldScope.title.lowercased()). Try Overall."
+        switch fieldScope {
+        case .overall: String(localized: "There isn't enough comparable field data for these splits.")
+        case .division: String(localized: "No comparable finishers were found in this division. Try Overall.")
+        case .gender: String(localized: "No comparable finishers were found in this gender. Try Overall.")
+        }
     }
 
     private var careerResults: [RaceResult] { contextResults ?? locker.results }
@@ -306,7 +308,7 @@ struct RaceDetailView: View {
 
     private var notesCard: some View {
         VStack(alignment: .leading, spacing: TriSpace.x3) {
-            TriSectionHeader(title: "Race notes")
+            TriSectionHeader(title: String(localized: "Race notes"))
 
             let note = notes.note(for: result.id)
             if note.isEmpty {
@@ -324,10 +326,10 @@ struct RaceDetailView: View {
                 .buttonStyle(.triPress)
             } else {
                 VStack(alignment: .leading, spacing: TriSpace.x3) {
-                    noteField("Conditions", note.conditions)
-                    noteField("Nutrition", note.nutrition)
-                    noteField("Gear", note.gear)
-                    noteField("Notes", note.notes)
+                    noteField(String(localized: "Conditions"), note.conditions)
+                    noteField(String(localized: "Nutrition"), note.nutrition)
+                    noteField(String(localized: "Gear"), note.gear)
+                    noteField(String(localized: "Notes"), note.notes)
                     Button("Edit") { editingNote = true }
                         .font(TriType.smallBold)
                         .foregroundStyle(TriPalette.sunrise)
@@ -345,7 +347,7 @@ struct RaceDetailView: View {
         let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
         if !trimmed.isEmpty {
             VStack(alignment: .leading, spacing: TriSpace.x1) {
-                Text(label.uppercased())
+                Text(label.localizedUppercase)
                     .font(TriType.micro)
                     .kerning(0.4)
                     .foregroundStyle(TriPalette.inkTertiary)
@@ -379,7 +381,7 @@ private struct SplitRow: View {
                         .font(TriType.bodyBold)
                         .foregroundStyle(TriPalette.ink)
                     if isPersonalBest {
-                        TriBadge(text: "PB", color: TriPalette.sunrise, filled: true)
+                        TriBadge(text: String(localized: "PB"), color: TriPalette.sunrise, filled: true)
                     }
                 }
                 if let pace {
@@ -416,9 +418,9 @@ private struct SplitRow: View {
 
     private var accessibilityLabel: String {
         var parts = [discipline.title, TimeFormat.spoken(seconds)]
-        if let divisionRank { parts.append("\(Ordinal.text(divisionRank) ?? String(divisionRank)) in division") }
-        else if let overallRank { parts.append("\(Ordinal.text(overallRank) ?? String(overallRank)) overall") }
-        if isPersonalBest { parts.append("Personal best") }
+        if let divisionRank { parts.append(String(localized: "\(Ordinal.text(divisionRank) ?? String(divisionRank)) in division")) }
+        else if let overallRank { parts.append(String(localized: "\(Ordinal.text(overallRank) ?? String(overallRank)) overall")) }
+        if isPersonalBest { parts.append(String(localized: "Personal best")) }
         return parts.joined(separator: ", ")
     }
 }
@@ -500,7 +502,7 @@ struct RaceNoteEditor: View {
             .interactiveDismissDisabled(isDirty)
             .toolbar {
                 TriBarItem(placement: .cancellationAction) {
-                    Button { requestDismiss() } label: { TriBarLabel(title: "Cancel") }
+                    Button { requestDismiss() } label: { TriBarLabel(title: String(localized: "Cancel")) }
                         .buttonStyle(.triPressSilent)
                 }
                 TriBarItem(placement: .confirmationAction) {
@@ -508,7 +510,7 @@ struct RaceNoteEditor: View {
                         onSave(note)
                         dismiss()
                     } label: {
-                        TriBarLabel(title: "Save", emphasized: true)
+                        TriBarLabel(title: String(localized: "Save"), emphasized: true)
                     }
                     .buttonStyle(.triPressSilent)
                 }

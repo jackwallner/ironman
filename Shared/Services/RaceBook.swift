@@ -278,16 +278,16 @@ enum RaceBookBuilder {
             }
 
             if options.includeCareerSummary || options.includePodiumHighlights {
-                draw("CAREER AT A GLANCE",
+                draw(String(localized: "Career at a glance").localizedUppercase,
                      in: CGRect(x: 64, y: 408, width: 952, height: 26),
                      font: UIFont.systemFont(ofSize: 18, weight: .semibold), color: .white.withAlphaComponent(0.72))
                 var stats: [String] = []
-                if options.includeCareerSummary { stats.append("\(summary.finishes) finishes") }
-                if options.includePodiumHighlights { stats.append("\(summary.podiums) podiums") }
+                if options.includeCareerSummary { stats.append(String(localized: "\(summary.finishes) finishes")) }
+                if options.includePodiumHighlights { stats.append(String(localized: "\(summary.podiums) podiums")) }
                 if options.includeCareerSummary, let years = summary.years {
                     stats.append(years.lowerBound == years.upperBound
                                  ? String(years.lowerBound)
-                                 : "\(years.lowerBound) to \(years.upperBound)")
+                                 : String(localized: "\(String(years.lowerBound)) to \(String(years.upperBound))"))
                 }
                 draw(stats.joined(separator: "    ·    "),
                      in: CGRect(x: 64, y: 446, width: 952, height: 40),
@@ -300,7 +300,7 @@ enum RaceBookBuilder {
             var y: CGFloat = 610
 
             if options.includePersonalBests {
-                draw("PERSONAL BESTS BY DISTANCE",
+                draw(String(localized: "Personal bests by distance").localizedUppercase,
                      in: CGRect(x: 88, y: y, width: 904, height: 34),
                      font: UIFont.systemFont(ofSize: 23, weight: .bold), color: pdfDeep)
                 y += 56
@@ -308,7 +308,7 @@ enum RaceBookBuilder {
                 for kind in kinds {
                     let bests = RaceAnalytics.personalBests(scopedResults, kind: kind).prefix(3)
                     guard !bests.isEmpty else { continue }
-                    draw(kind.longTitle.uppercased(),
+                    draw(kind.longTitle.localizedUppercase,
                          in: CGRect(x: 88, y: y, width: 904, height: 28),
                          font: UIFont.systemFont(ofSize: 17, weight: .semibold), color: pdfAccent)
                     y += 38
@@ -329,7 +329,7 @@ enum RaceBookBuilder {
                 let history = scopedResults.filter(\.isComplete).prefix(3)
                 if !history.isEmpty, y < 1550 {
                     if options.includePersonalBests { y += 12 }
-                    draw("RECENT FINISHES",
+                    draw(String(localized: "Recent finishes").localizedUppercase,
                          in: CGRect(x: 88, y: y, width: 904, height: 30),
                          font: UIFont.systemFont(ofSize: 21, weight: .bold), color: pdfDeep)
                     y += 42
@@ -346,7 +346,7 @@ enum RaceBookBuilder {
                 }
             }
 
-            draw("Official results as published by each event timer.",
+            draw(String(localized: "Official results as published by each event timer."),
                  in: CGRect(x: 64, y: 1810, width: 952, height: 36),
                  font: UIFont.systemFont(ofSize: 18), color: pdfMuted)
             draw("IM Tri Tracker",

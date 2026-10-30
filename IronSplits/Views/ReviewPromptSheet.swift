@@ -56,7 +56,7 @@ struct ReviewPromptSheet: View {
                     Button {
                         handleNotNow()
                     } label: {
-                        TriBarLabel(title: "Not now")
+                        TriBarLabel(title: String(localized: "Not now"))
                     }
                     .buttonStyle(.triPressSilent)
                 }
@@ -105,7 +105,7 @@ struct ReviewPromptSheet: View {
         Button {
             sendFeedback()
         } label: {
-            primaryButtonLabel("Continue in email")
+            primaryButtonLabel(String(localized: "Continue in email"))
         }
         .buttonStyle(.triPress)
         .disabled(feedbackText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)

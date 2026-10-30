@@ -56,7 +56,7 @@ struct PointerCatalog: Codable, Sendable {
     static let empty = PointerCatalog(
         title: "Tri Pointers",
         subtitle: nil,
-        emptyMessage: "The Tri Pointers episodes aren't published yet. They'll appear here as soon as they are, with no app update needed.",
+        emptyMessage: String(localized: "The Tri Pointers episodes aren't published yet. They'll appear here as soon as they are, with no app update needed."),
         pointers: []
     )
 }
@@ -93,7 +93,7 @@ actor PointerLibrary {
         if !force, let last = defaults.object(forKey: Self.cacheDateKey) as? Date,
            Date.now.timeIntervalSince(last) < Self.refreshInterval {
             if catalog().pointers.isEmpty {
-                lastErrorMessage = "The episode library couldn't be reached. Check your connection and try again."
+                lastErrorMessage = String(localized: "The episode library couldn't be reached. Check your connection and try again.")
             }
             return catalog()
         }
@@ -103,7 +103,7 @@ actor PointerLibrary {
               let http = response as? HTTPURLResponse, 200..<300 ~= http.statusCode,
               let catalog = try? JSONDecoder().decode(PointerCatalog.self, from: data) else {
             defaults.set(Date.now, forKey: Self.cacheDateKey)
-            lastErrorMessage = "The episode library couldn't be reached. Check your connection and try again."
+            lastErrorMessage = String(localized: "The episode library couldn't be reached. Check your connection and try again.")
             return catalog()
         }
         current = catalog

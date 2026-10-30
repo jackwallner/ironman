@@ -22,15 +22,15 @@ enum ResultsAPIError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .badConfiguration:
-            return "The results search could not be prepared. Please try again."
+            return String(localized: "The results search could not be prepared. Please try again.")
         case .badResponse(let code):
             _ = code
-            return "The results site is having trouble. Please try again shortly."
+            return String(localized: "The results site is having trouble. Please try again shortly.")
         case .upstreamRejected(let message):
             _ = message
-            return "The results site could not complete that search. Please try again."
+            return String(localized: "The results site could not complete that search. Please try again.")
         case .pageLimitReached:
-            return "Some older results may be missing. Try refreshing again later."
+            return String(localized: "Some older results may be missing. Try refreshing again later.")
         }
     }
 }
@@ -279,12 +279,12 @@ struct ResultsAPI: ResultsProviding {
         if let error = error as? URLError {
             switch error.code {
             case .notConnectedToInternet, .networkConnectionLost, .cannotConnectToHost, .cannotFindHost, .timedOut:
-                return "The results site is unavailable right now. Please check your connection and try again."
+                return String(localized: "The results site is unavailable right now. Please check your connection and try again.")
             default:
-                return "Couldn't reach the results site. Please try again."
+                return String(localized: "Couldn't reach the results site. Please try again.")
             }
         }
-        return "Couldn't reach the results site. Please try again."
+        return String(localized: "Couldn't reach the results site. Please try again.")
     }
 
     static func isGUID(_ value: String) -> Bool {

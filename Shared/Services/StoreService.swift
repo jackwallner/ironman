@@ -78,7 +78,7 @@ enum StoreServiceError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .purchasesUnavailableInSimulator:
-            return "Purchases are unavailable in simulator builds."
+            return String(localized: "Purchases are unavailable in simulator builds.")
         }
     }
 }
@@ -293,12 +293,12 @@ final class StoreService: NSObject, ObservableObject {
 
     /// CTA label for a Race Book entry point.
     var paywallBlurCTA: String {
-        "Unlock Race Book"
+        String(localized: "Unlock Race Book")
     }
 
     /// Short, stable copy for settings and contextual entry points.
     nonisolated static func upgradeCTALabel(trialAvailable: Bool) -> String {
-        "Unlock Race Book"
+        String(localized: "Unlock Race Book")
     }
 
     var upgradeCTALabel: String {
@@ -306,14 +306,14 @@ final class StoreService: NSObject, ObservableObject {
     }
 
     func directCTALabel(for trigger: PaywallTrigger) -> String {
-        guard let price = proPrice else { return "Unlock Race Book" }
-        return "Unlock Race Book for \(price)"
+        guard let price = proPrice else { return String(localized: "Unlock Race Book") }
+        return String(localized: "Unlock Race Book for \(price)")
     }
 
     /// One-line secondary caption shown under the CTA when a trial is offered,
     /// so the price after the trial isn't hidden.
     var paywallBlurSubtext: String? {
-        "One-time purchase. No subscription."
+        String(localized: "One-time purchase. No subscription.")
     }
 
     /// The only package offered to new customers.
@@ -404,7 +404,7 @@ final class StoreService: NSObject, ObservableObject {
             rebuildPlanOptions()
         } catch {
             logger.error("Product fetch failed: \(String(describing: error), privacy: .public)")
-            lastError = "Couldn't load the Race Book unlock. Check your connection and try again."
+            lastError = String(localized: "Couldn't load the Race Book unlock. Check your connection and try again.")
         }
     }
 
@@ -454,7 +454,7 @@ final class StoreService: NSObject, ObservableObject {
                 return .cancelled
             }
         } catch {
-            return .failed(lastError ?? "Couldn't complete the purchase. Please try again.")
+            return .failed(lastError ?? String(localized: "Couldn't complete the purchase. Please try again."))
         }
     }
 
@@ -466,7 +466,7 @@ final class StoreService: NSObject, ObservableObject {
             lastError = nil
         } catch {
             logger.error("Customer info refresh failed: \(String(describing: error), privacy: .public)")
-            lastError = "Couldn't refresh your Race Book purchase status. Check your connection and try again."
+            lastError = String(localized: "Couldn't refresh your Race Book purchase status. Check your connection and try again.")
         }
     }
 
@@ -479,10 +479,10 @@ final class StoreService: NSObject, ObservableObject {
         do {
             let info = try await Purchases.shared.restorePurchases()
             apply(customerInfo: info)
-            restoreError = isPro ? nil : "No Race Book purchase was found for this Apple ID."
+            restoreError = isPro ? nil : String(localized: "No Race Book purchase was found for this Apple ID.")
         } catch {
             logger.error("Restore failed: \(String(describing: error), privacy: .public)")
-            restoreError = "Couldn't restore purchases. Try again."
+            restoreError = String(localized: "Couldn't restore purchases. Try again.")
         }
     }
 
