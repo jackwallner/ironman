@@ -6,6 +6,18 @@
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
 	<string>IM Tri Tracker</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>de</string>
+		<string>es</string>
+		<string>fr</string>
+		<string>it</string>
+		<string>ja</string>
+		<string>nl</string>
+		<string>pl</string>
+		<string>pt-BR</string>
+	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
