@@ -122,8 +122,8 @@ extension Package {
     var displayName: String {
         switch productKind {
         case .lifetime: return "Race Book"
-        case .yearly: return "Yearly"
-        case .monthly: return "Monthly"
+        case .yearly: return String(localized: "Yearly")
+        case .monthly: return String(localized: "Monthly")
         case .other: return storeProduct.localizedTitle
         }
     }
@@ -189,25 +189,19 @@ extension Package {
     var introOfferLabel: String? {
         #if DEBUG && targetEnvironment(simulator)
         if RevenueCatConfig.apiKey.hasPrefix("test_"), productKind == .monthly || productKind == .yearly {
-            return "7-day free trial"
+            return String(localized: "\(7)-day free trial")
         }
         #endif
         guard let intro = storeProduct.introductoryDiscount, intro.paymentMode == .freeTrial else {
             return nil
         }
         let period = intro.subscriptionPeriod
-        let unit: String
         switch period.unit {
-        case .day: unit = period.value == 1 ? "day" : "days"
-        case .week: unit = period.value == 1 ? "week" : "weeks"
-        case .month: unit = period.value == 1 ? "month" : "months"
-        case .year: unit = period.value == 1 ? "year" : "years"
-        @unknown default: unit = ""
-        }
-        if period.unit == .week {
-            return "\(period.value * 7)-day free trial"
-        } else {
-            return "\(period.value)-\(unit.dropLast(period.value == 1 ? 0 : 1)) free trial"
+        case .day: return String(localized: "\(period.value)-day free trial")
+        case .week: return String(localized: "\(period.value * 7)-day free trial")
+        case .month: return String(localized: "\(period.value)-month free trial")
+        case .year: return String(localized: "\(period.value)-year free trial")
+        @unknown default: return nil
         }
     }
 }

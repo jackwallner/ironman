@@ -90,11 +90,11 @@ struct ODataResultRow: Decodable, Sendable {
         return RaceResult(
             id: resultID.flatMap { $0.isEmpty ? nil : $0 } ?? stableResultID,
             eventID: _wtc_eventid_value ?? wtc_EventId?.wtc_eventid ?? "",
-            eventName: wtc_EventId?.wtc_name ?? "Unknown race",
+            eventName: wtc_EventId?.wtc_name ?? String(localized: "Unknown race"),
             eventDate: Self.parseDate(wtc_EventId?.wtc_eventdate),
             externalEventName: wtc_EventId?.wtc_externaleventname,
             athleteID: wtc_ContactId?.contactid,
-            athleteName: name.isEmpty ? "Unknown athlete" : name,
+            athleteName: name.isEmpty ? String(localized: "Unknown athlete") : name,
             bib: wtc_bibnumber?.value,
             ageGroup: _wtc_agegroupid_value_formatted,
             countryISO2: wtc_CountryRepresentingId?.wtc_iso2,

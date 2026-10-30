@@ -621,7 +621,7 @@ private struct PaywallPlanCard: View {
                 }
             }
             if let trial = option.introOfferLabel {
-                Text(trial.capitalized)
+                Text(trial)
                     .font(TriType.micro)
                     .tracking(0.3)
                     .foregroundStyle(TriPalette.sunrise)
