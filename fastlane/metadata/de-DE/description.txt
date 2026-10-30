@@ -20,7 +20,7 @@ Stöbere in gefilmten Tipps für den Renntag und nutze Ask Pattie, um den passen
 KOSTENLOSER KERN
 Suche, übernimm deine unterstützte Rennhistorie und behalte vollständige Splits, Rankings, Perzentile, Feldkontext, Rennnotizen, Bestzeiten, Entwicklung und die gesamte Tippbibliothek. Deine Ergebnisse sind nie hinter einem Kauf versteckt.
 
-Datenschutzerklärung: https://jackwallner.github.io/ironman/privacy-policy.html
+Datenschutzerklärung: https://jackwallner.com/ios/ironman/privacy-policy.html
 Nutzungsbedingungen: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
 IM Tri Tracker ist unabhängig. Die App ist mit keinem Rennveranstalter oder Zeitnahmeunternehmen verbunden und wird von keinem davon unterstützt oder gesponsert. Ergebnisse werden so angezeigt, wie sie von der Zeitnahme des jeweiligen Rennens veröffentlicht wurden.

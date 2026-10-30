@@ -20,7 +20,7 @@ PATTIE 小贴士
 免费核心功能
 搜索、认领受支持的历史成绩，并保留全部分段、排名、百分位、参赛背景、比赛笔记、个人最佳、进步趋势和完整技巧库。你的成绩永远不会被锁在付费之后。
 
-隐私政策: https://jackwallner.github.io/ironman/privacy-policy.html
+隐私政策: https://jackwallner.com/ios/ironman/privacy-policy.html
 使用条款: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
 IM Tri Tracker 是独立应用，与任何赛事主办方或计时公司均无关联，也未获得其认可或赞助。成绩按各赛事计时方公布的内容显示。

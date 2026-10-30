@@ -20,7 +20,7 @@ Yarış günü için çekilmiş ipuçlarına göz at ve doğru videoya ulaşmak 
 ÜCRETSİZ TEMEL
 Ara, desteklenen geçmişini sahiplen ve tüm ara dereceleri, sıralamaları, yüzdelik dilimleri, katılımcı bağlamını, yarış notlarını, kişisel rekorları, gelişimi ve tüm ipucu kütüphanesini sakla. Sonuçların asla bir satın alımın arkasına gizlenmez.
 
-Gizlilik Politikası: https://jackwallner.github.io/ironman/privacy-policy.html
+Gizlilik Politikası: https://jackwallner.com/ios/ironman/privacy-policy.html
 Kullanım Koşulları: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
 IM Tri Tracker bağımsızdır. Hiçbir yarış organizatörü veya zamanlama şirketiyle bağlantılı değildir, onlar tarafından onaylanmamış ya da desteklenmemiştir. Sonuçlar, her etkinliğin zamanlama hizmeti tarafından yayımlandığı şekliyle gösterilir.

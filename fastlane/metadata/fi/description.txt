@@ -20,7 +20,7 @@ Selaa kuvattuja kilpailupäivän vinkkejä ja löydä oikea video Ask Pattie -to
 ILMAINEN YDIN
 Hae, ota tuettu kilpailuhistoriasi omaksesi ja säilytä kaikki väliajat, rankingit, persentiilit, kenttätiedot, kisamuistiinpanot, ennätykset, kehitys ja koko vinkkikirjasto. Tuloksiasi ei koskaan piiloteta oston taakse.
 
-Tietosuojakäytäntö: https://jackwallner.github.io/ironman/privacy-policy.html
+Tietosuojakäytäntö: https://jackwallner.com/ios/ironman/privacy-policy.html
 Käyttöehdot: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
 IM Tri Tracker on itsenäinen. Se ei ole sidoksissa mihinkään kilpailujärjestäjään tai ajanottoyritykseen, eivätkä ne tue tai sponsoroi sitä. Tulokset näytetään sellaisina kuin kunkin kilpailun ajanottaja on ne julkaissut.

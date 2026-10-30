@@ -20,7 +20,7 @@ PATTIEのヒント
 無料の基本機能
 検索、対応する履歴の登録に加え、すべてのスプリット、順位、パーセンタイル、出場者データ、レースメモ、自己ベスト、成長の推移、ヒントライブラリ全体を利用できます。結果が購入の向こうに隠されることはありません。
 
-プライバシーポリシー: https://jackwallner.github.io/ironman/privacy-policy.html
+プライバシーポリシー: https://jackwallner.com/ios/ironman/privacy-policy.html
 利用規約: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
 IM Tri Trackerは独立したアプリです。いかなる大会主催者や計測会社とも提携しておらず、承認や協賛も受けていません。リザルトは各大会の計測担当が公開したとおりに表示されます。

@@ -20,7 +20,7 @@ Xem các mẹo ngày thi đấu được quay sẵn và dùng Ask Pattie để t
 PHẦN CỐT LÕI MIỄN PHÍ
 Tìm kiếm, nhận lịch sử được hỗ trợ của bạn và giữ toàn bộ thời gian từng chặng, xếp hạng, phân vị, bối cảnh người tham gia, ghi chú, thành tích tốt nhất, tiến bộ và toàn bộ thư viện mẹo. Kết quả của bạn không bao giờ bị ẩn sau một giao dịch mua.
 
-Chính sách quyền riêng tư: https://jackwallner.github.io/ironman/privacy-policy.html
+Chính sách quyền riêng tư: https://jackwallner.com/ios/ironman/privacy-policy.html
 Điều khoản sử dụng: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
 IM Tri Tracker là ứng dụng độc lập, không liên kết, không được chứng thực hay tài trợ bởi bất kỳ ban tổ chức giải hoặc công ty bấm giờ nào. Kết quả được hiển thị đúng như bên bấm giờ của từng sự kiện đã công bố.

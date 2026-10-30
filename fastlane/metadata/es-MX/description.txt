@@ -20,7 +20,7 @@ Explora consejos grabados para el día de carrera y usa Ask Pattie para encontra
 LO ESENCIAL, GRATIS
 Busca, reclama tu historial compatible y conserva todos tus parciales, clasificaciones, percentiles, contexto del grupo, notas de carrera, mejores marcas, progresión y toda la biblioteca de consejos. Tus resultados nunca quedan ocultos tras una compra.
 
-Política de privacidad: https://jackwallner.github.io/ironman/privacy-policy.html
+Política de privacidad: https://jackwallner.com/ios/ironman/privacy-policy.html
 Términos de uso: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
 IM Tri Tracker es independiente. No está afiliada a ningún organizador de carreras ni empresa de cronometraje, ni cuenta con su respaldo o patrocinio. Los resultados se muestran tal como los publica el cronometrador de cada prueba.

@@ -20,7 +20,7 @@ Böngéssz a versenynapra szóló videós tippek között, és az Ask Pattie seg
 INGYENES ALAPOK
 Keress, igényeld a támogatott versenytörténetedet, és tartsd meg az összes részidőt, rangsort, percentilist, mezőnyadatot, versenyjegyzetet, egyéni csúcsot, a fejlődést és a teljes tipptárat. Az eredményeid soha nincsenek vásárlás mögé rejtve.
 
-Adatvédelmi irányelvek: https://jackwallner.github.io/ironman/privacy-policy.html
+Adatvédelmi irányelvek: https://jackwallner.com/ios/ironman/privacy-policy.html
 Felhasználási feltételek: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
 Az IM Tri Tracker független alkalmazás. Nem áll kapcsolatban egyetlen versenyszervezővel vagy időmérő céggel sem, és azok nem támogatják vagy szponzorálják. Az eredmények úgy jelennek meg, ahogy az egyes versenyek időmérői közzétették őket.

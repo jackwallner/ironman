@@ -20,7 +20,7 @@ Prezerajte si natočené tipy na pretekový deň a pomocou Ask Pattie nájdite s
 ZÁKLAD ZADARMO
 Vyhľadávajte, prihláste sa k svojej podporovanej histórii a majte všetky medzičasy, rebríčky, percentily, kontext štartového poľa, poznámky, osobné rekordy, vývoj a celú knižnicu tipov. Vaše výsledky nikdy nie sú skryté za nákupom.
 
-Zásady ochrany súkromia: https://jackwallner.github.io/ironman/privacy-policy.html
+Zásady ochrany súkromia: https://jackwallner.com/ios/ironman/privacy-policy.html
 Podmienky používania: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
 IM Tri Tracker je nezávislá aplikácia. Nie je pridružená k žiadnemu organizátorovi pretekov ani spoločnosti na meranie času a nie je nimi schválená ani sponzorovaná. Výsledky sa zobrazujú tak, ako ich zverejnila časomiera každého podujatia.

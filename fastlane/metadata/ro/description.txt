@@ -20,7 +20,7 @@ Răsfoiește sfaturi filmate pentru ziua cursei și folosește Ask Pattie ca să
 ESENȚIALUL GRATUIT
 Caută, revendică-ți istoricul acceptat și păstrează toți timpii, clasamentele, percentilele, contextul participanților, notițele, recordurile personale, progresul și întreaga bibliotecă de sfaturi. Rezultatele tale nu sunt niciodată ascunse în spatele unei achiziții.
 
-Politica de confidențialitate: https://jackwallner.github.io/ironman/privacy-policy.html
+Politica de confidențialitate: https://jackwallner.com/ios/ironman/privacy-policy.html
 Termeni de utilizare: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
 IM Tri Tracker este independentă. Nu este afiliată, aprobată sau sponsorizată de niciun organizator de curse sau companie de cronometrare. Rezultatele sunt afișate așa cum au fost publicate de cronometrorul fiecărui eveniment.

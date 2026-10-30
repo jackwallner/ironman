@@ -20,7 +20,7 @@ Bla gjennom filmede tips for løpsdagen, og bruk Ask Pattie for å finne riktig 
 GRATIS KJERNE
 Søk, gjør krav på din støttede historikk og behold alle splitter, rangeringer, persentiler, feltkontekst, løpsnotater, personlige rekorder, utvikling og hele tipsbiblioteket. Resultatene dine skjules aldri bak et kjøp.
 
-Personvernerklæring: https://jackwallner.github.io/ironman/privacy-policy.html
+Personvernerklæring: https://jackwallner.com/ios/ironman/privacy-policy.html
 Bruksvilkår: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
 IM Tri Tracker er uavhengig og er ikke tilknyttet, godkjent eller sponset av noen løpsarrangør eller tidtakerfirma. Resultatene vises slik de er publisert av tidtakeren for hvert løp.

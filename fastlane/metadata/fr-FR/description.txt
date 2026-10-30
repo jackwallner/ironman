@@ -20,7 +20,7 @@ Parcourez des conseils filmés pour le jour de course et utilisez Ask Pattie pou
 L'ESSENTIEL GRATUIT
 Recherchez, récupérez votre historique pris en charge et conservez tous vos temps, classements, percentiles, contexte du peloton, notes de course, records personnels, progression et toute la bibliothèque de conseils. Vos résultats ne sont jamais cachés derrière un achat.
 
-Politique de confidentialité: https://jackwallner.github.io/ironman/privacy-policy.html
+Politique de confidentialité: https://jackwallner.com/ios/ironman/privacy-policy.html
 Conditions d'utilisation: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
 IM Tri Tracker est indépendant. L'app n'est affiliée à aucun organisateur de courses ni à aucune société de chronométrage, et n'est ni approuvée ni sponsorisée par eux. Les résultats sont affichés tels que publiés par le chronométreur de chaque épreuve.

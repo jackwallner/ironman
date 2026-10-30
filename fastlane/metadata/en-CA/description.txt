@@ -20,7 +20,7 @@ Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
 FREE CORE
 Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
+Privacy Policy: https://jackwallner.com/ios/ironman/privacy-policy.html
 Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
 IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.

@@ -20,7 +20,7 @@ Explora consells filmats per al dia de cursa i fes servir Ask Pattie per trobar 
 L'ESSENCIAL, GRATIS
 Cerca, reclama el teu historial compatible i conserva tots els parcials, classificacions, percentils, context del grup, notes de cursa, millors marques, progressió i tota la biblioteca de consells. Els teus resultats mai no queden amagats darrere d'una compra.
 
-Privacitat: https://jackwallner.github.io/ironman/privacy-policy.html
+Privacitat: https://jackwallner.com/ios/ironman/privacy-policy.html
 Condicions d'ús: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
 IM Tri Tracker és independent. No està afiliada, avalada ni patrocinada per cap organitzador de curses ni empresa de cronometratge. Els resultats es mostren tal com els publica el cronometrador de cada prova.
