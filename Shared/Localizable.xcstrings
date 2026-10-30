@@ -13555,13 +13555,13 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Record personnel"
+            "value" : "Record"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Record personale"
+            "value" : "Personale"
           }
         },
         "ja" : {
@@ -13573,7 +13573,7 @@
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Persoonlijk record"
+            "value" : "Beste tijd"
           }
         },
         "pl" : {
@@ -13585,7 +13585,7 @@
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Recorde pessoal"
+            "value" : "Recorde"
           }
         }
       }
@@ -15833,7 +15833,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@から出場"
+            "value" : "%@年から出場"
           }
         },
         "nl" : {
