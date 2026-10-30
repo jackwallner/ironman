@@ -32,6 +32,6 @@ Aplikasi ini dalam bahasa Inggeris.
 
 IM Tri Tracker hanya untuk maklumat umum tentang perlumbaan dan kecergasan. Ia bukan peranti perubatan dan tidak mendiagnosis, merawat, menyembuhkan atau mencegah sebarang penyakit.
 
-Dasar Privasi: https://jackwallner.github.io/ironman/privacy-policy.html
-Terma Penggunaan: https://jackwallner.github.io/ironman/terms.html
-Sokongan: https://jackwallner.github.io/ironman/support.html
+Dasar Privasi: https://jackwallner.com/ios/ironman/privacy-policy.html
+Terma Penggunaan: https://jackwallner.com/ios/ironman/terms.html
+Sokongan: https://jackwallner.com/ios/ironman/support.html

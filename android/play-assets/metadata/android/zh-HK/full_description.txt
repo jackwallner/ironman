@@ -32,6 +32,6 @@ App 本身為英文介面。
 
 IM Tri Tracker 僅提供比賽與健身的一般資訊。它不是醫療器材，不會診斷、治療、治癒或預防任何疾病。
 
-隱私權政策: https://jackwallner.github.io/ironman/privacy-policy.html
-使用條款: https://jackwallner.github.io/ironman/terms.html
-支援: https://jackwallner.github.io/ironman/support.html
+隱私權政策: https://jackwallner.com/ios/ironman/privacy-policy.html
+使用條款: https://jackwallner.com/ios/ironman/terms.html
+支援: https://jackwallner.com/ios/ironman/support.html

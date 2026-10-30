@@ -32,6 +32,6 @@ Aplikasinya sendiri berbahasa Inggris.
 
 IM Tri Tracker hanya untuk informasi umum seputar lomba dan kebugaran. Aplikasi ini bukan perangkat medis dan tidak mendiagnosis, mengobati, menyembuhkan, atau mencegah penyakit apa pun.
 
-Kebijakan Privasi: https://jackwallner.github.io/ironman/privacy-policy.html
-Ketentuan Penggunaan: https://jackwallner.github.io/ironman/terms.html
-Dukungan: https://jackwallner.github.io/ironman/support.html
+Kebijakan Privasi: https://jackwallner.com/ios/ironman/privacy-policy.html
+Ketentuan Penggunaan: https://jackwallner.com/ios/ironman/terms.html
+Dukungan: https://jackwallner.com/ios/ironman/support.html

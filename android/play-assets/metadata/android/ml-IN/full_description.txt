@@ -32,6 +32,6 @@ IM Tri Tracker സ്വതന്ത്രമാണ്. ഇത് ഏതെങ�
 
 IM Tri Tracker റേസുകളെയും ഫിറ്റ്‌നസിനെയും കുറിച്ചുള്ള പൊതുവായ വിവരങ്ങൾക്ക് മാത്രമുള്ളതാണ്. ഇത് ഒരു മെഡിക്കൽ ഉപകരണമല്ല, ഒരു രോഗവും നിർണ്ണയിക്കുകയോ ചികിത്സിക്കുകയോ ഭേദമാക്കുകയോ തടയുകയോ ചെയ്യുന്നില്ല.
 
-സ്വകാര്യതാ നയം: https://jackwallner.github.io/ironman/privacy-policy.html
-ഉപയോഗ നിബന്ധനകൾ: https://jackwallner.github.io/ironman/terms.html
-സഹായം: https://jackwallner.github.io/ironman/support.html
+സ്വകാര്യതാ നയം: https://jackwallner.com/ios/ironman/privacy-policy.html
+ഉപയോഗ നിബന്ധനകൾ: https://jackwallner.com/ios/ironman/terms.html
+സഹായം: https://jackwallner.com/ios/ironman/support.html

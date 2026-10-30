@@ -33,6 +33,6 @@ IM Tri Tracker is independent. It is not affiliated with, endorsed by, or sponso
 
 IM Tri Tracker is for general race and fitness information only. It is not a medical device and does not diagnose, treat, cure, or prevent any medical condition.
 
-Privacy Policy: https://jackwallner.github.io/ironman/privacy-policy.html
-Terms of Use: https://jackwallner.github.io/ironman/terms.html
-Support: https://jackwallner.github.io/ironman/support.html
+Privacy Policy: https://jackwallner.com/ios/ironman/privacy-policy.html
+Terms of Use: https://jackwallner.com/ios/ironman/terms.html
+Support: https://jackwallner.com/ios/ironman/support.html

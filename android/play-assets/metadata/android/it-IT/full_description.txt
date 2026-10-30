@@ -32,6 +32,6 @@ L'app è in inglese.
 
 IM Tri Tracker fornisce solo informazioni generali su gare e forma fisica. Non è un dispositivo medico e non diagnostica, cura, tratta né previene alcuna condizione medica.
 
-Informativa sulla privacy: https://jackwallner.github.io/ironman/privacy-policy.html
-Termini di utilizzo: https://jackwallner.github.io/ironman/terms.html
-Assistenza: https://jackwallner.github.io/ironman/support.html
+Informativa sulla privacy: https://jackwallner.com/ios/ironman/privacy-policy.html
+Termini di utilizzo: https://jackwallner.com/ios/ironman/terms.html
+Assistenza: https://jackwallner.com/ios/ironman/support.html

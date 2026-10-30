@@ -32,6 +32,6 @@ Samotná aplikace je v angličtině.
 
 IM Tri Tracker slouží jen k obecným informacím o závodech a kondici. Není zdravotnickým prostředkem a nediagnostikuje, neléčí ani nepředchází žádné nemoci.
 
-Zásady ochrany soukromí: https://jackwallner.github.io/ironman/privacy-policy.html
-Podmínky použití: https://jackwallner.github.io/ironman/terms.html
-Podpora: https://jackwallner.github.io/ironman/support.html
+Zásady ochrany soukromí: https://jackwallner.com/ios/ironman/privacy-policy.html
+Podmínky použití: https://jackwallner.com/ios/ironman/terms.html
+Podpora: https://jackwallner.com/ios/ironman/support.html

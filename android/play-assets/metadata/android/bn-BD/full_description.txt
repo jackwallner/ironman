@@ -32,6 +32,6 @@ IM Tri Tracker স্বাধীন। এটি কোনো রেস আয�
 
 IM Tri Tracker শুধু রেস ও ফিটনেস সম্পর্কে সাধারণ তথ্যের জন্য। এটি কোনো চিকিৎসা যন্ত্র নয় এবং কোনো রোগ নির্ণয়, চিকিৎসা, নিরাময় বা প্রতিরোধ করে না।
 
-গোপনীয়তা নীতি: https://jackwallner.github.io/ironman/privacy-policy.html
-ব্যবহারের শর্তাবলি: https://jackwallner.github.io/ironman/terms.html
-সহায়তা: https://jackwallner.github.io/ironman/support.html
+গোপনীয়তা নীতি: https://jackwallner.com/ios/ironman/privacy-policy.html
+ব্যবহারের শর্তাবলি: https://jackwallner.com/ios/ironman/terms.html
+সহায়তা: https://jackwallner.com/ios/ironman/support.html

@@ -32,6 +32,6 @@ IM Tri Tracker 是独立应用，与任何赛事主办方或计时公司均无�
 
 IM Tri Tracker 仅提供有关比赛和健身的一般信息。它不是医疗器械，不诊断、治疗、治愈或预防任何疾病。
 
-隐私政策: https://jackwallner.github.io/ironman/privacy-policy.html
-使用条款: https://jackwallner.github.io/ironman/terms.html
-支持: https://jackwallner.github.io/ironman/support.html
+隐私政策: https://jackwallner.com/ios/ironman/privacy-policy.html
+使用条款: https://jackwallner.com/ios/ironman/terms.html
+支持: https://jackwallner.com/ios/ironman/support.html

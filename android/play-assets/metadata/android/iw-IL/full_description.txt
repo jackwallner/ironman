@@ -32,6 +32,6 @@ IM Tri Tracker היא אפליקציה עצמאית, שאינה קשורה לש�
 
 IM Tri Tracker מספקת מידע כללי בלבד על מרוצים וכושר. היא אינה מכשיר רפואי ואינה מאבחנת, מטפלת, מרפאת או מונעת שום מצב רפואי.
 
-מדיניות פרטיות: https://jackwallner.github.io/ironman/privacy-policy.html
-תנאי שימוש: https://jackwallner.github.io/ironman/terms.html
-תמיכה: https://jackwallner.github.io/ironman/support.html
+מדיניות פרטיות: https://jackwallner.com/ios/ironman/privacy-policy.html
+תנאי שימוש: https://jackwallner.com/ios/ironman/terms.html
+תמיכה: https://jackwallner.com/ios/ironman/support.html

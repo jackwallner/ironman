@@ -32,6 +32,6 @@ Bản thân ứng dụng dùng tiếng Anh.
 
 IM Tri Tracker chỉ cung cấp thông tin chung về thi đấu và thể lực. Đây không phải thiết bị y tế và không chẩn đoán, điều trị, chữa khỏi hay phòng ngừa bất kỳ bệnh nào.
 
-Chính sách quyền riêng tư: https://jackwallner.github.io/ironman/privacy-policy.html
-Điều khoản sử dụng: https://jackwallner.github.io/ironman/terms.html
-Hỗ trợ: https://jackwallner.github.io/ironman/support.html
+Chính sách quyền riêng tư: https://jackwallner.com/ios/ironman/privacy-policy.html
+Điều khoản sử dụng: https://jackwallner.com/ios/ironman/terms.html
+Hỗ trợ: https://jackwallner.com/ios/ironman/support.html

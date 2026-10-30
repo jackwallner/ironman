@@ -32,6 +32,6 @@ IM Tri Tracker تطبيق مستقل، غير تابع لأي منظم سباق�
 
 يقدّم IM Tri Tracker معلومات عامة عن السباقات واللياقة فقط. وهو ليس جهازًا طبيًا ولا يشخّص أي حالة مرضية أو يعالجها أو يشفيها أو يقي منها.
 
-سياسة الخصوصية: https://jackwallner.github.io/ironman/privacy-policy.html
-شروط الاستخدام: https://jackwallner.github.io/ironman/terms.html
-الدعم: https://jackwallner.github.io/ironman/support.html
+سياسة الخصوصية: https://jackwallner.com/ios/ironman/privacy-policy.html
+شروط الاستخدام: https://jackwallner.com/ios/ironman/terms.html
+الدعم: https://jackwallner.com/ios/ironman/support.html

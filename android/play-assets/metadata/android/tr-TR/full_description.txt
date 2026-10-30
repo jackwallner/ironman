@@ -32,6 +32,6 @@ Uygulamanın kendisi İngilizcedir.
 
 IM Tri Tracker yalnızca genel yarış ve fitness bilgisi sunar. Tıbbi bir cihaz değildir ve hiçbir hastalığı teşhis etmez, tedavi etmez, iyileştirmez veya önlemez.
 
-Gizlilik Politikası: https://jackwallner.github.io/ironman/privacy-policy.html
-Kullanım Koşulları: https://jackwallner.github.io/ironman/terms.html
-Destek: https://jackwallner.github.io/ironman/support.html
+Gizlilik Politikası: https://jackwallner.com/ios/ironman/privacy-policy.html
+Kullanım Koşulları: https://jackwallner.com/ios/ironman/terms.html
+Destek: https://jackwallner.com/ios/ironman/support.html

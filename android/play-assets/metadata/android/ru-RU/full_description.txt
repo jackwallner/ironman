@@ -32,6 +32,6 @@ IM Tri Tracker независим. Он не связан ни с одним о�
 
 IM Tri Tracker предоставляет только общую информацию о соревнованиях и физической форме. Это не медицинское изделие, оно не диагностирует, не лечит и не предотвращает никаких заболеваний.
 
-Политика конфиденциальности: https://jackwallner.github.io/ironman/privacy-policy.html
-Условия использования: https://jackwallner.github.io/ironman/terms.html
-Поддержка: https://jackwallner.github.io/ironman/support.html
+Политика конфиденциальности: https://jackwallner.com/ios/ironman/privacy-policy.html
+Условия использования: https://jackwallner.com/ios/ironman/terms.html
+Поддержка: https://jackwallner.com/ios/ironman/support.html

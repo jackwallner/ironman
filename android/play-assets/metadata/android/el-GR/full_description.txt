@@ -32,6 +32,6 @@ RACE BOOK
 
 Το IM Tri Tracker παρέχει μόνο γενικές πληροφορίες για αγώνες και φυσική κατάσταση. Δεν είναι ιατροτεχνολογικό προϊόν και δεν διαγιγνώσκει, δεν θεραπεύει και δεν προλαμβάνει καμία πάθηση.
 
-Πολιτική απορρήτου: https://jackwallner.github.io/ironman/privacy-policy.html
-Όροι χρήσης: https://jackwallner.github.io/ironman/terms.html
-Υποστήριξη: https://jackwallner.github.io/ironman/support.html
+Πολιτική απορρήτου: https://jackwallner.com/ios/ironman/privacy-policy.html
+Όροι χρήσης: https://jackwallner.com/ios/ironman/terms.html
+Υποστήριξη: https://jackwallner.com/ios/ironman/support.html
