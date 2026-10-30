@@ -87,6 +87,14 @@ final class ScratchAuditUITests: XCTestCase {
         let save = app.descendants(matching: .any)
             .matching(NSPredicate(format: "label == %@", "Save Image"))
             .firstMatch
+        if !save.waitForExistence(timeout: 10) {
+            // iOS 26+ puts the full action list behind "View More".
+            capture(app, "7a-share-sheet-row")
+            let more = app.descendants(matching: .any)
+                .matching(NSPredicate(format: "label == %@", "View More"))
+                .firstMatch
+            if more.waitForExistence(timeout: 5) { more.tap() } else { app.swipeUp() }
+        }
         XCTAssertTrue(save.waitForExistence(timeout: 20), "Share sheet offered no Save Image")
         capture(app, "7-share-sheet")
         save.tap()

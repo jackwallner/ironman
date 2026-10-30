@@ -4,6 +4,7 @@ Developer notes and historical audits for this repository. The published site re
 
 ## Audits
 
+- [2026-10-30-overnight-findings.md](audits/2026-10-30-overnight-findings.md): Overnight bug hunt and release review, 2026-10-30
 - [aso827.md](audits/aso827.md): IM Tri Tracker ASO Audit
 - [audit823.md](audits/audit823.md): IM Tri Tracker / IM Iron Splits audit823
 - [caudit926.md](audits/caudit926.md): Customer experience audit, 2026-09-26

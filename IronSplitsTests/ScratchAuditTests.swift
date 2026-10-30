@@ -194,6 +194,29 @@ final class ScratchAuditTests: XCTestCase {
         XCTAssertEqual(athletes.count, 2, "Merged into \(athletes.map(\.contactIDs))")
     }
 
+    // MARK: - Year in a US time zone
+
+    /// The feed dates every event at UTC midnight. West of UTC that instant is
+    /// still the previous day, so a 1 January race must not file under the
+    /// previous year while its date label (rendered in UTC) says January 1.
+    func testAJanuaryFirstRaceKeepsItsYearInPacificTime() {
+        let saved = NSTimeZone.default
+        NSTimeZone.default = TimeZone(identifier: "America/Los_Angeles")!
+        defer { NSTimeZone.default = saved }
+        let row = ODataResultRow.decode("""
+        {
+          "wtc_resultid": "jan1",
+          "wtc_finisher": true,
+          "wtc_finishtime": 21338,
+          "wtc_biketime": 10000,
+          "wtc_bikedistancecompleted": 90.1,
+          "wtc_EventId": { "wtc_name": "2026 IRONMAN 70.3 New Year", "wtc_eventdate": "2026-01-01T00:00:00Z" }
+        }
+        """)
+        XCTAssertEqual(RaceDate.medium(row.result.eventDate!), "Jan 1, 2026")
+        XCTAssertEqual(row.result.year, 2026, "Listed under \(row.result.year) while labelled Jan 1, 2026")
+    }
+
     // MARK: - Notes persistence
 
     @MainActor
