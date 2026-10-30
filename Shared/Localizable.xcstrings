@@ -8308,13 +8308,13 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Final"
+            "value" : "Total"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Finale"
+            "value" : "Totale"
           }
         },
         "ja" : {
