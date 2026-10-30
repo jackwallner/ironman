@@ -132,6 +132,10 @@ device.
   `.claude/rules/android.md`; shared Android workflows are in the personal
   `android-dev` skill.
 - **Pointers, Ask Pattie and Pattie's voice clips are hosted or generated content.** Regenerate `docs/ask-pattie.json` with `scripts/build-ask-pattie.py` rather than hand-editing it, and nothing of Pattie's voice is ever synthesised. Details (media hosting, why episodes are cached rather than streamed, clip cutting) are in `.claude/rules/pointers-and-pattie.md`, which loads when you read a matching file; Codex and other agents should open it directly.
+- Localization: English plus de, es, fr, it, ja, nl, pl, pt-BR from one
+  catalog, `Shared/Localizable.xcstrings`. Run `python3
+  Tools/Localization/check.py` after any copy change. Rules in
+  `.claude/rules/localization.md`.
 - iPhone Duo: unfolded, the Locker list and the open race sit in two panes
   either side of the fold. Rules and capture recipe in `.claude/rules/iphone-duo.md`.
 - Review funnel trigger: opening a race detail (`RaceDetailView.task`). The ASC
