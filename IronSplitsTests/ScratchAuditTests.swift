@@ -161,6 +161,39 @@ final class ScratchAuditTests: XCTestCase {
                        "The race detail badges only one of two tied races")
     }
 
+    // MARK: - Same-name strangers
+
+    /// Live feed, 2026-10-30: a common two-word male name returned one search
+    /// row built from two contacts in the same city whose age groups in the
+    /// same season were M45-49 and M30-34. Names here are fictional.
+    func testSameNameSameCityStrangersStayTwoAthletes() {
+        func row(_ id: String, contact: String, ageGroup: String, event: String, date: String) -> ODataResultRow {
+            ODataResultRow.decode("""
+            {
+              "wtc_resultid": "\(id)",
+              "wtc_finisher": true,
+              "wtc_finishtime": 21338,
+              "wtc_biketime": 10000,
+              "wtc_bikedistancecompleted": 90.1,
+              "_wtc_agegroupid_value_formatted": "\(ageGroup)",
+              "wtc_ContactId": { "contactid": "\(contact)", "firstname": "Sam", "lastname": "Rivera",
+                                 "fullname": "Sam Rivera", "address1_city": "Henderson",
+                                 "address1_stateorprovince": "US-NV", "address1_country": "usa",
+                                 "gendercode_formatted": "Male" },
+              "wtc_EventId": { "wtc_name": "\(event)", "wtc_eventdate": "\(date)" }
+            }
+            """)
+        }
+        let rows = [
+            row("a1", contact: "f1d44741-1048-ed11-bba1-000d3a314d17", ageGroup: "M45-49",
+                event: "2018 IRONMAN 70.3 Santa Cruz", date: "2018-09-09T00:00:00Z"),
+            row("b1", contact: "f98c1655-3981-f111-ab0e-70a8a5ae8eaa", ageGroup: "M30-34",
+                event: "2018 IRONMAN 70.3 Arizona", date: "2018-12-09T00:00:00Z"),
+        ]
+        let athletes = ResultsAPI.collapseToAthletes(rows)
+        XCTAssertEqual(athletes.count, 2, "Merged into \(athletes.map(\.contactIDs))")
+    }
+
     // MARK: - Notes persistence
 
     @MainActor
