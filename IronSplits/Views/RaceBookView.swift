@@ -69,6 +69,15 @@ struct RaceBookView: View {
         .sheet(item: $paywallTrigger) { trigger in
             PaywallView(trigger: trigger)
         }
+        #if DEBUG
+        // `-PaywallSnapshot` with `-DuoScreen racebook` opens the sheet for a
+        // gh-sim `--screen` capture, which cannot tap.
+        .task {
+            guard PaywallScreenshotMode.isActive, !raceBookUnlocked else { return }
+            try? await Task.sleep(for: .seconds(1))
+            paywallTrigger = .upgrade
+        }
+        #endif
         .sheet(item: $pdfPreview) { item in
             RaceBookPDFPreview(url: item.url)
         }
