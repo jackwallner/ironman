@@ -287,8 +287,10 @@ final class SubscriptionAuditUITests: XCTestCase {
                 scrollTo(app, add, attempts: 10)
                 if add.exists && add.isHittable {
                     add.tap()
-                    let field = app.textFields["How it went"]
-                    if field.waitForExistence(timeout: 10) {
+                    // A vertical-axis TextField is a text view to XCUITest.
+                    let textView = app.textViews["How it went"]
+                    let field = textView.waitForExistence(timeout: 10) ? textView : app.textFields["How it went"]
+                    if field.exists {
                         field.tap()
                         field.typeText("Audit note")
                         usleep(500_000)
