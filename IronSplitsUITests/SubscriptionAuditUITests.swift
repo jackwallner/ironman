@@ -500,6 +500,38 @@ final class SubscriptionAuditUITests: XCTestCase {
         shot("f04-after-close")
     }
 
+    // MARK: - S7: what a buyer can shape before building (Debug FORCE_PRO, no purchase)
+
+    /// A free user never sees the export options, so this records what they
+    /// would be buying: the include list and whether a single race can be chosen.
+    func testS7_ExportOptionsBehindTheLock() {
+        defer { flush("S7-export-options") }
+        let app = launch(pro: true)
+        guard lockerReady(app) else { return }
+        app.tabBars.buttons["Race Book"].tap()
+        guard app.navigationBars["Race Book"].waitForExistence(timeout: 15) else {
+            XCTFail("Race Book never rendered")
+            return
+        }
+        let customize = app.buttons["Customize export"]
+        scrollTo(app, customize)
+        shot("o01-customize-collapsed")
+        guard customize.exists, customize.isHittable else {
+            note("Customize export not reachable")
+            return
+        }
+        customize.tap()
+        usleep(900_000)
+        shot("o02-customize-expanded")
+        inventory(app, "o02 customize expanded")
+        app.swipeUp()
+        usleep(600_000)
+        shot("o03-customize-expanded-lower")
+        inventory(app, "o03 customize expanded lower")
+        let raceChoice = app.staticTexts.matching(NSPredicate(format: "label CONTAINS[c] %@", "this race")).count
+        note("elements offering a single-race export: \(raceChoice)")
+    }
+
     // MARK: - Helpers
 
     private func launch(pro: Bool) -> XCUIApplication {
