@@ -160,16 +160,34 @@ final class SubscriptionAuditUITests: XCTestCase {
         paywallFacts(app, "export paywall")
 
         // Restore from the paywall, as a free user with nothing to restore.
+        // First a tap 11 pt above the label: outside the 118x15 text, inside a
+        // 44 pt tap target. Only then a tap on the label itself.
         let restore = app.buttons["Restore Purchases"]
+        let simMessage = app.staticTexts["Purchases are unavailable in simulator builds."]
         if restore.exists {
-            let restoreTapped = Date()
-            restore.tap()
-            usleep(400_000)
-            shot("p06-paywall-restore-400ms")
-            usleep(1_800_000)
-            shot("p07-paywall-restore-2s")
-            inventory(app, "p07 paywall restore 2 s")
-            note("restore: tapped, feedback checked \(secs(restoreTapped)) later")
+            let before = restore.frame
+            note("restore before: frame \(before), message on screen \(simMessage.exists)")
+            let probe = app.coordinate(withNormalizedOffset: .zero)
+                .withOffset(CGVector(dx: before.midX, dy: before.minY - 11))
+            probe.tap()
+            usleep(900_000)
+            shot("p06-restore-edge-probe")
+            let edgeWorks = simMessage.exists
+            note("restore: tap 11 pt above the label (outside the text, inside a 44 pt box) gave feedback: \(edgeWorks)")
+            if !edgeWorks {
+                let restoreTapped = Date()
+                restore.tap()
+                usleep(400_000)
+                shot("p07-paywall-restore-400ms")
+                usleep(1_800_000)
+                shot("p08-paywall-restore-2s")
+                inventory(app, "p08 paywall restore 2 s")
+                note("restore: label tapped, feedback checked \(secs(restoreTapped)) later: message \(simMessage.exists)")
+            }
+            let afterButton = app.buttons["Restore Purchases"]
+            if afterButton.exists, simMessage.exists {
+                note("restore layout: button y \(Int(before.minY)) before, \(Int(afterButton.frame.minY)) after the message appeared; message frame \(simMessage.frame); button hittable \(afterButton.isHittable)")
+            }
         } else {
             note("Restore Purchases not found on the export paywall")
         }
@@ -179,7 +197,7 @@ final class SubscriptionAuditUITests: XCTestCase {
         if close.exists {
             close.tap()
             usleep(1_000_000)
-            shot("p08-after-close-button")
+            shot("p09-after-close-button")
             let exportAfter = app.buttons["Unlock to export"]
             note("after Close: Race Book bar visible \(app.navigationBars["Race Book"].exists); export card present \(exportAfter.exists)")
         }
@@ -189,13 +207,13 @@ final class SubscriptionAuditUITests: XCTestCase {
         guard app.navigationBars["Settings"].waitForExistence(timeout: 15) else { return }
         let see = app.buttons["See Race Book"]
         scrollTo(app, see)
-        shot("p09-settings-see-race-book")
+        shot("p10-settings-see-race-book")
         note("See Race Book: exists \(see.exists), hittable \(see.isHittable), frame \(see.frame)")
         guard see.exists, see.isHittable else { return }
         see.tap()
         usleep(1_800_000)
-        shot("p10-paywall-from-settings")
-        inventory(app, "p10 paywall from settings")
+        shot("p11-paywall-from-settings")
+        inventory(app, "p11 paywall from settings")
         note("after tapping 'See Race Book': sheet titled 'Share your Race Book' \(app.staticTexts["Share your Race Book"].exists); title 'Unlock Race Book' \(app.staticTexts["Unlock Race Book"].exists)")
         if app.buttons["Close"].exists { app.buttons["Close"].tap() }
     }
@@ -406,6 +424,25 @@ final class SubscriptionAuditUITests: XCTestCase {
         } else {
             note("Build PDF and image not reachable")
         }
+
+        // The unlocked Settings section, and what a failed restore looks like
+        // under it. The text here is the simulator's own message; the point is
+        // where an error lands once the section says "unlocked".
+        app.tabBars.buttons["Settings"].tap()
+        guard app.navigationBars["Settings"].waitForExistence(timeout: 15) else { return }
+        let settingsRestore = app.buttons["Restore purchases"]
+        scrollTo(app, settingsRestore)
+        usleep(500_000)
+        shot("q09-settings-unlocked")
+        inventory(app, "q09 settings unlocked")
+        note("Settings unlocked: 'Race Book is unlocked' \(app.staticTexts["Race Book is unlocked"].exists), See Race Book button \(app.buttons["See Race Book"].exists)")
+        if settingsRestore.exists, settingsRestore.isHittable {
+            settingsRestore.tap()
+            usleep(900_000)
+            shot("q10-settings-unlocked-after-restore")
+            let stale = app.staticTexts.matching(NSPredicate(format: "label CONTAINS[c] %@", "unavailable")).firstMatch
+            note("after Restore while unlocked: error text '\(stale.exists ? stale.label : "none")' sits under 'Race Book is unlocked'")
+        }
     }
 
     // MARK: - Helpers
@@ -530,7 +567,7 @@ final class SubscriptionAuditUITests: XCTestCase {
             }
             let label = node.label.replacingOccurrences(of: "\n", with: " ")
             guard !label.isEmpty || kind == "field" else { continue }
-            let small = kind == "button" && (frame.height < 43.5 || frame.width < 43.5) ? " SMALL" : ""
+            let small = (kind == "button" || kind == "link") && (frame.height < 43.5 || frame.width < 43.5) ? " SMALL" : ""
             note("  \(kind) | \(label) | \(Int(frame.minX)),\(Int(frame.minY)) \(Int(frame.width))x\(Int(frame.height))\(small)")
             emitted += 1
         }
