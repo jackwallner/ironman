@@ -445,6 +445,61 @@ final class SubscriptionAuditUITests: XCTestCase {
         }
     }
 
+    // MARK: - S6: can a buyer see the price and the buy button without scrolling?
+
+    /// Meant for a small phone (`gh-sim test --device "iPhone SE (3rd generation)"`).
+    /// On any device it records where each purchase-relevant control sits
+    /// against the screen height.
+    func testS6_PaywallFitsTheScreen() {
+        defer { flush("S6-paywall-fit") }
+        let app = launch(pro: false)
+        guard lockerReady(app) else { return }
+        app.tabBars.buttons["Race Book"].tap()
+        guard app.navigationBars["Race Book"].waitForExistence(timeout: 15) else {
+            XCTFail("Race Book never rendered")
+            return
+        }
+        usleep(900_000)
+        shot("f01-race-book-first-screen")
+        let compare = app.buttons["Unlock race comparison"]
+        scrollTo(app, compare)
+        guard compare.exists, compare.isHittable else {
+            note("Unlock race comparison not reachable")
+            return
+        }
+        compare.tap()
+        guard app.staticTexts["Compare your races"].waitForExistence(timeout: 20) else {
+            note("paywall never appeared")
+            return
+        }
+        usleep(1_500_000)
+        let screen = app.windows.firstMatch.frame
+        note("screen \(Int(screen.width))x\(Int(screen.height))")
+        shot("f02-paywall-first-screen")
+        let buy = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Unlock Race Book")).firstMatch
+        let controls: [(String, XCUIElement)] = [
+            ("price row", app.staticTexts["One-time lifetime purchase"]),
+            ("buy button", buy),
+            ("Restore Purchases", app.buttons["Restore Purchases"]),
+            ("Close", app.buttons["Close"]),
+        ]
+        for (name, element) in controls {
+            let frame = element.frame
+            note("first screen, \(name): exists \(element.exists), y \(Int(frame.minY)) to \(Int(frame.maxY)), fully on screen \(element.exists && screen.contains(frame)), hittable \(element.isHittable)")
+        }
+        inventory(app, "f02 paywall first screen")
+        app.swipeUp()
+        usleep(800_000)
+        shot("f03-paywall-scrolled")
+        for (name, element) in controls {
+            let frame = element.frame
+            note("after one swipe up, \(name): y \(Int(frame.minY)) to \(Int(frame.maxY)), fully on screen \(element.exists && screen.contains(frame))")
+        }
+        app.buttons["Close"].firstMatch.tap()
+        usleep(900_000)
+        shot("f04-after-close")
+    }
+
     // MARK: - Helpers
 
     private func launch(pro: Bool) -> XCUIApplication {
