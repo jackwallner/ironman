@@ -114,8 +114,8 @@ final class SubscriptionAuditUITests: XCTestCase {
         // Entry 1: Compare.
         let compare = app.buttons["Unlock race comparison"]
         scrollTo(app, compare)
-        let compareYBefore = compare.frame.minY
-        note("Unlock race comparison: exists \(compare.exists), hittable \(compare.isHittable), frame \(compare.frame)")
+        let compareYBefore = compare.exists ? compare.frame.minY : -1
+        note("Unlock race comparison: exists \(compare.exists), hittable \(compare.exists && compare.isHittable), frame \(frameText(compare))")
         usleep(400_000)
         shot("p01-compare-card-before-tap")
         guard compare.exists, compare.isHittable else { return }
@@ -146,7 +146,7 @@ final class SubscriptionAuditUITests: XCTestCase {
         // Entry 2: Export, then exit with the close button.
         let export = app.buttons["Unlock to export"]
         scrollTo(app, export)
-        note("Unlock to export: exists \(export.exists), hittable \(export.isHittable), frame \(export.frame)")
+        note("Unlock to export: exists \(export.exists), hittable \(export.exists && export.isHittable), frame \(frameText(export))")
         shot("p04-export-card-before-tap")
         guard export.exists, export.isHittable else { return }
         let exportTapped = Date()
@@ -193,7 +193,7 @@ final class SubscriptionAuditUITests: XCTestCase {
         }
 
         let close = app.buttons["Close"]
-        note("Close: exists \(close.exists), frame \(close.frame)")
+        note("Close: exists \(close.exists)\(close.exists ? ", frame \(close.frame)" : "")")
         if close.exists {
             close.tap()
             usleep(1_000_000)
@@ -208,7 +208,7 @@ final class SubscriptionAuditUITests: XCTestCase {
         let see = app.buttons["See Race Book"]
         scrollTo(app, see)
         shot("p10-settings-see-race-book")
-        note("See Race Book: exists \(see.exists), hittable \(see.isHittable), frame \(see.frame)")
+        note("See Race Book: exists \(see.exists), hittable \(see.exists && see.isHittable), frame \(frameText(see))")
         guard see.exists, see.isHittable else { return }
         see.tap()
         usleep(1_800_000)
@@ -234,7 +234,7 @@ final class SubscriptionAuditUITests: XCTestCase {
         usleep(500_000)
         shot("r01-settings-race-book-section")
         inventory(app, "r01 settings race book section")
-        note("Restore purchases: exists \(restore.exists), hittable \(restore.isHittable), frame \(restore.frame)")
+        note("Restore purchases: exists \(restore.exists), hittable \(restore.exists && restore.isHittable), frame \(frameText(restore))")
         guard restore.exists, restore.isHittable else { return }
 
         let tapped = Date()
@@ -485,17 +485,20 @@ final class SubscriptionAuditUITests: XCTestCase {
             ("Restore Purchases", app.buttons["Restore Purchases"]),
             ("Close", app.buttons["Close"]),
         ]
-        for (name, element) in controls {
+        func place(_ element: XCUIElement) -> String {
+            guard element.exists else { return "not found" }
             let frame = element.frame
-            note("first screen, \(name): exists \(element.exists), y \(Int(frame.minY)) to \(Int(frame.maxY)), fully on screen \(element.exists && screen.contains(frame)), hittable \(element.isHittable)")
+            return "y \(Int(frame.minY)) to \(Int(frame.maxY)), fully on screen \(screen.contains(frame)), hittable \(element.isHittable)"
+        }
+        for (name, element) in controls {
+            note("first screen, \(name): \(place(element))")
         }
         inventory(app, "f02 paywall first screen")
         app.swipeUp()
         usleep(800_000)
         shot("f03-paywall-scrolled")
         for (name, element) in controls {
-            let frame = element.frame
-            note("after one swipe up, \(name): y \(Int(frame.minY)) to \(Int(frame.maxY)), fully on screen \(element.exists && screen.contains(frame))")
+            note("after one swipe up, \(name): \(place(element))")
         }
         app.buttons["Close"].firstMatch.tap()
         usleep(900_000)
@@ -558,10 +561,18 @@ final class SubscriptionAuditUITests: XCTestCase {
     private func scrollTo(_ app: XCUIApplication, _ element: XCUIElement, attempts: Int = 14) {
         let bar = app.tabBars.firstMatch
         for _ in 0..<attempts {
-            let clear = !bar.exists || element.frame.maxY <= bar.frame.minY - 4
-            if element.exists && element.isHittable && clear { return }
+            // List rows that are off screen are not in the tree yet, so ask
+            // for the frame only once the element exists.
+            if element.exists, element.isHittable {
+                let clear = !bar.exists || element.frame.maxY <= bar.frame.minY - 4
+                if clear { return }
+            }
             app.swipeUp()
         }
+    }
+
+    private func frameText(_ element: XCUIElement) -> String {
+        element.exists ? element.frame.debugDescription : "n/a"
     }
 
     private func dragSheetDown(_ app: XCUIApplication) {
