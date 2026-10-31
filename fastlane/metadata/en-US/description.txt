@@ -1,26 +1,39 @@
-IM Tri Tracker finds your published full and half-distance triathlon results and ranks every split against the field from that race. Search, splits, rankings and personal bests are free, and there is no subscription.
+IM Tri Tracker finds your published full and half-distance triathlon results by name and ranks each swim, bike and run split against the field from that race. Results, splits, rankings and personal bests are free, with no account and no subscription.
 
-Search the name you registered with. IM Tri Tracker finds supported published results and shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks.
+FIND YOUR RACES
+• Search the name you registered with to find your supported published results
+• Each result shows swim, T1, bike, T2, run and finish times, bib number, division place and overall rank
+• Your claimed races stay together in one Locker
 
 SPLIT RANKINGS
-Rank each leg by swim, bike, run, transitions or finish time. Full-distance and half-distance races stay in separate rankings.
+• Rank your races by swim, bike, run, transitions or finish time
+• Full-distance and half-distance races are ranked separately
+• Each split shows its rank, the field size and your percentile in that race
 
-WHERE YOU LANDED
-See each split against the finishers from that event, with field size and percentile beside the rank.
-
-RACE BOOK
-Personal bests and progression are free. Race Book adds like-for-like comparisons and unlimited PDF or image exports with one lifetime purchase. There is no subscription or per-export charge.
+PERSONAL BESTS
+• Personal bests and progression across your races
 
 RACE NOTES
-Keep conditions, nutrition and gear attached to the result that produced them.
+• Notes on conditions, nutrition and gear, kept with the result they belong to
+
+EXPLORE
+• Look up another athlete's full and half-distance race history without changing your own Locker
 
 TIPS FROM PATTIE
-Browse filmed race-day pointers and Ask Pattie for a path to the right clip.
+• A library of filmed race-day tips
+• Ask Pattie points you to the right clip for what you are working on
 
-FREE CORE
-Search, claim your supported history and keep full splits, rankings, percentiles, field context, race notes, personal bests, progression and the full tips library. Your results are never hidden behind a purchase.
+PRIVACY
+• No account, no ads and no cross-app tracking
+• Your Locker, race notes and recently viewed athletes stay on your iPhone
+• Name searches go to the timing service that publishes the results
 
-Privacy Policy: https://jackwallner.com/ios/ironman/privacy-policy.html
-Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+FREE AND RACE BOOK
+Everything above is free and does not expire. Race Book is an optional one-time purchase with no subscription, and you can preview it before you buy. It adds:
+• Like-for-like comparisons between races
+• Unlimited PDF and image exports of your race history, with splits, career stats and optional notes
 
 IM Tri Tracker is independent. It is not affiliated with, endorsed by or sponsored by any race organizer or timing company. Results are shown as published by each event's timer.
+
+Terms (EULA): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Privacy: https://jackwallner.com/ios/ironman/privacy-policy.html
