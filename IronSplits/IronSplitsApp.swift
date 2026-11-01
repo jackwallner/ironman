@@ -26,6 +26,11 @@ struct IronSplitsApp: App {
         // with `-ResetLocker` to start from a clean install.
         if ProcessInfo.processInfo.arguments.contains("-ResetLocker") {
             LockerStorage().clear()
+            // The store may have saved the seeded Locker before this ran.
+            if ProcessInfo.processInfo.arguments.contains("-SeedScreenshotData") {
+                LockerStorage().save(.init(athlete: DebugScreenshotFixtures.athlete,
+                                           results: DebugScreenshotFixtures.results, refreshedAt: .now))
+            }
             for key in ["settings.hasCompletedOnboarding", "settings.preferredKind",
                         "feed.config.cached", "feed.config.cachedAt",
                         "pointers.catalog.cached", "pointers.catalog.cachedAt",

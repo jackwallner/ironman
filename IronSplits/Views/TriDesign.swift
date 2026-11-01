@@ -37,7 +37,7 @@ enum TriPalette {
 
     static let ink          = adaptive(light: (0.075, 0.098, 0.129), dark: (0.949, 0.961, 0.973))
     static let inkSecondary = adaptive(light: (0.259, 0.290, 0.333), dark: (0.678, 0.722, 0.769))
-    static let inkTertiary  = adaptive(light: (0.380, 0.410, 0.460), dark: (0.482, 0.529, 0.588))
+    static let inkTertiary  = adaptive(light: (0.322, 0.349, 0.396), dark: (0.584, 0.627, 0.682))
     static let shadow       = adaptive(light: (0.000, 0.000, 0.000), dark: (0.000, 0.000, 0.000))
     /// Type that sits on `deep`, which is dark in both schemes.
     static let inkOnDark    = adaptive(light: (1.000, 1.000, 1.000), dark: (1.000, 1.000, 1.000))

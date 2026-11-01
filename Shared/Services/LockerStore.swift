@@ -44,6 +44,9 @@ final class LockerStore: ObservableObject {
                 lastRefreshed = .now
                 state = .loaded
                 DebugScreenshotFixtures.seedFieldCache()
+                // Saved like a real claim, so a relaunch without the seed
+                // reads the same Locker back from disk.
+                persist()
                 return
             }
             return

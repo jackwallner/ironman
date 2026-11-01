@@ -289,6 +289,7 @@ private struct PattieModeInviteCard: View {
                     Text("Want Pattie along for the ride?")
                         .font(TriType.bodyBold)
                         .foregroundStyle(TriPalette.ink)
+                        .fixedSize(horizontal: false, vertical: true)
                     Text("Turn on her optional tips and race-day reactions.")
                         .font(TriType.small)
                         .foregroundStyle(TriPalette.inkSecondary)
