@@ -49,7 +49,9 @@ final class ReleaseJourneysUITests: XCTestCase {
         let back = app.navigationBars.buttons["Back"].firstMatch
         if back.exists {
             back.tap()
-            XCTAssertTrue(app.staticTexts["FINISHES"].waitForExistence(timeout: 15), "back at the Locker")
+            // The list keeps its scroll position, so at large text the header
+            // card (and its FINISHES caption) can be scrolled out of the tree.
+            XCTAssertTrue(app.navigationBars["Locker"].waitForExistence(timeout: 15), "back at the Locker")
         }
         // The chips sit at the top of the list, which can be scrolled past
         // them at large text sizes.
