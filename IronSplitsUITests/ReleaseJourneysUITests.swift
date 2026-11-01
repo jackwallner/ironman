@@ -46,7 +46,7 @@ final class ReleaseJourneysUITests: XCTestCase {
 
         // Unfolded, the race opens in the pane beside the Locker; there is
         // nothing to go back from.
-        let back = app.navigationBars.buttons["Locker"].firstMatch
+        let back = app.navigationBars.buttons["Back"].firstMatch
         if back.exists {
             back.tap()
             XCTAssertTrue(app.staticTexts["FINISHES"].waitForExistence(timeout: 15), "back at the Locker")
@@ -122,7 +122,7 @@ final class ReleaseJourneysUITests: XCTestCase {
         QA.relaunch(app)
         XCTAssertTrue(app.staticTexts["Riverbend Triathlon"].firstMatch.waitForExistence(timeout: 25),
                       "the claimed Locker after relaunch")
-        let back = app.navigationBars.buttons["Locker"].firstMatch
+        let back = app.navigationBars.buttons["Back"].firstMatch
         if back.exists { back.tap() }
         openRiverbend(in: app)
         assertRiverbendFinish(in: app)
