@@ -128,40 +128,37 @@ struct RootTabView: View {
 
     /// One tab's screen. Unfolded, the system's floating glass bar let rows show
     /// through it and reported an inset about twice its height, so the leading
-    /// pane hides it for an opaque bar of the same tabs. That bar is a safe-area
-    /// inset, so every list scrolls its last row clear of it.
+    /// pane hides it for an opaque bar of the same tabs. The bar sits below the
+    /// screen, not over it, so a row ends at the bar's edge instead of sliding
+    /// under its labels.
     private func tab<Content: View>(_ tab: Tab, @ViewBuilder content: () -> Content) -> some View {
-        content()
-            .toolbar(split == nil ? .automatic : .hidden, for: .tabBar)
-            .safeAreaInset(edge: .bottom, spacing: 0) {
-                if split != nil { paneTabBar }
-            }
-            .tabItem { Label(tab.title, systemImage: tab.systemImage) }
-            .tag(tab)
+        VStack(spacing: 0) {
+            content()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                // Folded keeps the system bar and its full-bleed backgrounds, so
+                // the mask only trims at the pane bar's edge when unfolded.
+                .mask { Rectangle().ignoresSafeArea(edges: split == nil ? .all : []) }
+            if split != nil { paneTabBar }
+        }
+        .toolbar(split == nil ? .automatic : .hidden, for: .tabBar)
+        .tabItem { Label(tab.title, systemImage: tab.systemImage) }
+        .tag(tab)
     }
 
-    /// The pane's bar, topped by a short fade so a row scrolling toward it
-    /// dissolves into the canvas instead of being cut at the bar's edge. The
-    /// fade is part of the inset, so the last row still scrolls clear of it.
+    /// The pane's bar: the same tabs, opaque, with a hairline on top.
     private var paneTabBar: some View {
-        VStack(spacing: 0) {
-            LinearGradient(colors: [TriPalette.canvas.opacity(0), TriPalette.canvas],
-                           startPoint: .top, endPoint: .bottom)
-                .frame(height: TriSpace.x6)
-                .allowsHitTesting(false)
-            HStack(spacing: 0) {
-                ForEach(Tab.allCases, id: \.self) { tab in
-                    paneTabButton(tab)
-                }
+        HStack(spacing: 0) {
+            ForEach(Tab.allCases, id: \.self) { tab in
+                paneTabButton(tab)
             }
-            .padding(.horizontal, TriSpace.x2)
-            .padding(.vertical, TriSpace.x2)
-            .background(TriPalette.surface.ignoresSafeArea(edges: .bottom))
-            .overlay(alignment: .top) {
-                Rectangle()
-                    .fill(TriPalette.hairline)
-                    .frame(height: TriGeo.hairline)
-            }
+        }
+        .padding(.horizontal, TriSpace.x2)
+        .padding(.vertical, TriSpace.x2)
+        .background(TriPalette.surface.ignoresSafeArea(edges: .bottom))
+        .overlay(alignment: .top) {
+            Rectangle()
+                .fill(TriPalette.hairline)
+                .frame(height: TriGeo.hairline)
         }
     }
 

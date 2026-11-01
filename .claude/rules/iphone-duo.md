@@ -21,10 +21,9 @@ paths:
 - The default pane opens quietly (`RaceDetailView.opensQuietly`): it does not
   count toward the review prompt or fire Pattie until the athlete picks it.
 - Unfolded, the leading pane hides the system's floating glass tab bar and
-  shows `paneTabBar`, an opaque bar of the same tabs, as a bottom
-  `safeAreaInset`, topped by a short canvas fade so rows dissolve at its edge
-  instead of being cut; lists scroll their last row clear of it and nothing
-  shows through. Don't size a clearance from the system bar's safe-area
+  shows `paneTabBar`, an opaque bar of the same tabs, stacked below
+  each tab's screen (not an overlay or inset), so rows end at its edge and
+  never sit under its labels (the QA overlap oracle flags a row under them). Don't size a clearance from the system bar's safe-area
   inset: on the inner display (iOS 27.1) it reports about 167 pt for a bar
   whose top is about 83 pt up. Folded keeps the system bar.
 - The inner display's status bar is a vertical column on the trailing edge
