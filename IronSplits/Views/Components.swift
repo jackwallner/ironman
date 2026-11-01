@@ -23,8 +23,8 @@ struct SplitBar: View {
             .clipShape(Capsule())
         }
         .frame(height: height)
-        .accessibilityElement()
-        .accessibilityLabel(accessibilityText)
+        // Decorative: the split rows and the row label already read every leg.
+        .accessibilityHidden(true)
     }
 
     private func normalizedShares() -> [(discipline: Discipline, share: Double, seconds: Int)] {
@@ -330,18 +330,18 @@ struct CareerStatsRow: View {
 
     @ViewBuilder
     private var tiles: some View {
-        StatTile(value: "\(summary.finishes)", caption: "Finishes", tint: TriPalette.inkOnDark)
+        StatTile(value: "\(summary.finishes)", caption: "Finishes", tint: TriPalette.inkOnDark, onDark: true)
             .frame(maxWidth: .infinity)
         if summary.fullDistance > 0 {
-            StatTile(value: "\(summary.fullDistance)", caption: "Full", tint: TriPalette.inkOnDark)
+            StatTile(value: "\(summary.fullDistance)", caption: "Full", tint: TriPalette.inkOnDark, onDark: true)
                 .frame(maxWidth: .infinity)
         }
         if summary.halfDistance > 0 {
-            StatTile(value: "\(summary.halfDistance)", caption: "Half", tint: TriPalette.inkOnDark)
+            StatTile(value: "\(summary.halfDistance)", caption: "Half", tint: TriPalette.inkOnDark, onDark: true)
                 .frame(maxWidth: .infinity)
         }
         if summary.podiums > 0 {
-            StatTile(value: "\(summary.podiums)", caption: "Podiums", tint: TriPalette.sunrise)
+            StatTile(value: "\(summary.podiums)", caption: "Podiums", tint: TriPalette.sunrise, onDark: true)
                 .frame(maxWidth: .infinity)
         }
     }
@@ -351,6 +351,8 @@ struct StatTile: View {
     let value: String
     let caption: String
     var tint: Color = TriPalette.ink
+    /// True on the navy header, where the caption must be light, not tertiary ink.
+    var onDark = false
 
     var body: some View {
         VStack(spacing: TriSpace.x1) {
@@ -360,7 +362,7 @@ struct StatTile: View {
             Text(caption.uppercased())
                 .font(TriType.micro)
                 .kerning(0.4)
-                .foregroundStyle(TriPalette.inkTertiary)
+                .foregroundStyle(onDark ? TriPalette.inkOnDark.opacity(0.78) : TriPalette.inkTertiary)
                 .multilineTextAlignment(.center)
                 .lineLimit(1)
                 .fixedSize(horizontal: true, vertical: false)

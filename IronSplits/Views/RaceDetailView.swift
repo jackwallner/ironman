@@ -117,16 +117,16 @@ struct RaceDetailView: View {
             if result.isComplete {
                 ViewThatFits(in: .horizontal) {
                     HStack(spacing: 0) {
-                        StatTile(value: Ordinal.text(result.finishRankGroup) ?? "--", caption: "Division", tint: TriPalette.inkOnDark)
-                        StatTile(value: Ordinal.text(result.finishRankGender) ?? "--", caption: "Gender", tint: TriPalette.inkOnDark)
-                        StatTile(value: Ordinal.text(result.finishRankOverall) ?? "--", caption: "Overall", tint: TriPalette.inkOnDark)
+                        StatTile(value: Ordinal.text(result.finishRankGroup) ?? "--", caption: "Division", tint: TriPalette.inkOnDark, onDark: true)
+                        StatTile(value: Ordinal.text(result.finishRankGender) ?? "--", caption: "Gender", tint: TriPalette.inkOnDark, onDark: true)
+                        StatTile(value: Ordinal.text(result.finishRankOverall) ?? "--", caption: "Overall", tint: TriPalette.inkOnDark, onDark: true)
                     }
                     VStack(spacing: TriSpace.x2) {
                         HStack(spacing: TriSpace.x2) {
-                            StatTile(value: Ordinal.text(result.finishRankGroup) ?? "--", caption: "Division", tint: TriPalette.inkOnDark)
-                            StatTile(value: Ordinal.text(result.finishRankGender) ?? "--", caption: "Gender", tint: TriPalette.inkOnDark)
+                            StatTile(value: Ordinal.text(result.finishRankGroup) ?? "--", caption: "Division", tint: TriPalette.inkOnDark, onDark: true)
+                            StatTile(value: Ordinal.text(result.finishRankGender) ?? "--", caption: "Gender", tint: TriPalette.inkOnDark, onDark: true)
                         }
-                        StatTile(value: Ordinal.text(result.finishRankOverall) ?? "--", caption: "Overall", tint: TriPalette.inkOnDark)
+                        StatTile(value: Ordinal.text(result.finishRankOverall) ?? "--", caption: "Overall", tint: TriPalette.inkOnDark, onDark: true)
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -544,17 +544,42 @@ struct RaceNoteEditor: View {
 enum RaceFieldCache {
     private static var entries: [String: [RaceResult]] = [:]
     private static var order: [String] = []
+    /// A field is published results, so a day-old copy is as good as a fresh
+    /// one, and keeping it on disk means a relaunch (or no signal) still
+    /// shows the race's field instead of "Couldn't load the field".
+    private static let maxAge: TimeInterval = 24 * 60 * 60
 
     static func results(for eventID: String) -> [RaceResult]? {
-        entries[eventID]
+        if let hit = entries[eventID] { return hit }
+        guard let url = fileURL(for: eventID),
+              let modified = (try? url.resourceValues(forKeys: [.contentModificationDateKey]))?.contentModificationDate,
+              Date().timeIntervalSince(modified) < maxAge,
+              let data = try? Data(contentsOf: url),
+              let loaded = try? JSONDecoder().decode([RaceResult].self, from: data)
+        else { return nil }
+        remember(loaded, for: eventID)
+        return loaded
     }
 
     static func store(_ results: [RaceResult], for eventID: String) {
+        remember(results, for: eventID)
+        if let url = fileURL(for: eventID), let data = try? JSONEncoder().encode(results) {
+            try? data.write(to: url, options: .atomic)
+        }
+    }
+
+    private static func remember(_ results: [RaceResult], for eventID: String) {
         entries[eventID] = results
         order.removeAll { $0 == eventID }
         order.append(eventID)
         while order.count > 4 {
             entries.removeValue(forKey: order.removeFirst())
         }
+    }
+
+    private static func fileURL(for eventID: String) -> URL? {
+        guard let caches = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else { return nil }
+        let safe = eventID.replacingOccurrences(of: "/", with: "_")
+        return caches.appendingPathComponent("race-field-\(safe).json")
     }
 }

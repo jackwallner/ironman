@@ -339,18 +339,19 @@ struct LockerView: View {
     }
 
     private var rankingPicker: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: TriSpace.x2) {
-                ForEach(Discipline.rankable) { discipline in
-                    TriChip(title: discipline.shortTitle,
-                            isSelected: rankingDiscipline == discipline) {
-                        rankingDiscipline = discipline
-                        pattie.react(.filter)
-                    }
-                }
+        let chips = ForEach(Discipline.rankable) { discipline in
+            TriChip(title: discipline.shortTitle,
+                    isSelected: rankingDiscipline == discipline) {
+                rankingDiscipline = discipline
+                pattie.react(.filter)
             }
-            .padding(.vertical, TriSpace.x1)
         }
+        return ViewThatFits(in: .horizontal) {
+            HStack(spacing: TriSpace.x2) { chips }
+            TriFlowLayout { chips }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, TriSpace.x1)
     }
 
     private var rankingKind: RaceKind? {

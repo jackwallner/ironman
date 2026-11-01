@@ -47,13 +47,16 @@ final class ReleaseJourneysUITests: XCTestCase {
         // Unfolded, the race opens in the pane beside the Locker; there is
         // nothing to go back from.
         let back = app.navigationBars.buttons["Locker"].firstMatch
-        if back.exists { back.tap() }
+        if back.exists {
+            back.tap()
+            XCTAssertTrue(app.staticTexts["FINISHES"].waitForExistence(timeout: 15), "back at the Locker")
+        }
         // The chips sit at the top of the list, which can be scrolled past
         // them at large text sizes.
         let rankings = app.buttons["Rankings"].firstMatch
         var scrolls = 0
         while !(rankings.exists && rankings.isHittable) && scrolls < 6 {
-            QA.swipe(app.collectionViews.firstMatch, .down)
+            QA.swipe(app.windows.firstMatch, .down)
             scrolls += 1
         }
         XCTAssertTrue(rankings.waitForExistence(timeout: 15))
@@ -105,11 +108,13 @@ final class ReleaseJourneysUITests: XCTestCase {
         QA.checkpoint(app, "locker-after-relaunch")
     }
 
-    /// Core loop: the Locker holds a finish and its splits, and the same
-    /// Locker is there after the app is killed and reopened without the seed.
+    /// Core loop: the Locker holds the 2025 Riverbend finish, its race opens
+    /// with the real finish time, splits and field, and the same Locker, race
+    /// and field are there after the app is killed and reopened without the seed.
     func testCoreLoopLockerRaceSurvivesRelaunch() {
         let app = launchSeeded()
         openRiverbend(in: app)
+        assertRiverbendFinish(in: app)
         QA.checkpoint(app, "race-detail")
 
         // Reopen as a returning user: no reset, no seed, persona arguments kept.
@@ -120,7 +125,16 @@ final class ReleaseJourneysUITests: XCTestCase {
         let back = app.navigationBars.buttons["Locker"].firstMatch
         if back.exists { back.tap() }
         openRiverbend(in: app)
+        assertRiverbendFinish(in: app)
         QA.checkpoint(app, "race-detail-after-relaunch")
+    }
+
+
+    private func assertRiverbendFinish(in app: XCUIApplication) {
+        XCTAssertTrue(app.staticTexts["10:11:12"].firstMatch.waitForExistence(timeout: 10), "the finish time")
+        XCTAssertTrue(app.staticTexts["59:50"].firstMatch.exists, "the swim split")
+        XCTAssertTrue(app.staticTexts["37 finishers"].waitForExistence(timeout: 20), "the field beside the finish")
+        XCTAssertFalse(app.buttons["Couldn't load the field. Try again."].exists, "the field failed to load")
     }
 
     private func openRiverbend(in app: XCUIApplication) {
