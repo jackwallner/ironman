@@ -13,3 +13,4 @@
 {"created": "2026-10-26T00:19:07+00:00", "id": "Q013", "match": "motion-jump|*|settings|*", "reason": "a tab switch to Settings replaces the screen in one frame", "status": "accepted"}
 {"created": "2026-10-26T00:19:11+00:00", "id": "Q014", "match": "blank-launch|test04ReturnVisitWithInterruption|explore|*", "reason": "the journey's launch, charged to its first checkpoint, on a loaded host; the cached locker draws on first render", "status": "accepted"}
 {"created": "2026-10-26T00:19:11+00:00", "id": "Q015", "match": "blank-launch|test03RaceBookPaywallShownAndClosed|race-book|*", "reason": "the journey's launch, charged to its first checkpoint, on a loaded host", "status": "accepted"}
+{"created": "2026-11-01T12:00:00+00:00", "id": "Q016", "match": "motion-jump|test03RaceBookPaywallShownAndClosed|race-book-paywall|*", "reason": "the paywall sheet presenting over Race Book, a system sheet transition caught as one jump frame", "status": "accepted"}
