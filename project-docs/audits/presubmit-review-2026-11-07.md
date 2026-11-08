@@ -28,6 +28,12 @@ To cover whichever 1.1.4 build actually shipped, the review also read the full 1
 2. Purchase and paywall: no changes to `StoreService`, `ProGate`, `PaywallView` or RevenueCat config in the cycle. The paywall has the same Terms and Privacy links and live store pricing that passed review in 1.1.4.
 3. State bugs: both new seed paths sit inside `#if DEBUG`, and so does `DebugScreenshotFixtures`. Release builds cannot reach them. Onboarding and settings keys are unchanged.
 4. App Review risks: the cycle adds no new user-facing strings, links, prices or health claims. There is no debug UI in Release.
+5. Backstop spot-check of the current tree (from the parallel review in `c74bfdd`):
+   - `ProGate.everythingUnlocked` is `false`, and the only paid boundary is `raceBookUnlocked(isPro:)`.
+   - `StoreService.start()` honours `FORCE_PRO` and simulator hydration only inside `#if DEBUG`. Release always configures RevenueCat and reads the `pro` entitlement through `apply(customerInfo:)`.
+   - The paywall shows Restore Purchases plus Terms (Apple standard EULA) and Privacy links. It can be dismissed and closes itself once `isPro` flips.
+   - There are no hard-coded prices in Swift sources.
+   - Array subscripts are all behind count or emptiness guards: `RaceBook.comparisonPair`, the `RaceBookView` baseline picker, the PDF chart path, the `RaceAnalytics` year range and UUID formatting.
 
 ## Findings
 
@@ -40,4 +46,9 @@ No P0 or P1 findings. No code changes were made.
 
 ## Tests
 
-`gh-sim test --scheme IronSplits --only IronSplitsTests` ran on HEAD `9bf20e8` as run `ironman@20261108-075727-7bd6-claude-mbpro12f0-1108-081556-2409` (Xcode 27.1, iPhone 17, iOS 27.2). Result: passed, 104 passed, 0 failed, 0 skipped. UI tests were not run because no code changed.
+`gh-sim test --scheme IronSplits --only IronSplitsTests` ran on HEAD `9bf20e8` twice (Xcode 27.1, iPhone 17, iOS 27.2), and both runs passed with 104 passed, 0 failed, 0 skipped:
+
+- `ironman@20261108-075727-7bd6-claude-mbpro12f0-1108-081556-2409` (this review)
+- `ironman@20261108-075655-4b31-claude-mbprob070-1108-075831-15342` (the parallel review, GitHub Actions run 42497486554)
+
+UI tests were not run because no app code changed since the live build.
