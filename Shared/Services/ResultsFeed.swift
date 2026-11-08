@@ -149,6 +149,9 @@ actor FeedConfigLoader {
               let http = response as? HTTPURLResponse, 200..<300 ~= http.statusCode,
               let config = try? JSONDecoder().decode(FeedConfig.self, from: data),
               config.isValid else {
+            // A cancelled fetch (the search screen closed) is not an
+            // unreachable file, so it must not delay the hotfix for hours.
+            if Task.isCancelled { return }
             // Stamp the attempt anyway so a persistently unreachable config
             // file doesn't mean a request on every single launch.
             defaults.set(Date.now, forKey: Self.cacheDateKey)

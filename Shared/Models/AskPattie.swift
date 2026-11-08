@@ -164,6 +164,8 @@ actor AskPattieLibrary {
               // Never let a truncated or reordered publish replace a good tree
               // with a broken path or an empty screen.
               fetched.version >= guide().version else {
+            // A cancelled fetch is not a failed one, so don't stamp the attempt.
+            if Task.isCancelled { return guide() }
             defaults.set(Date.now, forKey: Self.cacheDateKey)
             return guide()
         }

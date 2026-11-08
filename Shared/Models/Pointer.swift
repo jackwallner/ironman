@@ -102,6 +102,9 @@ actor PointerLibrary {
         guard let (data, response) = try? await URLSession.shared.data(for: request),
               let http = response as? HTTPURLResponse, 200..<300 ~= http.statusCode,
               let catalog = try? JSONDecoder().decode(PointerCatalog.self, from: data) else {
+            // Leaving the screen mid-fetch cancels it. That says nothing about
+            // the network, so it must not hold off the next try for 12 hours.
+            if Task.isCancelled { return catalog() }
             defaults.set(Date.now, forKey: Self.cacheDateKey)
             lastErrorMessage = "The episode library couldn't be reached. Check your connection and try again."
             return catalog()
