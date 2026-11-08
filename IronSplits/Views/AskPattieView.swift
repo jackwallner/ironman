@@ -255,6 +255,10 @@ struct AskPattieAnswerCard: View {
         .task {
             guard catalog.pointers.isEmpty else { return }
             catalog = await PointerLibrary.shared.catalog()
+            // A fresh install has no cached catalog until All episodes has
+            // loaded it, which hid the Full clip button. `refresh` is throttled.
+            guard catalog.pointers.isEmpty else { return }
+            catalog = await PointerLibrary.shared.refresh()
         }
     }
 
