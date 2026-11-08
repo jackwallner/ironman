@@ -27,7 +27,21 @@ final class PattieVoice: NSObject, ObservableObject {
     private var fadeTask: Task<Void, Never>?
     private let logger = Logger(subsystem: "com.jackwallner.ironman", category: "PattieVoice")
 
-    private override init() { super.init() }
+    private override init() {
+        super.init()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(audioSessionInterrupted(_:)),
+                                               name: AVAudioSession.interruptionNotification,
+                                               object: nil)
+    }
+
+    /// A call or Siri pauses the player without `audioPlayerDidFinishPlaying`,
+    /// which left `nowPlaying` set and Pattie silent for the rest of the session.
+    @objc private nonisolated func audioSessionInterrupted(_ notification: Notification) {
+        guard let raw = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
+              AVAudioSession.InterruptionType(rawValue: raw) == .began else { return }
+        Task { @MainActor in self.stop() }
+    }
 
     var isSpeaking: Bool { nowPlaying != nil }
 

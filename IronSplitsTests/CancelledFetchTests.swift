@@ -1,3 +1,4 @@
+import AVFoundation
 import XCTest
 @testable import IM_Iron_Splits
 
@@ -32,4 +33,18 @@ final class CancelledFetchTests: XCTestCase {
         XCTAssertTrue(guide.isValid, "falls back to the bundled guide")
     }
 
+    func testAudioInterruptionClearsSpeakingState() async throws {
+        let voice = PattieVoice.shared
+        XCTAssertTrue(voice.play("pattie-good"))
+        XCTAssertTrue(voice.isSpeaking)
+
+        NotificationCenter.default.post(
+            name: AVAudioSession.interruptionNotification,
+            object: AVAudioSession.sharedInstance(),
+            userInfo: [AVAudioSessionInterruptionTypeKey: AVAudioSession.InterruptionType.began.rawValue]
+        )
+        try await Task.sleep(for: .milliseconds(200))
+
+        XCTAssertFalse(voice.isSpeaking)
+    }
 }
