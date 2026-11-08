@@ -1,1 +1,1 @@
-Vylepšenia na pozadí a opravy chýb pre plynulejšie používanie. Ďakujeme, že ste tu.
+Celé klipy v Ask Pattie môžete otvoriť hneď po inštalácii aplikácie. Ovládanie zvuku sa po hovore alebo inom prerušení obnoví.

@@ -1,1 +1,1 @@
-Behind-the-scenes improvements and bug fixes for a smoother experience. Thank you for being here.
+Open full clips from Ask Pattie right after installing the app. Audio controls reset after a call or other interruption.

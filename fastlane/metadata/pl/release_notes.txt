@@ -1,1 +1,1 @@
-Ulepszenia w tle i poprawki błędów dla płynniejszego działania. Dziękujemy, że jesteś.
+Pełne klipy w Ask Pattie można otworzyć od razu po zainstalowaniu aplikacji. Po rozmowie telefonicznej lub innej przerwie przyciski sterowania dźwiękiem wracają do stanu początkowego.

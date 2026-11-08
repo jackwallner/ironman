@@ -1,1 +1,1 @@
-Háttérbeli fejlesztések és hibajavítások a gördülékenyebb használatért. Köszönjük, hogy itt vagy.
+A teljes klipeket már közvetlenül a telepítés után is megnyithatja az Ask Pattie felületén. A hangvezérlők hívás vagy más megszakítás után alaphelyzetbe állnak.

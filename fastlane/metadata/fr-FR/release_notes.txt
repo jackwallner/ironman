@@ -1,1 +1,1 @@
-Améliorations en coulisses et corrections de bugs pour une expérience plus fluide. Merci d'être là.
+Vous pouvez ouvrir les extraits complets dans Ask Pattie dès l’installation de l’application. Les commandes audio se réinitialisent après un appel ou une autre interruption.

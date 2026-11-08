@@ -1,1 +1,1 @@
-Poboljšanja u pozadini i ispravci grešaka za glađe iskustvo. Hvala što ste tu.
+Cijele isječke iz značajke Ask Pattie možete otvoriti odmah nakon instalacije. Kontrole zvuka ponovno rade nakon poziva ili drugog prekida.

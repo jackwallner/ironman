@@ -1,1 +1,1 @@
-Izboljšave v ozadju in popravki napak za bolj gladko delovanje. Hvala, da ste z nami.
+Celotne posnetke lahko v Ask Pattie odprete takoj po namestitvi aplikacije. Kontrolniki zvoka se ponastavijo po klicu ali drugi prekinitvi.

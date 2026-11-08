@@ -1,1 +1,1 @@
-Förbättringar bakom kulisserna och buggfixar för en smidigare upplevelse. Tack för att du är här.
+Du kan öppna hela klipp i Ask Pattie direkt efter installationen. Ljudkontrollerna återställs efter ett samtal eller annat avbrott.

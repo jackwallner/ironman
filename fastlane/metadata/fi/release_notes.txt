@@ -1,1 +1,1 @@
-Taustaparannuksia ja virhekorjauksia entistä sujuvampaa käyttöä varten. Kiitos, että olet mukana.
+Voit avata kokonaiset leikkeet Ask Pattiessa heti asennuksen jälkeen. Äänitoiston säätimet palautuvat puhelun tai muun keskeytyksen jälkeen.

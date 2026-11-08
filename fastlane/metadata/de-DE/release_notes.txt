@@ -1,1 +1,1 @@
-Verbesserungen und Fehlerbehebungen im Hintergrund für ein reibungsloseres Erlebnis. Danke, dass du dabei bist.
+Vollständige Clips lassen sich direkt nach der Installation in Ask Pattie öffnen. Nach einem Anruf oder einer anderen Unterbrechung werden die Wiedergabesteuerungen zurückgesetzt.

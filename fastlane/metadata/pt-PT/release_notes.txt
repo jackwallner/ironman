@@ -1,1 +1,1 @@
-Melhorias nos bastidores e correções de erros para uma experiência mais fluida. Obrigado por estar aqui.
+Pode abrir clipes completos no Ask Pattie assim que instalar a app. Os controlos de áudio voltam ao estado inicial após uma chamada ou outra interrupção.

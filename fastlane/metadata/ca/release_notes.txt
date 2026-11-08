@@ -1,1 +1,1 @@
-Millores internes i correccions d'errors per a una experiència més fluida. Gràcies per ser aquí.
+Podeu obrir els clips sencers des d’Ask Pattie just després d’instal·lar l’app. Els controls d’àudio es restableixen després d’una trucada o una altra interrupció.
