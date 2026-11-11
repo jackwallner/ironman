@@ -26,7 +26,7 @@ Add the five together and you get the finish time. Timing mats sit in slightly d
 
 ## What are the triathlon distances?
 
-The four common formats are sprint, Olympic (standard), half-distance and full-distance, and a full-distance race is a 3.8 km swim, 180 km bike and 42.2 km run. The distances for each, according to the age-group listing on Active.com and World Triathlon, are:
+The four common formats are sprint, Olympic (standard), half-distance and full-distance, and a full-distance race is a 3.8 km swim, 180 km bike and 42.2 km run. The distances for each, according to World Triathlon (sprint and standard) and Active.com (half and full distance), are:
 
 | Format | Swim | Bike | Run |
 | --- | --- | --- | --- |
@@ -60,7 +60,7 @@ Illustrative numbers, not a real athlete. The bike is about 53 percent of this f
 
 ## Which triathlon split matters most?
 
-The bike and run matter most for finish time, more than the swim. A 2025 study in *Sports Medicine - Open* analyzed 687,696 full-distance age-group finishes from 2002 to 2022. It found that overall finish time correlated more strongly with the bike and run than with the swim: r = 0.88 and 0.89 for women, and 0.89 and 0.90 for men. Those correlations weakened with age, and the swim weakened the most. In plain terms, the swim is the shortest leg, and the bike and run are where race order is mostly decided.
+The bike and run matter most for finish time, more than the swim. A 2025 study in *Sports Medicine - Open* analyzed 687,696 full-distance age-group finishes from 2002 to 2022. It found that overall finish time correlated more strongly with the bike and run than with the swim: r = 0.88 and 0.89 for women, and 0.89 and 0.90 for men. Those correlations weakened with age, and the swim weakened the most. In plain terms, the swim is the shortest leg. These are associations, not proof of cause: the bike and run make up most of the finish time, so a strong link is expected, and the study does not say which leg is best to train.
 
 Transitions are small but different in kind. A faster T1 or T2 comes from practice and a plan, not from fitness. Athletes track them separately, and adding them into one transitions number shows how many minutes they cost across races.
 
