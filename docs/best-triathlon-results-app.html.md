@@ -1,16 +1,16 @@
 # Best Triathlon Results App for iPhone: 5 Compared
 
-> Five iPhone apps for triathlon results compared: live race-day tracking, looking up past results by name, and logging your own. Ratings as of October 2026.
+> Five iPhone apps for triathlon results compared: live race-day tracking, looking up past results by name, and logging your own. Ratings as of November 2026.
 
 Web page: https://jackwallner.com/ios/ironman/best-triathlon-results-app.html
 
-## Best triathlon results app for iPhone (October 2026)
+## Best triathlon results app for iPhone (November 2026)
 
-By [Jack Wallner](https://jackwallner.com/). Last updated October 28, 2026.
+By [Jack Wallner](https://jackwallner.com/). Last updated November 11, 2026.
 
 A triathlon results app is a phone app that does one of two jobs: following an athlete live on race day, or looking up finished results later. Best for looking up published full and half-distance results by name, with swim, T1, bike, T2 and run splits ranked against the field: IM Tri Tracker. Best for live race-day tracking at supported events: IRONMAN Tracker, RTRT.me or USA Triathlon Events Tracker, depending on who timed the race. Best for keeping your own manual log: My Results.
 
-**How we compared.** I read each App Store listing and pulled its rating, update date and supported devices from Apple's public lookup on October 12, 2026 (US storefront), and took price models from the listings' in-app purchase sections. I did not install the competing apps, so every claim about them comes from their listings. Event coverage differs for every app, so check that your race is supported before you rely on one. Jack Wallner makes IM Tri Tracker, so read its entries with that in mind.
+**How we compared.** I read each App Store listing and pulled its rating, update date and supported devices from Apple's public lookup on November 11, 2026 (US storefront), and took price models from the listings' in-app purchase sections. I did not install the competing apps, so every claim about them comes from their listings. Event coverage differs for every app, so check that your race is supported before you rely on one. Jack Wallner makes IM Tri Tracker, so read its entries with that in mind.
 
 ## How do the triathlon results apps compare?
 
@@ -18,17 +18,17 @@ IM Tri Tracker looks up finished results by name, IRONMAN Tracker, RTRT.me and U
 
 | App | Best for | Price model | Apple Watch | iPad | Account | Rating (count) | Last updated |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| IM Tri Tracker | Looking up published full and half-distance results by name, with split rankings | Free + optional one-time purchase | No | Yes | No account | 5.00 (1) | Oct 8, 2026 |
-| IRONMAN Tracker | Following athletes live on race day at select events | Free (no in-app purchases listed) | No | Yes | Not stated in listing | 4.87 (8,359) | Mar 8, 2024 |
-| RTRT.me | Live tracking and leaderboards at events that use RTRT.me | Free (no in-app purchases listed) | No | Yes | Not stated in listing | 4.84 (1,414) | Aug 18, 2026 |
+| IM Tri Tracker | Looking up published full and half-distance results by name, with split rankings | Free + optional one-time purchase | No | Yes | No account | 5.00 (3) | Nov 10, 2026 |
+| IRONMAN Tracker | Following athletes live on race day at select events | Free (no in-app purchases listed) | No | Yes | Not stated in listing | 4.87 (8,500) | Mar 8, 2024 |
+| RTRT.me | Live tracking and leaderboards at events that use RTRT.me | Free (no in-app purchases listed) | No | Yes | Not stated in listing | 4.84 (1,453) | Aug 18, 2026 |
 | USA Triathlon Events Tracker | Live tracking at USA Triathlon events | Free (no in-app purchases listed) | No | Yes | Not stated in listing | 4.76 (184) | Jun 23, 2026 |
 | My Results - Triathlon | Typing in your own results by hand | Free (no in-app purchases listed) | No | Yes | No account described | No ratings yet | Oct 2, 2021 |
 
-Ratings, update dates and device support come from Apple's App Store lookup on October 12, 2026. IM Tri Tracker is new and has only one rating, so its score says little yet. "Not stated" means the listing does not say.
+Ratings, update dates and device support come from Apple's App Store lookup on November 11, 2026. IM Tri Tracker is new and has only three ratings, so its score says little yet. "Not stated" means the listing does not say.
 
 ## IM Tri Tracker
 
-IM Tri Tracker searches published full and half-distance triathlon results by the name you registered with. It shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks, ranks each split against the finishers of that event with field size and percentile, and keeps your history, personal bests and race notes in one place. Search, history and rankings are free with no account, and an optional one-time Race Book purchase adds race comparisons and PDF or image exports. The trade-offs: it covers supported published results only, not every race, it is not a live tracker, it has no Apple Watch app, and it is new with a single rating. It is independent and not affiliated with any race organizer or timing company.
+IM Tri Tracker searches published full and half-distance triathlon results by the name you registered with. It shows swim, T1, bike, T2 and run splits, bib numbers, division places and overall ranks, ranks each split against the finishers of that event with field size and percentile, and keeps your history, personal bests and race notes in one place. Search, history and rankings are free with no account, and an optional one-time Race Book purchase adds race comparisons and PDF or image exports. The trade-offs: it covers supported published results only, not every race, it is not a live tracker, it has no Apple Watch app, and it is new with only three ratings. It is independent and not affiliated with any race organizer or timing company.
 
 [Download on the App Store](https://apps.apple.com/us/app/id6803727074?pt=128748779&ct=jw-ironman-best-triathlon-results-app&mt=8)
 
