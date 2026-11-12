@@ -8,7 +8,7 @@
 
 ## Guides
 
-- [Best Triathlon Results App for iPhone: 5 Compared](https://jackwallner.com/ios/ironman/best-triathlon-results-app.html.md): Five iPhone apps for triathlon results compared: live race-day tracking, looking up past results by name, and logging your own. Ratings as of October 2026.
+- [Best Triathlon Results App for iPhone: 5 Compared](https://jackwallner.com/ios/ironman/best-triathlon-results-app.html.md): Five iPhone apps for triathlon results compared: live race-day tracking, looking up past results by name, and logging your own. Ratings as of November 2026.
 - [Triathlon Splits Explained: Swim, T1, Bike, T2 and Run](https://jackwallner.com/ios/ironman/triathlon-splits-explained.html.md): What each triathlon split means, how to turn it into pace, and how to compare your swim, T1, bike, T2 and run with sourced finish times for age-groupers.
 
 ## Optional
