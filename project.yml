@@ -34,7 +34,7 @@ targets:
         CURRENT_PROJECT_VERSION: "42"
         GENERATE_INFOPLIST_FILE: NO
         INFOPLIST_FILE: IronSplits/Info.plist
-        TARGETED_DEVICE_FAMILY: "1"
+        TARGETED_DEVICE_FAMILY: "1,2"
         CODE_SIGN_STYLE: Automatic
       configs:
         Debug:
