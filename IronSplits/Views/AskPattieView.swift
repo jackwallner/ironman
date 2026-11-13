@@ -74,6 +74,7 @@ struct AskPattieGoalList: View {
                 }
                 .padding(TriGeo.padPage)
             }
+            .triReadableColumn()
         }
     }
 }
@@ -107,6 +108,7 @@ struct AskPattieTopicList: View {
                 }
                 .padding(TriGeo.padPage)
             }
+            .triReadableColumn()
         }
         .navigationTitle(goal?.title ?? "Ask Pattie")
         .navigationBarTitleDisplayMode(.inline)
@@ -133,6 +135,7 @@ struct AskPattieAnswerList: View {
                 }
                 .padding(TriGeo.padPage)
             }
+            .triReadableColumn()
         }
         .navigationTitle(model.guide.topic(topicID)?.title ?? "Pointers")
         .navigationBarTitleDisplayMode(.inline)

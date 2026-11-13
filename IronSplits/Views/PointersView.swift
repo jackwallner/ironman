@@ -36,6 +36,7 @@ struct PointersView: View {
                             }
                             .padding(.horizontal, TriGeo.padPage)
                             .padding(.top, TriSpace.x3)
+                            .triReadableColumn()
                         }
                         AskPattieGoalList(model: ask, path: $path)
                     }
@@ -177,6 +178,7 @@ struct PointerLibraryView: View {
             }
             .padding(TriGeo.padPage)
         }
+        .triReadableColumn()
         .refreshable {
             await loadCatalog(force: true)
         }

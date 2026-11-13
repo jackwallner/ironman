@@ -7,7 +7,10 @@ struct LockerView: View {
     @EnvironmentObject private var pattie: PattieMode
     @EnvironmentObject private var settings: AppSettings
     /// Set on the unfolded Duo, where a race opens in the pane beside the list.
-    @Environment(RacePane.self) private var racePane: RacePane?
+    @Environment(RacePane.self) private var duoPane: RacePane?
+    /// The iPad's own list-and-race split, used when the Locker is wide enough.
+    @State private var padPane = RacePane()
+    @State private var width: CGFloat = 0
 
     @State private var showingAthleteSearch = false
     @State private var showingAddRegistration = false
@@ -20,7 +23,31 @@ struct LockerView: View {
     @State private var duoScreenScrolls = 0
     #endif
 
+    /// Wide enough for the list and a race side by side (an iPad, not a split
+    /// screen at a third or half width).
+    private var splitsOnPad: Bool {
+        UIDevice.current.userInterfaceIdiom == .pad && width >= Self.splitMinimumWidth
+    }
+
+    private static let splitMinimumWidth: CGFloat = 700
+
+    private var racePane: RacePane? { duoPane ?? (splitsOnPad ? padPane : nil) }
+
     var body: some View {
+        // One tree for both widths: the detail pane is a sibling that appears
+        // beside the list, so the list keeps its scroll and navigation.
+        HStack(spacing: 0) {
+            lockerStack
+                .frame(maxWidth: splitsOnPad ? TriGeo.masterWidth : .infinity)
+            if splitsOnPad {
+                RaceDetailPane(pane: padPane)
+                    .frame(maxWidth: .infinity)
+            }
+        }
+        .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width = $0 }
+    }
+
+    private var lockerStack: some View {
         NavigationStack {
             ZStack {
                 TriPalette.canvas.ignoresSafeArea()

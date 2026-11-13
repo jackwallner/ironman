@@ -215,6 +215,12 @@ enum TriGeo {
     /// Apple's floor for anything a thumb has to hit.
     static let tapTarget: CGFloat = 44
     static let rowHeight: CGFloat = 44
+
+    /// The widest a reading column gets. Wider screens centre it on the canvas
+    /// instead of stretching rows and cards edge to edge.
+    static let readableWidth: CGFloat = 640
+    /// The Locker list beside the open race on a wide iPad.
+    static let masterWidth: CGFloat = 440
 }
 
 /// Two elevations: one for a card sitting on the canvas, one for something
@@ -355,6 +361,23 @@ extension View {
     /// The standard card: surface, hairline, one radius, one elevation.
     func triCard(padding: CGFloat = TriGeo.padCard) -> some View {
         modifier(TriCard(padding: padding))
+    }
+
+    /// Centres a screen's content in a reading column on wide displays. It is
+    /// a no-op at phone width, so every iPhone layout stays as it was.
+    func triReadableColumn(_ width: CGFloat = TriGeo.readableWidth) -> some View {
+        frame(maxWidth: width).frame(maxWidth: .infinity)
+    }
+
+    /// Lets a content-heavy sheet take the full page on iPad instead of the
+    /// short form sheet. Phones and iOS 17 keep the system sizing.
+    @ViewBuilder
+    func triTallSheet() -> some View {
+        if #available(iOS 18.0, *) {
+            presentationSizing(.page)
+        } else {
+            self
+        }
     }
 
     /// Guarantees a thumb-sized hit area without changing how the thing looks.

@@ -49,6 +49,7 @@ struct RaceDetailView: View {
                 if !isReadOnly { notesCard }
             }
         }
+        .triReadableColumn()
         .background(TriPalette.canvas)
         .navigationTitle(result.raceName)
         .navigationBarTitleDisplayMode(.inline)

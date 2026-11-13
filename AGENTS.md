@@ -134,6 +134,8 @@ device.
 - **Pointers, Ask Pattie and Pattie's voice clips are hosted or generated content.** Regenerate `docs/ask-pattie.json` with `scripts/build-ask-pattie.py` rather than hand-editing it, and nothing of Pattie's voice is ever synthesised. Details (media hosting, why episodes are cached rather than streamed, clip cutting) are in `.claude/rules/pointers-and-pattie.md`, which loads when you read a matching file; Codex and other agents should open it directly.
 - iPhone Duo: unfolded, the Locker list and the open race sit in two panes
   either side of the fold. Rules and capture recipe in `.claude/rules/iphone-duo.md`.
+- iPad: native since 1.2.0. Reading column on every screen, Locker list beside the
+  open race when wide. Rules and capture recipe in `.claude/rules/ipad-layout.md`.
 - Review funnel trigger: opening a race detail (`RaceDetailView.task`). The ASC
   record is `6803727074`, and `AppStoreReviewLinks` is configured so Settings
   can show the native rating entry.

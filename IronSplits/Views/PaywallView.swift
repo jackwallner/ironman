@@ -101,6 +101,7 @@ struct PaywallView: View {
             selectDefaultPlanIfNeeded()
         }
         .onChange(of: store.planOptions.count) { _, _ in selectDefaultPlanIfNeeded() }
+        .triTallSheet()
     }
 
     // MARK: - States

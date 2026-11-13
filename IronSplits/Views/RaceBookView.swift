@@ -116,7 +116,7 @@ struct RaceBookView: View {
                                 .transition(.opacity.combined(with: .move(edge: .top)))
                         }
                     }
-                    Text("Official times are shown as published by the event timer. Race notes stay on this phone and are included only when you choose to export.")
+                    Text("Official times are shown as published by the event timer. Race notes stay on this device and are included only when you choose to export.")
                         .font(TriType.micro)
                         .foregroundStyle(TriPalette.inkTertiary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -126,6 +126,7 @@ struct RaceBookView: View {
                 .padding(.top, TriSpace.x4)
                 .padding(.bottom, TriSpace.x4)
             }
+            .triReadableColumn()
         }
     }
 
@@ -431,7 +432,7 @@ struct RaceBookView: View {
     private var exportCard: some View {
         VStack(alignment: .leading, spacing: TriSpace.x3) {
             TriSectionHeader(title: "Build your Race Book")
-            Text("Build a polished full report or one-page PDF, plus a tall shareable image. Everything is generated on this phone.")
+            Text("Build a polished full report or one-page PDF, plus a tall shareable image. Everything is generated on this device.")
                 .font(TriType.body)
                 .foregroundStyle(TriPalette.inkSecondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -452,7 +453,7 @@ struct RaceBookView: View {
                 HStack(spacing: TriSpace.x2) {
                     ProgressView()
                         .tint(TriPalette.inkSecondary)
-                    Text("Building both files on this phone...")
+                    Text("Building both files on this device...")
                         .font(TriType.small)
                         .foregroundStyle(TriPalette.inkSecondary)
                 }
@@ -836,6 +837,7 @@ struct RaceCompareView: View {
                 .padding(.top, TriSpace.x4)
                 .padding(.bottom, TriSpace.x8)
             }
+            .triReadableColumn()
         }
         .navigationTitle("Compare races")
         .navigationBarTitleDisplayMode(.inline)

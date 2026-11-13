@@ -27,6 +27,7 @@ struct ExploreView: View {
                     .padding(.top, TriSpace.x4)
                     .padding(.bottom, TriSpace.x4)
                 }
+                .triReadableColumn()
             }
             .navigationTitle("Explore")
             .navigationBarTitleDisplayMode(.inline)
@@ -234,6 +235,7 @@ private struct ExploreAthleteView: View {
                 .padding(.top, TriSpace.x4)
                 .padding(.bottom, TriSpace.x8)
             }
+            .triReadableColumn()
         }
         .navigationTitle(athlete.name)
         .navigationBarTitleDisplayMode(.inline)

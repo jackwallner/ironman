@@ -75,7 +75,7 @@ struct SettingsView: View {
                             Label("Export my race notes", systemImage: "square.and.arrow.up")
                         }
                         .frame(minHeight: TriGeo.tapTarget)
-                        Text("Creates a text copy you can save or share. Notes stay on this phone unless you choose a destination.")
+                        Text("Creates a text copy you can save or share. Notes stay on this device unless you choose a destination.")
                             .font(TriType.micro)
                             .foregroundStyle(TriPalette.inkTertiary)
                     } else {
@@ -194,6 +194,7 @@ struct SettingsView: View {
                 }
                 #endif
             }
+            .triReadableColumn()
             .navigationTitle("Settings")
             .pattieMoment(.settings, pattie)
             .task { await refreshCacheSize() }
@@ -216,7 +217,7 @@ struct SettingsView: View {
                 Button("Remove", role: .destructive) { locker.unclaim() }
                 Button("Cancel", role: .cancel) {}
             } message: {
-                Text("Your cached results are deleted from this phone. Your race notes are kept, and reappear if you claim the same athlete again.")
+                Text("Your cached results are deleted from this device. Your race notes are kept, and reappear if you claim the same athlete again.")
             }
         }
     }

@@ -75,7 +75,7 @@ struct AthleteSearchView: View {
             Button("Replace", role: .destructive) { performClaim(athlete) }
             Button("Cancel", role: .cancel) { pendingClaim = nil }
         } message: { athlete in
-            Text("Replace \(locker.athlete?.name ?? "your current athlete") with \(athlete.name)? Your saved race notes stay on this phone.")
+            Text("Replace \(locker.athlete?.name ?? "your current athlete") with \(athlete.name)? Your saved race notes stay on this device.")
         }
         .pattieMoment(.searching, pattie)
         .task {
@@ -99,6 +99,7 @@ struct AthleteSearchView: View {
                 results
             }
         }
+        .triReadableColumn()
     }
 
     private var isSearching: Bool { phase == .quick || phase == .deep }
@@ -306,7 +307,7 @@ struct AthleteSearchView: View {
                 .foregroundStyle(TriPalette.inkTertiary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
-            Text("Name searches go to the event results service. No account is created, and race notes stay on this phone.")
+            Text("Name searches go to the event results service. No account is created, and race notes stay on this device.")
                 .font(TriType.micro)
                 .foregroundStyle(TriPalette.inkTertiary)
                 .multilineTextAlignment(.center)

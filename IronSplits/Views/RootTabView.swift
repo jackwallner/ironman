@@ -40,7 +40,10 @@ struct RootTabView: View {
 
     /// Unfolded, the selected race gets its own pane beside the tabs.
     private var split: UnfoldedSplit? {
-        UnfoldedSplit.make(
+        // An iPad is not a fold: it keeps the full-width tabs, and the Locker
+        // makes its own list-and-race split.
+        guard UIDevice.current.userInterfaceIdiom == .phone else { return nil }
+        return UnfoldedSplit.make(
             width: paneGeometry.width,
             isRegularWidth: horizontalSizeClass == .regular,
             fold: paneGeometry.fold
@@ -229,7 +232,7 @@ struct RootTabView: View {
 
 /// The trailing pane on the unfolded Duo: the race picked in the Locker, or the
 /// latest finish until one is picked.
-private struct RaceDetailPane: View {
+struct RaceDetailPane: View {
     let pane: RacePane
     @EnvironmentObject private var locker: LockerStore
 
@@ -262,7 +265,9 @@ private struct RaceDetailPane: View {
             Rectangle()
                 .fill(TriPalette.divider)
                 .frame(width: TriGeo.hairline)
-                .ignoresSafeArea()
+                // The iPad's top safe area holds the tab bar, which the seam
+                // must not cut through.
+                .ignoresSafeArea(edges: UIDevice.current.userInterfaceIdiom == .phone ? .all : .bottom)
         }
     }
 }
