@@ -10,6 +10,7 @@ struct RaceBookView: View {
     @EnvironmentObject private var notes: RaceNotesStore
     @EnvironmentObject private var store: StoreService
     @EnvironmentObject private var pattie: PattieMode
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @EnvironmentObject private var settings: AppSettings
     @Environment(\.dismiss) private var dismiss
 
@@ -93,7 +94,7 @@ struct RaceBookView: View {
                     if raceBookUnlocked {
                         Button {
                             Haptics.selection()
-                            withAnimation(.easeInOut(duration: 0.2)) {
+                            withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
                                 isCustomizingExport.toggle()
                             }
                         } label: {
@@ -113,7 +114,7 @@ struct RaceBookView: View {
                         .accessibilityValue(isCustomizingExport ? "Expanded" : "Collapsed")
                         if isCustomizingExport {
                             includeCard
-                                .transition(.opacity.combined(with: .move(edge: .top)))
+                                .transition(reduceMotion ? .opacity : .opacity.combined(with: .move(edge: .top)))
                         }
                     }
                     Text("Official times are shown as published by the event timer. Race notes stay on this device and are included only when you choose to export.")

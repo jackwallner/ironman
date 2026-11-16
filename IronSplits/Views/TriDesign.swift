@@ -277,12 +277,13 @@ enum Haptics {
 /// The app's one button style: everything interactive dips and dims on press.
 struct TriPressStyle: ButtonStyle {
     var haptic: Bool = true
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .scaleEffect(configuration.isPressed ? 0.97 : 1)
+            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.97 : 1)
             .opacity(configuration.isPressed ? 0.72 : 1)
-            .animation(.spring(response: 0.25, dampingFraction: 0.7), value: configuration.isPressed)
+            .animation(reduceMotion ? nil : .spring(response: 0.25, dampingFraction: 0.7), value: configuration.isPressed)
             .onChange(of: configuration.isPressed) { _, pressed in
                 if pressed && haptic { Haptics.tap() }
             }
@@ -468,6 +469,7 @@ struct TriBarItem<Content: View>: ToolbarContent {
 struct TriBarSegments<Option: Hashable & Identifiable>: View {
     let options: [Option]
     @Binding var selection: Option
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let title: (Option) -> String
 
     var body: some View {
@@ -493,7 +495,7 @@ struct TriBarSegments<Option: Hashable & Identifiable>: View {
         }
         .padding(TriSpace.x1)
         .background(TriPalette.chromeFill, in: Capsule())
-        .animation(.easeOut(duration: 0.18), value: selection)
+        .animation(reduceMotion ? nil : .easeOut(duration: 0.18), value: selection)
     }
 }
 

@@ -25,6 +25,7 @@ struct AthleteSearchView: View {
     /// When present, selecting a result returns it to the caller instead.
     var onSelect: ((Athlete) -> Void)?
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var query = ""
     @State private var matches: [Athlete] = []
     @State private var phase: Phase = .idle
@@ -272,7 +273,7 @@ struct AthleteSearchView: View {
                 .stroke(fieldFocused ? TriPalette.sunrise : TriPalette.hairline,
                         lineWidth: fieldFocused ? 1.5 : TriGeo.hairline)
         )
-        .animation(.easeInOut(duration: 0.18), value: fieldFocused)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.18), value: fieldFocused)
         .padding(TriGeo.padPage)
         // Debounced rather than per-keystroke: each search is a real request to
         // somebody else's service, and "Pattie" would otherwise fire six.

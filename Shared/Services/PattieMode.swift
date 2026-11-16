@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import UIKit
 
 /// Pattie Mode: Pattie Wallner turning up in the app to comment on your racing.
 ///
@@ -273,7 +274,7 @@ final class PattieMode: ObservableObject {
             lastFired = .now
         }
         markSeen(line.id)
-        withAnimation(.spring(response: 0.46, dampingFraction: 0.74)) {
+        withAnimation(UIAccessibility.isReduceMotionEnabled ? nil : .spring(response: 0.46, dampingFraction: 0.74)) {
             current = line
         }
         Haptics.tap(.soft)
@@ -292,7 +293,7 @@ final class PattieMode: ObservableObject {
 
     func dismiss() {
         voice.stop()
-        withAnimation(.easeInOut(duration: 0.24)) { current = nil }
+        withAnimation(UIAccessibility.isReduceMotionEnabled ? nil : .easeInOut(duration: 0.24)) { current = nil }
     }
 
     /// A line for this moment, preferring ones not yet seen so the deck cycles
