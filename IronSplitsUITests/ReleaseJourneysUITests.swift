@@ -31,6 +31,12 @@ final class ReleaseJourneysUITests: XCTestCase {
 
         match.tap()
         guard app.navigationBars["Locker"].waitForExistence(timeout: 45) else { return }
+        // Wide layouts open the newest race beside the list, and its field card
+        // spins while the live feed pages through the whole event. Let it settle.
+        let loadingField = app.staticTexts["Loading the field…"]
+        if loadingField.exists {
+            _ = XCTWaiter().wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: loadingField)], timeout: 90)
+        }
         QA.checkpoint(app, "first-locker")
     }
 
