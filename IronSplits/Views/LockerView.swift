@@ -297,7 +297,7 @@ struct LockerView: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .listRowBackground(isShown ? TriPalette.sunrise.opacity(0.12) : TriPalette.surface)
+            .listRowBackground(isShown ? TriPalette.sunrise.opacity(0.05) : TriPalette.surface)
             .accessibilityAddTraits(isShown ? .isSelected : [])
         } else {
             NavigationLink {
