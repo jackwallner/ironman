@@ -159,16 +159,19 @@ struct PaywallView: View {
         }
         .safeAreaInset(edge: .bottom) {
             if pinsPurchaseButton {
-                purchaseButton
-                    .padding(.horizontal, TriSpace.x5)
-                    .padding(.vertical, TriSpace.x3)
-                    .background(TriPalette.canvas)
+                VStack(spacing: TriSpace.x2) {
+                    purchaseButton
+                    disclosureLabel
+                }
+                .padding(.horizontal, TriSpace.x5)
+                .padding(.vertical, TriSpace.x3)
+                .background(TriPalette.canvas)
             }
         }
     }
 
     /// At accessibility text sizes the plan and its button sit screens below
-    /// the hero, so the button (which carries the price) docks to the bottom.
+    /// the hero, so the button and its price line dock to the bottom.
     private var pinsPurchaseButton: Bool { dynamicTypeSize.isAccessibilitySize }
 
     // Bold navy hero: the entry-point icon over a faint percentile-bar motif,
@@ -373,18 +376,24 @@ struct PaywallView: View {
         .disabled(isPurchasing || selectedPlan?.isPurchasable != true)
     }
 
+    /// The price and terms sit with the button, so a pinned button never
+    /// shows without them.
+    @ViewBuilder private var disclosureLabel: some View {
+        if let disclosure = disclosureText {
+            Text(disclosure)
+                .font(TriType.micro)
+                .tracking(0.2)
+                .foregroundStyle(TriPalette.inkTertiary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
     private var purchaseSection: some View {
         VStack(spacing: TriSpace.x3) {
             if !pinsPurchaseButton { purchaseButton }
 
-            if let disclosure = disclosureText {
-                Text(disclosure)
-                    .font(TriType.micro)
-                    .tracking(0.2)
-                    .foregroundStyle(TriPalette.inkTertiary)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+            if !pinsPurchaseButton { disclosureLabel }
 
             if let errorMessage {
                 Text(errorMessage)
