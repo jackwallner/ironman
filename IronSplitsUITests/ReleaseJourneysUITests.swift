@@ -80,8 +80,10 @@ final class ReleaseJourneysUITests: XCTestCase {
         QA.checkpoint(app, "race-book")
 
         let unlock = app.buttons["Unlock to export"]
+        // Unfolded Duo: the window's centre is the fold, so swipe the Race Book's own scroll view.
+        let book = app.scrollViews.containing(.button, identifier: "Unlock to export").firstMatch
         for _ in 0..<10 where !(unlock.exists && unlock.isHittable) {
-            QA.swipe(app.windows.firstMatch, .up)
+            QA.swipe(book.exists ? book : app.windows.firstMatch, .up)
         }
         XCTAssertTrue(unlock.waitForExistence(timeout: 10))
         unlock.tap()
