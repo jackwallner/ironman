@@ -10,6 +10,7 @@ Developer notes and historical audits for this repository. The published site re
 - [laudit926.md](audits/laudit926.md): IM Iron Splits customer experience audit
 - [uiaudit930.md](audits/uiaudit930.md): UI audit after the unreadable Change button, 2026-09-30
 - [presubmit-review-2026-11-07.md](audits/presubmit-review-2026-11-07.md): Pre-submit code review of 1.1.5 against live 1.1.4, 2026-11-07
+- [presubmit-deep-review-2026-11-08.md](audits/presubmit-deep-review-2026-11-08.md): Whole-app pre-submit deep review of 1.1.5, 2026-11-08
 
 ## Design
 
