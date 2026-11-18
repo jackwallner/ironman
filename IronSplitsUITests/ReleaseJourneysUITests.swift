@@ -23,8 +23,7 @@ final class ReleaseJourneysUITests: XCTestCase {
         XCTAssertTrue(field.waitForExistence(timeout: 20), "claim search never rendered")
         QA.checkpoint(app, "claim-search")
 
-        field.tap()
-        field.typeText("Daniel Winek")
+        QA.type("Daniel Winek", into: field, in: app)
         let match = app.staticTexts["Daniel Winek"]
         guard match.waitForExistence(timeout: 45) else { return }
         QA.checkpoint(app, "claim-results")
@@ -157,13 +156,7 @@ final class ReleaseJourneysUITests: XCTestCase {
     /// Folded, a system tab bar; unfolded, the leading pane's own bar, which is
     /// not a `tabBars` element. A tap can miss there, so retry with a press.
     private func tapTab(_ label: String, in app: XCUIApplication) {
-        let button = app.buttons.matching(NSPredicate(format: "label == %@", label)).firstMatch
-        XCTAssertTrue(button.waitForExistence(timeout: 15), "\(label) tab")
-        button.tap()
-        let selected = NSPredicate(format: "isSelected == true")
-        if XCTWaiter().wait(for: [XCTNSPredicateExpectation(predicate: selected, object: button)], timeout: 3) != .completed {
-            button.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).press(forDuration: 0.05)
-        }
+        QA.openTab(app, label, timeout: 15)
     }
 
     private func launchSeeded() -> XCUIApplication {
