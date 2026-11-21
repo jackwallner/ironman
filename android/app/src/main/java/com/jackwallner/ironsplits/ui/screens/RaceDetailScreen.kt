@@ -132,7 +132,7 @@ fun RaceDetailScreen(result: RaceResult, contextResults: List<RaceResult>? = nul
         if (graph.review.isPositiveMoment(result, isReadOnly, career)) graph.review.recordPositiveMoment(result.id)
         if (!isReadOnly) {
             val moment = when {
-                !result.isComplete -> PattieMode.Moment.DID_NOT_FINISH
+                !result.isComplete && !result.isUntimedFinish -> PattieMode.Moment.DID_NOT_FINISH
                 result.raceName.contains("World Championship", ignoreCase = true) -> PattieMode.Moment.WORLD_CHAMPIONSHIP
                 Discipline.rankable.any { RaceAnalytics.isPersonalBest(result, it, career) } -> PattieMode.Moment.PERSONAL_BEST
                 else -> PattieMode.Moment.RACE_OPENED
@@ -183,7 +183,7 @@ private fun Hero(result: RaceResult) {
         Text(
             if (result.isComplete) TimeFormat.hms(result.finish) else result.statusLabel.orEmpty(),
             style = TriType.statHero,
-            color = if (result.isComplete) onDark else colors.sunrise,
+            color = if (result.isComplete || result.isUntimedFinish) onDark else colors.sunrise,
         )
         Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(TriSpace.x2)) {
             val badge = onDark.copy(alpha = 0.85f)

@@ -77,7 +77,7 @@ struct RaceDetailView: View {
 
     /// The most interesting thing about this race, in Pattie's eyes.
     private var pattieMoment: PattieMode.Moment {
-        if !result.isComplete { return .didNotFinish }
+        if !result.isComplete && !result.isUntimedFinish { return .didNotFinish }
         if result.raceName.localizedCaseInsensitiveContains("World Championship") {
             return .worldChampionship
         }
@@ -99,9 +99,9 @@ struct RaceDetailView: View {
                 .font(TriType.small)
                 .foregroundStyle(TriPalette.inkOnDark.opacity(0.7))
 
-            Text(result.isComplete ? TimeFormat.hms(result.finish) : statusText)
+            Text(result.isComplete ? TimeFormat.hms(result.finish) : result.statusText)
                 .font(TriType.statHero)
-                .foregroundStyle(result.isComplete ? TriPalette.inkOnDark : TriPalette.sunrise)
+                .foregroundStyle(result.isComplete || result.isUntimedFinish ? TriPalette.inkOnDark : TriPalette.sunrise)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: TriSpace.x2) {
@@ -138,12 +138,6 @@ struct RaceDetailView: View {
         .padding(.vertical, TriSpace.x5)
         .frame(maxWidth: .infinity)
         .background(TriPalette.deep)
-    }
-
-    private var statusText: String {
-        if result.disqualified { return "DQ" }
-        if result.didNotStart { return "DNS" }
-        return "DNF"
     }
 
     private var dateText: String {

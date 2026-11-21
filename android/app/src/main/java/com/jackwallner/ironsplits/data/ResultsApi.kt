@@ -95,15 +95,24 @@ class ResultsApi(private val configLoader: FeedConfigLoader) : ResultsProviding 
         allowTruncation: Boolean = false,
     ): ResultsFetch = withContext(Dispatchers.IO) {
         val config = configLoader.config()
-        var query = "\$filter=" + encodeODataValue(filter) + "&\$expand=" + encodeODataValue(EXPAND_CLAUSE)
-        if (orderBy != null) query += "&\$orderby=" + encodeODataValue(orderBy)
-        var url = config.requestUrl(query, pageSize) ?: throw ResultsApiException.BadConfiguration()
+        fun firstUrl(select: String?): String =
+            config.requestUrl(query(filter, orderBy, select), pageSize) ?: throw ResultsApiException.BadConfiguration()
+        var url = firstUrl(config.effectiveSelect)
         val rows = mutableListOf<ODataResultRow>()
         var truncated = false
         val limit = maxOf(minOf(pageLimit ?: config.maxPages, config.maxPages), 1)
         for (pageIndex in 0 until limit) {
             coroutineContext.ensureActive()
-            val page = load(url, config, timeoutSeconds)
+            val page = try {
+                load(url, config, timeoutSeconds)
+            } catch (error: ResultsApiException) {
+                // A selected column was renamed or dropped upstream, which fails the
+                // whole query. The default columns still decode through the
+                // formatted-time fallback, so retry without `$select`.
+                if (pageIndex != 0 || config.effectiveSelect == null || !isQueryRejection(error)) throw error
+                url = firstUrl(null)
+                load(url, config, timeoutSeconds)
+            }
             rows += page.first
             val next = page.second ?: break
             if (pageIndex == limit - 1) {
@@ -140,6 +149,39 @@ class ResultsApi(private val configLoader: FeedConfigLoader) : ResultsProviding 
     }
 
     companion object {
+        fun query(filter: String, orderBy: String?, select: String?): String {
+            var query = "\$filter=" + encodeODataValue(filter)
+            if (!select.isNullOrEmpty()) query += "&\$select=" + encodeODataValue(select)
+            query += "&\$expand=" + encodeODataValue(EXPAND_CLAUSE)
+            if (orderBy != null) query += "&\$orderby=" + encodeODataValue(orderBy)
+            return query
+        }
+
+        /** The upstream answered, but refused the query itself. */
+        fun isQueryRejection(error: Throwable): Boolean = when (error) {
+            is ResultsApiException.BadResponse -> error.code in 400..499
+            is ResultsApiException.UpstreamRejected -> true
+            else -> false
+        }
+
+        /**
+         * Every root column the decoder reads, raw seconds and formatted times
+         * both. In November 2026 the server's default columns stopped including
+         * the raw seconds and every race read as a DNF. An unknown name fails the
+         * whole query with a 400, so `fetch` retries without `$select`.
+         */
+        val SELECT_CLAUSE = listOf(
+            "wtc_resultid", "_wtc_eventid_value", "_wtc_agegroupid_value", "wtc_bibnumber",
+            "wtc_swimtime", "wtc_transition1time", "wtc_biketime", "wtc_transition2time", "wtc_runtime", "wtc_finishtime",
+            "wtc_swimtimeformatted", "wtc_transition1timeformatted", "wtc_biketimeformatted",
+            "wtc_transitiontime2formatted", "wtc_runtimeformatted", "wtc_finishtimeformatted",
+            "wtc_swimdistancecompleted", "wtc_bikedistancecompleted", "wtc_rundistancecompleted",
+            "wtc_swimrankoverall", "wtc_bikerankoverall", "wtc_runrankoverall",
+            "wtc_finishrankoverall", "wtc_finishrankgender", "wtc_finishrankgroup",
+            "wtc_swimrankgroup", "wtc_bikerankgroup", "wtc_runrankgroup",
+            "wtc_finisher", "wtc_dnf", "wtc_dns", "wtc_dq",
+        ).joinToString(",")
+
         /**
          * An explicit `$expand` replaces the server's default expansion. Every
          * relation the decoder reads has to be listed, or `wtc_ContactId`

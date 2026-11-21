@@ -95,12 +95,28 @@ data class RaceResult(
         else -> null
     }
 
+    /**
+     * The feed flags a finish but sent no usable time. Shown as "Finished",
+     * never as a DNF: a dropped time column once turned every race into one.
+     */
+    val isUntimedFinish: Boolean
+        get() = isFinisher && !didNotFinish && !didNotStart && !disqualified && (finish ?: 0) <= 0
+
     val statusLabel: String?
         get() = when {
             isComplete -> null
             disqualified -> "DQ"
             didNotStart -> "DNS"
+            isUntimedFinish -> "Finished"
             else -> "DNF"
+        }
+
+    val spokenStatus: String
+        get() = when {
+            disqualified -> "Disqualified"
+            didNotStart -> "Did not start"
+            isUntimedFinish -> "Finished"
+            else -> "Did not finish"
         }
 }
 

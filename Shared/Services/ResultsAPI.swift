@@ -152,20 +152,29 @@ struct ResultsAPI: ResultsProviding {
                        timeout: TimeInterval = 25,
                        allowTruncation: Bool = false) async throws -> ResultsFetch {
         let config = await FeedConfigLoader.shared.config()
-        var query = "$filter=" + Self.encodeODataValue(filter)
-        query += "&$expand=" + Self.encodeODataValue(Self.expandClause)
-        if let orderBy {
-            query += "&$orderby=" + Self.encodeODataValue(orderBy)
+        func firstURL(select: String?) throws -> URL {
+            guard let url = config.requestURL(query: Self.query(filter: filter, orderBy: orderBy, select: select),
+                                              pageSize: pageSize) else {
+                throw ResultsAPIError.badConfiguration
+            }
+            return url
         }
-        guard var url = config.requestURL(query: query, pageSize: pageSize) else {
-            throw ResultsAPIError.badConfiguration
-        }
+        var url = try firstURL(select: config.effectiveSelect)
 
         var rows: [ODataResultRow] = []
         var wasTruncated = false
         let limit = min(pageLimit ?? config.maxPages, config.maxPages)
         for pageIndex in 0..<max(limit, 1) {
-            let page = try await load(url: url, config: config, timeout: timeout)
+            let page: ODataPage
+            do {
+                page = try await load(url: url, config: config, timeout: timeout)
+            } catch where pageIndex == 0 && config.effectiveSelect != nil && Self.isQueryRejection(error) {
+                // A selected column was renamed or dropped upstream, which fails
+                // the whole query. The default columns still decode through the
+                // formatted-time fallback, so retry without `$select`.
+                url = try firstURL(select: nil)
+                page = try await load(url: url, config: config, timeout: timeout)
+            }
             rows.append(contentsOf: page.value)
             guard let next = page.nextLink else { break }
             if pageIndex == max(limit, 1) - 1 {
@@ -209,6 +218,46 @@ struct ResultsAPI: ResultsProviding {
     }
 
     // MARK: - Helpers
+
+    static func query(filter: String, orderBy: String?, select: String?) -> String {
+        var query = "$filter=" + encodeODataValue(filter)
+        if let select, !select.isEmpty {
+            query += "&$select=" + encodeODataValue(select)
+        }
+        query += "&$expand=" + encodeODataValue(expandClause)
+        if let orderBy {
+            query += "&$orderby=" + encodeODataValue(orderBy)
+        }
+        return query
+    }
+
+    /// The upstream answered, but refused the query itself.
+    static func isQueryRejection(_ error: Error) -> Bool {
+        switch error as? ResultsAPIError {
+        case .badResponse(let code): return (400..<500).contains(code)
+        case .upstreamRejected: return true
+        default: return false
+        }
+    }
+
+    /// Every root column the decoder reads, raw seconds and formatted times both.
+    ///
+    /// In November 2026 the server's default columns stopped including the raw
+    /// seconds, every finish decoded as nil and every race read as a DNF. Naming
+    /// the columns keeps them whatever the default does. A name the server no
+    /// longer knows fails the whole query with a 400, so `fetch` retries without
+    /// `$select`, and `FeedConfig.select` can replace or disable this remotely.
+    static let selectClause = [
+        "wtc_resultid", "_wtc_eventid_value", "_wtc_agegroupid_value", "wtc_bibnumber",
+        "wtc_swimtime", "wtc_transition1time", "wtc_biketime", "wtc_transition2time", "wtc_runtime", "wtc_finishtime",
+        "wtc_swimtimeformatted", "wtc_transition1timeformatted", "wtc_biketimeformatted",
+        "wtc_transitiontime2formatted", "wtc_runtimeformatted", "wtc_finishtimeformatted",
+        "wtc_swimdistancecompleted", "wtc_bikedistancecompleted", "wtc_rundistancecompleted",
+        "wtc_swimrankoverall", "wtc_bikerankoverall", "wtc_runrankoverall",
+        "wtc_finishrankoverall", "wtc_finishrankgender", "wtc_finishrankgroup",
+        "wtc_swimrankgroup", "wtc_bikerankgroup", "wtc_runrankgroup",
+        "wtc_finisher", "wtc_dnf", "wtc_dns", "wtc_dq",
+    ].joined(separator: ",")
 
     /// The related records every row needs, spelled out in full.
     ///

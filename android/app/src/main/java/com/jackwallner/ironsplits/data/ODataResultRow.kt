@@ -47,7 +47,7 @@ class ODataResultRow(private val json: JSONObject) {
             bike = seconds("wtc_biketime", "wtc_biketimeformatted"),
             t2 = seconds("wtc_transition2time", "wtc_transitiontime2formatted", "wtc_transition2timeformatted"),
             run = seconds("wtc_runtime", "wtc_runtimeformatted"),
-            finish = seconds("wtc_finishtime", "wtc_finishtimeformatted"),
+            finish = finishSeconds(),
             swimDistanceKm = looseDouble("wtc_swimdistancecompleted"),
             bikeDistanceKm = looseDouble("wtc_bikedistancecompleted"),
             runDistanceKm = looseDouble("wtc_rundistancecompleted"),
@@ -65,6 +65,19 @@ class ODataResultRow(private val json: JSONObject) {
             didNotStart = looseBool("wtc_dns") ?: false,
             disqualified = looseBool("wtc_dq") ?: false,
         )
+    }
+
+    /** The finish, or the sum of all five legs when the finish column is gone. */
+    private fun finishSeconds(): Int? {
+        seconds("wtc_finishtime", "wtc_finishtimeformatted")?.let { return it }
+        val legs = listOf(
+            seconds("wtc_swimtime", "wtc_swimtimeformatted"),
+            seconds("wtc_transition1time", "wtc_transition1timeformatted"),
+            seconds("wtc_biketime", "wtc_biketimeformatted"),
+            seconds("wtc_transition2time", "wtc_transitiontime2formatted", "wtc_transition2timeformatted"),
+            seconds("wtc_runtime", "wtc_runtimeformatted"),
+        )
+        return if (legs.all { it != null }) legs.sumOf { it!! } else null
     }
 
     /** A durable identity for a row with no result id, so notes never orphan. */

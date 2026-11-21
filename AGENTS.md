@@ -62,7 +62,7 @@ The proxy can return other sports too, but the product displays full- and
 half-distance triathlon results only. Search copy and App Store metadata must
 state that limit.
 
-Four things that have already cost time:
+Five things that have already cost time:
 
 - **`contains()` upstream is a full table scan and takes about thirty seconds.**
   The same two-word name written with `startswith()` comes back in about one and
@@ -82,6 +82,14 @@ Four things that have already cost time:
 - **`0` is the feed's "no data"** for a leg that never happened. A DNF carries a
   0 run split, so zeros become nil in `ODataResultRow.positive(_:)` or DNFs win
   every leaderboard.
+
+- **The server's default columns can change.** In November 2026 they dropped
+  the raw seconds (`wtc_finishtime`...) and every race read as a DNF. Requests
+  now name every root column in `ResultsAPI.selectClause`; a 400 from an
+  unknown column retries without `$select`, times fall back to the
+  `*formatted` strings (then to the sum of legs), and DNF is shown only when the
+  feed flags it. `select` in `api-config.json` overrides the list (`""` turns
+  it off).
 
 The proxy is somebody else's service and can change without warning. Every part
 of the request lives in `FeedConfig`, which the app re-reads from

@@ -23,6 +23,16 @@ struct FeedConfig: Codable, Sendable, Equatable {
     var maxPages: Int
     /// Sent as Referer. The proxy has rejected requests without it in the past.
     var referer: String
+    /// Root `$select` override. Absent: `ResultsAPI.selectClause`. Empty: send
+    /// no `$select` and take the server's default columns. Lets a dropped or
+    /// renamed column be fixed from Pages instead of an app update.
+    var select: String? = nil
+
+    /// The `$select` to send, or nil for none.
+    var effectiveSelect: String? {
+        guard let select else { return ResultsAPI.selectClause }
+        return select.isEmpty ? nil : select
+    }
 
     static let bundled = FeedConfig(
         proxyURL: "https://labs-v2.competitor.com/api/results-proxy",
@@ -44,7 +54,17 @@ struct FeedConfig: Codable, Sendable, Equatable {
         proxyURLParameter == "url" &&
         pageSizeParameter == "pageSize" &&
         (1...2_000).contains(pageSize) &&
-        (1...100).contains(maxPages)
+        (1...100).contains(maxPages) &&
+        isValidSelect(select)
+    }
+
+    /// Column names and commas only, so the hotfix channel can't inject a
+    /// second query option.
+    private func isValidSelect(_ raw: String?) -> Bool {
+        guard let raw else { return true }
+        return raw.count <= 2_000 && raw.unicodeScalars.allSatisfy {
+            ($0.isASCII && CharacterSet.alphanumerics.contains($0)) || $0 == "_" || $0 == ","
+        }
     }
 
     /// Build the proxied request URL for one OData query string.

@@ -83,9 +83,9 @@ struct RaceRow: View {
                 }
                 Spacer(minLength: TriSpace.x2)
                 VStack(alignment: .trailing, spacing: TriSpace.x1) {
-                    Text(result.isComplete ? TimeFormat.hms(result.finish) : statusText)
+                    Text(result.isComplete ? TimeFormat.hms(result.finish) : result.statusText)
                         .font(TriType.statLarge)
-                        .foregroundStyle(result.isComplete ? TriPalette.ink : TriPalette.negative)
+                        .foregroundStyle(result.isComplete || result.isUntimedFinish ? TriPalette.ink : TriPalette.negative)
                         .fixedSize(horizontal: true, vertical: false)
                     if let group = result.ageGroup, let place = result.finishRankGroup {
                         Text(group + " #" + String(place))
@@ -128,7 +128,7 @@ struct RaceRow: View {
     private var accessibilityLabel: String {
         let finish = result.isComplete
             ? TimeFormat.spoken(result.finish)
-            : (result.disqualified ? "Disqualified" : result.didNotStart ? "Did not start" : "Did not finish")
+            : result.spokenStatus
         let date = result.eventDate.map(RaceDate.medium) ?? (result.year > 0 ? String(result.year) : "Undated")
         var parts = [result.raceName, date, finish]
         if let ageGroup = result.ageGroup, let rank = result.finishRankGroup {
@@ -184,12 +184,6 @@ struct RaceRow: View {
                 }
             }
         }
-    }
-
-    private var statusText: String {
-        if result.disqualified { return "DQ" }
-        if result.didNotStart { return "DNS" }
-        return "DNF"
     }
 
     private var dateText: String {

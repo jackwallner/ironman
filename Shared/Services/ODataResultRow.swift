@@ -114,7 +114,7 @@ struct ODataResultRow: Decodable, Sendable {
             bike: Self.seconds(wtc_biketime, wtc_biketimeformatted),
             t2: Self.seconds(wtc_transition2time, wtc_transitiontime2formatted ?? wtc_transition2timeformatted),
             run: Self.seconds(wtc_runtime, wtc_runtimeformatted),
-            finish: Self.seconds(wtc_finishtime, wtc_finishtimeformatted),
+            finish: finishSeconds,
             swimDistanceKm: wtc_swimdistancecompleted?.value,
             bikeDistanceKm: wtc_bikedistancecompleted?.value,
             runDistanceKm: wtc_rundistancecompleted?.value,
@@ -132,6 +132,20 @@ struct ODataResultRow: Decodable, Sendable {
             didNotStart: wtc_dns?.value ?? false,
             disqualified: wtc_dq?.value ?? false
         )
+    }
+
+    /// The finish, or the sum of all five legs when the finish column is gone.
+    private var finishSeconds: Int? {
+        if let finish = Self.seconds(wtc_finishtime, wtc_finishtimeformatted) { return finish }
+        let legs = [
+            Self.seconds(wtc_swimtime, wtc_swimtimeformatted),
+            Self.seconds(wtc_transition1time, wtc_transition1timeformatted),
+            Self.seconds(wtc_biketime, wtc_biketimeformatted),
+            Self.seconds(wtc_transition2time, wtc_transitiontime2formatted ?? wtc_transition2timeformatted),
+            Self.seconds(wtc_runtime, wtc_runtimeformatted),
+        ]
+        guard legs.allSatisfy({ $0 != nil }) else { return nil }
+        return legs.compactMap { $0 }.reduce(0, +)
     }
 
     /// Missing result ids used to become a new UUID on every decode. That made

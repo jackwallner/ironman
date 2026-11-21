@@ -25,9 +25,7 @@ enum ResumeBuilder {
 
     static func statusLabel(for result: RaceResult) -> String? {
         guard !result.isComplete else { return nil }
-        if result.disqualified { return "DQ" }
-        if result.didNotStart { return "DNS" }
-        return "DNF"
+        return result.statusText
     }
 
     static func plainText(athlete: Athlete, results: [RaceResult], options: Options = .default) -> String {

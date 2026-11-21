@@ -79,6 +79,27 @@ struct RaceResult: Identifiable, Codable, Hashable, Sendable {
         isFinisher && !didNotFinish && !didNotStart && !disqualified && (finish ?? 0) > 0
     }
 
+    /// The feed flags a finish but sent no usable time. Shown as "Finished",
+    /// never as a DNF: a dropped time column once turned every race into one.
+    var isUntimedFinish: Bool {
+        isFinisher && !didNotFinish && !didNotStart && !disqualified && (finish ?? 0) <= 0
+    }
+
+    /// Short label for a result with no finish time to show.
+    var statusText: String {
+        if disqualified { return "DQ" }
+        if didNotStart { return "DNS" }
+        if isUntimedFinish { return "Finished" }
+        return "DNF"
+    }
+
+    var spokenStatus: String {
+        if disqualified { return "Disqualified" }
+        if didNotStart { return "Did not start" }
+        if isUntimedFinish { return "Finished" }
+        return "Did not finish"
+    }
+
     func seconds(for discipline: Discipline) -> Int? {
         switch discipline {
         case .swim: return swim

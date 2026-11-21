@@ -104,11 +104,7 @@ fun PercentileBar(percentile: Int, modifier: Modifier = Modifier, height: Dp = T
 fun RaceRow(result: RaceResult, modifier: Modifier = Modifier, personalBestLegs: Set<Discipline> = emptySet(), hasNote: Boolean = false) {
     val colors = Tri.colors
     val date = RaceDate.text(result)
-    val finish = if (result.isComplete) TimeFormat.spoken(result.finish) else when {
-        result.disqualified -> "Disqualified"
-        result.didNotStart -> "Did not start"
-        else -> "Did not finish"
-    }
+    val finish = if (result.isComplete) TimeFormat.spoken(result.finish) else result.spokenStatus
     val parts = mutableListOf(result.raceName, date, finish)
     if (result.ageGroup != null && result.finishRankGroup != null) {
         parts += "${Ordinal.text(result.finishRankGroup)} in ${result.ageGroup}"
@@ -143,7 +139,7 @@ fun RaceRow(result: RaceResult, modifier: Modifier = Modifier, personalBestLegs:
                 Text(
                     if (result.isComplete) TimeFormat.hms(result.finish) else result.statusLabel.orEmpty(),
                     style = TriType.statLarge,
-                    color = if (result.isComplete) colors.ink else colors.negative,
+                    color = if (result.isComplete || result.isUntimedFinish) colors.ink else colors.negative,
                     maxLines = 1,
                 )
                 if (result.ageGroup != null && result.finishRankGroup != null) {

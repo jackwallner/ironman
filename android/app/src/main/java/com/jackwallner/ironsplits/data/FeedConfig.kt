@@ -22,7 +22,21 @@ data class FeedConfig(
     val pageSize: Int,
     val maxPages: Int,
     val referer: String,
+    /**
+     * Root `$select` override. Null: [ResultsApi.SELECT_CLAUSE]. Empty: no
+     * `$select`, take the server's default columns. Lets a dropped or renamed
+     * column be fixed from Pages instead of an app update.
+     */
+    val select: String? = null,
 ) {
+    /** The `$select` to send, or null for none. */
+    val effectiveSelect: String?
+        get() = when {
+            select == null -> ResultsApi.SELECT_CLAUSE
+            select.isEmpty() -> null
+            else -> select
+        }
+
     val isValid: Boolean
         get() = isValidEndpoint(proxyUrl, "labs-v2.competitor.com", "/api/results-proxy") &&
             isValidEndpoint(resultsUrl, "api.competitor.com", "/web/results") &&
@@ -30,7 +44,8 @@ data class FeedConfig(
             proxyUrlParameter == "url" &&
             pageSizeParameter == "pageSize" &&
             pageSize in 1..2_000 &&
-            maxPages in 1..100
+            maxPages in 1..100 &&
+            (select == null || (select.length <= 2_000 && select.all { it in 'a'..'z' || it in 'A'..'Z' || it in '0'..'9' || it == '_' || it == ',' }))
 
     /** Proxied request URL for one already-encoded OData query string. */
     fun requestUrl(query: String, overridePageSize: Int? = null): String? {
@@ -65,6 +80,7 @@ data class FeedConfig(
         .put("pageSize", pageSize)
         .put("maxPages", maxPages)
         .put("referer", referer)
+        .apply { if (select != null) put("select", select) }
 
     private fun isValidEndpoint(raw: String, host: String, path: String): Boolean {
         val url = runCatching { URL(raw) }.getOrNull() ?: return false
@@ -106,6 +122,7 @@ data class FeedConfig(
                 pageSize = json.getInt("pageSize"),
                 maxPages = json.getInt("maxPages"),
                 referer = json.getString("referer"),
+                select = if (json.has("select") && !json.isNull("select")) json.getString("select") else null,
             )
         }.getOrNull()?.takeIf { it.isValid }
     }

@@ -129,6 +129,37 @@ class ResultsAndAnalyticsTest {
     }
 
     @Test
+    fun feedSurvivesDroppedColumns() {
+        val query = com.jackwallner.ironsplits.data.ResultsApi.query("x eq 1", null, com.jackwallner.ironsplits.data.ResultsApi.SELECT_CLAUSE)
+        assertTrue(query.contains("\$select="))
+        assertTrue(!com.jackwallner.ironsplits.data.ResultsApi.query("x eq 1", null, null).contains("\$select"))
+        val api = com.jackwallner.ironsplits.data.ResultsApi
+        assertTrue(api.isQueryRejection(com.jackwallner.ironsplits.data.ResultsApiException.BadResponse(400)))
+        assertTrue(api.isQueryRejection(com.jackwallner.ironsplits.data.ResultsApiException.UpstreamRejected("x")))
+        assertTrue(!api.isQueryRejection(com.jackwallner.ironsplits.data.ResultsApiException.BadResponse(503)))
+
+        val bundled = com.jackwallner.ironsplits.data.FeedConfig.bundled
+        assertEquals(api.SELECT_CLAUSE, bundled.effectiveSelect)
+        assertNull(bundled.copy(select = "").effectiveSelect)
+        assertTrue(bundled.copy(select = "wtc_finishtime,wtc_dnf").isValid)
+        assertTrue(!bundled.copy(select = "wtc_finishtime&\$top=1").isValid)
+
+        val summed = row(
+            """{"wtc_resultid":"s","wtc_swimtimeformatted":"0:53:18","wtc_transition1timeformatted":"0:06:19",
+               "wtc_biketimeformatted":"3:31:03","wtc_transitiontime2formatted":"0:07:34","wtc_runtimeformatted":"2:54:17",
+               "wtc_finisher":true}""",
+        ).result
+        assertEquals(27151, summed.finish)
+        assertTrue(summed.isComplete)
+
+        val untimed = row("""{"wtc_resultid":"u","wtc_finisher":true,"wtc_dnf":false}""").result
+        assertTrue(untimed.isUntimedFinish)
+        assertEquals("Finished", untimed.statusLabel)
+        val dnf = row("""{"wtc_resultid":"d","wtc_finisher":false,"wtc_dnf":true,"wtc_finishtimeformatted":"4:16:32"}""").result
+        assertEquals("DNF", dnf.statusLabel)
+    }
+
+    @Test
     fun missingResultIdIsStableAcrossDecodes() {
         val json = """{"wtc_finishtime":100,"wtc_ContactId":{"contactid":"x","fullname":"Y"},"wtc_EventId":{"wtc_name":"2020 A"}}"""
         assertEquals(row(json).result.id, row(json).result.id)
