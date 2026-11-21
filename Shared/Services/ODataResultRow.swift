@@ -62,6 +62,17 @@ struct ODataResultRow: Decodable, Sendable {
     let wtc_runtime: LooseInt?
     let wtc_finishtime: LooseInt?
 
+    /// Since November 2026 the default projection drops the raw seconds above
+    /// and sends only these display strings ("7:32:31"). Without them every
+    /// finish decodes as nil and every race reads as a DNF.
+    let wtc_swimtimeformatted: String?
+    let wtc_transition1timeformatted: String?
+    let wtc_transitiontime2formatted: String?
+    let wtc_transition2timeformatted: String?
+    let wtc_biketimeformatted: String?
+    let wtc_runtimeformatted: String?
+    let wtc_finishtimeformatted: String?
+
     let wtc_swimdistancecompleted: LooseDouble?
     let wtc_bikedistancecompleted: LooseDouble?
     let wtc_rundistancecompleted: LooseDouble?
@@ -98,12 +109,12 @@ struct ODataResultRow: Decodable, Sendable {
             bib: wtc_bibnumber?.value,
             ageGroup: _wtc_agegroupid_value_formatted,
             countryISO2: wtc_CountryRepresentingId?.wtc_iso2,
-            swim: Self.positive(wtc_swimtime),
-            t1: Self.positive(wtc_transition1time),
-            bike: Self.positive(wtc_biketime),
-            t2: Self.positive(wtc_transition2time),
-            run: Self.positive(wtc_runtime),
-            finish: Self.positive(wtc_finishtime),
+            swim: Self.seconds(wtc_swimtime, wtc_swimtimeformatted),
+            t1: Self.seconds(wtc_transition1time, wtc_transition1timeformatted),
+            bike: Self.seconds(wtc_biketime, wtc_biketimeformatted),
+            t2: Self.seconds(wtc_transition2time, wtc_transitiontime2formatted ?? wtc_transition2timeformatted),
+            run: Self.seconds(wtc_runtime, wtc_runtimeformatted),
+            finish: Self.seconds(wtc_finishtime, wtc_finishtimeformatted),
             swimDistanceKm: wtc_swimdistancecompleted?.value,
             bikeDistanceKm: wtc_bikedistancecompleted?.value,
             runDistanceKm: wtc_rundistancecompleted?.value,
@@ -160,6 +171,24 @@ struct ODataResultRow: Decodable, Sendable {
     private static func positive(_ loose: LooseInt?) -> Int? {
         guard let value = loose?.value, value > 0 else { return nil }
         return value
+    }
+
+    /// Raw seconds when the feed sends them, else the "H:MM:SS" display string.
+    private static func seconds(_ raw: LooseInt?, _ formatted: String?) -> Int? {
+        positive(raw) ?? clockSeconds(formatted)
+    }
+
+    /// "7:32:31", "0:07:34" or "52:10" to seconds. Anything else, and zero, is nil.
+    static func clockSeconds(_ text: String?) -> Int? {
+        guard let text else { return nil }
+        let parts = text.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: ":", omittingEmptySubsequences: false)
+        guard (2...3).contains(parts.count) else { return nil }
+        var total = 0
+        for part in parts {
+            guard !part.isEmpty, part.allSatisfy(\.isASCII), let value = Int(part), value >= 0 else { return nil }
+            total = total * 60 + value
+        }
+        return total > 0 ? total : nil
     }
 
     /// The other end of the same problem: an athlete the timer never ranked

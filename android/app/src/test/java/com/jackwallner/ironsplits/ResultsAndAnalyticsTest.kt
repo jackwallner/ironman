@@ -106,6 +106,29 @@ class ResultsAndAnalyticsTest {
     }
 
     @Test
+    fun formattedTimesOnlyStillDecodeAsAFinish() {
+        val parsed = row(
+            """
+            {"wtc_resultid":"r","wtc_swimtimeformatted":"0:53:18","wtc_transition1timeformatted":"0:06:19",
+             "wtc_biketimeformatted":"3:31:03","wtc_transitiontime2formatted":"0:07:34","wtc_runtimeformatted":"2:54:17",
+             "wtc_finishtimeformatted":"7:32:31","wtc_finisher":true,"wtc_dnf":false,"wtc_dns":false,"wtc_dq":false,
+             "wtc_ContactId":{"contactid":"c","fullname":"Pattie Wallner"},
+             "wtc_EventId":{"wtc_name":"2026 IRONMAN 70.3 Northern California","wtc_eventdate":"2026-08-16T00:00:00Z"}}
+            """.trimIndent(),
+        ).result
+        assertEquals(3198, parsed.swim)
+        assertEquals(379, parsed.t1)
+        assertEquals(12663, parsed.bike)
+        assertEquals(454, parsed.t2)
+        assertEquals(10457, parsed.run)
+        assertEquals(27151, parsed.finish)
+        assertTrue(parsed.isComplete)
+        assertEquals(3130, ODataResultRow.clockSeconds("52:10"))
+        assertNull(ODataResultRow.clockSeconds("0:00:00"))
+        assertNull(ODataResultRow.clockSeconds("--:--"))
+    }
+
+    @Test
     fun missingResultIdIsStableAcrossDecodes() {
         val json = """{"wtc_finishtime":100,"wtc_ContactId":{"contactid":"x","fullname":"Y"},"wtc_EventId":{"wtc_name":"2020 A"}}"""
         assertEquals(row(json).result.id, row(json).result.id)

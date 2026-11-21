@@ -114,4 +114,41 @@ final class DecodingTests: XCTestCase {
         let envelope = try JSONDecoder().decode(ODataErrorEnvelope.self, from: json)
         XCTAssertEqual(envelope.error, "Invalid results URL")
     }
+
+    /// November 2026: the default projection stopped sending raw seconds and
+    /// sends only display strings. Every race read as a DNF until this decoded.
+    func testFormattedTimesOnlyStillDecodeAsAFinish() throws {
+        let json = """
+        { "value": [ {
+          "wtc_resultid": "9fb8bd9e-3d48-4f42-8894-5ddc75ce3193",
+          "wtc_swimtimeformatted": "0:53:18",
+          "wtc_transition1timeformatted": "0:06:19",
+          "wtc_biketimeformatted": "3:31:03",
+          "wtc_transitiontime2formatted": "0:07:34",
+          "wtc_runtimeformatted": "2:54:17",
+          "wtc_finishtimeformatted": "7:32:31",
+          "wtc_finishrankgroup": 2,
+          "wtc_finisher": true, "wtc_dnf": false, "wtc_dns": false, "wtc_dq": false,
+          "wtc_ContactId": { "contactid": "c", "fullname": "Pattie Wallner" },
+          "wtc_EventId": { "wtc_name": "2026 IRONMAN 70.3 Northern California", "wtc_eventdate": "2026-08-16T00:00:00Z" }
+        } ] }
+        """.data(using: .utf8)!
+
+        let result = try JSONDecoder().decode(ODataPage.self, from: json).value[0].result
+        XCTAssertEqual(result.swim, 3198)
+        XCTAssertEqual(result.t1, 379)
+        XCTAssertEqual(result.bike, 12663)
+        XCTAssertEqual(result.t2, 454)
+        XCTAssertEqual(result.run, 10457)
+        XCTAssertEqual(result.finish, 27151)
+        XCTAssertTrue(result.isComplete)
+    }
+
+    func testClockSecondsRejectsJunkAndZero() {
+        XCTAssertEqual(ODataResultRow.clockSeconds("52:10"), 3130)
+        XCTAssertNil(ODataResultRow.clockSeconds("0:00:00"))
+        XCTAssertNil(ODataResultRow.clockSeconds("--:--"))
+        XCTAssertNil(ODataResultRow.clockSeconds(""))
+        XCTAssertNil(ODataResultRow.clockSeconds(nil))
+    }
 }

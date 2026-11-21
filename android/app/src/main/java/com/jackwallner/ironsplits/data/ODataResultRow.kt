@@ -42,12 +42,12 @@ class ODataResultRow(private val json: JSONObject) {
             bib = looseInt("wtc_bibnumber"),
             ageGroup = json.optNullableString("_wtc_agegroupid_value_formatted"),
             countryISO2 = json.optJSONObject("wtc_CountryRepresentingId")?.optNullableString("wtc_iso2"),
-            swim = positive("wtc_swimtime"),
-            t1 = positive("wtc_transition1time"),
-            bike = positive("wtc_biketime"),
-            t2 = positive("wtc_transition2time"),
-            run = positive("wtc_runtime"),
-            finish = positive("wtc_finishtime"),
+            swim = seconds("wtc_swimtime", "wtc_swimtimeformatted"),
+            t1 = seconds("wtc_transition1time", "wtc_transition1timeformatted"),
+            bike = seconds("wtc_biketime", "wtc_biketimeformatted"),
+            t2 = seconds("wtc_transition2time", "wtc_transitiontime2formatted", "wtc_transition2timeformatted"),
+            run = seconds("wtc_runtime", "wtc_runtimeformatted"),
+            finish = seconds("wtc_finishtime", "wtc_finishtimeformatted"),
             swimDistanceKm = looseDouble("wtc_swimdistancecompleted"),
             bikeDistanceKm = looseDouble("wtc_bikedistancecompleted"),
             runDistanceKm = looseDouble("wtc_rundistancecompleted"),
@@ -128,10 +128,30 @@ class ODataResultRow(private val json: JSONObject) {
     /** Zero is the feed's "no data": a DNF carries a 0 run split. */
     private fun positive(key: String): Int? = looseInt(key)?.takeIf { it > 0 }
 
+    /**
+     * Raw seconds when sent, else the "H:MM:SS" display string. Since November
+     * 2026 the default projection sends only the strings, and without this
+     * fallback every race read as a DNF.
+     */
+    private fun seconds(rawKey: String, vararg formattedKeys: String): Int? =
+        positive(rawKey) ?: formattedKeys.firstNotNullOfOrNull { clockSeconds(json.optNullableString(it)) }
+
     /** The timer's 99999 sentinel means "never ranked". */
     private fun rank(key: String): Int? = positive(key)?.takeIf { it < 99_999 }
 
     companion object {
+        /** "7:32:31", "0:07:34" or "52:10" to seconds. Anything else, and zero, is null. */
+        fun clockSeconds(text: String?): Int? {
+            val parts = text?.trim()?.split(":") ?: return null
+            if (parts.size !in 2..3) return null
+            var total = 0
+            for (part in parts) {
+                if (part.isEmpty() || !part.all { it in '0'..'9' }) return null
+                total = total * 60 + (part.toIntOrNull() ?: return null)
+            }
+            return total.takeIf { it > 0 }
+        }
+
         /** "2025-09-07T00:00:00Z" is a calendar day, read straight from the digits. */
         fun parseDate(raw: String?): LocalDate? {
             if (raw == null || raw.length < 10) return null
