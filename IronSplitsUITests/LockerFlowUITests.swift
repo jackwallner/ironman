@@ -123,6 +123,45 @@ final class LockerFlowUITests: XCTestCase {
         attachScreenshot(app, name: "7-settings")
     }
 
+    /// November 2026: the feed dropped its raw time columns and every race in
+    /// every locker read as a DNF. Pattie's real career has 19 finishes and one
+    /// DNF (Kona 2024), so the locker must show her times, not a column of DNFs.
+    func testPattieCareerShowsRealFinishesNotDNFs() throws {
+        let app = launch(forcePro: true)
+        XCTAssertTrue(searchAndClaim(app, name: "Pattie Wallner"), "Search should return Pattie")
+        XCTAssertTrue(app.navigationBars["Locker"].waitForExistence(timeout: 30))
+        XCTAssertTrue(app.staticTexts["7:32:31"].waitForExistence(timeout: 30),
+                      "2026 70.3 Northern California should show its 7:32:31 finish")
+        attachScreenshot(app, name: "pattie-1")
+
+        var finishTimes = Set<String>()
+        var dnfRows = 0
+        for page in 0..<8 {
+            for text in app.staticTexts.allElementsBoundByIndex where text.exists {
+                let label = text.label
+                if label.range(of: #"^\d{1,2}:\d{2}:\d{2}$"#, options: .regularExpression) != nil {
+                    finishTimes.insert(label)
+                }
+            }
+            dnfRows = max(dnfRows, app.staticTexts.matching(identifier: "DNF").count)
+            attachScreenshot(app, name: "pattie-scroll-\(page)")
+            app.swipeUp()
+        }
+        for expected in ["16:12:10", "15:48:49", "14:32:17"] {
+            XCTAssertTrue(finishTimes.contains(expected), "Missing finish \(expected); saw \(finishTimes.sorted())")
+        }
+        XCTAssertLessThanOrEqual(dnfRows, 1, "Only Kona 2024 is a real DNF")
+
+        let race = app.staticTexts["IRONMAN Maryland"]
+        for _ in 0..<8 where !race.isHittable { app.swipeDown() }
+        if race.isHittable {
+            race.tap()
+            XCTAssertTrue(app.staticTexts["SPLITS"].waitForExistence(timeout: 15))
+            XCTAssertTrue(app.staticTexts["14:32:17"].waitForExistence(timeout: 10))
+            attachScreenshot(app, name: "pattie-race-detail")
+        }
+    }
+
     func testRaceBookActionsRemainReachableAtAccessibilitySize() throws {
         let app = launch(forcePro: true, accessibilityTextSize: true)
 
