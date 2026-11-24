@@ -516,6 +516,9 @@ final class StoreService: NSObject, ObservableObject {
         let allKeys = customerInfo.entitlements.all.keys.sorted().joined(separator: ", ")
         logger.info("Applied customerInfo, active: [\(activeKeys, privacy: .public)] all: [\(allKeys, privacy: .public)]")
         let hasRaceBookAccess = customerInfo.hasProEntitlement
+        // A restore that found nothing earlier no longer describes an account
+        // that now owns Race Book, and Settings shows the line beside "unlocked".
+        if hasRaceBookAccess { restoreError = nil }
         guard !ProGate.everythingUnlocked else { return }
         if isPro != hasRaceBookAccess {
             isPro = hasRaceBookAccess
