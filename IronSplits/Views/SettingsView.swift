@@ -175,7 +175,11 @@ struct SettingsView: View {
 
                 Section("About") {
                     if AppStoreReviewLinks.isConfigured {
-                        Link("Write a review on the App Store", destination: AppStoreReviewLinks.writeReviewURL)
+                        Button("Write a review on the App Store") {
+                            // Opening the page ends the automatic star prompt.
+                            ReviewPromptTracker.markOpenedWriteReview()
+                            openURL(AppStoreReviewLinks.writeReviewURL)
+                        }
                     }
                     Button("Send feedback") {
                         reviewCoordinator.requestFeedback()

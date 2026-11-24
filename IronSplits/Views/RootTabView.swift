@@ -1,5 +1,4 @@
 import SwiftUI
-import StoreKit
 
 struct RootTabView: View {
     @EnvironmentObject private var locker: LockerStore
@@ -11,7 +10,6 @@ struct RootTabView: View {
     @State private var selectedTab: Tab = .locker
     @State private var racePane = RacePane()
     @State private var paneGeometry = PaneGeometry(width: 0, fold: nil)
-    @Environment(\.requestReview) private var requestReview
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     private enum Tab: CaseIterable, Hashable {
@@ -93,9 +91,6 @@ struct RootTabView: View {
             // A long career is worth remarking on, but only once she is past
             // the claim, so the two don't stack on the same screen.
             if locker.results.count >= 10 { pattie.fire(.veteran) }
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .ironSplitsPositiveMomentForReview)) { _ in
-            presentReviewPromptIfEligible()
         }
         .onReceive(reviewCoordinator.$feedbackRequested.filter { $0 }) { _ in
             showingFeedback = true
@@ -208,21 +203,9 @@ struct RootTabView: View {
     }
     #endif
 
-    private func presentReviewPromptIfEligible() {
-        guard ReviewPromptTracker.shouldShowAfterPositiveMoment(
-            hasCompletedOnboarding: settings.hasCompletedOnboarding
-        ) else { return }
-        // Apple's own prompt, asked of everyone who qualifies. It is
-        // rate-limited and often shows nothing, hence the short cooldown.
-        ReviewPromptTracker.markSoftDeferred()
-        requestReview()
-    }
-
+    /// Feedback never touches the star prompt's cooldown or ends its asks.
     private func handle(_ outcome: ReviewPromptDismissOutcome) {
-        switch outcome {
-        case .notNow:
-            ReviewPromptTracker.markShown()
-        case .feedbackDraftOpened:
+        if outcome == .feedbackDraftOpened {
             ReviewPromptTracker.markFeedbackDraftOpened()
         }
         showingFeedback = false

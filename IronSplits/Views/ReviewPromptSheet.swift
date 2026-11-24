@@ -122,7 +122,6 @@ struct ReviewPromptSheet: View {
     }
 
     private func handleNotNow() {
-        ReviewPromptTracker.markShown()
         finish(.notNow)
     }
 
@@ -139,7 +138,6 @@ struct ReviewPromptSheet: View {
                     copyFeedback(trimmed)
                     return
                 }
-                ReviewPromptTracker.markFeedbackDraftOpened()
                 finish(.feedbackDraftOpened)
             }
         }

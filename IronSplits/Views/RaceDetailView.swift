@@ -7,7 +7,7 @@ struct RaceDetailView: View {
     var contextResults: [RaceResult]? = nil
     var isReadOnly = false
     /// Shown without the athlete opening it (the unfolded Duo's default pane),
-    /// so it neither counts toward the review prompt nor wakes Pattie.
+    /// so it neither asks for a rating nor wakes Pattie.
     var opensQuietly = false
     /// The root of that pane's stack, so there is nothing to go back to.
     var isPaneRoot = false
@@ -21,6 +21,8 @@ struct RaceDetailView: View {
     @State private var fieldState: FieldState = .idle
     @State private var fieldScope: FieldScope = .overall
     @State private var editingNote = false
+    /// Bumped when the athlete opens a personal best, the star prompt's moment.
+    @State private var goodMoments = 0
 
     private enum FieldState: Equatable {
         case idle, loading, loaded, failed, unavailable
@@ -66,13 +68,14 @@ struct RaceDetailView: View {
                ReviewPromptTracker.isPositiveMoment(result: result,
                                                     isReadOnly: isReadOnly,
                                                     within: careerResults) {
-                ReviewPromptTracker.recordPositiveMoment(identifier: result.id)
+                goodMoments += 1
             }
             if !isReadOnly, !opensQuietly { pattie.fire(pattieMoment) }
             guard result.isComplete else { return }
             await loadField()
         }
         .onDisappear { pattie.react(.back) }
+        .requestsReview(after: goodMoments) { !editingNote }
     }
 
     /// The most interesting thing about this race, in Pattie's eyes.

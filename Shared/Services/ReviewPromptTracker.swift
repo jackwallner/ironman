@@ -1,104 +1,72 @@
 import Foundation
 
-extension Notification.Name {
-    /// Posted after a satisfaction moment, host may ask for an App Store rating after a short delay.
-    static let ironSplitsPositiveMomentForReview = Notification.Name("com.jackwallner.ironman.positiveMomentForReview")
-}
-
-/// How the user last resolved the in-app review / feedback prompt.
+/// What the athlete did about a review. Only opening the write-review page
+/// ends the passive asks: someone who sent feedback can still rate later.
 enum ReviewPromptOutcome: String, Sendable {
     case openedWriteReview
+    /// Written by builds before 1.2.1's star prompt change. Kept so those
+    /// installs decode it; it no longer stops anything.
     case submittedFeedback
     case feedbackDraftOpened
 }
 
-/// Persists launch counts, positive moments, and review-prompt eligibility.
+/// When the app may call Apple's own rating prompt.
+///
+/// No question goes in front of it (an "Enjoying it?" step got 1.1.2 rejected
+/// under 5.6.1). The only automatic trigger is a good moment: the athlete
+/// opening one of their own finishes that is a personal best for its
+/// distance. From the second cold launch on, at most once every 30 days.
+/// Apple shows the prompt at most three times a year and decides each time;
+/// a call it swallows costs nothing.
 @MainActor
 enum ReviewPromptTracker {
     private static let defaults = UserDefaults.standard
 
-    private static let launchCountKey = "reviewPrompt.appLaunchCount"
-    private static let firstOpenKey = "reviewPrompt.firstAppOpenDate"
-    private static let lastShownKey = "reviewPrompt.lastShownDate"
-    private static let outcomeKey = "reviewPrompt.outcome"
-    private static let positiveMomentCountKey = "reviewPrompt.positiveMomentCount"
-    private static let positiveMomentIDsKey = "reviewPrompt.positiveMomentIDs"
-    private static let pendingPositiveMomentKey = "reviewPrompt.pendingPositiveMoment"
-    private static let softDeferKey = "reviewPrompt.softDefer"
-    private static let distinctDaysKey = "reviewPrompt.distinctUseDays"
-    private static let lastUseDayKey = "reviewPrompt.lastUseDay"
-
-    static func isPositiveMoment(result: RaceResult,
-                                 isReadOnly: Bool,
-                                 within results: [RaceResult]) -> Bool {
-        guard !isReadOnly, result.isComplete else { return false }
-        return Discipline.rankable.contains {
-            RaceAnalytics.isPersonalBest(result, discipline: $0, within: results)
-        }
+    // Same keys as the old funnel, so an upgrade keeps its launch count, its
+    // last ask and a write-review that already happened.
+    private enum Keys {
+        static let launchCount = "reviewPrompt.appLaunchCount"
+        static let firstOpen = "reviewPrompt.firstAppOpenDate"
+        static let lastShown = "reviewPrompt.lastShownDate"
+        static let outcome = "reviewPrompt.outcome"
     }
 
-    // Thresholds match the Vitals portfolio standard for passive prompts.
-    static let minimumLaunchCount = 5
-    static let minimumDaysSinceFirstOpen = 7
-    static let minimumPositiveMoments = 3
-    static let cooldownDays = 120
-    /// Shorter cooldown after a native prompt. Apple's `requestReview()` is
-    /// rate-limited and silently shows nothing much of the time, so the common
-    /// case was a user who never saw a prompt being locked out for four months.
-    static let softDeferCooldownDays = 30
-    /// Separate calendar days of use before a returning-user prompt is allowed.
-    /// Three taps in one sitting isn't a habit; three days is.
-    static let minimumDistinctUseDays = 3
+    /// Not in the first session: a second cold start is the only tenure gate.
+    static let minimumLaunchCount = 2
+    /// Days between our calls. Paces the asks, not the athlete's answers.
+    static let cooldownDays = 30
+    /// How long the good moment gets on screen before the prompt can land.
+    static let delaySeconds: Double = 3
+
+    /// The legs a personal best counts on. A transition best is real but is
+    /// not a race anyone feels good about by itself.
+    static let momentDisciplines: [Discipline] = [.finish, .swim, .bike, .run]
 
     static var appLaunchCount: Int {
-        get { max(defaults.integer(forKey: launchCountKey), 0) }
-        set { defaults.set(newValue, forKey: launchCountKey) }
+        get { max(defaults.integer(forKey: Keys.launchCount), 0) }
+        set { defaults.set(newValue, forKey: Keys.launchCount) }
     }
 
-    static var firstAppOpenDate: Date? {
-        get { defaults.object(forKey: firstOpenKey) as? Date }
+    static var outcome: ReviewPromptOutcome? {
+        get { defaults.string(forKey: Keys.outcome).flatMap(ReviewPromptOutcome.init(rawValue:)) }
         set {
-            if let date = newValue {
-                defaults.set(date, forKey: firstOpenKey)
+            if let newValue {
+                defaults.set(newValue.rawValue, forKey: Keys.outcome)
             } else {
-                defaults.removeObject(forKey: firstOpenKey)
+                defaults.removeObject(forKey: Keys.outcome)
             }
         }
     }
 
     static var lastShownDate: Date? {
-        get { defaults.object(forKey: lastShownKey) as? Date }
+        get { defaults.object(forKey: Keys.lastShown) as? Date }
         set {
-            if let date = newValue {
-                defaults.set(date, forKey: lastShownKey)
+            if let newValue {
+                defaults.set(newValue, forKey: Keys.lastShown)
             } else {
-                defaults.removeObject(forKey: lastShownKey)
+                defaults.removeObject(forKey: Keys.lastShown)
             }
         }
-    }
-
-    static var outcome: ReviewPromptOutcome? {
-        get {
-            guard let raw = defaults.string(forKey: outcomeKey) else { return nil }
-            return ReviewPromptOutcome(rawValue: raw)
-        }
-        set {
-            if let value = newValue {
-                defaults.set(value.rawValue, forKey: outcomeKey)
-            } else {
-                defaults.removeObject(forKey: outcomeKey)
-            }
-        }
-    }
-
-    static var positiveMomentCount: Int {
-        get { max(defaults.integer(forKey: positiveMomentCountKey), 0) }
-        set { defaults.set(newValue, forKey: positiveMomentCountKey) }
-    }
-
-    static var hasPendingPositiveMoment: Bool {
-        get { defaults.bool(forKey: pendingPositiveMomentKey) }
-        set { defaults.set(newValue, forKey: pendingPositiveMomentKey) }
     }
 
     /// Skip passive prompts during UI tests / Fastlane snapshot runs.
@@ -112,117 +80,53 @@ enum ReviewPromptTracker {
         #endif
     }
 
-    /// Distinct calendar days the app has been opened.
-    static var distinctUseDays: Int {
-        max(defaults.integer(forKey: distinctDaysKey), 0)
-    }
-
-    /// Bump the distinct-day counter once per calendar day. This is the
-    /// retention signal the funnel leans on now: the old trigger fired on the
-    /// third player profile opened, which a single sitting satisfies and which
-    /// says nothing about whether someone values the app.
-    private static func recordUseDay(now: Date) {
-        // Local calendar on purpose: "a different day" should mean the user's
-        // day, not UTC's. Built from components rather than a cached formatter,
-        // which isn't Sendable under Swift 6 strict concurrency.
-        let parts = Calendar.current.dateComponents([.year, .month, .day], from: now)
-        let key = "\(parts.year ?? 0)-\(parts.month ?? 0)-\(parts.day ?? 0)"
-        guard defaults.string(forKey: lastUseDayKey) != key else { return }
-        defaults.set(key, forKey: lastUseDayKey)
-        defaults.set(distinctUseDays + 1, forKey: distinctDaysKey)
+    /// The good moment: one of the athlete's own finishes, opened, that is a
+    /// personal best on the finish, swim, bike or run for its distance (with
+    /// at least two races of that distance to beat). Another racer's career,
+    /// a DNF, or a race that is nobody's best never asks.
+    static func isPositiveMoment(result: RaceResult,
+                                 isReadOnly: Bool,
+                                 within results: [RaceResult]) -> Bool {
+        guard !isReadOnly, result.isComplete else { return false }
+        return momentDisciplines.contains {
+            RaceAnalytics.isPersonalBest(result, discipline: $0, within: results)
+        }
     }
 
     static func recordAppLaunch(now: Date = .now) {
-        recordUseDay(now: now)
-        if firstAppOpenDate == nil {
-            firstAppOpenDate = now
+        if defaults.object(forKey: Keys.firstOpen) == nil {
+            defaults.set(now, forKey: Keys.firstOpen)
         }
         appLaunchCount += 1
     }
 
-    static func recordPositiveMoment(identifier: String? = nil) {
-        if let identifier {
-            var identifiers = defaults.stringArray(forKey: positiveMomentIDsKey) ?? []
-            guard !identifiers.contains(identifier) else { return }
-            identifiers.append(identifier)
-            defaults.set(Array(identifiers.suffix(100)), forKey: positiveMomentIDsKey)
-        }
-        positiveMomentCount += 1
-        hasPendingPositiveMoment = true
-        NotificationCenter.default.post(name: .ironSplitsPositiveMomentForReview, object: nil)
-    }
-
-    static func consumePendingPositiveMoment() {
-        hasPendingPositiveMoment = false
-    }
-
-    static func passivePromptAllowed(now: Date = .now) -> Bool {
-        guard outcome == nil else { return false }
-        guard let last = lastShownDate else { return true }
-        let days = isSoftDeferred ? softDeferCooldownDays : cooldownDays
-        return now.timeIntervalSince(last) >= TimeInterval(days) * 86_400
-    }
-
-    /// True after a native prompt until the next hard `markShown` or outcome.
-    /// Callers must NOT call `markShown()` on sheet dismiss while this is set,
-    /// that clears the flag and reinstates the full cooldown, which is exactly
-    /// the leak this exists to close.
-    static var isSoftDeferred: Bool {
-        defaults.bool(forKey: softDeferKey)
-    }
-
-    /// After a passive `requestReview()`, which Apple often no-ops, keep the door open with
-    /// the short cooldown instead of jailing them for the full term.
-    static func markSoftDeferred(now: Date = .now) {
-        lastShownDate = now
-        defaults.set(true, forKey: softDeferKey)
-        consumePendingPositiveMoment()
-    }
-
-    static func canPresentRatingPrompt(
-        hasCompletedOnboarding: Bool,
-        now: Date = .now
-    ) -> Bool {
+    /// Whether a good moment right now may call `requestReview()`.
+    static func shouldRequestReview(now: Date = .now) -> Bool {
         guard !isAutomationRun else { return false }
-        guard hasCompletedOnboarding else { return false }
-        guard passivePromptAllowed(now: now) else { return false }
+        guard outcome != .openedWriteReview else { return false }
         guard appLaunchCount >= minimumLaunchCount else { return false }
-        guard positiveMomentCount >= minimumPositiveMoments else { return false }
-        // Came back on separate days, the strongest signal available that
-        // someone actually values the app rather than having poked it once.
-        guard distinctUseDays >= minimumDistinctUseDays else { return false }
-        guard let first = firstAppOpenDate else { return false }
-        let minInterval = TimeInterval(minimumDaysSinceFirstOpen) * 86_400
-        guard now.timeIntervalSince(first) >= minInterval else { return false }
-        return true
+        // A stamp from a clock that ran ahead is in the future: it is no
+        // evidence of an ask, and would hold the cooldown shut for as long.
+        guard let last = lastShownDate, last <= now else { return true }
+        return now.timeIntervalSince(last) >= TimeInterval(cooldownDays) * 86_400
     }
 
-    static func shouldShowAfterPositiveMoment(
-        hasCompletedOnboarding: Bool,
-        now: Date = .now
-    ) -> Bool {
-        guard hasPendingPositiveMoment else { return false }
-        return canPresentRatingPrompt(hasCompletedOnboarding: hasCompletedOnboarding, now: now)
-    }
-
+    /// Recorded when the call is made: Apple may show nothing, and there is
+    /// no answer to wait for.
     static func markShown(now: Date = .now) {
         lastShownDate = now
-        defaults.set(false, forKey: softDeferKey)
-        consumePendingPositiveMoment()
     }
 
-    static func markOpenedWriteReview() {
+    /// Settings > Write a review. The one thing that ends the asks.
+    static func markOpenedWriteReview(now: Date = .now) {
         outcome = .openedWriteReview
-        markShown()
+        markShown(now: now)
     }
 
-    static func markFeedbackSubmitted() {
-        outcome = .submittedFeedback
-        markShown()
-    }
-
+    /// Feedback is its own path and never ends or delays the asks. It also
+    /// never overwrites a write-review that already ended them.
     static func markFeedbackDraftOpened() {
+        guard outcome != .openedWriteReview else { return }
         outcome = .feedbackDraftOpened
-        markShown()
     }
 }

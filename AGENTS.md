@@ -144,9 +144,12 @@ device.
   either side of the fold. Rules and capture recipe in `.claude/rules/iphone-duo.md`.
 - iPad: native since 1.2.0. Reading column on every screen, Locker list beside the
   open race when wide. Rules and capture recipe in `.claude/rules/ipad-layout.md`.
-- Review funnel trigger: opening a race detail (`RaceDetailView.task`). The ASC
-  record is `6803727074`, and `AppStoreReviewLinks` is configured so Settings
-  can show the native rating entry.
+- Star prompt: Apple's `requestReview()` is called only when the athlete opens
+  one of their own finishes that is a personal best (finish, swim, bike or run)
+  for its distance, 3 seconds later and only if no sheet or alert is up
+  (`RaceDetailView` + `requestsReview(after:isClear:)`). From the 2nd cold
+  launch, 30 days between calls; Settings' write-review row ends the asks,
+  feedback never does. The ASC record is `6803727074`.
 - `IronSplitsSecrets.revenueCatKey` holds the production public SDK key
   (`appl_…`), set 2026-08-20. Only public keys go in that file; the RevenueCat
   **secret** key (`sk_…`, full REST access) lives in `~/.ironsplits_credentials`
