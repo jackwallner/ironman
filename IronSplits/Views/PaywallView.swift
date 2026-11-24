@@ -500,12 +500,15 @@ struct PaywallView: View {
                 case .pending:
                     // Ask-to-Buy / deferred payment: nothing is unlocked yet and
                     // no error occurred, tell the user instead of going silent.
-                    restoreMessage = "Purchase pending approval. Race Book unlocks automatically once it's approved."
+                    // The approval unlocks through the customer-info update.
+                    restoreMessage = PurchaseIssue.waitingForApproval.message
                 case .cancelled:
                     errorMessage = nil
                 }
             } catch {
-                errorMessage = store.lastError ?? "Couldn't complete the purchase. Please try again."
+                // From the error itself, never `store.lastError`: that line
+                // belongs to whichever product or status load failed last.
+                errorMessage = PurchaseIssue(error).message
             }
         }
     }

@@ -72,6 +72,43 @@ enum DirectPurchaseOutcome: Equatable {
     case needsPlanPicker
 }
 
+/// What the paywall says when a purchase does not go through. Mapped from
+/// the error itself: RevenueCat's own descriptions are English developer
+/// copy, and a pending Ask to Buy is not a failure at all.
+enum PurchaseIssue: Equatable, Sendable {
+    /// Ask to Buy: a parent has the request. Apple finishes it later and the
+    /// customer-info update unlocks Race Book without a relaunch.
+    case waitingForApproval
+    case storeUnreachable
+    case failed
+
+    init(_ error: Error) {
+        let nsError = error as NSError
+        let code = (error as? RevenueCat.ErrorCode)
+            ?? (nsError.domain == RevenueCat.ErrorCode.errorDomain
+                ? RevenueCat.ErrorCode(rawValue: nsError.code) : nil)
+        switch code {
+        case .paymentPendingError?:
+            self = .waitingForApproval
+        case .networkError?, .offlineConnectionError?:
+            self = .storeUnreachable
+        default:
+            self = nsError.domain == NSURLErrorDomain ? .storeUnreachable : .failed
+        }
+    }
+
+    var message: String {
+        switch self {
+        case .waitingForApproval:
+            return "Waiting for approval. Your purchase unlocks once it is approved."
+        case .storeUnreachable:
+            return "Couldn't reach the App Store. Check your connection and try again."
+        case .failed:
+            return "Couldn't complete the purchase. Please try again."
+        }
+    }
+}
+
 enum StoreServiceError: LocalizedError {
     case purchasesUnavailableInSimulator
 
@@ -417,7 +454,13 @@ final class StoreService: NSObject, ObservableObject {
         defer { purchaseInFlight = false }
 
         let startedTrial = product.storeProduct.introductoryDiscount?.paymentMode == .freeTrial
-        let result = try await Purchases.shared.purchase(package: product)
+        let result: PurchaseResultData
+        do {
+            result = try await Purchases.shared.purchase(package: product)
+        } catch where PurchaseIssue(error) == .waitingForApproval {
+            // StoreKit 2 reports Ask to Buy as this error, not as a result.
+            return .pending
+        }
         apply(customerInfo: result.customerInfo)
         if result.userCancelled {
             return .cancelled
@@ -454,7 +497,7 @@ final class StoreService: NSObject, ObservableObject {
                 return .cancelled
             }
         } catch {
-            return .failed(lastError ?? "Couldn't complete the purchase. Please try again.")
+            return .failed(PurchaseIssue(error).message)
         }
     }
 
