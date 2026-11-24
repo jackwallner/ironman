@@ -67,6 +67,9 @@ final class LockerStore: ObservableObject {
 
     func claim(_ athlete: Athlete) async {
         refreshGeneration &+= 1
+        // A refresh still in flight was for the locker being replaced, and its
+        // answer is discarded; it must not hold this claim's fetch off.
+        refreshingContactIDs = nil
         self.athlete = athlete
         results = []
         state = .loading
@@ -91,17 +94,19 @@ final class LockerStore: ObservableObject {
         guard mergedIDs != current.contactIDs else { return }
 
         refreshGeneration &+= 1
+        refreshingContactIDs = nil
         current.contactIDs = mergedIDs
         current.knownRaceCount = max(current.knownRaceCount, candidate.knownRaceCount)
         athlete = current
-        results = []
-        state = .loading
+        // The races already on screen stay until the merged career arrives, so
+        // a failed fetch leaves the Locker as it was instead of empty.
         refreshWarning = nil
         await refresh(force: true)
     }
 
     func unclaim() {
         refreshGeneration &+= 1
+        refreshingContactIDs = nil
         athlete = nil
         results = []
         lastRefreshed = nil
@@ -120,12 +125,14 @@ final class LockerStore: ObservableObject {
         if !force, let lastRefreshed, Date.now.timeIntervalSince(lastRefreshed) < 60 * 30 { return }
         let contactIDs = athlete.contactIDs
         guard refreshingContactIDs != contactIDs else { return }
-        refreshingContactIDs = contactIDs
-        defer {
-            if refreshingContactIDs == contactIDs { refreshingContactIDs = nil }
-        }
         refreshGeneration &+= 1
         let generation = refreshGeneration
+        refreshingContactIDs = contactIDs
+        defer {
+            // Only the newest refresh owns the marker: an older one finishing
+            // late must not clear the one a claim started after it.
+            if generation == refreshGeneration { refreshingContactIDs = nil }
+        }
         refreshWarning = nil
         if results.isEmpty { state = .loading }
         // Deliberately not awaited. `FeedConfigLoader.config()` already answers
