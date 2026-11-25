@@ -21,7 +21,7 @@ struct RaceDetailView: View {
     @State private var fieldState: FieldState = .idle
     @State private var fieldScope: FieldScope = .overall
     @State private var editingNote = false
-    /// Bumped when the athlete opens a personal best, the star prompt's moment.
+    /// Bumped when the athlete opens one of their own completed races, the star prompt's moment.
     @State private var goodMoments = 0
 
     private enum FieldState: Equatable {

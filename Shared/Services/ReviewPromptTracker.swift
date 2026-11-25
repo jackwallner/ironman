@@ -14,8 +14,8 @@ enum ReviewPromptOutcome: String, Sendable {
 ///
 /// No question goes in front of it (an "Enjoying it?" step got 1.1.2 rejected
 /// under 5.6.1). The only automatic trigger is a good moment: the athlete
-/// opening one of their own finishes that is a personal best for its
-/// distance. From the second cold launch on, at most once every 30 days.
+/// opening one of their own completed races (a personal best is one case).
+/// From the second cold launch on, at most once every 30 days.
 /// Apple shows the prompt at most three times a year and decides each time;
 /// a call it swallows costs nothing.
 @MainActor
@@ -80,14 +80,30 @@ enum ReviewPromptTracker {
         #endif
     }
 
-    /// The good moment: one of the athlete's own finishes, opened, that is a
-    /// personal best on the finish, swim, bike or run for its distance (with
-    /// at least two races of that distance to beat). Another racer's career,
-    /// a DNF, or a race that is nobody's best never asks.
+    /// The good moments. Both need one of the athlete's own finishes, opened:
+    /// - any finish they completed (the core action: they loaded their
+    ///   results and are looking at a race they finished), reached in the
+    ///   2nd or 3rd session by nearly everyone who claims a profile;
+    /// - a personal best on the finish, swim, bike or run for its distance
+    ///   (with at least two races of that distance to beat), a rarer extra.
+    /// Another racer's career, a DNF, DNS or DQ never asks.
     static func isPositiveMoment(result: RaceResult,
                                  isReadOnly: Bool,
                                  within results: [RaceResult]) -> Bool {
-        guard !isReadOnly, result.isComplete else { return false }
+        isOwnFinishOpened(result: result, isReadOnly: isReadOnly)
+            || isPersonalBestOpened(result: result, isReadOnly: isReadOnly, within: results)
+    }
+
+    /// The common moment: one of their own completed races is open.
+    static func isOwnFinishOpened(result: RaceResult, isReadOnly: Bool) -> Bool {
+        !isReadOnly && result.isComplete
+    }
+
+    /// The rarer moment: that race is a personal best.
+    static func isPersonalBestOpened(result: RaceResult,
+                                     isReadOnly: Bool,
+                                     within results: [RaceResult]) -> Bool {
+        guard isOwnFinishOpened(result: result, isReadOnly: isReadOnly) else { return false }
         return momentDisciplines.contains {
             RaceAnalytics.isPersonalBest(result, discipline: $0, within: results)
         }
