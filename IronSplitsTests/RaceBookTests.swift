@@ -277,7 +277,7 @@ final class RaceBookTests: XCTestCase {
     }
 
     @MainActor
-    func testReviewMomentRequiresAnOwnedPersonalBest() {
+    func testReviewMomentRequiresAnOwnedCompletedRace() {
         let earlier = Self.result(id: "review-earlier",
                                   date: "2023-09-10T00:00:00Z",
                                   bikeDistance: 180,
@@ -302,9 +302,14 @@ final class RaceBookTests: XCTestCase {
                                        finisher: false,
                                        dnf: true)
 
-        XCTAssertFalse(ReviewPromptTracker.isPositiveMoment(result: earlier,
-                                                             isReadOnly: false,
-                                                             within: [earlier, personalBest]))
+        XCTAssertFalse(ReviewPromptTracker.isPersonalBestOpened(result: earlier,
+                                                                 isReadOnly: false,
+                                                                 within: [earlier, personalBest]),
+                       "precondition: the earlier race is not a personal best")
+        XCTAssertTrue(ReviewPromptTracker.isPositiveMoment(result: earlier,
+                                                            isReadOnly: false,
+                                                            within: [earlier, personalBest]),
+                      "any own finish is the common moment")
         XCTAssertTrue(ReviewPromptTracker.isPositiveMoment(result: personalBest,
                                                             isReadOnly: false,
                                                             within: [earlier, personalBest]))
