@@ -1,8 +1,8 @@
 import XCTest
 @testable import IM_Iron_Splits
 
-/// The star prompt: when Apple's rating prompt may be called, and the one good
-/// moment that calls it.
+/// The star prompt: when Apple's rating prompt may be called, and the good
+/// moments that call it.
 @MainActor
 final class ReviewPromptTests: XCTestCase {
     private let keys = ["reviewPrompt.appLaunchCount", "reviewPrompt.firstAppOpenDate",
@@ -101,25 +101,35 @@ final class ReviewPromptTests: XCTestCase {
         XCTAssertTrue(ReviewPromptTracker.isPositiveMoment(result: best, isReadOnly: false, within: [earlier, best]))
     }
 
-    func testABadResultIsNotTheMoment() {
+    func testADNFIsNotTheMoment() {
         let best = Self.race(id: "best", date: "2024-09-08T00:00:00Z", swim: 3_700, bike: 17_800, run: 14_700, finish: 37_000)
-        let slower = Self.race(id: "slower", date: "2025-09-07T00:00:00Z", swim: 3_900, bike: 18_600, run: 15_600, finish: 39_000)
         let dnf = Self.race(id: "dnf", date: "2026-06-01T00:00:00Z", swim: 3_600, bike: 17_000, run: nil, finish: nil,
                             finisher: false, dnf: true)
-        let all = [best, slower, dnf]
-        XCTAssertFalse(ReviewPromptTracker.isPositiveMoment(result: slower, isReadOnly: false, within: all))
-        XCTAssertFalse(ReviewPromptTracker.isPositiveMoment(result: dnf, isReadOnly: false, within: all))
+        XCTAssertFalse(dnf.isComplete, "precondition: the DNF is not a completed race")
+        XCTAssertFalse(ReviewPromptTracker.isPositiveMoment(result: dnf, isReadOnly: false, within: [best, dnf]))
+    }
+
+    /// The frequent moment: any completed race of their own, PB or not.
+    func testOpeningAnyOwnFinishIsTheMoment() {
+        let best = Self.race(id: "best", date: "2024-09-08T00:00:00Z", swim: 3_700, bike: 17_800, run: 14_700, finish: 37_000)
+        let slower = Self.race(id: "slower", date: "2025-09-07T00:00:00Z", swim: 3_900, bike: 18_600, run: 15_600, finish: 39_000)
+        let all = [best, slower]
+        XCTAssertFalse(ReviewPromptTracker.isPersonalBestOpened(result: slower, isReadOnly: false, within: all),
+                       "precondition: the slower race is nobody's best")
+        XCTAssertTrue(ReviewPromptTracker.isPositiveMoment(result: slower, isReadOnly: false, within: all))
+    }
+
+    func testAnOnlyFinishIsTheMomentButNotAPersonalBest() {
+        let only = Self.race(id: "only", date: "2025-09-07T00:00:00Z", swim: 3_700, bike: 17_800, run: 14_700, finish: 37_000)
+        XCTAssertTrue(ReviewPromptTracker.isOwnFinishOpened(result: only, isReadOnly: false))
+        XCTAssertFalse(ReviewPromptTracker.isPersonalBestOpened(result: only, isReadOnly: false, within: [only]))
+        XCTAssertTrue(ReviewPromptTracker.isPositiveMoment(result: only, isReadOnly: false, within: [only]))
     }
 
     func testAnotherRacersBestIsNotTheMoment() {
         let earlier = Self.race(id: "earlier", date: "2024-09-08T00:00:00Z", swim: 3_900, bike: 18_600, run: 15_600, finish: 39_000)
         let best = Self.race(id: "best", date: "2025-09-07T00:00:00Z", swim: 3_700, bike: 17_800, run: 14_700, finish: 37_000)
         XCTAssertFalse(ReviewPromptTracker.isPositiveMoment(result: best, isReadOnly: true, within: [earlier, best]))
-    }
-
-    func testAnOnlyRaceIsNobodysBest() {
-        let only = Self.race(id: "only", date: "2025-09-07T00:00:00Z", swim: 3_700, bike: 17_800, run: 14_700, finish: 37_000)
-        XCTAssertFalse(ReviewPromptTracker.isPositiveMoment(result: only, isReadOnly: false, within: [only]))
     }
 
     func testATransitionBestAloneIsNotTheMoment() {
@@ -130,7 +140,7 @@ final class ReviewPromptTests: XCTestCase {
         let all = [faster, slowerWithQuickTransitions]
         XCTAssertTrue(RaceAnalytics.isPersonalBest(slowerWithQuickTransitions, discipline: .transitions, within: all),
                       "precondition: it is the transition best")
-        XCTAssertFalse(ReviewPromptTracker.isPositiveMoment(result: slowerWithQuickTransitions, isReadOnly: false, within: all))
+        XCTAssertFalse(ReviewPromptTracker.isPersonalBestOpened(result: slowerWithQuickTransitions, isReadOnly: false, within: all))
     }
 
     // MARK: Fixtures
