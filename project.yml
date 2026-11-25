@@ -31,7 +31,7 @@ targets:
         PRODUCT_NAME: "IM Tri Tracker"
         PRODUCT_MODULE_NAME: IM_Iron_Splits
         MARKETING_VERSION: "1.2.2"
-        CURRENT_PROJECT_VERSION: "47"
+        CURRENT_PROJECT_VERSION: "48"
         GENERATE_INFOPLIST_FILE: NO
         INFOPLIST_FILE: IronSplits/Info.plist
         TARGETED_DEVICE_FAMILY: "1,2"
